@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
-import { FileText, Users, Key, BarChart3 } from 'lucide-react';
+import { FileText, Users, Key, BarChart3, Wand2 } from 'lucide-react';
 
 const navigation = [
   { name: 'Company Facts', href: '/dashboard/facts', icon: FileText },
+  { name: 'Sanitization', href: '/dashboard/sanitization', icon: Wand2 },
   { name: 'Team', href: '/dashboard/team', icon: Users },
   { name: 'API Keys', href: '/dashboard/api-keys', icon: Key },
   { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },

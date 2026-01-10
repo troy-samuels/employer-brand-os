@@ -1,142 +1,152 @@
-# BrandOS: Business Plan & Strategic Roadmap (2026)
+# BrandOS: Strategic Business Plan (2026)
 
-**Mission:** To become the "SSL Certificate" of Employer Branding—the invisible, essential infrastructure that ensures companies are accurately represented to AI Agents and Candidates.
+**One-Line Pitch:** BrandOS is the employment data infrastructure layer for the AI age—a "Smart Pixel" that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
 
 ---
 
 ## 1. Executive Summary
 
-**BrandOS** is a B2B SaaS platform that allows companies to control their "Data Sovereignty" in the age of AI. As of 2026, candidates no longer browse career sites; they ask AI agents (ChatGPT, Gemini, Perplexity) for recommendations. BrandOS ensures those agents receive verified, structured data rather than hallucinated or negative historical noise.
+**The Shift:** In 2026, the "Apply" button is dying. 40% of job searches now happen via AI Agents (ChatGPT, Perplexity, Gemini) or Aggregators. These systems do not read "Career Sites"—they read **structured data**.
 
-Leveraging a proprietary database of **460,000 employer contacts**, BrandOS will deploy a "Smart Pixel" technology that instantly turns chaotic corporate websites into machine-readable sources of truth, creating a defensible moat through data structure and compliance.
+**The Problem:** Most companies are "Invisible and Illegal."
+1. **Invisible:** Their ATS (Applicant Tracking System) outputs messy HTML that AI agents cannot read, causing a 40% drop in traffic.
+2. **Illegal:** New 2026 Pay Transparency laws (EU Directive, NY/CA/CO) require strict salary disclosures that legacy systems fail to automate.
+
+**The Solution:** BrandOS is the **"Stripe for Employer Truth."** We provide a Smart Pixel that overlays a company's existing site. It intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
+
+**The Unfair Advantage:** We launch with a proprietary database of **460,000 employer contacts** and a "Wholesale Channel" strategy targeting Recruitment Agencies to scale without a massive sales team.
 
 ---
 
-## 2. The "Zero to One" Market Thesis
+## 2. Market Analysis: The "Zero to One" Thesis
 
 *Applying Peter Thiel's Principle: "What important truth do very few people agree with you on?"*
 
-- **The Truth:** The "Apply Button" and the "Career Site" are dying. In 2026, the first filter for talent is not a human recruiter, but an AI Agent.
-- **The Problem:** Current reputation management (Glassdoor) is built for humans reading reviews. It is unstructured, subjective, and outdated. AI models cannot rely on it, so they hallucinate.
-- **The Opportunity:** The winner will not be the company with the best *reviews*, but the company with the best *data structure*. We are moving from SEO (Search Engine Optimization) to **AIO (Artificial Intelligence Optimization)**.
+- **The Contrarian Truth:** The Applicant Tracking System (ATS) is a database for *storage*, not *discovery*. ATS giants (Workday, Greenhouse) will not solve the AI data problem because their data is internal, messy, and unstructured.
+- **The Opportunity:** A "Neutral Standardization Layer" is required between the messy Internal ATS and the public AI Web. BrandOS is that layer.
+- **The "Hair on Fire" Pain:** In 2026, companies don't care about "Brand Reputation." They care about **Compliance Fines** (Regulatory Risk) and **Ghosting** (Traffic Risk). We sell the cure to these immediate pains.
 
 ---
 
-## 3. The Product: The BrandOS Trinity
+## 3. Product Architecture: The 4-Layer Platform
 
-We have removed low-value "content creation" tools to focus on high-value "infrastructure."
+### Layer 1: Infrastructure (The Smart Pixel & Sanitization)
+*The "Fix It" Wedge.*
 
-### Module 1: BrandCore (The "Fix") – *The Wedge*
+- **Tech:** A JavaScript tag installed via Google Tag Manager.
+- **ATS Defense:** The **"Sanitization Engine."** We don't just display data; we translate it.
+  - *Example:* Internal Code `L4-Eng-NY` → Public Title `Senior Software Engineer`.
+  - *Benefit:* Keeps internal mess private while making public data pristine for AI.
+- **CSP Fallback:** If a client's security blocks our script, we auto-provision a **"Hosted Truth Mirror"** (`jobs.brandos.io/client`) that guarantees visibility regardless of IT settings.
 
-*A proprietary technology that creates the initial hook.*
+### Layer 2: Compliance (Automated Guardrails & Safety)
+*The "Moat" & Retention.*
 
-- **The Smart Pixel:** A single line of JavaScript code (like the Meta Pixel) that the client adds to their site via Google Tag Manager.
-- **Dynamic Injection:** The pixel dynamically injects valid `JSON-LD` Schema and `EmployerAggregateRating` data into the page.
-- **Value:** Instantly creates a "System of Truth" for Google Jobs and AI crawlers.
-- **Defensibility:** If they churn, we kill the API key. The schema vanishes. The AI hallucinations return.
+- **Automated Guardrails:** Scans job listings by IP location. If a NY job is missing salary data, we auto-flag it or inject the legally required range from our "Truth Store."
+- **Hallucination Radar:** Weekly scans of OpenAI/Perplexity to detect if AI models are inventing fake salaries or toxic culture myths.
 
-### Module 2: BrandShield (The "Moat") – *The Retention*
+### Layer 3: Intelligence (The "Proof of Life" Dashboard)
+*The Churn Killer.*
 
-*The risk mitigation layer that makes BrandOS impossible to cut.*
+- **Problem:** Infrastructure is invisible. CFOs cancel what they can't see.
+- **Solution:** The **"Monday Morning Visibility Report."** An automated email sent to stakeholders:
+  - *"This week, BrandOS served 14,000 structured data points to Google/OpenAI."*
+  - *"We auto-corrected 3 non-compliant job posts, preventing potential fines."*
+  - *"Your 'Senior Dev' role is now ranking #1 on Google Jobs."*
 
-- **Hallucination Radar:** Weekly automated scraping of top AI models (OpenAI, Anthropic, Google) to detect factual errors about the employer.
-- **Compliance Guard:** Automatically checks job listings against real-time Pay Transparency Laws (EU Directive, NY/CA/CO laws).
-- **Value:** Acts as "Reputation Insurance."
+### Layer 4: Network (Live Benchmarking)
+*The Upsell.*
 
-### Module 3: BrandPulse (The "Scale") – *The Net Effect*
-
-*The feature that gets better as we grow.*
-
-- **Verified Benchmarking:** Aggregated, anonymized salary and benefit data from our "verified" clients.
-- **Value:** Provides the only *real* salary benchmark in the market (unlike Glassdoor's user-guessed data).
+- **Live Benchmarking:** Using our network of verified pixels, we tell clients exactly where their salary offers sit compared to the real-time market (not self-reported Glassdoor guesses).
 
 ---
 
 ## 4. Go-To-Market Strategy
 
-**The Asset:** 460,000 Companies / 2.5M Contacts (Glassdoor/Employer Branding Buyers).
+**The Asset:** 460,000 "Problem-Aware" Contacts.
 
-### Phase 1: Segmentation (The "3-Star Purgatory")
+### Primary Motion: The "Visibility Audit" (Direct Sales)
 
-We will not target everyone. We will target the **"Misunderstood Mid-Market."**
+*Target: High-Volume Franchises & Retail (The "Desperate Middle").*
 
-- **Criteria:** 50–1,000 employees. Glassdoor rating between **2.5 and 3.8**.
-- **Why:** They are trying to hire but are hurting. They are big enough to have budget, but small enough to lack a massive tech team.
+1. **The Hook:** Automate a scan of their site.
+2. **The Pitch:** "You are invisible to 40% of candidates because your ATS blocks AI agents. I ran a scan: Google Jobs is hiding your listings. BrandOS fixes the code instantly."
+3. **The Close:** "This also automates your EU/NY Pay Transparency compliance."
 
-### Phase 2: The "Trojan Horse" Audit (Automated Sales)
+### Accelerator Motion: The "Agency Partner" Channel
 
-We do not cold call to "check in." We cold call to "report a fire."
+*Target: Recruitment Marketing Agencies (RMAs) managing 50+ locations.*
 
-1. **The Script:** A Python script (BrandOS Auditor) queries Perplexity for 1,000 companies: *"What are the negative downsides of working at [Company]?"*
-2. **The Trigger:** If the AI hallucinates or cites data older than 2 years, the lead is flagged as "High Intent."
-3. **The Outreach:**
-   - *Subject:* ChatGPT is misquoting your salary data
-   - *Body:* "I ran an audit. The AI agents are telling candidates your Engineering bands are $20k lower than market. This is hurting your funnel. Our Smart Pixel fixes this source data in 24 hours."
-
-### Phase 3: The "Zero-IT" Deployment
-
-- **No IT Ticket Needed:** We sell to HR/Marketing. They use Google Tag Manager to deploy our pixel.
-- **Franchise Option:** For local franchises (QSRs) who can't touch the website, we host a `brandos.com/verify/[company]` page they can link to in job ads.
+- **The Problem:** Agencies are being fired because their clients aren't getting applicants.
+- **The Pitch:** "Whitelabel BrandOS for your 50 clients. You get credit for 'Fixing their AI Strategy' and ensuring compliance. You buy at wholesale, sell at retail."
+- **Why this wins:** We sell to 1 Agency → We acquire 50 Clients. This solves the "Solo Founder Sales Bottleneck."
 
 ---
 
-## 5. Technical Architecture (Lean & Scalable)
+## 5. Technical Architecture (Solo + AI)
 
-*Built for a Solo Founder + AI assistance.*
+*Designed for "100-Developer Standards" with a team of one.*
 
-- **Database:** Supabase (Postgres) to store company "Facts" (Salary, Benefits, Policy).
-- **Backend:** Python Scripts (generated by Claude Code) running on serverless functions (AWS Lambda or Supabase Edge).
-- **Frontend:** Simple Dashboard (Next.js) for clients to update their facts.
-- **The Pixel:** A lightweight JavaScript SDK hosted on a CDN (Cloudflare) that queries our API and injects JSON-LD.
+- **Stack:** Next.js 15, Supabase (Postgres), Tailwind CSS (Monochrome/Enterprise).
+- **Integration:**
+  - **Primary:** Google Tag Manager (Zero-IT deployment).
+  - **Fallback:** Hosted Subdomain (for strict CSP environments).
+- **Security:**
+  - **Public Keys:** Read-Only access for the Pixel.
+  - **Sanitization:** Strict filtering of internal data before it hits the API.
+- **Documentation:** A strict `.docs/` folder (`PROJECT_RULES.md`, `ARCHITECTURE.md`) ensures the AI builder maintains architectural integrity.
 
 ---
 
 ## 6. Business Model & Pricing
 
-**Strategy:** High Gross Margin SaaS (>90%).
-
-| Tier | Price | Target | Includes |
+| Tier | Price | Target | Value Proposition |
 | :--- | :--- | :--- | :--- |
-| **Verify** | **$299/mo** | SMB / Franchise | Hosted Truth Page, Basic Schema, "Verified" Badge. |
-| **Control** | **$899/mo** | Mid-Market | **Smart Pixel**, BrandShield (Hallucination Alerts), Compliance Checks. |
-| **Command** | **$2,000/mo** | Enterprise | Multi-location management, BrandPulse Benchmarking, API Access. |
+| **Visibility** | **$299/mo** | SMB / Franchise | **"Get Found."** Smart Pixel + Basic Schema. Hosted Truth Page. |
+| **Compliance** | **$899/mo** | Mid-Market | **"Stay Safe."** Visibility + Auto-Compliance Checks + The "Monday Morning Report." |
+| **Agency** | **$150/mo per location** | **Agency Partners** | **"Scale."** Wholesale rate per location. Minimum 10 locations. Whitelabel reporting. |
 
 ---
 
-## 7. Operational Roadmap (Q1 - Q2 2026)
+## 7. Execution Roadmap (Q1 2026)
 
-### Month 1: Build the "Auditor" (MVP)
+### Phase 1: The Build (Weeks 1-4)
 
-- **Goal:** Build the scraping script to analyze AI outputs for companies.
-- **Action:** Use Claude Code to write a script that queries Perplexity API.
-- **Output:** A list of 50 "Victims" from your database who are being misrepresented by AI.
+- **Goal:** A working product that proves the pain.
+- **Actions:**
+  - Finalize the **Sanitization Engine** logic (ATS → Public Schema).
+  - Build the **Visibility Audit Script** (The Sales Tool).
+  - Implement the **CSP Fallback** pages.
 
-### Month 2: The "Smart Pixel" Prototype
+### Phase 2: The Pilot (Weeks 5-8)
 
-- **Goal:** Build the JS injection script.
-- **Action:** Create a Supabase table for "Company Facts" and a JS script that fetches this data and writes it to the DOM as JSON-LD.
-- **Test:** Deploy on a dummy website and verify Google/ChatGPT picks up the new data.
+- **Goal:** 10 Direct Clients + 1 Agency Partner.
+- **Actions:**
+  - Run the audit on 100 direct targets.
+  - Identify 20 boutique Recruitment Agencies. Pitch the "Whitelabel AI Solution."
+  - Manual onboarding for the first batch.
 
-### Month 3: Sales Pilot
+### Phase 3: Automation (Weeks 9-12)
 
-- **Goal:** Convert 10 Beta Customers.
-- **Action:** Manual outreach to the 50 "Victims" identified in Month 1.
-- **Offer:** "We will fix your AI hallucination for free for 30 days. If the data cleans up, you stay on for $299/mo."
-
-### Month 4: VAs & Automation
-
-- **Goal:** Scale the Audit.
-- **Action:** Hire VAs to run the Audit script on 1,000 contacts/week and clean the email data.
-- **Founder Role:** Focus exclusively on closing deals and product strategy.
-
----
-
-## 8. Why This Wins (Defensibility)
-
-1. **Data Sovereignty:** We are not an aggregator (like Glassdoor). We are infrastructure. The client owns the data; we just deliver it.
-2. **High Switching Costs:** Removing the Smart Pixel breaks their "AI SEO." No HR director wants to risk disappearing from search results.
-3. **Regulatory Tailwinds:** Pay Transparency laws are forcing companies to structure their data. We automate that compliance.
+- **Goal:** Operational maturity.
+- **Actions:**
+  - Automate the **"Monday Morning Report"** (Critical for retention).
+  - Hire VAs to run the Audit Script at scale.
+  - Shift purely to "Inbound via Audit" and "Channel Sales."
 
 ---
 
-This plan moves BrandOS from a "nice-to-have marketing tool" to a "must-have compliance and infrastructure tool," securing your future in the 2026 landscape.
+## 8. Defensibility (The Moat)
+
+1. **The "Sanitization" Moat:** ATS data is messy. By building the rules engine that cleans it, we become the indispensable translator between the Enterprise and the AI.
+2. **The Agency Lock-In:** Once an agency deploys us across 50 clients, they cannot rip us out without breaking their own value proposition.
+3. **Active Retention:** The "Monday Morning Report" constantly reminds the buyer of the fines we avoided and the traffic we generated.
+
+---
+
+## Summary of Key Differentiators
+
+- **ATS Defense:** We are now the "Translator," not just a "Publisher."
+- **Retention:** We proactively prove value via weekly reports.
+- **Scale:** We use Agencies to multiply our sales efforts.
+- **Resilience:** We have a technical fallback (Hosted Pages) if IT security blocks us.

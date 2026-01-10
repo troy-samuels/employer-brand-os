@@ -8,26 +8,42 @@
 - **Explain everything as though you're talking to a non-technical co-founder.**
 
 ## 2. Project Mission
-BrandOS is the "SSL Certificate" of Employer Branding—invisible, essential infrastructure that ensures companies are accurately represented to AI Agents and Candidates.
+BrandOS is the **"Stripe for Employer Truth"**—the employment data infrastructure layer for the AI age. We provide a Smart Pixel that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
 
-**Core Value Proposition:** A platform that enables "Data Sovereignty" in the age of AI. Companies control their verified employer data (Salary, Benefits, Policy) via a "Smart Pixel" that injects structured JSON-LD schema directly into their websites, ensuring AI agents receive accurate information instead of hallucinations.
+**Core Value Proposition:** Most companies are "Invisible and Illegal." Their ATS outputs messy HTML that AI agents cannot read (40% traffic drop), and they fail to automate Pay Transparency compliance (regulatory risk). BrandOS intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
 
-**Target Market:** Mid-market companies (50-1,000 employees) with Glassdoor ratings between 2.5-3.8 ("3-Star Purgatory")—companies trying to hire but being hurt by outdated/inaccurate AI data.
+**Target Market:**
+- **Primary:** High-Volume Franchises & Retail (The "Desperate Middle")—companies with visibility pain
+- **Secondary:** Mid-market companies (50-1,000 employees) in "3-Star Purgatory"
+- **Channel:** Recruitment Marketing Agencies managing 50+ locations (wholesale strategy)
 
-## 3. The BrandOS Trinity (Product Modules)
+## 3. The 4-Layer Platform (Product Architecture)
 
-### BrandCore (The "Fix")
+### Layer 1: Infrastructure (The Smart Pixel & Sanitization)
+*The "Fix It" Wedge.*
 - **Smart Pixel:** Single line of JavaScript (like Meta Pixel) deployed via Google Tag Manager
-- Dynamically injects `JSON-LD` Schema and `EmployerAggregateRating` into the page
-- Creates instant "System of Truth" for Google Jobs and AI crawlers
+- **Sanitization Engine:** Translates internal ATS codes to public-friendly titles (e.g., `L4-Eng-NY` → `Senior Software Engineer`)
+- **CSP Fallback:** Hosted Truth Mirror (`jobs.brandos.io/client`) for strict security environments
+- Dynamically injects `JSON-LD` Schema into the page for AI crawlers
 
-### BrandShield (The "Moat")
-- **Hallucination Radar:** Weekly automated monitoring of AI models for factual errors
-- **Compliance Guard:** Checks job listings against Pay Transparency Laws (EU, NY/CA/CO)
+### Layer 2: Compliance (Automated Guardrails & Safety)
+*The "Moat" & Retention.*
+- **Automated Guardrails:** Scans job listings by location. Auto-flags or injects salary data for Pay Transparency compliance
+- **Hallucination Radar:** Weekly scans of OpenAI/Perplexity to detect AI models inventing fake data
 - Acts as "Reputation Insurance"
 
-### BrandPulse (The "Scale")
+### Layer 3: Intelligence (The "Proof of Life" Dashboard)
+*The Churn Killer.*
+- **Problem:** Infrastructure is invisible. CFOs cancel what they can't see.
+- **Solution:** The "Monday Morning Visibility Report"—automated email showing:
+  - Data points served to Google/OpenAI
+  - Non-compliant posts auto-corrected
+  - Job ranking improvements
+
+### Layer 4: Network (Live Benchmarking)
+*The Upsell.*
 - **Verified Benchmarking:** Aggregated, anonymized salary/benefit data from verified clients
+- Real-time market comparison (not self-reported Glassdoor guesses)
 - Network effect: Gets more valuable as more companies join
 
 ## 4. Core Development Principles
@@ -35,6 +51,7 @@ BrandOS is the "SSL Certificate" of Employer Branding—invisible, essential inf
 - **Zero-IT Deployment:** Features must be deployable by HR/Marketing via Google Tag Manager—no IT tickets required.
 - **Modular Build:** Build Phase 1 (MVP) features as independent but connected modules.
 - **Scalability:** Ensure the database schema supports multi-location franchises from Day 1 (Role-Based Access Control).
+- **ATS Defense:** We are the "Translator" between messy internal data and public AI consumption.
 
 ## 5. Guardrails
 - **No Hardcoded Keys:** Never put API keys in code. Use `.env` files.
@@ -48,20 +65,20 @@ BrandOS is the "SSL Certificate" of Employer Branding—invisible, essential inf
 - **Backend:** Supabase (PostgreSQL with RLS) + Supabase Edge Functions
 - **Smart Pixel:** Lightweight JavaScript SDK hosted on Cloudflare CDN
 - **AI:** Claude 3.5 Sonnet API (brand analysis), Perplexity API (hallucination detection)
-- **Scripts:** Python (BrandOS Auditor for lead generation)
+- **Scripts:** Python (Visibility Audit for lead generation)
 
 See `tech-stack.md` for detailed architecture decisions.
 
 ## 7. Design System
-- **Vibe:** "Stripe for Employer Branding" - professional, authoritative, trust-focused
+- **Vibe:** "Stripe for Employer Truth" - professional, authoritative, trust-focused
 - **Core Colors:** Trust Navy (`#0F172A`), Verification Blue (`#3B82F6`), Signal Green (`#10B981`), Warning Amber (`#F59E0B`)
 - **Key Motif:** "Verified Badge" iconography across all data points
 
 See `design-system.md` for full visual identity guidelines.
 
 ## 8. Do's & Don'ts
-- **DO:** Flexible schema, data exportability, multi-persona access, audit logs, Zero-IT deployment
-- **DON'T:** Hardcode industry labels, build unverifiable features, require IT involvement for pixel deployment
+- **DO:** Flexible schema, data exportability, multi-persona access, audit logs, Zero-IT deployment, Sanitization rules
+- **DON'T:** Hardcode industry labels, build unverifiable features, require IT involvement for pixel deployment, expose internal ATS codes publicly
 
 See `do_do_not.md` for full guardrails.
 
@@ -69,6 +86,7 @@ See `do_do_not.md` for full guardrails.
 - **Multi-tenant:** Single Supabase project with RLS separating all tenant data
 - **Flat Locations:** All locations are peers (no hierarchy)
 - **Company Facts:** Salary, Benefits, Policy data with Pay Transparency compliance tracking
+- **Job Title Mappings:** Sanitization rules for ATS code translation
 - **JSON-LD Exports:** Track what data is exported and when
 - **Hallucination Tracking:** Monitor what AI agents say vs. verified facts
 - **Full Audit:** Every fact change creates version history and audit log entry
@@ -79,6 +97,6 @@ See `database-schema.sql` for complete schema.
 
 | Tier | Price | Target | Includes |
 |------|-------|--------|----------|
-| **Verify** | $299/mo | SMB / Franchise | Hosted Truth Page, Basic Schema, "Verified" Badge |
-| **Control** | $899/mo | Mid-Market | Smart Pixel, BrandShield, Compliance Checks |
-| **Command** | $2,000/mo | Enterprise | Multi-location, BrandPulse Benchmarking, API Access |
+| **Visibility** | $299/mo | SMB / Franchise | Smart Pixel, Basic Schema, Hosted Truth Page |
+| **Compliance** | $899/mo | Mid-Market | Visibility + Auto-Compliance Checks + Monday Morning Report |
+| **Agency** | $150/mo per location | Agency Partners | Wholesale rate, min 10 locations, Whitelabel reporting |

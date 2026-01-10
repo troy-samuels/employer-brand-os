@@ -1,6 +1,6 @@
 # BrandOS: Technical Architecture (2026)
 
-## Philosophy: Lean Infrastructure for Data Sovereignty
+## Philosophy: Lean Infrastructure for AI Visibility & Compliance
 
 Built for a **Solo Founder + AI assistance**. Every technology choice optimizes for:
 1. **Speed to Deploy:** No IT tickets required
@@ -9,7 +9,7 @@ Built for a **Solo Founder + AI assistance**. Every technology choice optimizes 
 
 ---
 
-## The Smart Pixel (BrandCore)
+## Layer 1: Infrastructure (The Smart Pixel & Sanitization Engine)
 
 The heart of BrandOS is a lightweight JavaScript SDK that injects verified employer data as JSON-LD schema.
 
@@ -33,6 +33,22 @@ Client Website                    BrandOS Infrastructure
 └─────────────┘
 ```
 
+### Sanitization Engine
+
+The Sanitization Engine translates internal ATS codes to public-friendly job titles.
+
+```
+Internal ATS                    BrandOS Sanitization               Public Output
+     │                                     │                            │
+L4-Eng-NY  ───────────────────────────────►│                            │
+                          ┌────────────────┴────────────────┐           │
+                          │ job_title_mappings table        │           │
+                          │ L4-Eng-NY → Senior Software Eng │           │
+                          └────────────────┬────────────────┘           │
+                                           │                            ▼
+                                           └──────────────► Senior Software Engineer
+```
+
 ### Technical Components
 
 | Component | Technology | Purpose |
@@ -40,6 +56,7 @@ Client Website                    BrandOS Infrastructure
 | **Pixel Host** | Cloudflare CDN | Global edge distribution, <50ms load time |
 | **Pixel SDK** | Vanilla JavaScript (~5KB) | No dependencies, GTM-compatible |
 | **Facts API** | Supabase Edge Functions | Serverless, auto-scaling |
+| **Sanitize API** | Next.js API Route | ATS code translation |
 | **Schema Format** | JSON-LD (schema.org) | Google Jobs + AI crawler compatible |
 
 ---
@@ -48,16 +65,16 @@ Client Website                    BrandOS Infrastructure
 
 - **Framework:** Next.js (App Router)
 - **UI Library:** Shadcn/ui + Tailwind CSS
-- **Purpose:** Client dashboard for managing facts, viewing hallucinations, compliance status
+- **Purpose:** Client dashboard for managing facts, sanitization rules, compliance status
 
 ### Key Pages (Phase 1)
 
 | Page | Purpose |
 |------|---------|
 | `/dashboard` | Overview of Smart Pixel status, hallucination alerts |
-| `/facts` | CRUD interface for company facts (salary, benefits, policy) |
-| `/hallucinations` | View detected AI inaccuracies with remediation status |
-| `/compliance` | Pay Transparency law compliance tracker |
+| `/dashboard/facts` | CRUD interface for company facts (salary, benefits, policy) |
+| `/dashboard/sanitization` | Manage ATS code → public title mappings |
+| `/dashboard/analytics` | Visibility metrics and compliance tracking |
 
 ---
 
@@ -78,7 +95,7 @@ Client Website                    BrandOS Infrastructure
 
 ---
 
-## AI & Monitoring (BrandShield)
+## Layer 2: Compliance (Hallucination Radar & Pay Transparency)
 
 ### Hallucination Detection
 
@@ -115,9 +132,9 @@ Weekly Cron Job
 
 ---
 
-## Lead Generation Scripts (BrandOS Auditor)
+## Lead Generation Scripts (Visibility Audit)
 
-Python scripts for the "Trojan Horse Audit" sales strategy.
+Python scripts for the "Visibility Audit" sales strategy.
 
 ### Script Stack
 
@@ -132,9 +149,9 @@ Python scripts for the "Trojan Horse Audit" sales strategy.
 
 | Script | Purpose |
 |--------|---------|
-| `auditor.py` | Main auditor - queries Perplexity for company reputation |
-| `filter_leads.py` | Filter 460k contacts to "3-Star Purgatory" segment |
-| `generate_outreach.py` | Create personalized cold emails based on audit findings |
+| `audit_brand*.py` | Audit employer visibility and reputation via AI models |
+| `import_leads.py` | Import 460k contacts to Supabase |
+| `companies.csv` | Target companies for visibility audits |
 
 ---
 
@@ -203,3 +220,13 @@ These technologies are **not** in Phase 1:
 - Global edge distribution (<50ms worldwide)
 - Free tier handles millions of requests
 - Easy cache invalidation when SDK updates
+
+### ADR-004: Sanitization Engine for ATS Defense
+
+**Decision:** Build a translation layer between internal ATS codes and public job titles.
+
+**Why:**
+- Companies use messy internal codes (L4-Eng-NY) that shouldn't be public
+- AI agents need clean, standardized job titles
+- Creates additional value and lock-in
+- Supports Pay Transparency compliance
