@@ -78,7 +78,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Company Information */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-base font-medium">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
               Company Information
             </CardTitle>
           </CardHeader>
@@ -120,7 +120,9 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Compensation */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-base font-medium">Compensation</CardTitle>
+            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
+              Compensation
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-3">
@@ -193,7 +195,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Benefits & Policy */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-base font-medium">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
               Benefits & Policy
             </CardTitle>
           </CardHeader>
@@ -227,7 +229,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
                                 }}
                               />
                             </FormControl>
-                            <FormLabel className="text-sm font-normal">
+                            <FormLabel className="text-sm font-normal normal-case tracking-normal text-muted-foreground">
                               {benefit.label}
                             </FormLabel>
                           </FormItem>
@@ -270,7 +272,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Submit */}
         <div className="flex items-center justify-end gap-3">
           {saveStatus === 'success' && (
-            <span className="text-sm text-green-600">Changes saved successfully</span>
+            <span className="text-sm text-signal-green">Changes saved successfully</span>
           )}
           {saveStatus === 'error' && (
             <span className="text-sm text-destructive">Failed to save changes</span>
@@ -288,5 +290,3 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         </div>
       </form>
     </Form>
-  );
-}

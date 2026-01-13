@@ -1,0 +1,222 @@
+@import url('https://assets.vercel.com/raw/upload/v1587415301/fonts/geist-sans/geist-sans.css');
+
+:root {
+    /* BrandOS Palette */
+    --trust-navy: #0F172A;
+    --verify-blue: #3B82F6;
+    --signal-green: #10B981;
+    --warning-amber: #F59E0B;
+    --critical-red: #EF4444;
+    --neutral-gray: #64748B;
+    --light-gray: #F1F5F9; /* slate-100 */
+    --border-gray: #E2E8F0; /* slate-200 */
+    --white: #FFFFFF;
+
+    /* Typography */
+    --font-sans: 'Geist Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* --- Global Styles & Reset --- */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    background-color: var(--white);
+    color: var(--trust-navy);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+h1, h2, p {
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+h2 {
+    font-size: 9px;
+    font-weight: 500;
+    color: var(--neutral-gray);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--trust-navy);
+    padding-bottom: 6px;
+    margin-bottom: 16px;
+}
+
+main {
+    padding: 25mm 20mm;
+}
+
+section {
+    margin-bottom: 25mm;
+}
+
+/* --- Header --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--trust-navy);
+    color: var(--white);
+    padding: 10mm 20mm;
+    height: 18mm;
+}
+
+.header-right {
+    text-align: right;
+}
+.header-right .date {
+    font-size: 10px;
+    font-weight: 400;
+}
+.header-right .company {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+
+/* --- Executive Summary --- */
+.stat-boxes {
+    display: flex;
+    justify-content: space-between;
+    gap: 5mm;
+}
+
+.stat-box {
+    flex: 1;
+    border: 1px solid var(--border-gray);
+    border-radius: 6px;
+    padding: 4mm;
+    height: 25mm;
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--neutral-gray);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.stat-value {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 2mm;
+    margin-bottom: auto;
+}
+
+.stat-value.critical {
+    color: var(--critical-red);
+}
+
+.stat-tag {
+    font-size: 9px;
+    color: var(--neutral-gray);
+}
+.stat-tag.critical {
+    font-weight: 600;
+    color: var(--critical-red);
+}
+
+/* --- Hijack Analysis --- */
+.hijack-list {
+    margin-top: 4mm;
+}
+.hijack-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 3mm 0;
+    border-bottom: 1px solid var(--light-gray);
+}
+.hijack-domain {
+    font-weight: 600;
+}
+.hijack-count {
+    color: var(--neutral-gray);
+}
+.section-note {
+    margin-top: 4mm;
+    font-style: italic;
+    color: var(--neutral-gray);
+}
+.pass-message {
+    color: var(--signal-green);
+    font-weight: 600;
+}
+
+
+/* --- Data Audit Table --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 4mm;
+}
+
+th, td {
+    padding: 3mm 0;
+    text-align: left;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+th {
+    font-size: 8px;
+    color: var(--neutral-gray);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom-width: 2px;
+    border-bottom-color: var(--border-gray);
+}
+
+.status-col {
+    text-align: center;
+    width: 80px;
+}
+
+.impact-col {
+    text-align: right;
+    width: 120px;
+    color: var(--neutral-gray);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 1mm 2mm;
+    border-radius: 4px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--white);
+}
+.status-badge.pass {
+    background-color: var(--signal-green);
+}
+.status-badge.fail {
+    background-color: var(--critical-red);
+}
+
+/* --- Recommendation & Footer --- */
+.recommendation p {
+    line-height: 1.8;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 5mm 0;
+    font-size: 9px;
+    color: var(--neutral-gray);
+    border-top: 1px solid var(--border-gray);
+}

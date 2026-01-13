@@ -2,17 +2,29 @@
 
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
 import type { CompanyFactsFormData } from '../schemas/facts.schema';
 import type { SaveFactsResult } from '../types/facts.types';
-
-// MVP: Using test organization ID
-// TODO: Get from authenticated user session
-const TEST_ORG_ID = '6e5805ce-1576-4d06-b32c-38d2957854a0';
+import type { Json } from '@/types/database.types';
 
 export async function saveCompanyFacts(
   data: CompanyFactsFormData
 ): Promise<SaveFactsResult> {
   try {
+    // Get authenticated user's organization
+    const userOrg = await getUserOrganization();
+
+    if (!userOrg) {
+      return { success: false, error: 'You must be logged in to save facts' };
+    }
+
+    // Check if user has permission to edit facts
+    if (!hasPermission(userOrg.userRole, 'edit')) {
+      return { success: false, error: 'You do not have permission to edit facts' };
+    }
+
+    const orgId = userOrg.organizationId;
+
     // 1. Update organization name only (no description column in table)
     const { error: orgError } = await supabaseAdmin
       .from('organizations')
@@ -20,7 +32,7 @@ export async function saveCompanyFacts(
         name: data.companyName,
         updated_at: new Date().toISOString(),
       })
-      .eq('id', TEST_ORG_ID);
+      .eq('id', orgId);
 
     if (orgError) {
       console.error('Error updating organization:', orgError);
@@ -32,7 +44,7 @@ export async function saveCompanyFacts(
 
     // 3. Save description fact
     if (data.description) {
-      const descError = await saveOrUpdateFact(TEST_ORG_ID, definitions.description, data.description);
+      const descError = await saveOrUpdateFact(orgId, definitions.description, data.description);
       if (descError) {
         return { success: false, error: 'Failed to save description' };
       }
@@ -44,13 +56,13 @@ export async function saveCompanyFacts(
       max: data.salaryMax,
       currency: data.currency,
     };
-    const salaryError = await saveOrUpdateFact(TEST_ORG_ID, definitions.salary, salaryValue);
+    const salaryError = await saveOrUpdateFact(orgId, definitions.salary, salaryValue);
     if (salaryError) {
       return { success: false, error: 'Failed to save salary information' };
     }
 
     // 5. Save benefits fact
-    const benefitsError = await saveOrUpdateFact(TEST_ORG_ID, definitions.benefits, data.benefits);
+    const benefitsError = await saveOrUpdateFact(orgId, definitions.benefits, data.benefits);
     if (benefitsError) {
       return { success: false, error: 'Failed to save benefits information' };
     }
@@ -66,7 +78,7 @@ export async function saveCompanyFacts(
       value: data.remotePolicy,
       display: remotePolicyDisplay,
     };
-    const policyError = await saveOrUpdateFact(TEST_ORG_ID, definitions.remotePolicy, policyValue);
+    const policyError = await saveOrUpdateFact(orgId, definitions.remotePolicy, policyValue);
     if (policyError) {
       return { success: false, error: 'Failed to save remote policy' };
     }
@@ -85,7 +97,7 @@ export async function saveCompanyFacts(
 async function saveOrUpdateFact(
   orgId: string,
   definitionId: string,
-  value: unknown
+  value: Json
 ): Promise<string | null> {
   try {
     // Check if fact already exists
@@ -256,11 +268,20 @@ async function getOrCreateDefinition(params: {
 
 export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
   try {
+    // Get authenticated user's organization
+    const userOrg = await getUserOrganization();
+
+    if (!userOrg) {
+      return null;
+    }
+
+    const orgId = userOrg.organizationId;
+
     // Get organization data (name only - no description column)
     const { data: org } = await supabaseAdmin
       .from('organizations')
       .select('name')
-      .eq('id', TEST_ORG_ID)
+      .eq('id', orgId)
       .single();
 
     if (!org) return null;
@@ -272,7 +293,7 @@ export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
     const { data: descFact } = await supabaseAdmin
       .from('employer_facts')
       .select('value')
-      .eq('organization_id', TEST_ORG_ID)
+      .eq('organization_id', orgId)
       .eq('definition_id', definitions.description)
       .eq('is_current', true)
       .single();
@@ -281,7 +302,7 @@ export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
     const { data: salaryFact } = await supabaseAdmin
       .from('employer_facts')
       .select('value')
-      .eq('organization_id', TEST_ORG_ID)
+      .eq('organization_id', orgId)
       .eq('definition_id', definitions.salary)
       .eq('is_current', true)
       .single();
@@ -290,7 +311,7 @@ export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
     const { data: benefitsFact } = await supabaseAdmin
       .from('employer_facts')
       .select('value')
-      .eq('organization_id', TEST_ORG_ID)
+      .eq('organization_id', orgId)
       .eq('definition_id', definitions.benefits)
       .eq('is_current', true)
       .single();
@@ -299,7 +320,7 @@ export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
     const { data: remoteFact } = await supabaseAdmin
       .from('employer_facts')
       .select('value')
-      .eq('organization_id', TEST_ORG_ID)
+      .eq('organization_id', orgId)
       .eq('definition_id', definitions.remotePolicy)
       .eq('is_current', true)
       .single();

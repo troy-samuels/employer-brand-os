@@ -10,19 +10,17 @@ export const companyFactsSchema = z.object({
     .optional()
     .or(z.literal('')),
   salaryMin: z
-    .coerce
-    .number({ invalid_type_error: 'Must be a number' })
+    .number({ message: 'Must be a number' })
     .positive('Must be a positive number'),
   salaryMax: z
-    .coerce
-    .number({ invalid_type_error: 'Must be a number' })
+    .number({ message: 'Must be a number' })
     .positive('Must be a positive number'),
   currency: z.enum(['USD', 'EUR', 'GBP'], {
-    required_error: 'Please select a currency',
+    message: 'Please select a currency',
   }),
-  benefits: z.array(z.string()).default([]),
+  benefits: z.array(z.string()),
   remotePolicy: z.enum(['remote', 'hybrid', 'onsite'], {
-    required_error: 'Please select a remote policy',
+    message: 'Please select a remote policy',
   }),
 }).refine(
   (data) => data.salaryMax > data.salaryMin,
