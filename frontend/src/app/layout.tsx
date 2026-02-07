@@ -1,13 +1,30 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-family-sans",
+  display: "swap",
+});
+
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-family-mono",
+  display: "swap",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-family-display",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
-  title: "BrandOS - AI Employer Brand Platform",
-  description: "Control your employer brand. Ensure AI agents receive accurate information about your company.",
+  title: "BrandOS — Take Back Your Reputation from AI",
+  description: "AI is telling candidates the wrong things about your company. BrandOS gives you verified employer data that AI agents trust — so you control the narrative.",
 };
 
 export default function RootLayout({
@@ -17,7 +34,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`min-h-screen bg-background font-sans antialiased ${inter.variable}`}>
+      <body className={`min-h-screen bg-background font-sans antialiased ${jakarta.variable} ${jetbrains.variable} ${instrumentSerif.variable}`}>
         {children}
         <Toaster position="bottom-right" />
       </body>

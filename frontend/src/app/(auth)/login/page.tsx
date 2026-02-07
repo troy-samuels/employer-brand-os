@@ -45,7 +45,7 @@ export default function LoginPage() {
       {/* Logo - typographic */}
       <div className="mb-8">
         <Link href="/">
-          <span className="text-xl font-semibold tracking-tight text-zinc-950">
+          <span className="text-xl font-semibold tracking-tight text-gray-900">
             BrandOS
           </span>
         </Link>
@@ -53,10 +53,10 @@ export default function LoginPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 mb-2">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-2">
           Welcome back
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-gray-500">
           Enter your credentials to access your dashboard
         </p>
       </div>
@@ -72,7 +72,7 @@ export default function LoginPage() {
         <div className="space-y-2">
           <label
             htmlFor="email"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Email
           </label>
@@ -81,7 +81,7 @@ export default function LoginPage() {
             type="email"
             placeholder="you@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onValueChange={(value) => setEmail(value)}
             required
             disabled={loading}
           />
@@ -90,7 +90,7 @@ export default function LoginPage() {
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Password
           </label>
@@ -99,7 +99,7 @@ export default function LoginPage() {
             type="password"
             placeholder="Enter your password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onValueChange={(value) => setPassword(value)}
             required
             disabled={loading}
           />
@@ -111,11 +111,11 @@ export default function LoginPage() {
       </form>
 
       {/* Footer */}
-      <p className="mt-8 text-sm text-zinc-500 text-center">
+      <p className="mt-8 text-sm text-gray-500 text-center">
         Don&apos;t have an account?{' '}
         <Link
           href="/signup"
-          className="text-zinc-950 font-medium hover:underline underline-offset-4"
+          className="text-gray-900 font-medium hover:underline underline-offset-4"
         >
           Sign up
         </Link>

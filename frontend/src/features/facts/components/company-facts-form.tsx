@@ -78,7 +78,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Company Information */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">
               Company Information
             </CardTitle>
           </CardHeader>
@@ -120,7 +120,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Compensation */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">
               Compensation
             </CardTitle>
           </CardHeader>
@@ -195,7 +195,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Benefits & Policy */}
         <Card>
           <CardHeader className="pb-4">
-            <CardTitle className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium">
+            <CardTitle className="text-[10px] uppercase tracking-widest text-gray-500 font-medium">
               Benefits & Policy
             </CardTitle>
           </CardHeader>
@@ -272,7 +272,7 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         {/* Submit */}
         <div className="flex items-center justify-end gap-3">
           {saveStatus === 'success' && (
-            <span className="text-sm text-signal-green">Changes saved successfully</span>
+            <span className="text-sm text-success">Changes saved successfully</span>
           )}
           {saveStatus === 'error' && (
             <span className="text-sm text-destructive">Failed to save changes</span>
@@ -290,3 +290,5 @@ export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
         </div>
       </form>
     </Form>
+  );
+}

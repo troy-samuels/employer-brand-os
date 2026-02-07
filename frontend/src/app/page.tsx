@@ -1,92 +1,114 @@
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { motion, AnimatePresence } from "framer-motion";
+
+import { AuditInput } from "@/components/audit/audit-input";
+import { AuditProgress } from "@/components/audit/audit-progress";
+import { AuditResults } from "@/components/audit/audit-results";
+import { AuditGate } from "@/components/audit/audit-gate";
+import { useAudit } from "@/lib/hooks/use-audit";
 
 export default function Home() {
+  const { state, isLoading, result, error, runAudit, reset } = useAudit();
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header - Sticky with frosted glass */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="container mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/">
-            <span className="text-xl font-semibold tracking-tight text-foreground">
-              BrandOS
-            </span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link href="/login">
-              <Button variant="ghost">Sign in</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>Get Started</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-neutral-50">
+      <main className="flex flex-col items-center px-6 py-20 lg:py-32">
+        {/* ── Headline ───────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {state !== "complete" && (
+            <motion.div
+              key="hero"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.35 }}
+              className="text-center mb-12 max-w-xl"
+            >
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-neutral-950 leading-tight tracking-tight mb-3">
+                Is AI telling the truth
+                <br />
+                <span className="text-brand-accent">about your company?</span>
+              </h1>
+              <p className="text-base text-neutral-500">
+                Find out in 15 seconds. Completely free.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      {/* Hero */}
-      <main className="container mx-auto px-6 py-24 text-center">
-        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium mb-4">
-          AI Employer Brand Platform
-        </p>
-        <h1 className="text-5xl font-semibold tracking-tight text-foreground mb-6">
-          Control Your Employer Brand
-        </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-          Ensure AI agents receive accurate information about your company.
-          Stop hallucinations. Start with verified data.
-        </p>
-        <div className="flex items-center justify-center gap-4">
-          <Link href="/signup">
-            <Button size="lg" className="text-lg px-8 py-6">
-              Start Free Trial
-            </Button>
-          </Link>
-          <Link href="/login">
-            <Button size="lg" variant="outline" className="text-lg px-8 py-6">
-              Sign In
-            </Button>
-          </Link>
-        </div>
+        {/* ── Input ──────────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {state === "idle" && (
+            <motion.div
+              key="input"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="w-full max-w-lg"
+            >
+              <AuditInput onSubmit={runAudit} isLoading={isLoading} />
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-4 text-sm text-status-critical text-center"
+                >
+                  {error}
+                </motion.p>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-        {/* Features - Cards using design system */}
-        <div className="grid md:grid-cols-3 gap-6 mt-24 text-left">
-          <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
-            <p className="text-[10px] uppercase tracking-widest text-primary font-medium mb-3">
-              BrandCore
-            </p>
-            <h3 className="font-semibold text-lg text-foreground mb-2">Smart Pixel</h3>
-            <p className="text-muted-foreground">
-              One line of code. Instant JSON-LD schema injection for AI crawlers.
-            </p>
-          </div>
-          <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
-            <p className="text-[10px] uppercase tracking-widest text-primary font-medium mb-3">
-              BrandShield
-            </p>
-            <h3 className="font-semibold text-lg text-foreground mb-2">Hallucination Radar</h3>
-            <p className="text-muted-foreground">
-              Monitor what AI says about you. Get alerts on inaccuracies.
-            </p>
-          </div>
-          <div className="p-6 rounded-xl bg-card border border-border shadow-sm hover:shadow-md transition-shadow">
-            <p className="text-[10px] uppercase tracking-widest text-primary font-medium mb-3">
-              BrandPulse
-            </p>
-            <h3 className="font-semibold text-lg text-foreground mb-2">Verified Benchmarking</h3>
-            <p className="text-muted-foreground">
-              Benchmark against verified industry data. Know where you stand.
-            </p>
-          </div>
-        </div>
+        {/* ── Scanning ───────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {state === "running" && (
+            <motion.div
+              key="progress"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <AuditProgress result={null} isRunning={true} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ── Results ────────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {state === "complete" && result && (
+            <motion.div
+              key="results"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.4 }}
+              className="w-full max-w-lg mx-auto space-y-10"
+            >
+              {/* Score + cards */}
+              <AuditResults result={result} />
+
+              {/* Email capture */}
+              <AuditGate />
+
+              {/* Reset */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1 }}
+                className="text-center pb-6"
+              >
+                <button
+                  onClick={reset}
+                  className="text-sm text-neutral-400 hover:text-neutral-600 transition-colors"
+                >
+                  Scan another company
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
-
-      {/* Footer */}
-      <footer className="container mx-auto px-6 py-8 border-t border-border">
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <span>© 2025 BrandOS</span>
-          <span>The SSL Certificate of Employer Branding</span>
-        </div>
-      </footer>
     </div>
   );
 }

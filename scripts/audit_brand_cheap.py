@@ -96,7 +96,7 @@ Analyze and list the top 3 complaints:"""
 
     try:
         response = client.chat.completions.create(
-            model="google/gemini-2.0-flash-lite-preview-02-05:free",
+            model="google/gemini-3-pro",
             messages=[
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
@@ -111,7 +111,7 @@ Analyze and list the top 3 complaints:"""
         print("[*] Trying fallback model...")
         try:
             response = client.chat.completions.create(
-                model="google/gemini-flash-1.5",
+                model="google/gemini-1.5-flash",
                 messages=[
                     {"role": "system", "content": system_prompt},
                     {"role": "user", "content": user_prompt}

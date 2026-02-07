@@ -79,7 +79,7 @@ export default function SignupPage() {
         </div>
 
         <Link href="/login">
-          <Button variant="outline" className="w-full">
+          <Button variant="secondary" className="w-full">
             Back to login
           </Button>
         </Link>
@@ -92,7 +92,7 @@ export default function SignupPage() {
       {/* Logo - typographic */}
       <div className="mb-8">
         <Link href="/">
-          <span className="text-xl font-semibold tracking-tight text-zinc-950">
+          <span className="text-xl font-semibold tracking-tight text-gray-900">
             BrandOS
           </span>
         </Link>
@@ -100,10 +100,10 @@ export default function SignupPage() {
 
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-2xl font-semibold tracking-tight text-zinc-950 mb-2">
+        <h1 className="text-2xl font-semibold tracking-tight text-gray-900 mb-2">
           Create your account
         </h1>
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-gray-500">
           Start controlling your employer brand in minutes
         </p>
       </div>
@@ -119,7 +119,7 @@ export default function SignupPage() {
         <div className="space-y-2">
           <label
             htmlFor="fullName"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Your Name
           </label>
@@ -128,7 +128,7 @@ export default function SignupPage() {
             type="text"
             placeholder="Jane Smith"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onValueChange={(value) => setFullName(value)}
             required
             disabled={loading}
           />
@@ -137,7 +137,7 @@ export default function SignupPage() {
         <div className="space-y-2">
           <label
             htmlFor="companyName"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Company Name
           </label>
@@ -146,7 +146,7 @@ export default function SignupPage() {
             type="text"
             placeholder="Acme Corp"
             value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
+            onValueChange={(value) => setCompanyName(value)}
             required
             disabled={loading}
           />
@@ -155,7 +155,7 @@ export default function SignupPage() {
         <div className="space-y-2">
           <label
             htmlFor="email"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Work Email
           </label>
@@ -164,7 +164,7 @@ export default function SignupPage() {
             type="email"
             placeholder="you@company.com"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onValueChange={(value) => setEmail(value)}
             required
             disabled={loading}
           />
@@ -173,7 +173,7 @@ export default function SignupPage() {
         <div className="space-y-2">
           <label
             htmlFor="password"
-            className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium"
+            className="text-[10px] uppercase tracking-widest text-gray-500 font-medium"
           >
             Password
           </label>
@@ -182,7 +182,7 @@ export default function SignupPage() {
             type="password"
             placeholder="At least 8 characters"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onValueChange={(value) => setPassword(value)}
             required
             minLength={8}
             disabled={loading}
@@ -195,11 +195,11 @@ export default function SignupPage() {
       </form>
 
       {/* Footer */}
-      <p className="mt-8 text-sm text-zinc-500 text-center">
+      <p className="mt-8 text-sm text-gray-500 text-center">
         Already have an account?{' '}
         <Link
           href="/login"
-          className="text-zinc-950 font-medium hover:underline underline-offset-4"
+          className="text-gray-900 font-medium hover:underline underline-offset-4"
         >
           Sign in
         </Link>

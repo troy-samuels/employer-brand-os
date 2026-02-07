@@ -79,7 +79,7 @@ export function Sidebar() {
       <nav className="flex-1 px-6 space-y-8">
         {navigation.map((group) => (
           <div key={group.section}>
-            <h3 className="text-[10px] uppercase tracking-widest text-neutral-gray font-medium mb-3">
+            <h3 className="text-[10px] uppercase tracking-widest text-gray-500 font-medium mb-3">
               {group.section}
             </h3>
             <div className="space-y-4">
@@ -117,9 +117,9 @@ export function Sidebar() {
             </div>
             <div className="flex-1 text-left min-w-0">
               <p className="text-sm font-medium text-sidebar-primary truncate">{userName}</p>
-              <p className="text-[10px] text-neutral-gray truncate">{userEmail}</p>
+              <p className="text-[10px] text-gray-500 truncate">{userEmail}</p>
             </div>
-            <ChevronUp className="h-4 w-4 text-neutral-gray" />
+            <ChevronUp className="h-4 w-4 text-gray-500" />
           </DropdownMenuTrigger>
           <DropdownMenuContent side="top" align="start" className="w-56">
             <DropdownMenuLabel>My Account</DropdownMenuLabel>

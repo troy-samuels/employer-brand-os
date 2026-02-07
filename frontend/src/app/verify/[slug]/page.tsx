@@ -50,6 +50,34 @@ interface TruthPageData {
   facts: EmployerFactData[];
 }
 
+function normalizeWebsite(website: string | null) {
+  if (!website) return null;
+  const trimmed = website.trim();
+  if (!trimmed) return null;
+
+  const hasScheme = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed);
+  const candidate = hasScheme ? trimmed : `https://${trimmed}`;
+
+  try {
+    const parsed = new URL(candidate);
+    if (!["http:", "https:"].includes(parsed.protocol)) {
+      return null;
+    }
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function hostnameFromUrl(url: string | null) {
+  if (!url) return null;
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return null;
+  }
+}
+
 // Fetch organization and facts by slug
 async function getTruthPageData(slug: string): Promise<TruthPageData | null> {
   // First try hosted_pages table
@@ -205,13 +233,14 @@ async function getTruthPageData(slug: string): Promise<TruthPageData | null> {
 // Generate JSON-LD for the page
 function generateJsonLd(data: TruthPageData): object[] {
   const { organization, facts } = data;
+  const websiteUrl = normalizeWebsite(organization.website);
 
   // Organization schema
   const orgSchema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: organization.name,
-    ...(organization.website && { url: organization.website }),
+    ...(websiteUrl && { url: websiteUrl }),
     ...(organization.logoUrl && { logo: organization.logoUrl }),
     ...(organization.industry && { industry: organization.industry }),
     ...(organization.employeeCount && {
@@ -245,14 +274,14 @@ function generateJsonLd(data: TruthPageData): object[] {
     hiringOrganization: {
       '@type': 'Organization',
       name: organization.name,
-      ...(organization.website && { sameAs: organization.website }),
+      ...(websiteUrl && { sameAs: websiteUrl }),
       ...(organization.logoUrl && { logo: organization.logoUrl }),
     },
-    ...(organization.website && {
+    ...(websiteUrl && {
       directApply: true,
       applicationContact: {
         '@type': 'ContactPoint',
-        url: organization.website,
+        url: websiteUrl,
       },
     }),
   };
@@ -343,6 +372,8 @@ export default async function TruthPage({ params }: PageProps) {
 
   const { organization, facts } = data;
   const jsonLdSchemas = generateJsonLd(data);
+  const websiteUrl = normalizeWebsite(organization.website);
+  const websiteHost = hostnameFromUrl(websiteUrl);
 
   // Extract display values
   const salaryFact = facts.find((f) => f.name === 'base_salary');
@@ -483,19 +514,21 @@ export default async function TruthPage({ params }: PageProps) {
           </div>
 
           {/* CTA */}
-          {organization.website && (
+          {websiteUrl && (
             <div className="mt-16 text-center">
               <a
-                href={organization.website}
+                href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center px-6 py-3 bg-zinc-900 text-white font-medium rounded-lg hover:bg-zinc-800 transition-colors"
               >
                 View Open Positions
               </a>
-              <p className="mt-3 text-xs text-zinc-400">
-                Opens {new URL(organization.website).hostname}
-              </p>
+              {websiteHost && (
+                <p className="mt-3 text-xs text-zinc-400">
+                  Opens {websiteHost}
+                </p>
+              )}
             </div>
           )}
         </main>

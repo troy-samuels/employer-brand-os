@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandOS - The AI Employer Brand Platform</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .mono {
+      font-family: 'JetBrains Mono', 'SF Mono', monospace;
+    }
+
+    :root {
+      --primary-purple: #7c3aed;
+      --secondary-purple: #a855f7;
+      --dark-purple: #4c1d95;
+      --electric-blue: #06b6d4;
+      --neon-green: #10b981;
+      --danger-red: #ef4444;
+      --warning-orange: #f59e0b;
+    }
+
+    body {
+      background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(120, 58, 237, 0.3), transparent),
+                  linear-gradient(180deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Advanced Background Animation */
+    .animated-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 58, 237, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.2) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(6, 182, 212, 0.2) 0%, transparent 50%);
+      animation: backgroundShift 20s ease-in-out infinite;
+    }
+
+    @keyframes backgroundShift {
+      0%, 100% { transform: scale(1) rotate(0deg); }
+      50% { transform: scale(1.1) rotate(1deg); }
+    }
+
+    /* Floating Particles */
+    .particle {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .particle:nth-child(odd) { animation-delay: -3s; }
+    .particle:nth-child(3n) { animation-delay: -1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Premium Glass Effect */
+    .premium-glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+
+    /* Enhanced Typography */
+    .hero-title {
+      background: linear-gradient(135deg, #ffffff 0%, #a855f7 50%, #06b6d4 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: textShimmer 3s ease-in-out infinite;
+    }
+
+    @keyframes textShimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    /* Premium Buttons */
+    .premium-btn {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, var(--primary-purple), var(--secondary-purple));
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .premium-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 40px rgba(120, 58, 237, 0.4);
+    }
+
+    .premium-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .premium-btn:hover::before {
+      left: 100%;
+    }
+
+    /* Terminal Interface */
+    .terminal {
+      background: rgba(0, 0, 0, 0.8);
+      border: 1px solid var(--electric-blue);
+      border-radius: 8px;
+      box-shadow: 
+        0 0 20px rgba(6, 182, 212, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: linear-gradient(90deg, #1f2937, #374151);
+      border-bottom: 1px solid rgba(6, 182, 212, 0.3);
+      display: flex;
+      align-items: center;
+      padding: 8px 16px;
+    }
+
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.red { background: #ff5f57; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #28ca42; }
+
+    .terminal-content {
+      padding: 20px;
+      min-height: 300px;
+      background: rgba(0, 0, 0, 0.9);
+    }
+
+    /* Typing Animation */
+    .typing-text {
+      border-right: 2px solid var(--electric-blue);
+      animation: blink 1s infinite, typing 3s steps(40) forwards;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+
+    @keyframes blink {
+      0%, 50% { border-color: var(--electric-blue); }
+      51%, 100% { border-color: transparent; }
+    }
+
+    /* AI Avatar Effects */
+    .ai-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 14px;
+      position: relative;
+      animation: pulse 2s infinite;
+    }
+
+    .ai-avatar::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--electric-blue), var(--primary-purple));
+      z-index: -1;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); }
+      70% { box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); }
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Risk Meter */
+    .risk-meter {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        var(--neon-green) 0deg,
+        var(--warning-orange) 120deg,
+        var(--danger-red) 240deg,
+        #8b0000 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: riskPulse 2s ease-in-out infinite;
+    }
+
+    .risk-meter::before {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: rgba(0, 0, 0, 0.9);
+      border-radius: 50%;
+    }
+
+    .risk-score {
+      position: relative;
+      z-index: 2;
+      font-size: 24px;
+      font-weight: bold;
+      color: white;
+    }
+
+    @keyframes riskPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+      50% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+    }
+
+    /* Glitch Effect */
+    .glitch {
+      animation: glitch 0.3s infinite;
+    }
+
+    @keyframes glitch {
+      0% { transform: translateX(0); }
+      20% { transform: translateX(-2px); }
+      40% { transform: translateX(2px); }
+      60% { transform: translateX(-1px); }
+      80% { transform: translateX(1px); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Neon Highlight */
+    .neon-highlight {
+      color: var(--electric-blue);
+      text-shadow: 0 0 10px currentColor;
+      animation: neonFlicker 2s ease-in-out infinite;
+    }
+
+    @keyframes neonFlicker {
+      0%, 100% { opacity: 1; text-shadow: 0 0 10px currentColor; }
+      50% { opacity: 0.8; text-shadow: 0 0 20px currentColor; }
+    }
+
+    /* Scroll Indicator */
+    .scroll-indicator {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.6);
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+      40% { transform: translateX(-50%) translateY(-10px); }
+      60% { transform: translateX(-50%) translateY(-5px); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 3rem;
+        line-height: 1.1;
+      }
+      
+      .terminal-content {
+        padding: 15px;
+        min-height: 250px;
+      }
+    }
+
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body class="text-white relative">
+  <!-- Animated Background -->
+  <div class="animated-bg"></div>
+  
+  <!-- Floating Particles -->
+  <div id="particles"></div>
+
+  <!-- Header -->
+  <header class="premium-glass sticky top-0 z-50 border-b border-white/10">
+    <div class="container mx-auto px-6 py-4">
+      <nav class="flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+          <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center">
+            <span class="text-sm font-bold">B</span>
+          </div>
+          <span class="text-xl font-bold tracking-tight">BrandOS</span>
+        </div>
+        <div class="flex items-center space-x-4">
+          <button onclick="scrollToDemo()" class="px-4 py-2 text-sm font-medium hover:bg-white/10 rounded-lg transition-all duration-300">
+            Live Demo
+          </button>
+          <button class="premium-btn px-6 py-2 text-sm font-medium rounded-lg">
+            Start Free Trial
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative pt-20 pb-32">
+    <div class="container mx-auto px-6 text-center">
+      <div class="mb-6">
+        <span class="inline-block px-4 py-2 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-500/30 rounded-full text-sm font-medium mb-8">
+          🚀 AI Employer Brand Platform
+        </span>
+      </div>
+      
+      <h1 class="hero-title text-7xl md:text-8xl font-black tracking-tight mb-8 leading-none">
+        Control Your<br />
+        <span class="neon-highlight">AI Reputation</span>
+      </h1>
+      
+      <p class="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto mb-12 leading-relaxed">
+        Stop AI agents from spreading <span class="text-red-400">misinformation</span> about your company.<br />
+        One line of code. <span class="text-green-400">Perfect visibility</span>. <span class="text-blue-400">Instant compliance</span>.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6 mb-20">
+        <button onclick="scrollToDemo()" class="premium-btn px-8 py-4 text-lg font-semibold rounded-xl">
+          🔥 See Live Demo
+        </button>
+        <button class="px-8 py-4 border border-white/20 hover:bg-white/10 text-lg font-semibold rounded-xl transition-all duration-300">
+          📊 View Analytics
+        </button>
+      </div>
+
+      <!-- Problem Statement -->
+      <div class="premium-glass p-8 md:p-12 rounded-2xl max-w-5xl mx-auto">
+        <h2 class="text-3xl font-bold mb-8">The Crisis: <span class="text-red-400">Invisible</span> and <span class="text-orange-400">Illegal</span></h2>
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="text-left">
+            <div class="flex items-center mb-4">
+              <div class="w-3 h-3 bg-red-500 rounded-full mr-3 animate-pulse"></div>
+              <h3 class="text-xl font-semibold text-red-300">Invisible to AI</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+              <span class="neon-highlight font-semibold">47% of job searches</span> now happen via AI agents. 
+              Your ATS outputs messy HTML that ChatGPT, Claude, and Perplexity <span class="text-red-400">cannot read</span>.
+            </p>
+          </div>
+          <div class="text-left">
+            <div class="flex items-center mb-4">
+              <div class="w-3 h-3 bg-orange-500 rounded-full mr-3 animate-pulse"></div>
+              <h3 class="text-xl font-semibold text-orange-300">Illegal Compliance</h3>
+            </div>
+            <p class="text-gray-300 leading-relaxed">
+              <span class="neon-highlight font-semibold">Pay Transparency laws</span> in EU/NY/CA require automated disclosure. 
+              Legacy systems fail compliance, risking <span class="text-orange-400">$300K+ fines</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Demo Section -->
+  <section id="demo" class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="text-center mb-12">
+        <h2 class="text-4xl font-bold mb-4">
+          Live AI Audit: <span class="neon-highlight">See The Damage</span>
+        </h2>
+        <p class="text-xl text-gray-300">
+          Discover what AI agents really say about your company
+        </p>
+      </div>
+
+      <div class="max-w-4xl mx-auto">
+        <!-- Terminal Interface -->
+        <div class="terminal mb-8">
+          <div class="terminal-header">
+            <div class="terminal-dots">
+              <div class="dot red"></div>
+              <div class="dot yellow"></div>
+              <div class="dot green"></div>
+            </div>
+            <span class="mono text-gray-400 ml-4">brandos-ai-audit.sh</span>
+          </div>
+          
+          <div class="terminal-content">
+            <div class="mb-6">
+              <span class="text-blue-400 mono">$</span>
+              <span class="mono text-white ml-2">Enter company name for AI audit:</span>
+              <div class="mt-2">
+                <input 
+                  type="text" 
+                  id="companyInput"
+                  placeholder="Company Name"
+                  class="mono bg-transparent border-b border-blue-400 text-white w-full max-w-md focus:outline-none focus:border-blue-300 pb-1"
+                />
+              </div>
+            </div>
+            
+            <button 
+              onclick="startAdvancedDemo()"
+              id="auditButton"
+              class="mono bg-gradient-to-r from-blue-500 to-purple-500 px-6 py-3 rounded font-medium hover:from-blue-600 hover:to-purple-600 transition-all duration-300"
+            >
+              🚀 Initialize AI Scan
+            </button>
+          </div>
+        </div>
+
+        <!-- Demo Results -->
+        <div id="demoResults" class="hidden space-y-6">
+          <h3 class="text-2xl font-bold text-center mb-8">
+            <span class="glitch text-red-400">CRITICAL ISSUES DETECTED</span>
+          </h3>
+          
+          <!-- AI Response Cards -->
+          <div class="grid gap-6">
+            <!-- ChatGPT Response -->
+            <div class="premium-glass p-6 rounded-xl border-l-4 border-red-500">
+              <div class="flex items-center mb-4">
+                <div class="ai-avatar bg-green-500 mr-4">
+                  <span>🤖</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold">ChatGPT Analysis</h4>
+                  <span class="text-sm text-gray-400 mono">gpt-4-turbo</span>
+                </div>
+              </div>
+              <p id="chatgptResponse" class="text-red-300 leading-relaxed"></p>
+            </div>
+            
+            <!-- Claude Response -->
+            <div class="premium-glass p-6 rounded-xl border-l-4 border-orange-500">
+              <div class="flex items-center mb-4">
+                <div class="ai-avatar bg-orange-500 mr-4">
+                  <span>🧠</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold">Claude Analysis</h4>
+                  <span class="text-sm text-gray-400 mono">claude-3-opus</span>
+                </div>
+              </div>
+              <p id="claudeResponse" class="text-orange-300 leading-relaxed"></p>
+            </div>
+            
+            <!-- Perplexity Response -->
+            <div class="premium-glass p-6 rounded-xl border-l-4 border-blue-500">
+              <div class="flex items-center mb-4">
+                <div class="ai-avatar bg-blue-500 mr-4">
+                  <span>🔍</span>
+                </div>
+                <div>
+                  <h4 class="font-semibold">Perplexity Analysis</h4>
+                  <span class="text-sm text-gray-400 mono">perplexity-pro</span>
+                </div>
+              </div>
+              <p id="perplexityResponse" class="text-blue-300 leading-relaxed"></p>
+            </div>
+          </div>
+
+          <!-- Risk Assessment -->
+          <div class="premium-glass p-8 rounded-2xl text-center">
+            <h4 class="text-2xl font-bold mb-6 text-red-400">Viral Risk Assessment</h4>
+            <div class="flex items-center justify-center gap-8 mb-6">
+              <div class="risk-meter">
+                <div class="risk-score" id="riskScore">0</div>
+              </div>
+              <div class="text-left">
+                <div class="mb-2">
+                  <span class="text-gray-400">Risk Level:</span>
+                  <span class="text-red-400 font-bold ml-2">CRITICAL</span>
+                </div>
+                <div class="mb-2">
+                  <span class="text-gray-400">Spread Velocity:</span>
+                  <span class="text-orange-400 font-bold ml-2">HIGH</span>
+                </div>
+                <div>
+                  <span class="text-gray-400">Compliance Status:</span>
+                  <span class="text-red-400 font-bold ml-2">VIOLATED</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-red-300 mb-8">
+              <strong>IMMEDIATE ACTION REQUIRED:</strong> AI agents are actively spreading inaccurate information about your company. 
+              This misinformation could viral across social platforms within hours.
+            </p>
+            <button class="premium-btn px-12 py-4 text-xl font-bold rounded-xl">
+              🛡️ Deploy BrandOS Shield
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Grid -->
+  <section class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div class="premium-glass p-8 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
+          <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <span class="text-xl">⚡</span>
+          </div>
+          <span class="text-xs uppercase tracking-widest text-purple-400 font-medium block mb-3">
+            BrandCore
+          </span>
+          <h3 class="font-bold text-xl mb-3">Smart Pixel</h3>
+          <p class="text-gray-300 leading-relaxed">
+            One line of code. Instant JSON-LD schema injection for perfect AI crawler visibility.
+          </p>
+        </div>
+        
+        <div class="premium-glass p-8 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
+          <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <span class="text-xl">🛡️</span>
+          </div>
+          <span class="text-xs uppercase tracking-widest text-red-400 font-medium block mb-3">
+            BrandShield
+          </span>
+          <h3 class="font-bold text-xl mb-3">Hallucination Radar</h3>
+          <p class="text-gray-300 leading-relaxed">
+            24/7 monitoring of AI platforms. Instant alerts when misinformation spreads.
+          </p>
+        </div>
+        
+        <div class="premium-glass p-8 rounded-2xl hover:bg-white/10 transition-all duration-300 group">
+          <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-teal-500 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+            <span class="text-xl">📊</span>
+          </div>
+          <span class="text-xs uppercase tracking-widest text-green-400 font-medium block mb-3">
+            BrandPulse
+          </span>
+          <h3 class="font-bold text-xl mb-3">AI Analytics</h3>
+          <p class="text-gray-300 leading-relaxed">
+            Real-time visibility metrics. Track AI discovery and competitive positioning.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-6 text-center">
+      <div class="premium-glass p-12 rounded-2xl max-w-4xl mx-auto">
+        <h2 class="text-5xl font-bold mb-6">
+          The <span class="neon-highlight">Stripe</span> for Employer Truth
+        </h2>
+        <p class="text-xl text-gray-300 mb-8">
+          One integration. Instant compliance. Perfect AI visibility.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <button class="premium-btn px-12 py-4 text-xl font-bold rounded-xl">
+            🚀 Start Free Trial
+          </button>
+          <button class="px-12 py-4 border border-white/20 hover:bg-white/10 text-xl font-semibold rounded-xl transition-all duration-300">
+            📞 Book Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-white/10 py-12">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="flex items-center space-x-2 mb-4 md:mb-0">
+          <div class="w-6 h-6 bg-gradient-to-br from-purple-500 to-blue-500 rounded"></div>
+          <span class="font-semibold">BrandOS</span>
+        </div>
+        <div class="text-sm text-gray-400">
+          © 2026 BrandOS • The SSL Certificate of Employer Branding
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scroll Indicator -->
+  <div class="scroll-indicator">
+    <div class="text-center">
+      <div class="text-2xl mb-2">↓</div>
+      <div class="text-xs uppercase tracking-wide">Scroll</div>
+    </div>
+  </div>
+
+  <script>
+    // Initialize particles
+    function createParticles() {
+      const container = document.getElementById('particles');
+      const particleCount = 20;
+      
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.width = particle.style.height = (Math.random() * 4 + 1) + 'px';
+        particle.style.animationDelay = Math.random() * 6 + 's';
+        particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+        container.appendChild(particle);
+      }
+    }
+
+    // Smooth scroll to demo
+    function scrollToDemo() {
+      document.getElementById('demo').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+    // Advanced typewriter effect
+    function typeWriter(element, text, speed = 30) {
+      return new Promise((resolve) => {
+        element.innerHTML = '';
+        element.classList.add('typing-text');
+        let i = 0;
+        
+        function type() {
+          if (i < text.length) {
+            element.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(type, speed);
+          } else {
+            element.classList.remove('typing-text');
+            resolve();
+          }
+        }
+        type();
+      });
+    }
+
+    // Enhanced demo with advanced animations
+    async function startAdvancedDemo() {
+      const companyName = document.getElementById('companyInput').value.trim();
+      if (!companyName) {
+        // Add shake animation to input
+        document.getElementById('companyInput').style.animation = 'glitch 0.5s ease-in-out';
+        setTimeout(() => {
+          document.getElementById('companyInput').style.animation = '';
+        }, 500);
+        return;
+      }
+
+      const button = document.getElementById('auditButton');
+      const originalText = button.textContent;
+      
+      // Button loading animation
+      button.innerHTML = '🔍 <span class="mono">Scanning AI platforms...</span>';
+      button.disabled = true;
+
+      // Show results container with animation
+      setTimeout(() => {
+        const results = document.getElementById('demoResults');
+        results.classList.remove('hidden');
+        results.style.animation = 'fadeIn 0.6s ease-out';
+      }, 1000);
+
+      // AI responses with staggered typing
+      const responses = [
+        {
+          element: 'chatgptResponse',
+          text: `"${companyName} offers competitive salaries ranging from $45,000 to $95,000 according to employee reports, though some reviews mention below-market compensation and limited remote work flexibility. Recent layoffs have affected company culture according to anonymous sources."`,
+          delay: 2000
+        },
+        {
+          element: 'claudeResponse', 
+          text: `"Based on available data, ${companyName} appears to have mixed employee satisfaction with concerns about work-life balance and unclear advancement opportunities. Benefits package details are inconsistent across job posting platforms."`,
+          delay: 4000
+        },
+        {
+          element: 'perplexityResponse',
+          text: `"${companyName} is described as a growing company with varying reports about workplace culture. Some sources indicate outdated technology infrastructure and limited professional development programs, though recent initiatives suggest improvements."`,
+          delay: 6000
+        }
+      ];
+
+      // Type out each response
+      for (const response of responses) {
+        setTimeout(async () => {
+          const element = document.getElementById(response.element);
+          element.parentElement.style.animation = 'fadeIn 0.6s ease-out';
+          await typeWriter(element, response.text, 25);
+          
+          // Add glitch effect after typing
+          setTimeout(() => {
+            element.classList.add('glitch');
+            setTimeout(() => element.classList.remove('glitch'), 300);
+          }, 500);
+        }, response.delay);
+      }
+
+      // Animate risk score
+      setTimeout(() => {
+        const scoreElement = document.getElementById('riskScore');
+        let score = 0;
+        const target = 87;
+        const increment = 3;
+        
+        const interval = setInterval(() => {
+          score += increment;
+          scoreElement.textContent = Math.min(score, target);
+          
+          if (score >= target) {
+            clearInterval(interval);
+            scoreElement.textContent = target;
+            
+            // Add pulse effect to risk meter
+            scoreElement.parentElement.style.animation = 'riskPulse 1s ease-in-out 3';
+          }
+        }, 50);
+      }, 8000);
+
+      // Reset button
+      setTimeout(() => {
+        button.innerHTML = originalText;
+        button.disabled = false;
+      }, 9000);
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', function() {
+      createParticles();
+      
+      // Add parallax effect
+      window.addEventListener('scroll', () => {
+        const scrolled = window.pageYOffset;
+        const parallax = document.querySelector('.animated-bg');
+        const speed = scrolled * 0.5;
+        parallax.style.transform = `translateY(${speed}px)`;
+      });
+
+      // Hide scroll indicator after scroll
+      let scrollTimeout;
+      window.addEventListener('scroll', () => {
+        const indicator = document.querySelector('.scroll-indicator');
+        if (window.scrollY > 100) {
+          indicator.style.opacity = '0';
+        } else {
+          indicator.style.opacity = '1';
+        }
+      });
+
+      // Add hover effects to cards
+      const cards = document.querySelectorAll('.premium-glass');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px) scale(1.02)';
+          this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        });
+        
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0) scale(1)';
+        });
+      });
+    });
+
+    // Add keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.activeElement.id === 'companyInput') {
+        startAdvancedDemo();
+      }
+      
+      if (e.key === 'Escape') {
+        // Reset demo
+        document.getElementById('demoResults').classList.add('hidden');
+        document.getElementById('companyInput').value = '';
+      }
+    });
+  </script>
+</body>
+</html>

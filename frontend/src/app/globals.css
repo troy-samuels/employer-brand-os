@@ -1,4 +1,3 @@
-@import url('https://assets.vercel.com/raw/upload/v1587415301/fonts/geist-sans/geist-sans.css');
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -7,47 +6,83 @@
 @theme inline {
   /* Semantic Colors */
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-foreground: var(--text-primary);
+  --color-card: var(--white);
+  --color-card-foreground: var(--text-primary);
+  --color-popover: var(--white);
+  --color-popover-foreground: var(--text-primary);
+  --color-primary: var(--brand-accent);
+  --color-primary-foreground: var(--white);
+  --color-secondary: var(--neutral-100);
+  --color-secondary-foreground: var(--text-primary);
+  --color-muted: var(--neutral-100);
+  --color-muted-foreground: var(--text-secondary);
+  --color-accent: var(--neutral-100);
+  --color-accent-foreground: var(--text-primary);
+  --color-destructive: var(--status-critical);
+  --color-destructive-foreground: var(--white);
   --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-input: var(--border);
+  --color-ring: var(--brand-accent);
+
+  /* Brand */
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-accent: var(--brand-accent);
+  --color-brand-accent-hover: var(--brand-accent-hover);
+  --color-brand-accent-light: var(--brand-accent-light);
+  --color-brand-accent-subtle: var(--brand-accent-subtle);
+  --color-brand-primary: var(--brand-accent);
+  --color-brand-primary-hover: var(--brand-accent-hover);
+  --color-brand-primary-light: var(--brand-accent-light);
+
+  /* Warm Neutrals */
+  --color-neutral-950: var(--neutral-950);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-50: var(--neutral-50);
+
+  /* Status */
+  --color-status-verified: var(--status-verified);
+  --color-status-verified-light: var(--status-verified-light);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-light: var(--status-warning-light);
+  --color-status-critical: var(--status-critical);
+  --color-status-critical-light: var(--status-critical-light);
+  --color-status-info: var(--status-info);
+  --color-status-info-light: var(--status-info-light);
+
+  /* Box Shadows */
+  --shadow-card: 0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04);
+  --shadow-card-hover: 0 4px 12px rgba(28, 25, 23, 0.08), 0 2px 4px rgba(28, 25, 23, 0.04);
+  --shadow-elevated: 0 8px 24px rgba(28, 25, 23, 0.1), 0 2px 8px rgba(28, 25, 23, 0.06);
 
   /* Charts */
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  --color-chart-1: var(--brand-accent);
+  --color-chart-2: var(--status-verified);
+  --color-chart-3: var(--status-warning);
+  --color-chart-4: var(--status-critical);
+  --color-chart-5: var(--neutral-600);
 
   /* Sidebar */
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar: var(--white);
+  --color-sidebar-foreground: var(--neutral-600);
+  --color-sidebar-primary: var(--brand-accent);
+  --color-sidebar-primary-foreground: var(--white);
+  --color-sidebar-accent: var(--brand-accent-light);
+  --color-sidebar-accent-foreground: var(--brand-accent);
+  --color-sidebar-border: var(--neutral-200);
+  --color-sidebar-ring: var(--brand-accent);
 
   /* Typography */
-  --font-sans: var(--font-sans, ui-sans-serif, system-ui, sans-serif);
-  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+  --font-sans: var(--font-family-sans, "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-family-mono, "JetBrains Mono", ui-monospace, SFMono-Regular, monospace);
+  --font-display: var(--font-family-display, "Instrument Serif", Georgia, "Times New Roman", serif);
 
-  /* Border Radius - Silent Luxury */
+  /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -62,93 +97,104 @@
   --animate-accordion-up: accordion-up 0.2s ease-out;
 }
 
-/*
-  BrandOS Trust Design System
-
-  Philosophy: Clean, authoritative, and trustworthy.
-  Inspired by: Stripe, Vercel, modern tech infrastructure.
-*/
-
 :root {
-  --radius: 0.5rem; /* Sharper, more modern radius */
+  --radius: 12px;
 
-  /* BrandOS Trust Palette - Light Mode */
-  --background: hsl(0 0% 100%); /* White */
-  --foreground: hsl(222 47% 11%); /* Trust Navy */
+  /* Brand Colours */
+  --brand-deep: #1B2559;
+  --brand-accent: #4F6BF6;
+  --brand-accent-hover: #3D56D6;
+  --brand-accent-light: #EEF1FE;
+  --brand-accent-subtle: #F6F7FF;
 
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(222 47% 11%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(222 47% 11%);
+  /* Warm Neutral Palette */
+  --neutral-950: #1C1917;
+  --neutral-800: #3D3833;
+  --neutral-600: #6B6560;
+  --neutral-500: #8A8480;
+  --neutral-300: #CCC7C1;
+  --neutral-200: #E8E4DF;
+  --neutral-100: #F4F2EF;
+  --neutral-50: #FAFAF8;
+  --white: #FFFFFF;
 
-  --primary: hsl(221 83% 60%); /* Verify Blue */
-  --primary-foreground: hsl(0 0% 100%); /* White */
+  /* Status Colours */
+  --status-verified: #16A34A;
+  --status-verified-light: #F0FDF4;
+  --status-warning: #D97706;
+  --status-warning-light: #FFFBEB;
+  --status-critical: #DC2626;
+  --status-critical-light: #FEF2F2;
+  --status-info: #4F6BF6;
+  --status-info-light: #EEF1FE;
 
-  --secondary: hsl(210 40% 98%); /* Slate 50 */
-  --secondary-foreground: hsl(222 47% 11%);
+  /* Semantic Mappings */
+  --background: var(--neutral-50);
+  --surface: var(--white);
+  --border: var(--neutral-200);
+  --border-focus: var(--brand-accent);
 
-  --muted: hsl(210 40% 96.1%); /* Slate 100 */
-  --muted-foreground: hsl(215.4 16.3% 46.9%); /* Slate 500 */
+  /* Text */
+  --text-primary: var(--neutral-950);
+  --text-secondary: var(--neutral-600);
+  --text-muted: var(--neutral-500);
+  --text-white: var(--white);
 
-  --accent: hsl(210 40% 96.1%);
-  --accent-foreground: hsl(222 47% 11%);
-
-  --destructive: hsl(0 84% 60%); /* Critical Red */
-  --destructive-foreground: hsl(0 0% 100%);
-
-  --border: hsl(214.3 31.8% 91.4%); /* Slate 200 */
-  --input: hsl(214.3 31.8% 91.4%);
-  --ring: hsl(221 83% 60%); /* Verify Blue */
-}
-
-.dark {
-  /* BrandOS Trust Palette - Dark Mode */
-  --background: hsl(222 47% 11%); /* Trust Navy */
-  --foreground: hsl(0 0% 100%); /* White */
-
-  --card: hsl(222 47% 15%); /* Slightly lighter navy */
-  --card-foreground: hsl(0 0% 100%);
-  --popover: hsl(222 47% 11%);
-  --popover-foreground: hsl(0 0% 100%);
-
-  --primary: hsl(221 83% 60%); /* Verify Blue */
-  --primary-foreground: hsl(0 0% 100%);
-
-  --secondary: hsl(222 47% 20%); /* Custom darker shade */
-  --secondary-foreground: hsl(0 0% 100%);
-
-  --muted: hsl(215 20.2% 65.1%);
-  --muted-foreground: hsl(215.4 16.3% 56.9%);
-
-  --accent: hsl(215 20.2% 65.1%);
-  --accent-foreground: hsl(0 0% 100%);
-
-  --destructive: hsl(0 84% 60%); /* Critical Red */
-  --destructive-foreground: hsl(0 0% 100%);
-
-  --border: hsl(215 27.9% 27%); /* Custom border */
-  --input: hsl(215 27.9% 27%);
-  --ring: hsl(221 83% 60%); /* Verify Blue */
+  /* Legacy Aliases — keeps existing components working during migration */
+  --brand-primary: var(--brand-accent);
+  --brand-primary-hover: var(--brand-accent-hover);
+  --brand-primary-light: var(--brand-accent-light);
+  --success: var(--status-verified);
+  --success-light: var(--status-verified-light);
+  --warning: var(--status-warning);
+  --warning-light: var(--status-warning-light);
+  --error: var(--status-critical);
+  --error-light: var(--status-critical-light);
+  --gray-50: var(--neutral-50);
+  --gray-100: var(--neutral-100);
+  --gray-200: var(--neutral-200);
+  --gray-300: var(--neutral-300);
+  --gray-400: var(--neutral-500);
+  --gray-500: var(--neutral-600);
+  --gray-600: var(--neutral-600);
+  --gray-700: var(--neutral-800);
+  --gray-800: var(--neutral-800);
+  --gray-900: var(--neutral-950);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Editorial Headings */
   h1, h2, h3, h4, h5, h6 {
-    @apply tracking-tight font-medium;
+    @apply font-semibold;
+    color: var(--neutral-950);
+    letter-spacing: -0.015em;
+  }
+
+  h1 {
+    letter-spacing: -0.02em;
+  }
+
+  /* Overline utility — used for category labels */
+  .overline {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--neutral-500);
+    line-height: 1.3;
   }
 }
 
-/* Accordion Animations */
 @keyframes accordion-down {
   from { height: 0; }
   to { height: var(--radix-accordion-content-height); }

@@ -32,7 +32,7 @@ client = OpenAI(
 MODEL_STACKS = {
     "OUTREACH": [
         {
-            "id": "google/gemini-2.0-flash-exp:free",
+            "id": "google/gemini-1.5-flash",
             "name": "Google Gemini Flash",
             "perspective": "Google Perspective",
             "cost": "FREE"
@@ -52,7 +52,7 @@ MODEL_STACKS = {
     ],
     "CLIENT": [
         {
-            "id": "google/gemini-1.5-pro",
+            "id": "google/gemini-3-pro",
             "name": "Google Gemini 1.5 Pro",
             "perspective": "Deep Google Analysis",
             "cost": "$$"

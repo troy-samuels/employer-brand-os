@@ -167,7 +167,7 @@ export default function IntegrationPage() {
                     </code>
                   </pre>
                   <Button
-                    variant="outline"
+                    variant="secondary"
                     size="sm"
                     onClick={handleCopySnippet}
                     className="absolute top-3 right-3 bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white text-xs"

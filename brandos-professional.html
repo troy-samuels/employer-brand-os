@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandOS - AI Employer Brand Platform</title>
+  
+  <!-- Premium Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <style>
+    /* Professional Design System */
+    :root {
+      /* Typography */
+      --font-primary: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+      
+      /* Colors - Sophisticated Palette */
+      --color-primary: #6366F1;        /* Indigo-600 - refined authority */
+      --color-accent: #0EA5E9;         /* Sky-500 - technical credibility */
+      --color-success: #10B981;        /* Emerald-500 - positive actions */
+      --color-warning: #F59E0B;        /* Amber-500 - attention without alarm */
+      --color-danger: #EF4444;         /* Red-500 - clear error state */
+      
+      /* Neutrals - High Contrast System */
+      --gray-50: #F8FAFC;             /* Pure backgrounds */
+      --gray-100: #F1F5F9;            /* Subtle backgrounds */
+      --gray-200: #E2E8F0;            /* Borders, dividers */
+      --gray-400: #94A3B8;            /* Disabled states */
+      --gray-600: #475569;            /* Secondary text */
+      --gray-900: #0F172A;            /* Primary text */
+      
+      /* Spacing - Mathematical Progression */
+      --space-unit: 4px;
+      --space-xs: 4px;                /* 1 unit */
+      --space-sm: 8px;                /* 2 units */
+      --space-md: 16px;               /* 4 units */
+      --space-lg: 24px;               /* 6 units */
+      --space-xl: 32px;               /* 8 units */
+      --space-2xl: 48px;              /* 12 units */
+      --space-3xl: 64px;              /* 16 units */
+      --space-4xl: 96px;              /* 24 units */
+      
+      /* Shadows - Subtle and Realistic */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+      
+      /* Transitions - Sophisticated Timing */
+      --transition-fast: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-normal: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Reset and Base Styles */
+    * {
+      font-family: var(--font-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    body {
+      background: #FFFFFF;
+      color: var(--gray-900);
+      line-height: 1.5;
+      font-size: 16px;
+    }
+    
+    /* Typography Scale */
+    .text-display {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: 1.1;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    
+    .text-h1 {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      line-height: 1.2;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    
+    .text-h2 {
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      line-height: 1.3;
+      font-weight: 600;
+    }
+    
+    .text-body-lg {
+      font-size: 1.125rem;
+      line-height: 1.75;
+      color: var(--gray-600);
+    }
+    
+    .text-body {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--gray-600);
+    }
+    
+    .text-mono {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      letter-spacing: 0.025em;
+    }
+    
+    /* Layout System */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 5vw, 80px);
+    }
+    
+    .section-spacing {
+      padding: var(--space-4xl) 0;
+    }
+    
+    /* Component System */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-md) var(--space-lg);
+      font-weight: 500;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: var(--transition-fast);
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+    }
+    
+    .btn-primary:hover {
+      background-color: #4f46e5;
+      border-color: #4f46e5;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    
+    .btn-secondary {
+      background-color: white;
+      color: var(--gray-900);
+      border-color: var(--gray-200);
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--gray-50);
+      border-color: var(--gray-300);
+    }
+    
+    .btn-lg {
+      padding: var(--space-lg) var(--space-xl);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+    
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: var(--space-lg);
+      transition: var(--transition-normal);
+    }
+    
+    .card-interactive:hover {
+      border-color: var(--gray-300);
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    
+    /* Demo Interface */
+    .terminal {
+      background: var(--gray-900);
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+    
+    .terminal-header {
+      background: var(--gray-100);
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: 1px solid var(--gray-200);
+      display: flex;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    
+    .terminal-content {
+      padding: var(--space-lg);
+      color: #E5E7EB;
+      min-height: 300px;
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: var(--space-md);
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: var(--transition-fast);
+      background: white;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgb(99 102 241 / 0.1);
+    }
+    
+    /* Status Indicators */
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .status-success {
+      background: rgb(16 185 129 / 0.1);
+      color: var(--color-success);
+    }
+    
+    .status-warning {
+      background: rgb(245 158 11 / 0.1);
+      color: var(--color-warning);
+    }
+    
+    .status-danger {
+      background: rgb(239 68 68 / 0.1);
+      color: var(--color-danger);
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    
+    .typing {
+      overflow: hidden;
+      white-space: nowrap;
+      border-right: 2px solid var(--color-accent);
+      animation: typing 2s steps(40) forwards;
+    }
+    
+    /* Risk Meter */
+    .risk-meter {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: conic-gradient(
+        from 0deg,
+        var(--color-success) 0deg 120deg,
+        var(--color-warning) 120deg 240deg,
+        var(--color-danger) 240deg 360deg
+      );
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .risk-meter::before {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: white;
+      border-radius: 50%;
+    }
+    
+    .risk-score {
+      position: relative;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gray-900);
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .section-spacing {
+        padding: var(--space-2xl) 0;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+      
+      .terminal-content {
+        padding: var(--space-md);
+      }
+    }
+    
+    /* Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+    
+    /* Focus States */
+    .btn:focus-visible,
+    .input-field:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation -->
+  <header class="border-b border-gray-200 bg-white/95 backdrop-blur-sm sticky top-0 z-50">
+    <div class="container">
+      <nav class="flex items-center justify-between py-4">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-indigo-600 rounded flex items-center justify-center">
+            <span class="text-white font-bold text-sm">B</span>
+          </div>
+          <span class="font-semibold text-lg">BrandOS</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <button onclick="scrollToDemo()" class="text-gray-600 hover:text-gray-900 transition-colors">
+            Demo
+          </button>
+          <button onclick="scrollToDemo()" class="btn btn-primary">
+            Start Free Trial
+          </button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="section-spacing">
+    <div class="container text-center">
+      <div class="max-w-4xl mx-auto">
+        <div class="mb-6">
+          <span class="status-indicator status-success">
+            <span class="w-2 h-2 bg-current rounded-full"></span>
+            AI Employer Brand Platform
+          </span>
+        </div>
+        
+        <h1 class="text-display mb-6">
+          Stop AI agents from 
+          <span class="text-red-600">spreading misinformation</span> 
+          about your company
+        </h1>
+        
+        <p class="text-body-lg max-w-2xl mx-auto mb-12">
+          47% of job searches now happen via AI agents. Your ATS outputs messy HTML that 
+          ChatGPT, Claude, and Perplexity cannot read. One line of code fixes this instantly.
+        </p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-16">
+          <button onclick="scrollToDemo()" class="btn btn-primary btn-lg">
+            See Live AI Audit
+          </button>
+          <button class="btn btn-secondary btn-lg">
+            View Documentation
+          </button>
+        </div>
+
+        <!-- Problem Statement -->
+        <div class="card max-w-4xl mx-auto">
+          <h2 class="text-h2 mb-8 text-center">The Crisis</h2>
+          <div class="grid md:grid-cols-2 gap-8 text-left">
+            <div>
+              <div class="status-indicator status-danger mb-4">
+                <span class="w-2 h-2 bg-current rounded-full"></span>
+                Invisible
+              </div>
+              <h3 class="font-semibold text-lg mb-3 text-gray-900">AI Agents Can't Read Your Jobs</h3>
+              <p class="text-body">
+                47% of job searches now happen via AI platforms. Your ATS outputs 
+                unstructured HTML that AI cannot parse. You're invisible to nearly 
+                half of all job seekers.
+              </p>
+            </div>
+            
+            <div>
+              <div class="status-indicator status-warning mb-4">
+                <span class="w-2 h-2 bg-current rounded-full"></span>
+                Illegal
+              </div>
+              <h3 class="font-semibold text-lg mb-3 text-gray-900">Compliance Violations</h3>
+              <p class="text-body">
+                Pay transparency laws in EU, NY, CA, and CO require automated salary 
+                disclosure. Legacy systems fail compliance, risking $300K+ fines per violation.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Audit Demo -->
+  <section id="demo" class="section-spacing bg-gray-50">
+    <div class="container">
+      <div class="max-w-4xl mx-auto text-center mb-12">
+        <h2 class="text-h1 mb-4">Live AI Audit</h2>
+        <p class="text-body-lg">
+          See exactly what AI agents say about your company right now
+        </p>
+      </div>
+
+      <div class="max-w-3xl mx-auto">
+        <!-- Terminal Interface -->
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="terminal-dot bg-red-500"></div>
+            <div class="terminal-dot bg-yellow-500"></div>
+            <div class="terminal-dot bg-green-500"></div>
+            <span class="text-mono text-gray-600 ml-4">ai-audit.sh</span>
+          </div>
+          
+          <div class="terminal-content">
+            <div class="mb-6">
+              <span class="text-sky-400">$</span>
+              <span class="ml-2">Enter company name for AI analysis:</span>
+              <div class="mt-3">
+                <input 
+                  type="text" 
+                  id="companyInput"
+                  placeholder="Company Name"
+                  class="bg-gray-800 border border-gray-600 text-white w-full max-w-md px-3 py-2 rounded focus:border-sky-400 focus:outline-none text-mono"
+                />
+              </div>
+            </div>
+            
+            <button 
+              onclick="startProfessionalDemo()"
+              id="auditButton"
+              class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded font-medium transition-colors text-mono"
+            >
+              Initialize Scan
+            </button>
+          </div>
+        </div>
+
+        <!-- Results -->
+        <div id="demoResults" class="hidden mt-8 space-y-6">
+          <div class="text-center mb-8">
+            <div class="status-indicator status-danger mb-4">
+              <span class="w-2 h-2 bg-current rounded-full animate-pulse"></span>
+              Critical Issues Detected
+            </div>
+            <h3 class="text-h2 text-red-600">Misinformation Spreading</h3>
+          </div>
+          
+          <!-- AI Platform Analysis -->
+          <div class="grid gap-4">
+            <div class="card border-l-4 border-l-red-500">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-content center p-2">
+                  <span class="text-xs font-mono">GPT</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-semibold mb-2">ChatGPT Analysis</h4>
+                  <p id="chatgptResponse" class="text-body text-red-700"></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card border-l-4 border-l-orange-500">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center p-2">
+                  <span class="text-xs font-mono">CLD</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-semibold mb-2">Claude Analysis</h4>
+                  <p id="claudeResponse" class="text-body text-orange-700"></p>
+                </div>
+              </div>
+            </div>
+            
+            <div class="card border-l-4 border-l-blue-500">
+              <div class="flex items-start gap-4">
+                <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center p-2">
+                  <span class="text-xs font-mono">PPX</span>
+                </div>
+                <div class="flex-1">
+                  <h4 class="font-semibold mb-2">Perplexity Analysis</h4>
+                  <p id="perplexityResponse" class="text-body text-blue-700"></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Assessment -->
+          <div class="card text-center">
+            <h4 class="font-semibold text-lg mb-6">Misinformation Risk Assessment</h4>
+            <div class="flex items-center justify-center gap-8 mb-6">
+              <div class="risk-meter">
+                <div class="risk-score" id="riskScore">0</div>
+              </div>
+              <div class="text-left space-y-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-body">Risk Level:</span>
+                  <span class="status-indicator status-danger">High</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-body">Compliance:</span>
+                  <span class="status-indicator status-danger">Violated</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-body">Visibility:</span>
+                  <span class="status-indicator status-warning">Poor</span>
+                </div>
+              </div>
+            </div>
+            
+            <p class="text-body mb-8 max-w-2xl mx-auto">
+              <strong>Immediate action required:</strong> AI agents are actively spreading 
+              inaccurate information about your company. This misinformation could reach 
+              thousands of potential candidates within hours.
+            </p>
+            
+            <button class="btn btn-primary btn-lg">
+              Deploy BrandOS Solution
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="section-spacing">
+    <div class="container">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+          <h2 class="text-h1 mb-4">Three-Layer Solution</h2>
+          <p class="text-body-lg max-w-2xl mx-auto">
+            Professional infrastructure for AI-age recruiting
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="card card-interactive">
+            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-indigo-600 font-bold">1</span>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">Smart Pixel</h3>
+            <p class="text-body mb-4">
+              One line of code injects perfect JSON-LD schema for 
+              instant AI crawler visibility.
+            </p>
+            <div class="status-indicator status-success">
+              <span class="w-2 h-2 bg-current rounded-full"></span>
+              Core Infrastructure
+            </div>
+          </div>
+          
+          <div class="card card-interactive">
+            <div class="w-12 h-12 bg-sky-100 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-sky-600 font-bold">2</span>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">Hallucination Radar</h3>
+            <p class="text-body mb-4">
+              24/7 monitoring of AI platforms with instant alerts 
+              when misinformation spreads.
+            </p>
+            <div class="status-indicator status-warning">
+              <span class="w-2 h-2 bg-current rounded-full"></span>
+              Protection Layer
+            </div>
+          </div>
+          
+          <div class="card card-interactive">
+            <div class="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-emerald-600 font-bold">3</span>
+            </div>
+            <h3 class="font-semibold text-lg mb-3">Compliance Engine</h3>
+            <p class="text-body mb-4">
+              Automated pay transparency compliance across 
+              all jurisdictions and platforms.
+            </p>
+            <div class="status-indicator status-success">
+              <span class="w-2 h-2 bg-current rounded-full"></span>
+              Legal Safety
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-spacing bg-gray-900 text-white">
+    <div class="container text-center">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-h1 mb-6">
+          The Infrastructure Layer for AI Recruiting
+        </h2>
+        <p class="text-body-lg mb-8 text-gray-300">
+          One integration. Perfect visibility. Complete compliance.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="btn btn-primary btn-lg bg-white text-gray-900 hover:bg-gray-100">
+            Start Free Trial
+          </button>
+          <button class="btn btn-lg border-gray-600 text-white hover:bg-gray-800">
+            Schedule Demo
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="border-t border-gray-200 py-8">
+    <div class="container">
+      <div class="flex flex-col md:flex-row items-center justify-between">
+        <div class="flex items-center gap-2 mb-4 md:mb-0">
+          <div class="w-6 h-6 bg-indigo-600 rounded"></div>
+          <span class="font-semibold">BrandOS</span>
+        </div>
+        <div class="text-body text-gray-500">
+          © 2026 BrandOS • The Infrastructure Layer for AI Recruiting
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function scrollToDemo() {
+      document.getElementById('demo').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+
+    async function typeText(element, text, speed = 40) {
+      element.textContent = '';
+      element.classList.add('typing');
+      
+      for (let i = 0; i < text.length; i++) {
+        element.textContent += text.charAt(i);
+        await new Promise(resolve => setTimeout(resolve, speed));
+      }
+      
+      element.classList.remove('typing');
+    }
+
+    async function startProfessionalDemo() {
+      const companyName = document.getElementById('companyInput').value.trim();
+      if (!companyName) {
+        document.getElementById('companyInput').focus();
+        return;
+      }
+
+      const button = document.getElementById('auditButton');
+      const originalText = button.textContent;
+      
+      button.textContent = 'Scanning AI platforms...';
+      button.disabled = true;
+
+      // Show results with animation
+      setTimeout(() => {
+        const results = document.getElementById('demoResults');
+        results.classList.remove('hidden');
+        results.classList.add('fade-in');
+      }, 1000);
+
+      // Professional AI responses
+      const responses = [
+        {
+          element: 'chatgptResponse',
+          text: `${companyName} salary ranges appear inconsistent across platforms. Employee reviews mention below-market compensation in several roles. Limited remote work options reported by current staff according to recent reviews.`,
+          delay: 2500
+        },
+        {
+          element: 'claudeResponse',
+          text: `Available information about ${companyName} workplace culture shows mixed signals. Benefits package details vary significantly between job platforms. Some sources indicate outdated technology infrastructure.`,
+          delay: 4500
+        },
+        {
+          element: 'perplexityResponse',
+          text: `${companyName} employment data lacks standardization across job boards. Pay transparency information missing from most listings. Company culture descriptions appear inconsistent between sources.`,
+          delay: 6500
+        }
+      ];
+
+      // Type responses sequentially
+      for (const response of responses) {
+        setTimeout(async () => {
+          await typeText(document.getElementById(response.element), response.text, 25);
+        }, response.delay);
+      }
+
+      // Animate risk score
+      setTimeout(() => {
+        const scoreElement = document.getElementById('riskScore');
+        let score = 0;
+        const target = 84;
+        
+        const interval = setInterval(() => {
+          score += 2;
+          scoreElement.textContent = Math.min(score, target);
+          
+          if (score >= target) {
+            clearInterval(interval);
+          }
+        }, 50);
+      }, 9000);
+
+      // Reset button
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.disabled = false;
+      }, 10000);
+    }
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && document.activeElement.id === 'companyInput') {
+        startProfessionalDemo();
+      }
+    });
+
+    // Initialize smooth scrolling for all anchor links
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add focus styles for accessibility
+      const focusableElements = document.querySelectorAll('button, input, a, [tabindex]');
+      focusableElements.forEach(el => {
+        el.addEventListener('focus', function() {
+          this.style.outline = '2px solid var(--color-primary)';
+          this.style.outlineOffset = '2px';
+        });
+        
+        el.addEventListener('blur', function() {
+          this.style.outline = 'none';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

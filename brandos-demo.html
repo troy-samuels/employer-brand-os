@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BrandOS - AI Employer Brand Platform Demo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1e293b 0%, #7c3aed 50%, #1e293b 100%);
+      min-height: 100vh;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .typing {
+      border-right: 2px solid #7c3aed;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0%, 50% { border-color: #7c3aed; }
+      51%, 100% { border-color: transparent; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    .risk-meter {
+      background: conic-gradient(from 0deg, #ef4444 0deg, #f97316 120deg, #eab308 240deg, #22c55e 360deg);
+    }
+  </style>
+</head>
+<body class="text-white font-sans">
+  <!-- Header -->
+  <header class="glass sticky top-0 z-50 border-b border-white/20">
+    <div class="container mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="text-xl font-semibold tracking-tight">BrandOS</div>
+      <div class="flex items-center gap-3">
+        <button onclick="scrollToDemo()" class="px-4 py-2 text-sm font-medium hover:bg-white/10 rounded-lg transition-colors">
+          Try Demo
+        </button>
+        <button class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-sm font-medium rounded-lg transition-colors">
+          Get Started
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="container mx-auto px-6 py-24 text-center">
+    <p class="text-xs uppercase tracking-widest text-purple-300 font-medium mb-4">
+      AI Employer Brand Platform
+    </p>
+    <h1 class="text-6xl font-bold tracking-tight mb-6">
+      Control Your<br />Employer Brand
+    </h1>
+    <p class="text-xl text-purple-200 max-w-2xl mx-auto mb-12">
+      Ensure AI agents receive accurate information about your company.<br />
+      Stop hallucinations. Start with verified data.
+    </p>
+    <div class="flex items-center justify-center gap-4 mb-24">
+      <button onclick="scrollToDemo()" class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-lg font-medium rounded-lg transition-colors">
+        Try Live Demo
+      </button>
+      <button class="px-8 py-4 border border-purple-400 hover:bg-purple-600/20 text-lg font-medium rounded-lg transition-colors">
+        Watch Video
+      </button>
+    </div>
+
+    <!-- Problem Statement -->
+    <div class="glass p-12 rounded-2xl max-w-4xl mx-auto mb-24">
+      <h2 class="text-3xl font-bold mb-6">The Problem: Invisible and Illegal</h2>
+      <div class="grid md:grid-cols-2 gap-8 text-left">
+        <div>
+          <h3 class="text-xl font-semibold text-purple-300 mb-3">Invisible</h3>
+          <p class="text-purple-200">
+            40% of job searches now happen via AI agents (ChatGPT, Perplexity). 
+            Your ATS outputs messy HTML that AI can't read.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-xl font-semibold text-purple-300 mb-3">Illegal</h3>
+          <p class="text-purple-200">
+            New Pay Transparency laws (EU, NY/CA/CO) require automated disclosure. 
+            Legacy systems fail compliance.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Demo Section -->
+    <div id="demo" class="glass p-8 rounded-2xl mb-24">
+      <h2 class="text-3xl font-bold mb-8">Live AI Audit Demo</h2>
+      <p class="text-lg text-purple-200 mb-8">See what AI agents really say about your company</p>
+      
+      <div class="max-w-2xl mx-auto">
+        <div class="mb-6">
+          <label class="block text-left text-sm font-medium mb-2">Company Name</label>
+          <input 
+            type="text" 
+            id="companyInput"
+            placeholder="Enter your company name..."
+            class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+        </div>
+        <button 
+          onclick="startDemo()"
+          id="demoButton"
+          class="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-lg transition-colors"
+        >
+          Run AI Audit
+        </button>
+      </div>
+
+      <!-- Demo Results -->
+      <div id="demoResults" class="hidden mt-12 space-y-6">
+        <h3 class="text-2xl font-semibold">AI Audit Results</h3>
+        
+        <!-- AI Responses -->
+        <div class="space-y-4">
+          <div class="bg-red-500/20 border border-red-500/40 p-4 rounded-lg text-left fade-in">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-xs font-bold text-white">AI</div>
+              <span class="font-semibold">ChatGPT Response</span>
+            </div>
+            <p id="chatgptResponse" class="text-red-200"></p>
+          </div>
+          
+          <div class="bg-red-500/20 border border-red-500/40 p-4 rounded-lg text-left fade-in">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-xs font-bold text-white">AI</div>
+              <span class="font-semibold">Claude Response</span>
+            </div>
+            <p id="claudeResponse" class="text-red-200"></p>
+          </div>
+          
+          <div class="bg-red-500/20 border border-red-500/40 p-4 rounded-lg text-left fade-in">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-xs font-bold text-white">AI</div>
+              <span class="font-semibold">Perplexity Response</span>
+            </div>
+            <p id="perplexityResponse" class="text-red-200"></p>
+          </div>
+        </div>
+
+        <!-- Risk Score -->
+        <div class="bg-orange-500/20 border border-orange-500/40 p-6 rounded-lg text-center fade-in">
+          <div class="flex items-center justify-center gap-4 mb-4">
+            <div class="w-16 h-16 risk-meter rounded-full flex items-center justify-center">
+              <span class="text-2xl font-bold text-white" id="riskScore">73</span>
+            </div>
+            <div class="text-left">
+              <h4 class="text-xl font-semibold text-orange-200">Risk Score</h4>
+              <p class="text-orange-300">High viral misinformation risk</p>
+            </div>
+          </div>
+          <p class="text-orange-300">
+            <strong>Immediate action recommended.</strong> AI agents are spreading inaccurate information about your company.
+          </p>
+        </div>
+
+        <!-- Solution CTA -->
+        <div class="text-center fade-in">
+          <button class="px-12 py-4 bg-green-600 hover:bg-green-700 text-xl font-medium rounded-lg transition-colors">
+            Fix with BrandOS Smart Pixel
+          </button>
+          <p class="text-sm text-gray-300 mt-2">One line of code. Instant compliance. Perfect AI visibility.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="grid md:grid-cols-3 gap-8 text-left max-w-6xl mx-auto mb-24">
+      <div class="glass p-8 rounded-2xl hover:bg-white/5 transition-colors">
+        <p class="text-xs uppercase tracking-widest text-purple-400 font-medium mb-3">
+          BrandCore
+        </p>
+        <h3 class="font-semibold text-xl mb-3">Smart Pixel</h3>
+        <p class="text-purple-200">
+          One line of code. Instant JSON-LD schema injection for AI crawlers.
+        </p>
+      </div>
+      <div class="glass p-8 rounded-2xl hover:bg-white/5 transition-colors">
+        <p class="text-xs uppercase tracking-widest text-purple-400 font-medium mb-3">
+          BrandShield
+        </p>
+        <h3 class="font-semibold text-xl mb-3">Hallucination Radar</h3>
+        <p class="text-purple-200">
+          Monitor what AI says about you. Get alerts on inaccuracies.
+        </p>
+      </div>
+      <div class="glass p-8 rounded-2xl hover:bg-white/5 transition-colors">
+        <p class="text-xs uppercase tracking-widest text-purple-400 font-medium mb-3">
+          BrandPulse
+        </p>
+        <h3 class="font-semibold text-xl mb-3">Verified Benchmarking</h3>
+        <p class="text-purple-200">
+          Benchmark against verified industry data. Know where you stand.
+        </p>
+      </div>
+    </div>
+
+    <!-- CTA Section -->
+    <div class="text-center">
+      <h2 class="text-4xl font-bold mb-6">The Stripe for Employer Truth</h2>
+      <p class="text-xl text-purple-200 mb-8">
+        One integration. Instant compliance. AI-ready data.
+      </p>
+      <button class="px-12 py-4 bg-purple-600 hover:bg-purple-700 text-xl font-medium rounded-lg transition-colors">
+        Get Early Access
+      </button>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="container mx-auto px-6 py-8 border-t border-purple-800/50 mt-24">
+    <div class="flex items-center justify-between text-sm text-purple-400">
+      <span>© 2026 BrandOS</span>
+      <span>The SSL Certificate of Employer Branding</span>
+    </div>
+  </footer>
+
+  <script>
+    function scrollToDemo() {
+      document.getElementById('demo').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function typeWriter(element, text, speed = 50) {
+      element.innerHTML = '';
+      element.classList.add('typing');
+      let i = 0;
+      function type() {
+        if (i < text.length) {
+          element.innerHTML += text.charAt(i);
+          i++;
+          setTimeout(type, speed);
+        } else {
+          element.classList.remove('typing');
+        }
+      }
+      type();
+    }
+
+    function startDemo() {
+      const companyName = document.getElementById('companyInput').value.trim();
+      if (!companyName) {
+        alert('Please enter a company name');
+        return;
+      }
+
+      const button = document.getElementById('demoButton');
+      button.textContent = 'Scanning AI Platforms...';
+      button.disabled = true;
+
+      setTimeout(() => {
+        document.getElementById('demoResults').classList.remove('hidden');
+        
+        // Simulate typing responses
+        setTimeout(() => {
+          typeWriter(document.getElementById('chatgptResponse'), 
+            `"${companyName} offers competitive salaries ranging from $60,000 to $120,000, though some employees report below-market compensation and limited advancement opportunities."`
+          );
+        }, 500);
+
+        setTimeout(() => {
+          typeWriter(document.getElementById('claudeResponse'), 
+            `"Working at ${companyName} provides good work-life balance, but recent reviews suggest limited remote work options and outdated technology infrastructure."`
+          );
+        }, 2000);
+
+        setTimeout(() => {
+          typeWriter(document.getElementById('perplexityResponse'), 
+            `"${companyName} is a growing company with unclear benefits package according to online sources. Glassdoor reviews indicate mixed employee satisfaction."`
+          );
+        }, 3500);
+
+        // Animate risk score
+        setTimeout(() => {
+          let score = 0;
+          const target = 73;
+          const scoreElement = document.getElementById('riskScore');
+          const interval = setInterval(() => {
+            score += 3;
+            scoreElement.textContent = score;
+            if (score >= target) {
+              clearInterval(interval);
+              scoreElement.textContent = target;
+            }
+          }, 50);
+        }, 5000);
+
+        button.textContent = 'Run Another Audit';
+        button.disabled = false;
+      }, 2000);
+    }
+
+    // Add some interactive animations
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add hover effects to feature cards
+      const cards = document.querySelectorAll('.glass');
+      cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+          this.style.transform = 'translateY(-5px)';
+          this.style.transition = 'transform 0.3s ease';
+        });
+        card.addEventListener('mouseleave', function() {
+          this.style.transform = 'translateY(0)';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

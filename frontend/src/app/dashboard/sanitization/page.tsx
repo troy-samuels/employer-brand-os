@@ -3,7 +3,7 @@ import { MappingsTable } from './mappings-table';
 import { AddMappingButton } from './add-mapping-button';
 
 export default async function SanitizationPage() {
-  const { mappings, total } = await getMappings();
+  const { mappings, total, error } = await getMappings();
 
   return (
     <div className="flex flex-col">
@@ -23,6 +23,11 @@ export default async function SanitizationPage() {
       {/* Content */}
       <div className="flex-1 p-6">
         <div className="mx-auto max-w-4xl">
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              {error}
+            </div>
+          )}
           {/* Description */}
           <div className="mb-6 rounded-lg border border-border bg-card p-4">
             <h2 className="text-sm font-medium text-foreground mb-2">

@@ -50,4 +50,5 @@ export interface BulkImportResult {
 export interface MappingListResult {
   mappings: JobTitleMapping[];
   total: number;
+  error?: string;
 }

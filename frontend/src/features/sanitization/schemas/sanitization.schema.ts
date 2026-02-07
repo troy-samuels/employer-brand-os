@@ -30,13 +30,15 @@ export const jobTitleMappingSchema = z.object({
     .or(z.literal('')),
   aliases: z
     .array(z.string())
+    .optional()
     .default([]),
   isActive: z
     .boolean()
+    .optional()
     .default(true),
 });
 
-export type JobTitleMappingFormData = z.infer<typeof jobTitleMappingSchema>;
+export type JobTitleMappingFormData = z.input<typeof jobTitleMappingSchema>;
 
 /**
  * Schema for sanitization API request

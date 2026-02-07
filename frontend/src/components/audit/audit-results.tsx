@@ -1,0 +1,247 @@
+"use client";
+
+import { motion } from "framer-motion";
+import {
+  ChatCircleText,
+  TreeStructure,
+  CurrencyGbp,
+  Briefcase,
+  ShieldCheck,
+} from "@phosphor-icons/react";
+import type { ReactNode } from "react";
+
+import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
+import { ScoreGauge } from "./score-gauge";
+
+interface AuditResultsProps {
+  result: WebsiteCheckResult;
+}
+
+/* ── Helpers ───────────────────────────────────────── */
+
+type CheckStatus = "pass" | "partial" | "fail";
+
+function checkStatus(earned: number, max: number): CheckStatus {
+  if (earned >= max) return "pass";
+  if (earned > 0) return "partial";
+  return "fail";
+}
+
+/* ── Check card ────────────────────────────────────── */
+
+interface CheckCardProps {
+  icon: ReactNode;
+  name: string;
+  earned: number;
+  max: number;
+  detail: string;
+  index: number;
+}
+
+function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
+  const status = checkStatus(earned, max);
+  const isFail = status === "fail";
+
+  const iconColour =
+    status === "pass"
+      ? "text-status-verified"
+      : status === "partial"
+        ? "text-status-warning"
+        : "text-status-critical";
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, delay: 0.1 * index, ease: "easeOut" }}
+      className={`rounded-2xl bg-white p-5 transition-shadow duration-200 ${
+        isFail
+          ? "shadow-[0_2px_12px_rgba(220,38,38,0.08),0_1px_3px_rgba(28,25,23,0.06)]"
+          : "shadow-[0_1px_4px_rgba(28,25,23,0.06),0_1px_2px_rgba(28,25,23,0.04)] hover:shadow-[0_4px_16px_rgba(28,25,23,0.08),0_2px_4px_rgba(28,25,23,0.04)]"
+      }`}
+    >
+      <div className="flex items-start gap-4">
+        {/* Icon */}
+        <div className={`mt-1 shrink-0 ${iconColour}`}>
+          {icon}
+        </div>
+
+        {/* Content */}
+        <div className="flex-1 min-w-0">
+          <div className="flex items-baseline justify-between gap-4 mb-1.5">
+            <h3 className="text-[15px] font-semibold text-neutral-950">{name}</h3>
+            <span
+              className={`text-sm font-semibold tabular-nums shrink-0 ${
+                status === "pass"
+                  ? "text-status-verified"
+                  : status === "partial"
+                    ? "text-status-warning"
+                    : "text-status-critical"
+              }`}
+            >
+              {earned}/{max}
+            </span>
+          </div>
+          <p className="text-[13px] leading-relaxed text-neutral-500">{detail}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Detail copy ───────────────────────────────────── */
+
+function getLlmsDetail(r: WebsiteCheckResult): string {
+  if (r.hasLlmsTxt && r.llmsTxtHasEmployment)
+    return "You have an llms.txt with hiring content — AI models can tell your employer story accurately.";
+  if (r.hasLlmsTxt)
+    return "You have an llms.txt, but it doesn't mention hiring or culture yet.";
+  return "No llms.txt found. AI has no structured instructions about who you are as an employer.";
+}
+
+function getJsonldDetail(r: WebsiteCheckResult): string {
+  if (r.jsonldSchemasFound.length > 0)
+    return `Found ${r.jsonldSchemasFound.join(", ")} schema${r.jsonldSchemasFound.length > 1 ? "s" : ""}. AI uses this to understand your organisation.`;
+  return "No structured data on your homepage. AI may guess your company details instead of knowing them.";
+}
+
+function getSalaryDetail(r: WebsiteCheckResult): string {
+  if (r.hasSalaryData)
+    return "Salary information is visible to AI crawlers — candidates asking about pay will get answers.";
+  return "No salary data found. When candidates ask AI about your pay, it has nothing to share.";
+}
+
+function getCareersDetail(r: WebsiteCheckResult): string {
+  if (r.careersPageStatus === "full" && r.careersPageUrl)
+    return `Solid careers page at ${r.careersPageUrl} — AI can surface your open roles.`;
+  if (r.careersPageStatus === "partial" && r.careersPageUrl)
+    return `Found a careers page at ${r.careersPageUrl}, but it's thin on detail.`;
+  if (r.careersPageStatus === "none")
+    return "Your careers page exists but barely has any content for AI to work with.";
+  return "No careers page found. AI can't point candidates to your jobs.";
+}
+
+function getRobotsDetail(r: WebsiteCheckResult): string {
+  if (r.robotsTxtStatus === "partial") {
+    const parts: string[] = ["Some AI crawlers are blocked, others can access your site."];
+    if (r.robotsTxtAllowedBots.length > 0)
+      parts.push(`Allowed: ${r.robotsTxtAllowedBots.join(", ")}.`);
+    if (r.robotsTxtBlockedBots.length > 0)
+      parts.push(`Blocked: ${r.robotsTxtBlockedBots.join(", ")}.`);
+    return parts.join(" ");
+  }
+  if (r.robotsTxtStatus === "blocks" && r.robotsTxtBlockedBots.length > 0)
+    return `These AI crawlers are blocked: ${r.robotsTxtBlockedBots.join(", ")}. They can't read your site at all.`;
+  if (r.robotsTxtStatus === "allows")
+    return "All major AI crawlers can access your site. Your content is fully visible to AI.";
+  if (r.robotsTxtStatus === "no_rules")
+    return "No AI-specific rules in robots.txt. Crawlers aren't explicitly blocked or allowed.";
+  return "No robots.txt found. AI crawlers have no guidance on what they should read.";
+}
+
+/* ── Main ──────────────────────────────────────────── */
+
+export function AuditResults({ result }: AuditResultsProps) {
+  const { score, scoreBreakdown, companyName } = result;
+
+  const passed = [
+    scoreBreakdown.llmsTxt,
+    scoreBreakdown.jsonld,
+    scoreBreakdown.salaryData,
+    scoreBreakdown.careersPage,
+    scoreBreakdown.robotsTxt,
+  ].filter((s) => s > 0).length;
+
+  const scanDate = new Date().toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
+  return (
+    <div className="w-full max-w-lg mx-auto space-y-10" data-testid="audit-results">
+      {/* Score */}
+      <ScoreGauge score={score} companyName={companyName} />
+
+      {/* Summary pill */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6 }}
+        className="mx-auto w-fit rounded-2xl bg-white px-6 py-3 shadow-[0_1px_6px_rgba(28,25,23,0.06),0_1px_2px_rgba(28,25,23,0.04)]"
+      >
+        <p className="text-sm text-neutral-600 text-center">
+          <span className="font-semibold text-neutral-950">{passed}</span> of{" "}
+          <span className="font-semibold text-neutral-950">5</span> checks
+          passed
+        </p>
+      </motion.div>
+
+      {/* Cards */}
+      <div className="space-y-3">
+        <CheckCard
+          icon={<ChatCircleText size={22} weight="duotone" />}
+          name="AI Instructions"
+          earned={scoreBreakdown.llmsTxt}
+          max={25}
+          detail={getLlmsDetail(result)}
+          index={0}
+        />
+        <CheckCard
+          icon={<TreeStructure size={22} weight="duotone" />}
+          name="Structured Data"
+          earned={scoreBreakdown.jsonld}
+          max={25}
+          detail={getJsonldDetail(result)}
+          index={1}
+        />
+        <CheckCard
+          icon={<CurrencyGbp size={22} weight="duotone" />}
+          name="Salary Transparency"
+          earned={scoreBreakdown.salaryData}
+          max={20}
+          detail={getSalaryDetail(result)}
+          index={2}
+        />
+        <CheckCard
+          icon={<Briefcase size={22} weight="duotone" />}
+          name="Careers Page"
+          earned={scoreBreakdown.careersPage}
+          max={15}
+          detail={getCareersDetail(result)}
+          index={3}
+        />
+        <CheckCard
+          icon={<ShieldCheck size={22} weight="duotone" />}
+          name="Bot Access"
+          earned={scoreBreakdown.robotsTxt}
+          max={15}
+          detail={getRobotsDetail(result)}
+          index={4}
+        />
+      </div>
+
+      {/* Score methodology link & timestamp */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="space-y-3 pt-2"
+      >
+        <div className="flex items-center justify-center">
+          <a
+            href="/how-we-score"
+            className="group inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            How is this score calculated?
+            <span className="transition-transform group-hover:translate-x-0.5">→</span>
+          </a>
+        </div>
+
+        <p className="text-center text-xs text-neutral-400">
+          Scanned on {scanDate}
+        </p>
+      </motion.div>
+    </div>
+  );
+}

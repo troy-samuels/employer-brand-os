@@ -24,7 +24,7 @@ client = OpenAI(
 # The Council: 3 AI model families to interrogate
 MODEL_COUNCIL = [
     {
-        "id": "google/gemini-2.0-flash-lite-preview-02-05:free",
+        "id": "google/gemini-1.5-flash",
         "name": "Google Gemini",
         "perspective": "The Google Perspective"
     },

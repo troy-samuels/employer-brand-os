@@ -15,60 +15,115 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xl": "1440px",
       },
     },
     extend: {
       fontFamily: {
-        sans: ["Geist Sans", "var(--font-sans)", ...defaultTheme.fontFamily.sans],
+        sans: ["var(--font-family-sans)", ...defaultTheme.fontFamily.sans],
+        mono: ["var(--font-family-mono)", ...defaultTheme.fontFamily.mono],
       },
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        /* Semantic */
+        border: "var(--border)",
+        input: "var(--border)",
+        ring: "var(--brand-accent)",
+        background: "var(--background)",
+        foreground: "var(--text-primary)",
+        surface: "var(--surface)",
+
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "var(--brand-accent)",
+          foreground: "var(--white)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--neutral-100)",
+          foreground: "var(--text-primary)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--status-critical)",
+          foreground: "var(--white)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+          DEFAULT: "var(--neutral-100)",
+          foreground: "var(--text-secondary)",
         },
         accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
+          DEFAULT: "var(--neutral-100)",
+          foreground: "var(--text-primary)",
         },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "var(--white)",
+          foreground: "var(--text-primary)",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--white)",
+          foreground: "var(--text-primary)",
         },
-        // BrandOS Palette from design-system.md
-        "trust-navy": "#0F172A",
-        "verify-blue": "#3B82F6",
-        "signal-green": "#10B981",
-        "warning-amber": "#F59E0B",
-        "critical-red": "#EF4444",
-        "neutral-gray": "#64748B",
+
+        /* Brand */
+        "brand-deep": "var(--brand-deep)",
+        "brand-accent": "var(--brand-accent)",
+        "brand-accent-hover": "var(--brand-accent-hover)",
+        "brand-accent-light": "var(--brand-accent-light)",
+        "brand-accent-subtle": "var(--brand-accent-subtle)",
+
+        /* Legacy aliases */
+        "brand-primary": "var(--brand-accent)",
+        "brand-primary-hover": "var(--brand-accent-hover)",
+        "brand-primary-light": "var(--brand-accent-light)",
+
+        /* Warm Neutrals */
+        "neutral-950": "var(--neutral-950)",
+        "neutral-800": "var(--neutral-800)",
+        "neutral-600": "var(--neutral-600)",
+        "neutral-500": "var(--neutral-500)",
+        "neutral-300": "var(--neutral-300)",
+        "neutral-200": "var(--neutral-200)",
+        "neutral-100": "var(--neutral-100)",
+        "neutral-50": "var(--neutral-50)",
+
+        /* Status */
+        "status-verified": "var(--status-verified)",
+        "status-verified-light": "var(--status-verified-light)",
+        "status-warning": "var(--status-warning)",
+        "status-warning-light": "var(--status-warning-light)",
+        "status-critical": "var(--status-critical)",
+        "status-critical-light": "var(--status-critical-light)",
+        "status-info": "var(--status-info)",
+        "status-info-light": "var(--status-info-light)",
+
+        /* Legacy gray aliases — maps to warm neutrals */
+        success: "var(--status-verified)",
+        "success-light": "var(--status-verified-light)",
+        warning: "var(--status-warning)",
+        "warning-light": "var(--status-warning-light)",
+        error: "var(--status-critical)",
+        "error-light": "var(--status-critical-light)",
+        "gray-50": "var(--neutral-50)",
+        "gray-100": "var(--neutral-100)",
+        "gray-200": "var(--neutral-200)",
+        "gray-300": "var(--neutral-300)",
+        "gray-400": "var(--neutral-500)",
+        "gray-500": "var(--neutral-600)",
+        "gray-600": "var(--neutral-600)",
+        "gray-700": "var(--neutral-800)",
+        "gray-800": "var(--neutral-800)",
+        "gray-900": "var(--neutral-950)",
+        "text-primary": "var(--text-primary)",
+        "text-secondary": "var(--text-secondary)",
+        "text-muted": "var(--text-muted)",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
         pill: "9999px",
+      },
+      boxShadow: {
+        "card": "0 1px 3px rgba(28, 25, 23, 0.06), 0 1px 2px rgba(28, 25, 23, 0.04)",
+        "card-hover": "0 4px 12px rgba(28, 25, 23, 0.08), 0 2px 4px rgba(28, 25, 23, 0.04)",
+        "elevated": "0 8px 24px rgba(28, 25, 23, 0.1), 0 2px 8px rgba(28, 25, 23, 0.06)",
       },
       keyframes: {
         "accordion-down": {
