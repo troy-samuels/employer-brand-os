@@ -56,6 +56,7 @@ vi.mock("@/lib/audit/website-checks", () => ({
       hasJsonld: false,
       jsonldSchemasFound: [],
       hasSalaryData: false,
+      salaryConfidence: "none",
       careersPageStatus: "not_found",
       careersPageUrl: null,
       robotsTxtStatus: "not_found",

@@ -17,16 +17,52 @@ const LLMS_EMPLOYMENT_KEYWORDS = [
 
 const SALARY_KEYWORDS = [
   "salary",
-  "£",
-  "$",
-  "compensation",
+  "salary range",
+  "salary band",
+  "base salary",
+  "competitive salary",
+  "salary on application",
+  "salary commensurate with experience",
+  "depending on experience",
+  "doe",
+  "pay",
   "pay range",
   "pay band",
+  "compensation",
+  "compensation range",
   "remuneration",
-  "per annum",
-  "p.a.",
-  "k per year",
+  "market rate",
 ];
+
+const SALARY_NON_DISCLOSURE_PATTERNS = [
+  /\bcompetitive salary\b/i,
+  /\bsalary\s+(?:on|upon)\s+application\b/i,
+  /\bsalary\s+(?:commensurate|dependent|depending)\s+with\s+experience\b/i,
+  /\b(?:salary|compensation)\s+doe\b/i,
+  /\b(?:salary|compensation)\s+negotiable\b/i,
+  /\bmarket[-\s]?rate\b/i,
+];
+
+const JOB_TITLE_TERMS = [
+  "engineer",
+  "developer",
+  "designer",
+  "manager",
+  "analyst",
+  "specialist",
+  "coordinator",
+  "director",
+  "consultant",
+  "architect",
+  "recruiter",
+  "intern",
+  "associate",
+];
+
+const SALARY_CURRENCY_PATTERN = String.raw`(?:[£$€]|gbp|usd|eur)`;
+const SALARY_AMOUNT_PATTERN = String.raw`(?:\d{1,3}(?:,\d{3})+|\d{4,6}|\d{2,3}(?:\.\d+)?\s*[kK])`;
+const SALARY_VALUE_PATTERN = String.raw`${SALARY_CURRENCY_PATTERN}\s*${SALARY_AMOUNT_PATTERN}`;
+const SALARY_RANGE_PATTERN = String.raw`${SALARY_VALUE_PATTERN}\s*(?:-|–|—|to)\s*(?:${SALARY_CURRENCY_PATTERN}\s*)?${SALARY_AMOUNT_PATTERN}`;
 
 const CAREERS_PATHS = [
   "/careers",
@@ -36,6 +72,64 @@ const CAREERS_PATHS = [
   "/about/careers",
   "/join-us",
   "/work-with-us",
+];
+
+const MAX_SAMPLED_JOB_LISTING_PAGES = 5;
+
+const ATS_HOST_SUFFIXES = [
+  "boards.greenhouse.io",
+  "greenhouse.io",
+  "jobs.lever.co",
+  "apply.workable.com",
+  "jobs.ashbyhq.com",
+  "jobs.smartrecruiters.com",
+  "myworkdayjobs.com",
+  "jobs.jobvite.com",
+  "jobs.jobscore.com",
+  "ats.rippling.com",
+  "jobs.gohire.io",
+];
+
+const JOB_PATH_HINT_PATTERNS = [
+  /\/jobs?(?:\/|$)/i,
+  /\/careers?(?:\/|$)/i,
+  /\/positions?(?:\/|$)/i,
+  /\/openings?(?:\/|$)/i,
+  /\/vacanc(?:y|ies)(?:\/|$)/i,
+  /\/requisitions?(?:\/|$)/i,
+  /\/job-postings?(?:\/|$)/i,
+  /\/roles?(?:\/|$)/i,
+  /\/j\/[^/?#]+/i,
+];
+
+const JOB_DETAIL_PATH_PATTERNS = [
+  /\/jobs?\/[^/?#]+/i,
+  /\/careers?\/[^/?#]+/i,
+  /\/positions?\/[^/?#]+/i,
+  /\/openings?\/[^/?#]+/i,
+  /\/vacanc(?:y|ies)\/[^/?#]+/i,
+  /\/requisitions?\/[^/?#]+/i,
+  /\/j\/[^/?#]+/i,
+];
+
+const JOB_QUERY_HINT_PATTERNS = [/[?&](?:gh_jid|gh_src|jid|jobId|job|lever-source|lever-via)=/i];
+
+const NON_JOB_PATH_SEGMENTS = [
+  "about",
+  "blog",
+  "contact",
+  "privacy",
+  "terms",
+  "legal",
+  "cookie",
+  "cookies",
+  "press",
+  "news",
+  "investors",
+  "team",
+  "support",
+  "help",
+  "events",
 ];
 
 const AI_BOTS = [
@@ -63,6 +157,12 @@ const AI_BOTS = [
 
 type CareersPageStatus = "full" | "partial" | "none" | "not_found";
 type RobotsTxtStatus = "allows" | "partial" | "blocks" | "no_rules" | "not_found";
+type SalaryConfidence =
+  | "none"
+  | "mention_only"
+  | "single_range"
+  | "multiple_ranges"
+  | "jsonld_base_salary";
 
 type SafeFetchResult = {
   ok: boolean;
@@ -82,6 +182,12 @@ type RobotsPolicyParseResult = {
   blockedBots: string[];
 };
 
+type SalaryDetectionResult = {
+  hasSalaryData: boolean;
+  salaryConfidence: SalaryConfidence;
+  score: number;
+};
+
 export type WebsiteCheckResult = {
   domain: string;
   companyName: string;
@@ -91,6 +197,7 @@ export type WebsiteCheckResult = {
   hasJsonld: boolean;
   jsonldSchemasFound: string[];
   hasSalaryData: boolean;
+  salaryConfidence: SalaryConfidence;
   careersPageStatus: CareersPageStatus;
   careersPageUrl: string | null;
   robotsTxtStatus: RobotsTxtStatus;
@@ -157,6 +264,113 @@ function normalizeDomain(input: string): string {
     const withoutProtocol = trimmed.replace(/^https?:\/\//i, "");
     return withoutProtocol.split("/")[0]?.toLowerCase() ?? "";
   }
+}
+
+function isSameDomain(hostname: string, domain: string): boolean {
+  return hostname === domain || hostname.endsWith(`.${domain}`);
+}
+
+function isTrustedAtsHost(hostname: string): boolean {
+  return ATS_HOST_SUFFIXES.some((suffix) => hostname === suffix || hostname.endsWith(`.${suffix}`));
+}
+
+function pathContainsNonJobSegment(pathname: string): boolean {
+  const segments = pathname
+    .split("/")
+    .map((segment) => segment.trim().toLowerCase())
+    .filter(Boolean);
+
+  return segments.some((segment) => NON_JOB_PATH_SEGMENTS.includes(segment));
+}
+
+function isLikelyJobListingUrl(url: URL, domain: string): boolean {
+  const hostname = url.hostname.toLowerCase();
+  const pathname = decodeURIComponent(url.pathname).toLowerCase();
+  const search = url.search.toLowerCase();
+
+  const sameDomain = isSameDomain(hostname, domain);
+  const trustedAtsHost = isTrustedAtsHost(hostname);
+
+  if (!sameDomain && !trustedAtsHost) {
+    return false;
+  }
+
+  if (pathname === "/" && !search) {
+    return false;
+  }
+
+  const hasJobPathHint = JOB_PATH_HINT_PATTERNS.some((pattern) => pattern.test(pathname));
+  const hasJobDetailPath = JOB_DETAIL_PATH_PATTERNS.some((pattern) => pattern.test(pathname));
+  const hasJobQueryHint = JOB_QUERY_HINT_PATTERNS.some((pattern) => pattern.test(search));
+
+  if (!hasJobPathHint && !hasJobQueryHint && !trustedAtsHost) {
+    return false;
+  }
+
+  const pathDepth = pathname.split("/").filter(Boolean).length;
+  const hasAtsDetailDepth = trustedAtsHost && pathDepth >= 2;
+  const isLikelyDetail = hasJobDetailPath || hasJobQueryHint || hasAtsDetailDepth;
+
+  if (!isLikelyDetail) {
+    return false;
+  }
+
+  if (pathContainsNonJobSegment(pathname) && !hasJobDetailPath && !hasJobQueryHint) {
+    return false;
+  }
+
+  return true;
+}
+
+function extractJobListingLinks(careersHtml: string, careersUrl: string, domain: string): string[] {
+  if (!careersHtml || !careersUrl) {
+    return [];
+  }
+
+  const linkRegex = /<a\b[^>]*href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'<>]+))[^>]*>/gi;
+  const links: string[] = [];
+  const seen = new Set<string>();
+
+  for (const match of careersHtml.matchAll(linkRegex)) {
+    const href = (match[1] ?? match[2] ?? match[3] ?? "").trim();
+    if (!href || href.startsWith("#")) {
+      continue;
+    }
+
+    if (/^(?:mailto:|tel:|javascript:)/i.test(href)) {
+      continue;
+    }
+
+    let resolvedUrl: URL;
+    try {
+      resolvedUrl = new URL(href, careersUrl);
+    } catch {
+      continue;
+    }
+
+    if (!/^https?:$/i.test(resolvedUrl.protocol)) {
+      continue;
+    }
+
+    if (!isLikelyJobListingUrl(resolvedUrl, domain)) {
+      continue;
+    }
+
+    resolvedUrl.hash = "";
+    const normalized = resolvedUrl.toString();
+    if (seen.has(normalized)) {
+      continue;
+    }
+
+    seen.add(normalized);
+    links.push(normalized);
+
+    if (links.length >= MAX_SAMPLED_JOB_LISTING_PAGES) {
+      break;
+    }
+  }
+
+  return links;
 }
 
 function createCompanySlug(companyName: string): string {
@@ -261,6 +475,43 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
     url: null,
     html: "",
   };
+}
+
+function selectHighestConfidenceSalaryDetection(
+  detections: SalaryDetectionResult[],
+): SalaryDetectionResult {
+  if (detections.length === 0) {
+    return {
+      hasSalaryData: false,
+      salaryConfidence: "none",
+      score: 0,
+    };
+  }
+
+  return detections.reduce((best, current) => (current.score > best.score ? current : best));
+}
+
+async function analyzeSalaryAcrossCareersAndJobListings(
+  careersHtml: string,
+  careersUrl: string | null,
+  domain: string,
+): Promise<SalaryDetectionResult> {
+  const htmlSamples = [careersHtml];
+
+  if (careersHtml && careersUrl) {
+    const jobListingLinks = extractJobListingLinks(careersHtml, careersUrl, domain);
+    if (jobListingLinks.length > 0) {
+      const sampledResponses = await Promise.all(jobListingLinks.map((link) => fetchSafe(link)));
+      for (const response of sampledResponses) {
+        if (response.ok && response.status === 200 && response.text) {
+          htmlSamples.push(response.text);
+        }
+      }
+    }
+  }
+
+  const detections = htmlSamples.map((html) => analyzeSalaryTransparency(html));
+  return selectHighestConfidenceSalaryDetection(detections);
 }
 
 type RobotsRule = {
@@ -484,6 +735,165 @@ export function parseRobotsPolicy(robotsTxt: string): RobotsPolicyParseResult {
   };
 }
 
+function collectRegexMatches(input: string, pattern: RegExp): string[] {
+  const matches = input.matchAll(pattern);
+  return Array.from(matches, (match) => (match[0] ?? "").trim()).filter(Boolean);
+}
+
+function textHasKeyword(input: string, keyword: string): boolean {
+  const keywordRegex = new RegExp(String.raw`\b${escapeRegex(keyword)}\b`, "i");
+  return keywordRegex.test(input);
+}
+
+function extractSalaryRangeMatches(text: string): string[] {
+  const patterns = [
+    new RegExp(SALARY_RANGE_PATTERN, "gi"),
+    new RegExp(String.raw`from\s+${SALARY_VALUE_PATTERN}`, "gi"),
+    new RegExp(String.raw`up\s*to\s+${SALARY_VALUE_PATTERN}`, "gi"),
+  ];
+
+  const uniqueMatches = new Set<string>();
+  for (const pattern of patterns) {
+    for (const match of collectRegexMatches(text, pattern)) {
+      uniqueMatches.add(match.replace(/\s+/g, " ").toLowerCase());
+    }
+  }
+
+  return Array.from(uniqueMatches);
+}
+
+function hasStructuredSalaryElements(careersHtml: string, careersText: string): boolean {
+  const salaryRangePattern = String.raw`(?:${SALARY_RANGE_PATTERN}|from\s+${SALARY_VALUE_PATTERN}|up\s*to\s+${SALARY_VALUE_PATTERN})`;
+  const jobTitlePattern = JOB_TITLE_TERMS.map((term) => escapeRegex(term)).join("|");
+  const salaryNearRoleRegex = new RegExp(
+    String.raw`(?:\b(?:${jobTitlePattern})\b[\s\S]{0,180}${salaryRangePattern}|${salaryRangePattern}[\s\S]{0,180}\b(?:${jobTitlePattern})\b)`,
+    "i"
+  );
+
+  if (salaryNearRoleRegex.test(careersText)) {
+    return true;
+  }
+
+  const tableMatches = careersHtml.match(/<table\b[\s\S]*?<\/table>/gi) ?? [];
+  for (const tableHtml of tableMatches) {
+    const tableText = stripHtmlTags(tableHtml).toLowerCase();
+    const hasBandOrRangeLabel = /\b(?:salary|pay|compensation)\s*(?:band|range)\b/i.test(tableText);
+    if (!hasBandOrRangeLabel) {
+      continue;
+    }
+
+    if (extractSalaryRangeMatches(tableText).length > 0) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isJobPostingType(typeValue: unknown): boolean {
+  if (typeof typeValue === "string") {
+    return normalizeSchemaType(typeValue).toLowerCase() === "jobposting";
+  }
+  if (!Array.isArray(typeValue)) {
+    return false;
+  }
+
+  return typeValue.some(
+    (entry) => typeof entry === "string" && normalizeSchemaType(entry).toLowerCase() === "jobposting"
+  );
+}
+
+function hasJobPostingBaseSalary(node: unknown): boolean {
+  if (Array.isArray(node)) {
+    return node.some((item) => hasJobPostingBaseSalary(item));
+  }
+  if (node === null || typeof node !== "object") {
+    return false;
+  }
+
+  const record = node as Record<string, unknown>;
+  if (isJobPostingType(record["@type"]) && record.baseSalary !== undefined && record.baseSalary !== null) {
+    return true;
+  }
+
+  return Object.values(record).some((value) => hasJobPostingBaseSalary(value));
+}
+
+function hasJobPostingBaseSalaryInJsonLd(careersHtml: string): boolean {
+  if (!careersHtml) {
+    return false;
+  }
+
+  for (const block of extractJsonLdBlocks(careersHtml)) {
+    try {
+      const parsed = JSON.parse(block);
+      if (hasJobPostingBaseSalary(parsed)) {
+        return true;
+      }
+    } catch {
+      continue;
+    }
+  }
+
+  return false;
+}
+
+function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
+  if (!careersHtml) {
+    return {
+      hasSalaryData: false,
+      salaryConfidence: "none",
+      score: 0,
+    };
+  }
+
+  const careersText = stripHtmlTags(careersHtml).toLowerCase();
+  const hasJsonLdBaseSalary = hasJobPostingBaseSalaryInJsonLd(careersHtml);
+  const salaryRangeMatches = extractSalaryRangeMatches(careersText);
+  const hasStructuredElements = hasStructuredSalaryElements(careersHtml, careersText);
+  const hasSalaryMentions =
+    SALARY_KEYWORDS.some((keyword) => textHasKeyword(careersText, keyword)) ||
+    SALARY_NON_DISCLOSURE_PATTERNS.some((pattern) => pattern.test(careersText));
+
+  if (hasJsonLdBaseSalary) {
+    return {
+      hasSalaryData: true,
+      salaryConfidence: "jsonld_base_salary",
+      score: 20,
+    };
+  }
+
+  if (salaryRangeMatches.length >= 2) {
+    return {
+      hasSalaryData: true,
+      salaryConfidence: "multiple_ranges",
+      score: 15,
+    };
+  }
+
+  if (salaryRangeMatches.length >= 1 || hasStructuredElements) {
+    return {
+      hasSalaryData: true,
+      salaryConfidence: "single_range",
+      score: 10,
+    };
+  }
+
+  if (hasSalaryMentions) {
+    return {
+      hasSalaryData: true,
+      salaryConfidence: "mention_only",
+      score: 5,
+    };
+  }
+
+  return {
+    hasSalaryData: false,
+    salaryConfidence: "none",
+    score: 0,
+  };
+}
+
 function scoreLlmsCheck(hasLlmsTxt: boolean, llmsTxtHasEmployment: boolean): number {
   if (hasLlmsTxt && llmsTxtHasEmployment) {
     return 25;
@@ -543,6 +953,8 @@ export async function runWebsiteChecks(
   let hasJsonld = false;
   let jsonldSchemasFound: string[] = [];
   let hasSalaryData = false;
+  let salaryConfidence: SalaryConfidence = "none";
+  let salaryScore = 0;
   let careersPageStatus: CareersPageStatus = "not_found";
   let careersPageUrl: string | null = null;
   let robotsTxtStatus: RobotsTxtStatus = "not_found";
@@ -583,8 +995,14 @@ export async function runWebsiteChecks(
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
 
-    const salarySourceText = `${stripHtmlTags(homepageHtml)} ${stripHtmlTags(careersCheck.html)}`.toLowerCase();
-    hasSalaryData = SALARY_KEYWORDS.some((keyword) => salarySourceText.includes(keyword.toLowerCase()));
+    const salaryDetection = await analyzeSalaryAcrossCareersAndJobListings(
+      careersCheck.html,
+      careersCheck.url,
+      normalizedDomain,
+    );
+    hasSalaryData = salaryDetection.hasSalaryData;
+    salaryConfidence = salaryDetection.salaryConfidence;
+    salaryScore = salaryDetection.score;
 
     const robotsResponse = await fetchSafe(`https://${normalizedDomain}/robots.txt`);
     if (robotsResponse.ok && robotsResponse.status === 200) {
@@ -600,7 +1018,7 @@ export async function runWebsiteChecks(
   const scoreBreakdown = {
     llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
     jsonld: scoreJsonLdCheck(jsonldSchemasFound),
-    salaryData: hasSalaryData ? 20 : 0,
+    salaryData: salaryScore,
     careersPage: scoreCareersCheck(careersPageStatus),
     robotsTxt: scoreRobotsCheck(robotsTxtStatus, robotsTxtAllowedBots.length),
   };
@@ -621,6 +1039,7 @@ export async function runWebsiteChecks(
     hasJsonld,
     jsonldSchemasFound,
     hasSalaryData,
+    salaryConfidence,
     careersPageStatus,
     careersPageUrl,
     robotsTxtStatus,

@@ -103,6 +103,175 @@ Allow: /
   });
 
   describe("runWebsiteChecks", () => {
+    function createFetchMock(careersHtml: string) {
+      return vi.fn().mockImplementation((url: string) => {
+        if (url.endsWith("/llms.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/robots.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/careers")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(careersHtml),
+          });
+        }
+
+        if (url.endsWith("/")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve("<html><body>Homepage content</body></html>"),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          text: () => Promise.resolve(""),
+        });
+      });
+    }
+
+    it("uses JobPosting baseSalary JSON-LD as highest-confidence salary signal", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          '<html><head><script type="application/ld+json">{"@context":"https://schema.org","@type":"JobPosting","title":"Software Engineer","baseSalary":{"@type":"MonetaryAmount","currency":"GBP","value":{"@type":"QuantitativeValue","minValue":50000,"maxValue":70000,"unitText":"YEAR"}}}</script></head><body>Join us.</body></html>',
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.salaryConfidence).toBe("jsonld_base_salary");
+      expect(result.scoreBreakdown.salaryData).toBe(20);
+    });
+
+    it("scores 15 when multiple concrete salary ranges are listed on careers page", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Software Engineer</h2><p>£50,000 - £70,000</p><h2>Product Manager</h2><p>£80k to £100k</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.salaryConfidence).toBe("multiple_ranges");
+      expect(result.scoreBreakdown.salaryData).toBe(15);
+    });
+
+    it("scores 5 for mention-only salary language with no disclosed range", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Open Roles</h2><p>We offer a competitive salary and benefits package.</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.salaryConfidence).toBe("mention_only");
+      expect(result.scoreBreakdown.salaryData).toBe(5);
+    });
+
+    it("does not score salary data when careers page has no salary references", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Open Roles</h2><p>Join our mission and build great products.</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.hasSalaryData).toBe(false);
+      expect(result.salaryConfidence).toBe("none");
+      expect(result.scoreBreakdown.salaryData).toBe(0);
+    });
+
+    it("detects salary data from linked job listing pages when careers index has none", async () => {
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (url.endsWith("/llms.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/robots.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/careers")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () =>
+              Promise.resolve(
+                '<html><body><h2>Open Roles</h2><a href="/jobs/staff-frontend-engineer">Staff Frontend Engineer</a><a href="/about">About us</a></body></html>',
+              ),
+          });
+        }
+
+        if (url.endsWith("/jobs/staff-frontend-engineer")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () =>
+              Promise.resolve(
+                "<html><body><h1>Staff Frontend Engineer</h1><p>Compensation: $145,000 - $175,000</p></body></html>",
+              ),
+          });
+        }
+
+        if (url.endsWith("/")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve("<html><body>Homepage content</body></html>"),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          text: () => Promise.resolve(""),
+        });
+      });
+
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await runWebsiteChecks("example.com", "Example");
+      const fetchedUrls = fetchMock.mock.calls.map((call) => call[0]);
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.salaryConfidence).toBe("single_range");
+      expect(result.scoreBreakdown.salaryData).toBe(10);
+      expect(fetchedUrls).toContain("https://example.com/jobs/staff-frontend-engineer");
+      expect(fetchedUrls).not.toContain("https://example.com/about");
+    });
+
     it("returns partial robots scoring with accurate allowed/blocked bot lists", async () => {
       vi.stubGlobal(
         "fetch",
