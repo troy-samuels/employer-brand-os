@@ -3,6 +3,7 @@
  * Validates Smart Pixel API keys against the database
  */
 
+import { createHash } from 'node:crypto';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import type { ValidatedPixelKey } from '../types/pixel.types';
 
@@ -14,11 +15,11 @@ import type { ValidatedPixelKey } from '../types/pixel.types';
  * - Key must be active and not expired
  * - Updates last_used_at timestamp on successful validation
  *
- * @param keyPrefix - The API key prefix (e.g., "bos_live_abc123")
+ * @param fullKey - The full API key (e.g., "bos_live_abc123...")
  * @returns Validated key data or null if invalid
  */
 export async function validateApiKey(
-  keyPrefix: string
+  fullKey: string
 ): Promise<ValidatedPixelKey | null> {
   try {
     // Query smart_pixels table by key_prefix
@@ -30,11 +31,12 @@ export async function validateApiKey(
         organization_id,
         name,
         scopes,
+        key_hash,
         rate_limit_per_minute,
         is_active,
         expires_at
       `)
-      .eq('key_prefix', keyPrefix.substring(0, 16))
+      .eq('key_prefix', extractKeyPrefix(fullKey))
       .eq('is_active', true)
       .single();
 
@@ -44,6 +46,11 @@ export async function validateApiKey(
 
     // Check expiration
     if (pixel.expires_at && new Date(pixel.expires_at) < new Date()) {
+      return null;
+    }
+
+    const candidateHash = createHash('sha256').update(fullKey).digest('hex');
+    if (candidateHash !== pixel.key_hash) {
       return null;
     }
 

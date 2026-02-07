@@ -6,6 +6,7 @@ import { z } from "zod";
 import { resolveCompanyUrl } from "@/lib/audit/company-resolver";
 import { isLikelyDomainOrUrl, validateUrl } from "@/lib/audit/url-validator";
 import { runWebsiteChecks } from "@/lib/audit/website-checks";
+import { validateCsrf } from "@/lib/utils/csrf";
 import { RateLimiter } from "@/lib/utils/rate-limiter";
 
 export const runtime = "nodejs";
@@ -35,6 +36,13 @@ function getClientIpAddress(request: NextRequest): string {
 
 export async function POST(request: NextRequest) {
   try {
+    if (!validateCsrf(request)) {
+      return NextResponse.json(
+        { error: "Invalid request origin" },
+        { status: 403 },
+      );
+    }
+
     const clientIp = getClientIpAddress(request);
     const allowed = await rateLimiter.check(clientIp, "audit-phase1", 50, 3600);
 
