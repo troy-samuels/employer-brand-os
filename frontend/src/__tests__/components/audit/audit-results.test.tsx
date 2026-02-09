@@ -9,14 +9,18 @@ const createMockResult = (
   domain: "example.com",
   companyName: "Example Corp",
   companySlug: "example-corp",
+  status: "success",
   hasLlmsTxt: false,
   llmsTxtHasEmployment: false,
   hasJsonld: false,
   jsonldSchemasFound: [],
   hasSalaryData: false,
   salaryConfidence: "none",
+  detectedCurrency: null,
   careersPageStatus: "not_found",
   careersPageUrl: null,
+  atsDetected: null,
+  hasSitemap: false,
   robotsTxtStatus: "not_found",
   robotsTxtAllowedBots: [],
   robotsTxtBlockedBots: [],
@@ -213,6 +217,66 @@ describe("AuditResults", () => {
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/No salary data found/)).toBeInTheDocument();
+    });
+  });
+
+  describe("score contextual summary", () => {
+    it("should show urgency message for very low scores (0-20)", () => {
+      const result = createMockResult({ score: 10 });
+      render(<AuditResults result={result} />);
+      expect(screen.getByTestId("score-summary")).toHaveTextContent(
+        "AI is guessing about your company. Candidates are getting unreliable answers."
+      );
+    });
+
+    it("should show gaps message for mid-low scores (21-50)", () => {
+      const result = createMockResult({ score: 35 });
+      render(<AuditResults result={result} />);
+      expect(screen.getByTestId("score-summary")).toHaveTextContent(
+        "AI has some data, but gaps mean candidates get incomplete answers."
+      );
+    });
+
+    it("should show basics message for mid-high scores (51-75)", () => {
+      const result = createMockResult({ score: 60 });
+      render(<AuditResults result={result} />);
+      expect(screen.getByTestId("score-summary")).toHaveTextContent(
+        "AI knows the basics, but your full employer story isn't getting through."
+      );
+    });
+
+    it("should show strong message for high scores (76+)", () => {
+      const result = createMockResult({ score: 85 });
+      render(<AuditResults result={result} />);
+      expect(screen.getByTestId("score-summary")).toHaveTextContent(
+        "Your AI presence is strong. Fine-tune it to stay ahead."
+      );
+    });
+  });
+
+  describe("ATS detection in careers detail", () => {
+    it("should show ATS-specific message when ATS is detected on partial careers page", () => {
+      const result = createMockResult({
+        careersPageStatus: "partial",
+        careersPageUrl: "https://boards.greenhouse.io/example",
+        atsDetected: "Greenhouse",
+      });
+      render(<AuditResults result={result} />);
+      expect(
+        screen.getByText(/redirects to an external ATS \(Greenhouse\)/)
+      ).toBeInTheDocument();
+    });
+
+    it("should show generic partial message when no ATS is detected", () => {
+      const result = createMockResult({
+        careersPageStatus: "partial",
+        careersPageUrl: "https://example.com/jobs",
+        atsDetected: null,
+      });
+      render(<AuditResults result={result} />);
+      expect(
+        screen.getByText(/careers page at https:\/\/example\.com\/jobs, but it's thin/)
+      ).toBeInTheDocument();
     });
   });
 

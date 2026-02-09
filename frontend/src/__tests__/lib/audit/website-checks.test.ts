@@ -149,7 +149,7 @@ Allow: /
       vi.stubGlobal(
         "fetch",
         createFetchMock(
-          '<html><head><script type="application/ld+json">{"@context":"https://schema.org","@type":"JobPosting","title":"Software Engineer","baseSalary":{"@type":"MonetaryAmount","currency":"GBP","value":{"@type":"QuantitativeValue","minValue":50000,"maxValue":70000,"unitText":"YEAR"}}}</script></head><body>Join us.</body></html>',
+          '<html><head><script type="application/ld+json">{"@context":"https://schema.org","@type":"JobPosting","title":"Software Engineer","baseSalary":{"@type":"MonetaryAmount","currency":"GBP","value":{"@type":"QuantitativeValue","minValue":50000,"maxValue":70000,"unitText":"YEAR"}}}</script></head><body>£50,000 - £70,000</body></html>',
         ),
       );
 
@@ -158,6 +158,7 @@ Allow: /
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("jsonld_base_salary");
       expect(result.scoreBreakdown.salaryData).toBe(20);
+      expect(result.detectedCurrency).toBe("GBP");
     });
 
     it("scores 15 when multiple concrete salary ranges are listed on careers page", async () => {
@@ -350,6 +351,143 @@ Allow: /
       expect(result.robotsTxtStatus).toBe("not_found");
       expect(result.robotsTxtAllowedBots).toEqual([]);
       expect(result.robotsTxtBlockedBots).toEqual([]);
+    });
+
+    it("detects multiple currency formats including non-Western", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Engineer</h2><p>¥5,000,000 - ¥8,000,000</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.co.jp", "Example Japan");
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.detectedCurrency).toBe("JPY");
+    });
+
+    it("detects sitemap.xml when present", async () => {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn().mockImplementation((url: string) => {
+          if (url.endsWith("/sitemap.xml")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve('<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>'),
+            });
+          }
+
+          if (url.endsWith("/llms.txt")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/robots.txt")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/careers")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve("<html><body>Join us</body></html>"),
+            });
+          }
+
+          if (url.endsWith("/")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve("<html><body>Home</body></html>"),
+            });
+          }
+
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.hasSitemap).toBe(true);
+    });
+
+    it("detects international careers paths", async () => {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn().mockImplementation((url: string) => {
+          if (url.endsWith("/karriere")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve(`<html><body>${"Arbeiten Sie mit uns. ".repeat(220)}</body></html>`),
+            });
+          }
+
+          if (url.endsWith("/llms.txt")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/robots.txt")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/sitemap.xml")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/careers") || url.endsWith("/jobs") || url.endsWith("/careers/") || url.endsWith("/jobs/")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve("<html><body>Home</body></html>"),
+            });
+          }
+
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }),
+      );
+
+      const result = await runWebsiteChecks("example.de", "Example DE");
+
+      expect(result.careersPageStatus).toBe("full");
+      expect(result.careersPageUrl).toBe("https://example.de/karriere");
     });
   });
 });

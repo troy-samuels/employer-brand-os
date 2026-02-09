@@ -5,12 +5,19 @@ import {
   ChatCircleText,
   TreeStructure,
   CurrencyGbp,
+  CurrencyDollar,
+  CurrencyEur,
+  CurrencyJpy,
+  CurrencyInr,
+  CurrencyKrw,
+  CurrencyCny,
   Briefcase,
   ShieldCheck,
+  CurrencyCircleDollar,
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
-import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
+import type { WebsiteCheckResult, CurrencyCode, AtsName } from "@/lib/audit/website-checks";
 import { ScoreGauge } from "./score-gauge";
 
 interface AuditResultsProps {
@@ -20,6 +27,34 @@ interface AuditResultsProps {
 /* ── Helpers ───────────────────────────────────────── */
 
 type CheckStatus = "pass" | "partial" | "fail";
+
+function getCurrencyIcon(currency: CurrencyCode) {
+  switch (currency) {
+    case "GBP":
+      return <CurrencyGbp size={22} weight="duotone" />;
+    case "USD":
+    case "CAD":
+    case "AUD":
+    case "NZD":
+    case "HKD":
+    case "SGD":
+    case "MXN":
+      return <CurrencyDollar size={22} weight="duotone" />;
+    case "EUR":
+      return <CurrencyEur size={22} weight="duotone" />;
+    case "JPY":
+      return <CurrencyJpy size={22} weight="duotone" />;
+    case "INR":
+      return <CurrencyInr size={22} weight="duotone" />;
+    case "KRW":
+      return <CurrencyKrw size={22} weight="duotone" />;
+    case "CNY":
+      return <CurrencyCny size={22} weight="duotone" />;
+    default:
+      // For currencies without specific icons, use generic currency icon
+      return <CurrencyCircleDollar size={22} weight="duotone" />;
+  }
+}
 
 function checkStatus(earned: number, max: number): CheckStatus {
   if (earned >= max) return "pass";
@@ -114,8 +149,11 @@ function getSalaryDetail(r: WebsiteCheckResult): string {
 function getCareersDetail(r: WebsiteCheckResult): string {
   if (r.careersPageStatus === "full" && r.careersPageUrl)
     return `Solid careers page at ${r.careersPageUrl} — AI can surface your open roles.`;
-  if (r.careersPageStatus === "partial" && r.careersPageUrl)
+  if (r.careersPageStatus === "partial" && r.careersPageUrl) {
+    if (r.atsDetected)
+      return `Your careers page redirects to an external ATS (${r.atsDetected}) — most AI crawlers can't read this content.`;
     return `Found a careers page at ${r.careersPageUrl}, but it's thin on detail.`;
+  }
   if (r.careersPageStatus === "none")
     return "Your careers page exists but barely has any content for AI to work with.";
   return "No careers page found. AI can't point candidates to your jobs.";
@@ -137,6 +175,16 @@ function getRobotsDetail(r: WebsiteCheckResult): string {
   if (r.robotsTxtStatus === "no_rules")
     return "No AI-specific rules in robots.txt. Crawlers aren't explicitly blocked or allowed.";
   return "No robots.txt found. AI crawlers have no guidance on what they should read.";
+}
+
+function getScoreSummary(score: number): string {
+  if (score <= 20)
+    return "AI is guessing about your company. Candidates are getting unreliable answers.";
+  if (score <= 50)
+    return "AI has some data, but gaps mean candidates get incomplete answers.";
+  if (score <= 75)
+    return "AI knows the basics, but your full employer story isn't getting through.";
+  return "Your AI presence is strong. Fine-tune it to stay ahead.";
 }
 
 /* ── Main ──────────────────────────────────────────── */
@@ -196,7 +244,7 @@ export function AuditResults({ result }: AuditResultsProps) {
           index={1}
         />
         <CheckCard
-          icon={<CurrencyGbp size={22} weight="duotone" />}
+          icon={getCurrencyIcon(result.detectedCurrency)}
           name="Salary Transparency"
           earned={scoreBreakdown.salaryData}
           max={20}
@@ -228,6 +276,10 @@ export function AuditResults({ result }: AuditResultsProps) {
         transition={{ delay: 0.8 }}
         className="space-y-3 pt-2"
       >
+        <p className="text-center text-sm text-neutral-500" data-testid="score-summary">
+          {getScoreSummary(score)}
+        </p>
+
         <div className="flex items-center justify-center">
           <a
             href="/how-we-score"

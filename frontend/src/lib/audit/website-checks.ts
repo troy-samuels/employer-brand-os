@@ -59,10 +59,10 @@ const JOB_TITLE_TERMS = [
   "associate",
 ];
 
-const SALARY_CURRENCY_PATTERN = String.raw`(?:[£$€]|gbp|usd|eur)`;
-const SALARY_AMOUNT_PATTERN = String.raw`(?:\d{1,3}(?:,\d{3})+|\d{4,6}|\d{2,3}(?:\.\d+)?\s*[kK])`;
+const SALARY_CURRENCY_PATTERN = String.raw`(?:[£$€¥₹₩₽₪₺₱৳]|gbp|usd|eur|jpy|inr|krw|rub|ils|try|php|bdt|chf|rm|myr|kr|zł|pln|zar|r|aud|cad|sgd|hkd|nzd|thb|idr)`;
+const SALARY_AMOUNT_PATTERN = String.raw`(?:\d{1,3}(?:[,.\s]\d{3})+|\d{4,9}|\d{2,3}(?:[.,]\d+)?\s*[kK])`;
 const SALARY_VALUE_PATTERN = String.raw`${SALARY_CURRENCY_PATTERN}\s*${SALARY_AMOUNT_PATTERN}`;
-const SALARY_RANGE_PATTERN = String.raw`${SALARY_VALUE_PATTERN}\s*(?:-|–|—|to)\s*(?:${SALARY_CURRENCY_PATTERN}\s*)?${SALARY_AMOUNT_PATTERN}`;
+const SALARY_RANGE_PATTERN = String.raw`${SALARY_VALUE_PATTERN}\s*(?:-|–|—|to|bis|à|a)\s*(?:${SALARY_CURRENCY_PATTERN}\s*)?${SALARY_AMOUNT_PATTERN}`;
 
 const CAREERS_PATHS = [
   "/careers",
@@ -72,22 +72,77 @@ const CAREERS_PATHS = [
   "/about/careers",
   "/join-us",
   "/work-with-us",
+  // International variants
+  "/karriere", // German
+  "/karriere/",
+  "/carrières", // French
+  "/carrières/",
+  "/carrera", // Spanish
+  "/carrera/",
+  "/carriera", // Italian
+  "/carriera/",
+  "/empleo", // Spanish (alternative)
+  "/empleo/",
+  "/vagas", // Portuguese
+  "/vagas/",
+  "/vacatures", // Dutch
+  "/vacatures/",
+  "/lediga-jobb", // Swedish
+  "/lediga-jobb/",
+  "/arbejde", // Danish
+  "/arbejde/",
+  "/採用情報", // Japanese
+  "/採用情報/",
+  "/채용", // Korean
+  "/채용/",
+  "/职位", // Chinese (Simplified)
+  "/职位/",
+  "/offres-emploi", // French (alternative)
+  "/offres-emploi/",
+  "/stellenangebote", // German (alternative)
+  "/stellenangebote/",
 ];
 
-const MAX_SAMPLED_JOB_LISTING_PAGES = 5;
+const MAX_SAMPLED_JOB_LISTING_PAGES = 12;
 
 const ATS_HOST_SUFFIXES = [
   "boards.greenhouse.io",
   "greenhouse.io",
   "jobs.lever.co",
+  "lever.co",
   "apply.workable.com",
   "jobs.ashbyhq.com",
   "jobs.smartrecruiters.com",
   "myworkdayjobs.com",
+  "workday.com",
   "jobs.jobvite.com",
   "jobs.jobscore.com",
   "ats.rippling.com",
   "jobs.gohire.io",
+  "bamboohr.com",
+  "applytojob.com",
+  "breezy.hr",
+  "recruitee.com",
+  "pinpointhq.com",
+  "teamtailor.com",
+  "welcometothejungle.com",
+  "jobs.polymer.co",
+  "workable.com",
+  "recruiterbox.com",
+  "jazz.co",
+  "talentlyft.com",
+  "comeet.com",
+];
+
+const ATS_SUBDOMAINS = [
+  "careers",
+  "jobs",
+  "apply",
+  "hiring",
+  "join",
+  "talent",
+  "recruiting",
+  "opportunities",
 ];
 
 const JOB_PATH_HINT_PATTERNS = [
@@ -186,20 +241,111 @@ type SalaryDetectionResult = {
   hasSalaryData: boolean;
   salaryConfidence: SalaryConfidence;
   score: number;
+  detectedCurrency: CurrencyCode;
+};
+
+export type CurrencyCode =
+  | "GBP"
+  | "USD"
+  | "EUR"
+  | "JPY"
+  | "INR"
+  | "KRW"
+  | "CNY"
+  | "AUD"
+  | "CAD"
+  | "CHF"
+  | "SEK"
+  | "NOK"
+  | "DKK"
+  | "PLN"
+  | "ZAR"
+  | "BRL"
+  | "MXN"
+  | "SGD"
+  | "HKD"
+  | "NZD"
+  | "THB"
+  | "MYR"
+  | "IDR"
+  | "PHP"
+  | "RUB"
+  | "TRY"
+  | "ILS"
+  | "BDT"
+  | null;
+
+export type AuditStatus = "success" | "no_website" | "unreachable" | "empty";
+
+export type AtsName =
+  | "Greenhouse"
+  | "Lever"
+  | "Workday"
+  | "Workable"
+  | "Ashby"
+  | "SmartRecruiters"
+  | "Jobvite"
+  | "JobScore"
+  | "Rippling"
+  | "GoHire"
+  | "BambooHR"
+  | "Breezy HR"
+  | "Recruitee"
+  | "Pinpoint"
+  | "Teamtailor"
+  | "Welcome to the Jungle"
+  | "Polymer"
+  | "Recruiterbox"
+  | "JazzHR"
+  | "TalentLyft"
+  | "Comeet"
+  | null;
+
+export const ATS_HOST_MAP: Record<string, AtsName> = {
+  "boards.greenhouse.io": "Greenhouse",
+  "greenhouse.io": "Greenhouse",
+  "jobs.lever.co": "Lever",
+  "lever.co": "Lever",
+  "apply.workable.com": "Workable",
+  "workable.com": "Workable",
+  "jobs.ashbyhq.com": "Ashby",
+  "jobs.smartrecruiters.com": "SmartRecruiters",
+  "myworkdayjobs.com": "Workday",
+  "workday.com": "Workday",
+  "jobs.jobvite.com": "Jobvite",
+  "jobs.jobscore.com": "JobScore",
+  "ats.rippling.com": "Rippling",
+  "jobs.gohire.io": "GoHire",
+  "bamboohr.com": "BambooHR",
+  "applytojob.com": "BambooHR",
+  "breezy.hr": "Breezy HR",
+  "recruitee.com": "Recruitee",
+  "pinpointhq.com": "Pinpoint",
+  "teamtailor.com": "Teamtailor",
+  "welcometothejungle.com": "Welcome to the Jungle",
+  "jobs.polymer.co": "Polymer",
+  "recruiterbox.com": "Recruiterbox",
+  "jazz.co": "JazzHR",
+  "talentlyft.com": "TalentLyft",
+  "comeet.com": "Comeet",
 };
 
 export type WebsiteCheckResult = {
   domain: string;
   companyName: string;
   companySlug: string;
+  status: AuditStatus;
   hasLlmsTxt: boolean;
   llmsTxtHasEmployment: boolean;
   hasJsonld: boolean;
   jsonldSchemasFound: string[];
   hasSalaryData: boolean;
   salaryConfidence: SalaryConfidence;
+  detectedCurrency: CurrencyCode;
   careersPageStatus: CareersPageStatus;
   careersPageUrl: string | null;
+  atsDetected: AtsName;
+  hasSitemap: boolean;
   robotsTxtStatus: RobotsTxtStatus;
   robotsTxtAllowedBots: string[];
   robotsTxtBlockedBots: string[];
@@ -274,6 +420,25 @@ function isTrustedAtsHost(hostname: string): boolean {
   return ATS_HOST_SUFFIXES.some((suffix) => hostname === suffix || hostname.endsWith(`.${suffix}`));
 }
 
+function detectAtsName(hostname: string): AtsName {
+  for (const [suffix, name] of Object.entries(ATS_HOST_MAP)) {
+    if (hostname === suffix || hostname.endsWith(`.${suffix}`)) {
+      return name;
+    }
+  }
+  return null;
+}
+
+function isAtsSubdomain(hostname: string, domain: string): boolean {
+  // Check if the hostname is a subdomain of the main domain with an ATS-like prefix
+  if (!hostname.endsWith(`.${domain}`)) {
+    return false;
+  }
+  
+  const subdomain = hostname.slice(0, -(domain.length + 1));
+  return ATS_SUBDOMAINS.includes(subdomain);
+}
+
 function pathContainsNonJobSegment(pathname: string): boolean {
   const segments = pathname
     .split("/")
@@ -290,8 +455,9 @@ function isLikelyJobListingUrl(url: URL, domain: string): boolean {
 
   const sameDomain = isSameDomain(hostname, domain);
   const trustedAtsHost = isTrustedAtsHost(hostname);
+  const atsSubdomain = isAtsSubdomain(hostname, domain);
 
-  if (!sameDomain && !trustedAtsHost) {
+  if (!sameDomain && !trustedAtsHost && !atsSubdomain) {
     return false;
   }
 
@@ -485,6 +651,7 @@ function selectHighestConfidenceSalaryDetection(
       hasSalaryData: false,
       salaryConfidence: "none",
       score: 0,
+      detectedCurrency: null,
     };
   }
 
@@ -838,12 +1005,54 @@ function hasJobPostingBaseSalaryInJsonLd(careersHtml: string): boolean {
   return false;
 }
 
+function detectCurrency(text: string): CurrencyCode {
+  const currencyPatterns: Array<{ pattern: RegExp; code: CurrencyCode }> = [
+    { pattern: /£|gbp/i, code: "GBP" },
+    { pattern: /\$|usd/i, code: "USD" },
+    { pattern: /€|eur/i, code: "EUR" },
+    { pattern: /¥|jpy/i, code: "JPY" },
+    { pattern: /₹|inr/i, code: "INR" },
+    { pattern: /₩|krw/i, code: "KRW" },
+    { pattern: /cny|rmb/i, code: "CNY" },
+    { pattern: /aud|a\$/i, code: "AUD" },
+    { pattern: /cad|c\$/i, code: "CAD" },
+    { pattern: /chf/i, code: "CHF" },
+    { pattern: /sek|kr/i, code: "SEK" },
+    { pattern: /nok/i, code: "NOK" },
+    { pattern: /dkk/i, code: "DKK" },
+    { pattern: /zł|pln/i, code: "PLN" },
+    { pattern: /\br\b|zar/i, code: "ZAR" },
+    { pattern: /brl|r\$/i, code: "BRL" },
+    { pattern: /mxn/i, code: "MXN" },
+    { pattern: /sgd|s\$/i, code: "SGD" },
+    { pattern: /hkd|hk\$/i, code: "HKD" },
+    { pattern: /nzd|nz\$/i, code: "NZD" },
+    { pattern: /thb|฿/i, code: "THB" },
+    { pattern: /myr|rm/i, code: "MYR" },
+    { pattern: /idr|rp/i, code: "IDR" },
+    { pattern: /php|₱/i, code: "PHP" },
+    { pattern: /rub|₽/i, code: "RUB" },
+    { pattern: /try|₺/i, code: "TRY" },
+    { pattern: /ils|₪/i, code: "ILS" },
+    { pattern: /bdt|৳/i, code: "BDT" },
+  ];
+
+  for (const { pattern, code } of currencyPatterns) {
+    if (pattern.test(text)) {
+      return code;
+    }
+  }
+
+  return null;
+}
+
 function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
   if (!careersHtml) {
     return {
       hasSalaryData: false,
       salaryConfidence: "none",
       score: 0,
+      detectedCurrency: null,
     };
   }
 
@@ -855,11 +1064,14 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     SALARY_KEYWORDS.some((keyword) => textHasKeyword(careersText, keyword)) ||
     SALARY_NON_DISCLOSURE_PATTERNS.some((pattern) => pattern.test(careersText));
 
+  const detectedCurrency = detectCurrency(careersText);
+
   if (hasJsonLdBaseSalary) {
     return {
       hasSalaryData: true,
       salaryConfidence: "jsonld_base_salary",
       score: 20,
+      detectedCurrency,
     };
   }
 
@@ -868,6 +1080,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
       hasSalaryData: true,
       salaryConfidence: "multiple_ranges",
       score: 15,
+      detectedCurrency,
     };
   }
 
@@ -876,6 +1089,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
       hasSalaryData: true,
       salaryConfidence: "single_range",
       score: 10,
+      detectedCurrency,
     };
   }
 
@@ -884,6 +1098,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
       hasSalaryData: true,
       salaryConfidence: "mention_only",
       score: 5,
+      detectedCurrency,
     };
   }
 
@@ -891,6 +1106,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     hasSalaryData: false,
     salaryConfidence: "none",
     score: 0,
+    detectedCurrency: null,
   };
 }
 
@@ -948,6 +1164,7 @@ export async function runWebsiteChecks(
   const normalizedDomain = normalizeDomain(domain);
   const companySlug = createCompanySlug(companyName);
 
+  let auditStatus: AuditStatus = "success";
   let hasLlmsTxt = false;
   let llmsTxtHasEmployment = false;
   let hasJsonld = false;
@@ -955,13 +1172,18 @@ export async function runWebsiteChecks(
   let hasSalaryData = false;
   let salaryConfidence: SalaryConfidence = "none";
   let salaryScore = 0;
+  let detectedCurrency: CurrencyCode = null;
   let careersPageStatus: CareersPageStatus = "not_found";
   let careersPageUrl: string | null = null;
+  let atsDetected: AtsName = null;
+  let hasSitemap = false;
   let robotsTxtStatus: RobotsTxtStatus = "not_found";
   let robotsTxtAllowedBots: string[] = [];
   let robotsTxtBlockedBots: string[] = [];
 
-  if (normalizedDomain) {
+  if (!normalizedDomain) {
+    auditStatus = "no_website";
+  } else {
     const homepageUrl = `https://${normalizedDomain}/`;
 
     const llmsResponse = await fetchSafe(`https://${normalizedDomain}/llms.txt`);
@@ -972,28 +1194,31 @@ export async function runWebsiteChecks(
     }
 
     const homepageResponse = await fetchSafe(homepageUrl);
-    const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
 
-    if (homepageHtml) {
-      const jsonLdBlocks = extractJsonLdBlocks(homepageHtml);
-      const schemas = new Set<string>();
-
-      for (const block of jsonLdBlocks) {
-        try {
-          const parsed = JSON.parse(block);
-          collectJsonLdTypes(parsed, schemas);
-        } catch {
-          continue;
-        }
-      }
-
-      jsonldSchemasFound = Array.from(schemas);
-      hasJsonld = jsonldSchemasFound.length > 0;
+    if (!homepageResponse.ok) {
+      auditStatus = "unreachable";
+    } else if (
+      homepageResponse.status === 404 ||
+      stripHtmlTags(homepageResponse.text).length < 50
+    ) {
+      auditStatus = "empty";
     }
+
+    const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
 
     const careersCheck = await runCareersCheck(normalizedDomain);
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
+
+    // Detect ATS from the careers URL hostname
+    if (careersPageUrl) {
+      try {
+        const careersHostname = new URL(careersPageUrl).hostname.toLowerCase();
+        atsDetected = detectAtsName(careersHostname);
+      } catch {
+        // Invalid URL — ignore
+      }
+    }
 
     const salaryDetection = await analyzeSalaryAcrossCareersAndJobListings(
       careersCheck.html,
@@ -1003,6 +1228,47 @@ export async function runWebsiteChecks(
     hasSalaryData = salaryDetection.hasSalaryData;
     salaryConfidence = salaryDetection.salaryConfidence;
     salaryScore = salaryDetection.score;
+    detectedCurrency = salaryDetection.detectedCurrency;
+
+    // Collect JSON-LD schemas from multiple pages: homepage, careers page, and job listings
+    const htmlSamplesToScan = [homepageHtml];
+    
+    if (careersCheck.html) {
+      htmlSamplesToScan.push(careersCheck.html);
+    }
+
+    // Also get job listing pages for JSON-LD checking
+    if (careersCheck.html && careersCheck.url) {
+      const jobListingLinks = extractJobListingLinks(careersCheck.html, careersCheck.url, normalizedDomain);
+      if (jobListingLinks.length > 0) {
+        const sampledResponses = await Promise.all(
+          jobListingLinks.slice(0, 3).map((link) => fetchSafe(link))
+        );
+        for (const response of sampledResponses) {
+          if (response.ok && response.status === 200 && response.text) {
+            htmlSamplesToScan.push(response.text);
+          }
+        }
+      }
+    }
+
+    const schemas = new Set<string>();
+    for (const html of htmlSamplesToScan) {
+      if (!html) continue;
+      
+      const jsonLdBlocks = extractJsonLdBlocks(html);
+      for (const block of jsonLdBlocks) {
+        try {
+          const parsed = JSON.parse(block);
+          collectJsonLdTypes(parsed, schemas);
+        } catch {
+          continue;
+        }
+      }
+    }
+
+    jsonldSchemasFound = Array.from(schemas);
+    hasJsonld = jsonldSchemasFound.length > 0;
 
     const robotsResponse = await fetchSafe(`https://${normalizedDomain}/robots.txt`);
     if (robotsResponse.ok && robotsResponse.status === 200) {
@@ -1012,6 +1278,14 @@ export async function runWebsiteChecks(
       robotsTxtBlockedBots = parsedRobots.blockedBots;
     } else if (robotsResponse.ok && robotsResponse.status === 404) {
       robotsTxtStatus = "not_found";
+    }
+
+    // Check for sitemap.xml
+    const sitemapResponse = await fetchSafe(`https://${normalizedDomain}/sitemap.xml`);
+    if (sitemapResponse.ok && sitemapResponse.status === 200) {
+      // Basic validation: check if it looks like an XML sitemap
+      const sitemapText = sitemapResponse.text;
+      hasSitemap = sitemapText.includes("<urlset") || sitemapText.includes("<sitemapindex");
     }
   }
 
@@ -1034,14 +1308,18 @@ export async function runWebsiteChecks(
     domain: normalizedDomain || domain.trim(),
     companyName,
     companySlug,
+    status: auditStatus,
     hasLlmsTxt,
     llmsTxtHasEmployment,
     hasJsonld,
     jsonldSchemasFound,
     hasSalaryData,
     salaryConfidence,
+    detectedCurrency,
     careersPageStatus,
     careersPageUrl,
+    atsDetected,
+    hasSitemap,
     robotsTxtStatus,
     robotsTxtAllowedBots,
     robotsTxtBlockedBots,

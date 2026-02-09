@@ -3,7 +3,36 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 
-export function AuditGate() {
+interface AuditGateProps {
+  score?: number;
+}
+
+function getCtaCopy(score: number) {
+  if (score >= 61) {
+    return {
+      headline: "You're ahead of most employers — claim your verified profile",
+      description:
+        "Lock in your advantage. A verified AI profile ensures your employer brand stays accurate as AI models update.",
+      button: "Claim your profile",
+    };
+  }
+  if (score >= 31) {
+    return {
+      headline: "You're making progress — close the gaps",
+      description:
+        "A few targeted fixes will dramatically improve what AI tells candidates about you. Get the full breakdown.",
+      button: "Get your report",
+    };
+  }
+  return {
+    headline: "Want the full picture?",
+    description:
+      "See exactly what AI tells candidates about your company — and what you can do about it.",
+    button: "Send report",
+  };
+}
+
+export function AuditGate({ score = 0 }: AuditGateProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -13,6 +42,8 @@ export function AuditGate() {
     if (!trimmed) return;
     setSubmitted(true);
   };
+
+  const cta = getCtaCopy(score);
 
   if (submitted) {
     return (
@@ -41,11 +72,10 @@ export function AuditGate() {
     >
       <div className="space-y-2">
         <h2 className="text-lg font-semibold text-neutral-950">
-          Want the full picture?
+          {cta.headline}
         </h2>
         <p className="text-sm text-neutral-500 leading-relaxed max-w-sm mx-auto">
-          See exactly what AI tells candidates about your company —
-          and what you can do about it.
+          {cta.description}
         </p>
       </div>
 
@@ -63,7 +93,7 @@ export function AuditGate() {
           type="submit"
           className="rounded-xl bg-neutral-950 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800 active:scale-[0.98] transition-all duration-150"
         >
-          Send report
+          {cta.button}
         </button>
       </form>
 

@@ -70,6 +70,82 @@ async function isReachable(candidateUrl: string): Promise<boolean> {
   return Boolean(getResponse?.ok);
 }
 
+const COUNTRY_TLDS = [
+  "com",
+  "co.uk",
+  "de",
+  "fr",
+  "com.au",
+  "co.jp",
+  "com.br",
+  "ca",
+  "nl",
+  "es",
+  "it",
+  "se",
+  "dk",
+  "no",
+  "fi",
+  "ch",
+  "at",
+  "be",
+  "ie",
+  "nz",
+  "sg",
+  "in",
+  "mx",
+  "ar",
+  "cl",
+  "co",
+  "pl",
+  "cz",
+  "pt",
+  "gr",
+  "ru",
+  "cn",
+  "jp",
+  "kr",
+  "hk",
+  "tw",
+  "my",
+  "th",
+  "id",
+  "ph",
+  "vn",
+  "za",
+  "ae",
+  "il",
+  "tr",
+];
+
+async function searchCompanyUrl(companyName: string): Promise<string | null> {
+  // Simple web search fallback using DuckDuckGo instant answer API
+  try {
+    const searchQuery = encodeURIComponent(`${companyName} official website`);
+    const response = await fetchWithTimeout(
+      `https://api.duckduckgo.com/?q=${searchQuery}&format=json&no_html=1&skip_disambig=1`
+    );
+    
+    if (!response?.ok) {
+      return null;
+    }
+
+    const data = await response.json() as { AbstractURL?: string };
+    const abstractUrl = data.AbstractURL;
+    
+    if (abstractUrl && typeof abstractUrl === "string") {
+      const normalized = normalizeUrl(abstractUrl);
+      if (normalized) {
+        return normalized;
+      }
+    }
+
+    return null;
+  } catch {
+    return null;
+  }
+}
+
 export function normalizeUrl(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) {
@@ -122,11 +198,25 @@ export async function resolveCompanyUrl(
     return { name, url: null };
   }
 
-  const candidates = [`https://${slug}.com`, `https://www.${slug}.com`];
+  // Try various TLD combinations
+  const candidates: string[] = [];
+  for (const tld of COUNTRY_TLDS) {
+    candidates.push(`https://${slug}.${tld}`);
+    if (!tld.includes(".")) {
+      candidates.push(`https://www.${slug}.${tld}`);
+    }
+  }
+
   for (const candidateUrl of candidates) {
     if (await isReachable(candidateUrl)) {
       return { name, url: candidateUrl };
     }
+  }
+
+  // Fallback to web search
+  const searchResult = await searchCompanyUrl(name);
+  if (searchResult) {
+    return { name, url: searchResult };
   }
 
   return { name, url: null };

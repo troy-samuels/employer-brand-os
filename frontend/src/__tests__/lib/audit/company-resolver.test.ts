@@ -221,5 +221,56 @@ describe("company-resolver", () => {
       expect(result.url).toBeNull();
       expect(global.fetch).not.toHaveBeenCalled();
     });
+
+    it("should try country-specific TLDs like .co.uk and .de", async () => {
+      let attemptedUrls: string[] = [];
+      
+      global.fetch = vi.fn((url: string | URL | Request, init?: RequestInit) => {
+        const urlString = typeof url === "string" ? url : url.toString();
+        attemptedUrls.push(urlString);
+        
+        if (urlString.includes("test-company.de")) {
+          return Promise.resolve(new Response("", { status: 200 }));
+        }
+        return Promise.resolve(new Response("", { status: 404 }));
+      }) as typeof fetch;
+
+      const result = await resolveCompanyUrl("Test Company");
+
+      expect(result.url).toBe("https://test-company.de");
+      expect(attemptedUrls.some(url => url.includes(".co.uk"))).toBe(true);
+      expect(attemptedUrls.some(url => url.includes(".de"))).toBe(true);
+    });
+
+    it("should fallback to web search when TLD guessing fails", async () => {
+      let searchCalled = false;
+      
+      global.fetch = vi.fn((url: string | URL | Request, init?: RequestInit) => {
+        const urlString = typeof url === "string" ? url : url.toString();
+        
+        // Mock DuckDuckGo API call
+        if (urlString.includes("duckduckgo.com")) {
+          searchCalled = true;
+          return Promise.resolve(
+            new Response(
+              JSON.stringify({ AbstractURL: "https://realcompany.io" }),
+              { status: 200 }
+            )
+          );
+        }
+        
+        // Mock the final URL check for realcompany.io
+        if (urlString.includes("realcompany.io")) {
+          return Promise.resolve(new Response("", { status: 200 }));
+        }
+        
+        return Promise.resolve(new Response("", { status: 404 }));
+      }) as typeof fetch;
+
+      const result = await resolveCompanyUrl("Real Company");
+
+      expect(searchCalled).toBe(true);
+      expect(result.url).toBe("https://realcompany.io");
+    });
   });
 });
