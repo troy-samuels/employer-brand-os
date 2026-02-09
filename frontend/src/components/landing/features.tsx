@@ -26,7 +26,7 @@ export default function Features() {
     <section id="how-it-works" className="py-16 lg:py-20 bg-white">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
         <div className="mb-12">
-          <p className="overline mb-3">How BrandOS works</p>
+          <p className="overline mb-3">How Rankwell works</p>
           <h2 className="text-3xl font-bold text-neutral-950 max-w-xl">
             Take control of what AI says about you
           </h2>

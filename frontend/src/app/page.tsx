@@ -89,7 +89,7 @@ export default function Home() {
               <AuditResults result={result} />
 
               {/* Email capture */}
-              <AuditGate score={result.score} />
+              <AuditGate score={result.score} companySlug={result.companySlug} />
 
               {/* Reset */}
               <motion.div

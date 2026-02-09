@@ -2,7 +2,7 @@
  * Smart Pixel Facts API Endpoint
  * GET /api/pixel/v1/facts
  *
- * This is the core API that powers the BrandOS Smart Pixel.
+ * This is the core API that powers the Rankwell Smart Pixel.
  * It returns verified employer facts as JSON-LD for injection into client websites.
  *
  * Security layers:

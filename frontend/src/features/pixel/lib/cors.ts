@@ -52,7 +52,7 @@ export function buildSuccessHeaders(origin: string): Headers {
   headers.set('Content-Type', 'application/ld+json; charset=utf-8');
 
   // Version header for debugging
-  headers.set('X-BrandOS-Version', '1.0');
+  headers.set('X-Rankwell-Version', '1.0');
 
   return headers;
 }

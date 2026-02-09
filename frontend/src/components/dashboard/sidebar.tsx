@@ -39,7 +39,7 @@ export function DashboardSidebar({
         href="/dashboard"
         className="text-lg font-bold text-neutral-950 tracking-tight block px-3 mb-8"
       >
-        BrandOS
+        Rankwell
       </Link>
 
       <nav className="space-y-1">

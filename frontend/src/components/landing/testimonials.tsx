@@ -1,6 +1,6 @@
 /**
  * Before/After Comparison — replaces fictional testimonials.
- * Shows what AI says about a company now vs. after BrandOS.
+ * Shows what AI says about a company now vs. after Rankwell.
  */
 export default function BeforeAfter() {
   return (
@@ -13,7 +13,7 @@ export default function BeforeAfter() {
           </h2>
           <p className="text-neutral-600 mt-3 max-w-xl">
             A candidate asks ChatGPT about working at a mid-size tech company. Here&apos;s
-            what changes when BrandOS is active.
+            what changes when Rankwell is active.
           </p>
         </div>
 
@@ -23,7 +23,7 @@ export default function BeforeAfter() {
             <div className="flex items-center gap-2 mb-6">
               <span className="w-2 h-2 bg-status-critical rounded-full" />
               <span className="text-xs font-semibold text-status-critical uppercase tracking-wide">
-                Without BrandOS
+                Without Rankwell
               </span>
             </div>
 
@@ -56,7 +56,7 @@ export default function BeforeAfter() {
             <div className="flex items-center gap-2 mb-6">
               <span className="w-2 h-2 bg-status-verified rounded-full" />
               <span className="text-xs font-semibold text-status-verified uppercase tracking-wide">
-                With BrandOS
+                With Rankwell
               </span>
             </div>
 

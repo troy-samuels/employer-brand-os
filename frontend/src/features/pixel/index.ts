@@ -1,6 +1,6 @@
 /**
  * Smart Pixel Feature
- * Public exports for the BrandOS Smart Pixel infrastructure
+ * Public exports for the Rankwell Smart Pixel infrastructure
  */
 
 // Types

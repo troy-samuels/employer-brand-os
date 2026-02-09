@@ -16,7 +16,7 @@ const plans = [
       "Basic Monday Report",
     ],
     cta: "Start with Visibility",
-    href: "/audit",
+    href: "/",
   },
   {
     name: "Compliance",
@@ -31,7 +31,7 @@ const plans = [
       "Hallucination monitoring",
     ],
     cta: "Start with Compliance",
-    href: "/audit",
+    href: "/",
     highlighted: true,
   },
   {
@@ -47,7 +47,7 @@ const plans = [
       "Dedicated account manager",
     ],
     cta: "Talk to us",
-    href: "mailto:hello@brandos.io",
+    href: "mailto:hello@rankwell.io",
   },
 ];
 
@@ -61,7 +61,7 @@ export default function Pricing() {
             Cheaper than one bad hire
           </h2>
           <p className="text-neutral-600 mt-3 max-w-xl">
-            If BrandOS prevents even one candidate from ruling you out based on
+            If Rankwell prevents even one candidate from ruling you out based on
             wrong AI data, it&apos;s paid for itself for the year.
           </p>
         </div>
@@ -117,7 +117,7 @@ export default function Pricing() {
         <div className="mt-8 text-center">
           <p className="text-sm text-neutral-500">
             Agency wholesale pricing available — £150/month per location for 10+ locations.{" "}
-            <Link href="mailto:hello@brandos.io" className="text-brand-accent hover:underline">
+            <Link href="mailto:hello@rankwell.io" className="text-brand-accent hover:underline">
               Get in touch
             </Link>
           </p>

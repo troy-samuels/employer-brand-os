@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 interface AuditGateProps {
   score?: number;
+  companySlug?: string;
 }
 
 function getCtaCopy(score: number) {
@@ -32,15 +33,40 @@ function getCtaCopy(score: number) {
   };
 }
 
-export function AuditGate({ score = 0 }: AuditGateProps) {
+export function AuditGate({ score = 0, companySlug }: AuditGateProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = email.trim();
     if (!trimmed) return;
-    setSubmitted(true);
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/audit/leads", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed, companySlug, score }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || "Something went wrong. Please try again.");
+        return;
+      }
+
+      setSubmitted(true);
+    } catch {
+      setError("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const cta = getCtaCopy(score);
@@ -91,11 +117,16 @@ export function AuditGate({ score = 0 }: AuditGateProps) {
         />
         <button
           type="submit"
-          className="rounded-xl bg-neutral-950 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800 active:scale-[0.98] transition-all duration-150"
+          disabled={loading}
+          className="rounded-xl bg-neutral-950 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-800 active:scale-[0.98] transition-all duration-150 disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          {cta.button}
+          {loading ? "Sending…" : cta.button}
         </button>
       </form>
+
+      {error && (
+        <p className="text-sm text-red-600">{error}</p>
+      )}
 
       <p className="text-xs text-neutral-400">
         Free, no card, no spam.

@@ -1,6 +1,6 @@
 /**
  * API Key Management Types
- * Type definitions for BrandOS API key generation and management
+ * Type definitions for Rankwell API key generation and management
  */
 
 export interface ApiKeyRecord {

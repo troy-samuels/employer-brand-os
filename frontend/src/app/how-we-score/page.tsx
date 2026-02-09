@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "How We Score Your AI Visibility | BrandOS",
+  title: "How We Score Your AI Visibility | Rankwell",
   description:
-    "Understand the five checks behind your BrandOS AI Visibility Score — and what each one means for how candidates find you through AI.",
+    "Understand the five checks behind your Rankwell AI Visibility Score — and what each one means for how candidates find you through AI.",
 };
 
 const CHECKS = [
@@ -97,7 +97,7 @@ export default function HowWeScorePage() {
             Ready to fix your score?
           </h2>
           <p className="text-sm text-neutral-400 mb-6 max-w-md mx-auto">
-            BrandOS automatically optimises your employer brand for AI — so when
+            Rankwell automatically optimises your employer brand for AI — so when
             candidates ask about you, the answers are yours.
           </p>
           <Link

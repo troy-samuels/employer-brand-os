@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { generateApiKey, getApiKey } from '@/features/api-keys';
 import type { GetApiKeyResult } from '@/features/api-keys';
 
-const CDN_ENDPOINT = 'https://cdn.brandos.ai/pixel.js';
+const CDN_ENDPOINT = 'https://cdn.rankwell.io/pixel.js';
 
 export default function IntegrationPage() {
   const [keyData, setKeyData] = useState<GetApiKeyResult | null>(null);
@@ -46,7 +46,7 @@ export default function IntegrationPage() {
   };
 
   const generateSnippet = (key: string) => {
-    return `<!-- BrandOS Smart Pixel -->
+    return `<!-- Rankwell Smart Pixel -->
 <script
   src="${CDN_ENDPOINT}"
   data-key="${key}"
@@ -74,7 +74,7 @@ export default function IntegrationPage() {
         <div className="max-w-2xl space-y-8">
           {/* Introduction */}
           <p className="text-sm text-zinc-500 leading-relaxed">
-            Deploy the BrandOS Smart Pixel to inject verified JSON-LD schema into your
+            Deploy the Rankwell Smart Pixel to inject verified JSON-LD schema into your
             careers page. The pixel automatically updates when you modify your company facts.
           </p>
 

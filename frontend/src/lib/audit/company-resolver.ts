@@ -2,7 +2,7 @@ import { validateUrl } from "@/lib/audit/url-validator";
 
 const FETCH_TIMEOUT_MS = 5_000;
 const URL_SCHEME_REGEX = /^[a-z][a-z0-9+.-]*:\/\//i;
-const USER_AGENT = "BrandOSAuditBot/1.0 (+https://brandos.ai)";
+const USER_AGENT = "RankwellAuditBot/1.0 (+https://rankwell.io)";
 
 function slugify(value: string): string {
   return value

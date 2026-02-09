@@ -17,12 +17,12 @@ export default function Hero() {
           <p className="text-lg text-neutral-600 mb-10 max-w-2xl leading-relaxed">
             When someone asks ChatGPT what you pay, it guesses — using old
             Glassdoor reviews and outdated job posts. That guess is costing you
-            candidates. BrandOS gives AI the truth, straight from you.
+            candidates. Rankwell gives AI the truth, straight from you.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 mb-12">
             <Button variant="primary" size="lg" asChild>
-              <Link href="/audit">See your Shadow Salary — free</Link>
+              <Link href="/#audit">See your Shadow Salary — free</Link>
             </Button>
             <Button variant="ghost" size="md" asChild>
               <Link href="#how-it-works" className="text-neutral-600">

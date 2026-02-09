@@ -20,7 +20,7 @@ export function AuditReport({ result }: AuditReportProps) {
           {result.pdf_report_url && (
             <a
               href={result.pdf_report_url}
-              download={`brandos-audit-${result.company_domain}.pdf`}
+              download={`rankwell-audit-${result.company_domain}.pdf`}
               className="text-sm font-medium text-brand-primary hover:underline"
             >
               Download PDF

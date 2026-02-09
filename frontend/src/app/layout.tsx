@@ -23,8 +23,8 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata: Metadata = {
-  title: "BrandOS — Take Back Your Reputation from AI",
-  description: "AI is telling candidates the wrong things about your company. BrandOS gives you verified employer data that AI agents trust — so you control the narrative.",
+  title: "Rankwell — Take Back Your Reputation from AI",
+  description: "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
 };
 
 export default function RootLayout({

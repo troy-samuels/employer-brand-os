@@ -1,6 +1,6 @@
 /**
  * Smart Pixel Types
- * Core type definitions for the BrandOS Smart Pixel infrastructure
+ * Core type definitions for the Rankwell Smart Pixel infrastructure
  */
 
 // Validated API key data returned from database

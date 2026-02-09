@@ -2,7 +2,7 @@ import { type NextRequest } from 'next/server';
 
 export function validateCsrf(request: NextRequest): boolean {
   const origin = request.headers.get('origin');
-  if (!origin) return true;
+  if (!origin) return false;
 
   const host = request.headers.get('host');
   if (!host) return false;

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofology AI Visibility Report</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #FAFAF9;
+    color: #0A0A0A;
+    -webkit-font-smoothing: antialiased;
+    padding: 48px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .brand {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #A3A3A3;
+    margin-bottom: 8px;
+  }
+  .company-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #0A0A0A;
+    letter-spacing: -0.02em;
+    margin-bottom: 4px;
+  }
+  .domain {
+    font-size: 14px;
+    color: #737373;
+  }
+
+  /* Score gauge */
+  .score-section {
+    text-align: center;
+    margin: 40px 0;
+  }
+  .score-ring {
+    position: relative;
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 16px;
+  }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-ring .bg { stroke: #E5E5E5; }
+  .score-ring .fill { stroke: #DC2626; stroke-linecap: round; transition: stroke-dashoffset 0.6s ease; }
+  .score-value {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 42px;
+    font-weight: 700;
+    color: #0A0A0A;
+    letter-spacing: -0.02em;
+  }
+  .score-label {
+    font-size: 13px;
+    color: #737373;
+  }
+
+  /* Summary pill */
+  .summary {
+    text-align: center;
+    margin: 24px 0 40px;
+  }
+  .summary-pill {
+    display: inline-block;
+    background: white;
+    border-radius: 16px;
+    padding: 10px 24px;
+    box-shadow: 0 1px 4px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+    font-size: 14px;
+    color: #525252;
+  }
+  .summary-pill strong { color: #0A0A0A; }
+
+  /* Cards */
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  .card {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(28,25,23,0.06), 0 1px 2px rgba(28,25,23,0.04);
+  }
+  .card.fail {
+    box-shadow: 0 2px 12px rgba(220,38,38,0.08), 0 1px 3px rgba(28,25,23,0.06);
+  }
+  .card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+  .card-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    vertical-align: middle;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+  .card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0A0A0A;
+    flex: 1;
+  }
+  .card-score {
+    font-size: 14px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    flex-shrink: 0;
+  }
+  .card-score.pass { color: #16A34A; }
+  .card-score.partial { color: #D97706; }
+  .card-score.fail { color: #DC2626; }
+  .card-detail {
+    font-size: 13px;
+    line-height: 1.6;
+    color: #737373;
+  }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 24px;
+    border-top: 1px solid #E5E5E5;
+  }
+  .footer-link {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #525252;
+    text-decoration: none;
+    margin-bottom: 8px;
+  }
+  .footer-link:hover { color: #0A0A0A; }
+  .footer-date {
+    font-size: 12px;
+    color: #A3A3A3;
+  }
+
+  /* CTA */
+  .cta {
+    margin-top: 32px;
+    background: #FFFFFF;
+    border: 1px solid #E7E5E4;
+    border-radius: 16px;
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .cta h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #0A0A0A;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .cta p {
+    font-size: 13px;
+    color: #78716C;
+    margin-bottom: 24px;
+    max-width: 340px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+  }
+  .cta-button {
+    display: inline-block;
+    background: #FFFFFF;
+    color: #0A0A0A;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 24px;
+    border-radius: 10px;
+    border: 1px solid #D6D3D1;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    box-shadow: 0 1px 3px rgba(28,25,23,0.08), 0 1px 2px rgba(28,25,23,0.04);
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="brand">BrandOS AI Visibility Report</div>
+  <div class="company-name">Sofology</div>
+  <div class="domain">sofology.co.uk</div>
+</div>
+
+<div class="score-section">
+  <div class="score-ring">
+    <svg width="160" height="160" viewBox="0 0 160 160">
+      <circle class="bg" cx="80" cy="80" r="70" fill="none" stroke-width="10" />
+      <circle class="fill" cx="80" cy="80" r="70" fill="none" stroke-width="10"
+        stroke-dasharray="440"
+        stroke-dashoffset="264" />
+    </svg>
+    <div class="score-value">40</div>
+  </div>
+  <div class="score-label">AI Visibility Score</div>
+</div>
+
+<div class="summary">
+  <div class="summary-pill">
+    <strong>2</strong> of <strong>5</strong> checks passed
+  </div>
+</div>
+
+<div class="cards">
+  <!-- AI Instructions -->
+  <div class="card fail">
+    <div class="card-header">
+      <span class="card-name">
+        <span class="card-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="#DC2626" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M128 24a104 104 0 0 0-91.49 152.89L26 207.93a8 8 0 0 0 9.93 9.93l31-10.53A104 104 0 1 0 128 24Z"/>
+            <line x1="96" y1="112" x2="160" y2="112"/>
+            <line x1="96" y1="144" x2="144" y2="144"/>
+          </svg>
+        </span>
+        AI Instructions
+      </span>
+      <span class="card-score fail">0/25</span>
+    </div>
+    <div class="card-detail">
+      No llms.txt found. AI has no structured instructions about who you are as an employer — it's guessing from whatever it can scrape.
+    </div>
+  </div>
+
+  <!-- Structured Data -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-name">
+        <span class="card-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="#16A34A" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="128" cy="48" r="24"/>
+            <circle cx="48" cy="200" r="24"/>
+            <circle cx="208" cy="200" r="24"/>
+            <line x1="128" y1="72" x2="128" y2="128"/>
+            <path d="M48 176V152a24 24 0 0 1 24-24h112a24 24 0 0 1 24 24v24"/>
+          </svg>
+        </span>
+        Structured Data
+      </span>
+      <span class="card-score pass">25/25</span>
+    </div>
+    <div class="card-detail">
+      Found Organization schema with legal name, founding date, address, and social links. AI can confirm your company facts accurately.
+    </div>
+  </div>
+
+  <!-- Salary Transparency -->
+  <div class="card fail">
+    <div class="card-header">
+      <span class="card-name">
+        <span class="card-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="#DC2626" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="128" y1="24" x2="128" y2="232"/>
+            <path d="M168 72H108a36 36 0 0 0 0 72h40a36 36 0 0 1 0 72H88"/>
+          </svg>
+        </span>
+        Salary Transparency
+      </span>
+      <span class="card-score fail">0/20</span>
+    </div>
+    <div class="card-detail">
+      No salary data found anywhere. When candidates ask AI about your pay, it has nothing to share.
+    </div>
+  </div>
+
+  <!-- Careers Page -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-name">
+        <span class="card-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="#D97706" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="32" y="72" width="192" height="144" rx="8"/>
+            <path d="M168 72V56a16 16 0 0 0-16-16H104A16 16 0 0 0 88 56V72"/>
+            <line x1="32" y1="144" x2="224" y2="144"/>
+          </svg>
+        </span>
+        Careers Page
+      </span>
+      <span class="card-score partial">10/15</span>
+    </div>
+    <div class="card-detail">
+      Found careers pages at sofology.co.uk/careers and careers.sofology.co.uk, but content is heavily JavaScript-rendered with no JobPosting schema for AI to parse.
+    </div>
+  </div>
+
+  <!-- Bot Access -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-name">
+        <span class="card-icon">
+          <svg viewBox="0 0 256 256" fill="none" stroke="#D97706" stroke-width="16" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M40 112V96a88 88 0 0 1 176 0v16a8 8 0 0 1-8 8H48A8 8 0 0 1 40 112Z"/>
+            <path d="M93.3 220.44A96 96 0 0 0 216 128V112"/>
+            <circle cx="92" cy="152" r="12"/>
+            <circle cx="164" cy="152" r="12"/>
+            <line x1="128" y1="192" x2="128" y2="224"/>
+            <line x1="104" y1="224" x2="152" y2="224"/>
+          </svg>
+        </span>
+        AI Crawlers
+      </span>
+      <span class="card-score partial">5/15</span>
+    </div>
+    <div class="card-detail">
+      robots.txt exists but has no AI-specific rules. GPTBot, ClaudeBot, and Google-Extended aren't mentioned — AI crawlers have no clear guidance.
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <a href="https://brandos.ai/how-we-score" class="footer-link">How is this score calculated? →</a>
+  <div class="footer-date">Scanned on 7 February 2026</div>
+</div>
+
+<div class="cta">
+  <h3>Ready to fix your score?</h3>
+  <p>BrandOS automatically optimises your employer brand for AI — so when candidates ask about you, the answers are yours.</p>
+  <a href="https://brandos.ai" class="cta-button">Get started at brandos.ai</a>
+</div>
+
+</body>
+</html>

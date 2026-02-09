@@ -6,7 +6,7 @@ function escapePdfText(text: string) {
 
 function buildPdfBuffer(auditResult: AuditResult) {
   const lines: Array<{ text: string; size?: number; spacing?: number }> = [
-    { text: "BrandOS AI Visibility Report", size: 18, spacing: 24 },
+    { text: "Rankwell AI Visibility Report", size: 18, spacing: 24 },
     { text: `Company: ${auditResult.company_name}` },
     { text: `Domain: ${auditResult.company_domain}` },
     { text: `Generated: ${new Date().toLocaleDateString("en-US")}`, spacing: 20 },

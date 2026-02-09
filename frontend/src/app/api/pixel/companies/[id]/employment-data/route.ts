@@ -8,7 +8,7 @@ export async function GET(
 ) {
   try {
     const { id: companyId } = await params;
-    const pixelId = request.headers.get("X-BrandOS-Pixel-ID");
+    const pixelId = request.headers.get("X-Rankwell-Pixel-ID");
 
     if (!pixelId) {
       return NextResponse.json(

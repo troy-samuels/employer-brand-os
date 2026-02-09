@@ -29,9 +29,9 @@ export default function PixelPage() {
           Copy-paste this snippet into Google Tag Manager or your site header.
         </p>
         <pre className="rounded-lg bg-gray-900 text-gray-100 p-4 text-xs overflow-x-auto">
-{`<script src="https://cdn.brandos.com/pixel/brandos-pixel.js"
-  data-brandos-company-id="company_123"
-  data-brandos-pixel-id="px_demo_123"
+{`<script src="https://cdn.rankwell.io/pixel/rankwell-pixel.js"
+  data-rankwell-company-id="company_123"
+  data-rankwell-pixel-id="px_demo_123"
   async></script>`}
         </pre>
       </Card>

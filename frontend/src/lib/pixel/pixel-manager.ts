@@ -4,9 +4,9 @@ export async function getEmploymentData(companyId: string) {
   return {
     company: {
       id: companyId,
-      name: "BrandOS Demo",
-      website: "https://brandos.com",
-      logo_url: "/images/brandos-logo.svg",
+      name: "Rankwell Demo",
+      website: "https://rankwell.io",
+      logo_url: "/images/rankwell-logo.svg",
     },
     jobs: SAMPLE_JOBS,
     compliance: {

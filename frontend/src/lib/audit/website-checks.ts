@@ -1,7 +1,7 @@
 import { validateUrl } from "@/lib/audit/url-validator";
 
 const FETCH_TIMEOUT_MS = 5000;
-const AUDIT_USER_AGENT = "BrandOSAuditBot/1.0";
+const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
 
 const LLMS_EMPLOYMENT_KEYWORDS = [
   "career",
