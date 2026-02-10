@@ -12,39 +12,45 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How We Score Your AI Visibility | Rankwell",
   description:
-    "Understand the five checks behind your Rankwell AI Visibility Score — and what each one means for how candidates find you through AI.",
+    "Understand the six checks behind your Rankwell AI Visibility Score — and what each one means for how candidates find you through AI.",
 };
 
 const CHECKS = [
   {
-    name: "AI Instructions (llms.txt)",
-    weight: 25,
-    what: "We look for an llms.txt file on your domain — a standardised file that tells AI models how to describe your organisation.",
-    why: "Without it, AI invents your employer brand from whatever scraps it can find. With it, you control the narrative directly.",
-  },
-  {
-    name: "Structured Data (JSON-LD)",
-    weight: 25,
-    what: "We scan your homepage for JSON-LD schema markup — machine-readable facts about your organisation, locations, and roles.",
-    why: "Structured data is the language AI agents trust most. It's the difference between AI guessing your details and knowing them.",
-  },
-  {
-    name: "Salary Transparency",
-    weight: 20,
-    what: "We check whether salary information is visible on your careers or job pages in a format AI crawlers can read.",
-    why: '"How much does [company] pay?" is one of the top questions candidates ask AI. If you don\'t publish it, AI either guesses or says nothing.',
-  },
-  {
     name: "Careers Page",
-    weight: 15,
+    weight: 30,
     what: "We look for a careers page and assess whether it has enough content for AI to surface your open roles and culture.",
     why: "Your careers page is the primary source AI uses to answer questions about working at your company. A thin page means thin answers.",
   },
   {
-    name: "Bot Access (robots.txt)",
+    name: "Structured Data (JSON-LD)",
+    weight: 20,
+    what: "We scan your homepage for JSON-LD schema markup — machine-readable facts about your organisation, locations, and roles.",
+    why: "Structured data is the language AI agents trust most. It's the difference between AI guessing your details and knowing them.",
+  },
+  {
+    name: "Brand Reputation",
     weight: 15,
+    what: "We analyse your presence on employer review platforms and public sentiment to see how your brand is perceived by candidates.",
+    why: "AI models synthesise review data when answering questions about your company. A weak or negative reputation signal means AI paints an incomplete — or unflattering — picture.",
+  },
+  {
+    name: "Salary Transparency",
+    weight: 15,
+    what: "We check whether salary information is visible on your careers or job pages in a format AI crawlers can read.",
+    why: '"How much does [company] pay?" is one of the top questions candidates ask AI. If you don\'t publish it, AI either guesses or says nothing.',
+  },
+  {
+    name: "Bot Access (robots.txt)",
+    weight: 10,
     what: "We check your robots.txt to see which AI crawlers are allowed or blocked from reading your site.",
     why: "If you're blocking GPTBot, ClaudeBot, or other AI crawlers, none of the above matters — they can't see your site at all.",
+  },
+  {
+    name: "AI Instructions (llms.txt)",
+    weight: 10,
+    what: "We look for an llms.txt file on your domain — a standardised file that tells AI models how to describe your organisation.",
+    why: "Without it, AI invents your employer brand from whatever scraps it can find. With it, you control the narrative directly.",
   },
 ];
 
@@ -68,7 +74,7 @@ export default function HowWeScorePage() {
             How we calculate your score
           </h1>
           <p className="mt-4 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
-            Your AI Visibility Score is based on five checks that measure how
+            Your AI Visibility Score is based on six checks that measure how
             well AI models can find, read, and accurately describe your employer
             brand.
           </p>

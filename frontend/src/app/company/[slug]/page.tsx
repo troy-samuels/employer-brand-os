@@ -419,7 +419,7 @@ export default async function CompanyPage({ params }: PageProps) {
             </p>
           </div>
           <Link
-            href="/signup?ref=claim&company={audit.company_slug}"
+            href={`/signup?ref=claim&company=${audit.company_slug}`}
             className="inline-flex items-center gap-1.5 rounded-xl bg-neutral-950 px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors shrink-0"
           >
             Claim profile

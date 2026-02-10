@@ -57,6 +57,12 @@ export function Footer() {
             >
               Terms
             </Link>
+            <Link
+              href="/dpa"
+              className="hover:text-neutral-950 transition-colors"
+            >
+              DPA
+            </Link>
             <a
               href="mailto:hello@rankwell.io"
               className="hover:text-neutral-950 transition-colors"

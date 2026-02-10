@@ -43,7 +43,7 @@ export default function Hero() {
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-neutral-500">
             <span>No signup required</span>
             <span className="hidden sm:inline">·</span>
-            <span>Results in 60 seconds</span>
+            <span>Results in 30 seconds</span>
             <span className="hidden sm:inline">·</span>
             <span>See what AI says about you right now</span>
           </div>

@@ -4,6 +4,8 @@
  */
 
 import type { Metadata } from 'next';
+import { Header } from '@/components/shared/header';
+import { Footer } from '@/components/shared/footer';
 
 /**
  * Exposes exported value(s): metadata.
@@ -22,7 +24,9 @@ export default function PrivacyPage() {
   const lastUpdated = '9 February 2026';
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
+      <Header />
+      <main>
       <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
           Privacy Policy
@@ -343,5 +347,7 @@ export default function PrivacyPage() {
         </div>
       </div>
     </main>
+    <Footer />
+    </div>
   );
 }

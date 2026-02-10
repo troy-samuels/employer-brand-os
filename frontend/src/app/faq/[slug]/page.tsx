@@ -227,7 +227,7 @@ const faqContent: Record<string, FaqContent> = {
       <p class="mb-6">
         When you enter a company name, we resolve it to a domain (using Companies House data
         for UK companies), then crawl the public website checking each dimension. The scan
-        takes 15-30 seconds. We only access publicly available content — nothing behind
+        takes 30 seconds. We only access publicly available content — nothing behind
         authentication, nothing private.
       </p>
       <p class="mb-6">

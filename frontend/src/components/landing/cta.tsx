@@ -19,7 +19,7 @@ export default function CTA() {
           See what AI says about your company
         </h2>
         <p className="text-lg text-white/70 mb-8 max-w-xl mx-auto">
-          Enter your company name. Get your Shadow Salary in 60 seconds.
+          Enter your company name. Get your Shadow Salary in 30 seconds.
           No signup, no credit card.
         </p>
         <Button

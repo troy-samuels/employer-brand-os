@@ -51,7 +51,7 @@ export default function Home() {
                     <span className="text-brand-accent">about your company?</span>
                   </h1>
                   <p className="text-base text-neutral-500">
-                    Find out in 15 seconds. Completely free.
+                    Find out in 30 seconds. Completely free.
                   </p>
                 </motion.div>
               )}

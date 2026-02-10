@@ -4,6 +4,8 @@
  */
 
 import type { Metadata } from 'next';
+import { Header } from '@/components/shared/header';
+import { Footer } from '@/components/shared/footer';
 
 /**
  * Exposes exported value(s): metadata.
@@ -20,7 +22,9 @@ export const metadata: Metadata = {
  */
 export default function SecurityPage() {
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
+      <Header />
+      <main>
       {/* Header */}
       <section className="border-b border-neutral-200 bg-neutral-50">
         <div className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
@@ -497,5 +501,7 @@ export default function SecurityPage() {
         </div>
       </section>
     </main>
+    <Footer />
+    </div>
   );
 }
