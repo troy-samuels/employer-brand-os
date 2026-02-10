@@ -454,6 +454,26 @@ export function AuditResults({ result }: AuditResultsProps) {
 
       {/* LLM Teaser — locked preview of what AI models say */}
       <LlmTeaser companyName={companyName} />
+
+      {/* Fix It link */}
+      {result.companySlug && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="rounded-2xl border border-brand-accent/20 bg-brand-accent-light p-5 text-center"
+        >
+          <p className="text-sm text-neutral-700 mb-2">
+            Want copy-paste fixes for these issues?
+          </p>
+          <a
+            href={`/fix/${result.companySlug}`}
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-accent hover:underline"
+          >
+            Get copy-paste fixes for {companyName} →
+          </a>
+        </motion.div>
+      )}
     </div>
   );
 }
