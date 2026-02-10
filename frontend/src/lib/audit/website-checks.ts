@@ -5,6 +5,12 @@
 
 import { validateUrl } from "@/lib/audit/url-validator";
 import { renderPage, renderBotProtectedPage } from "@/lib/audit/headless-render";
+import {
+  checkBrandReputation,
+  scoreBrandReputation,
+  type BrandReputation,
+  type ReviewPlatform,
+} from "@/lib/audit/brand-reputation";
 
 const FETCH_TIMEOUT_MS = 5000;
 const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
@@ -358,6 +364,8 @@ export const ATS_HOST_MAP: Record<string, AtsName> = {
 /**
  * Defines the WebsiteCheckResult contract.
  */
+export type { ReviewPlatform, BrandReputation } from "@/lib/audit/brand-reputation";
+
 export type WebsiteCheckResult = {
   domain: string;
   companyName: string;
@@ -378,6 +386,7 @@ export type WebsiteCheckResult = {
   robotsTxtStatus: RobotsTxtStatus;
   robotsTxtAllowedBots: string[];
   robotsTxtBlockedBots: string[];
+  brandReputation: BrandReputation;
   score: number;
   scoreBreakdown: {
     llmsTxt: number;
@@ -385,6 +394,7 @@ export type WebsiteCheckResult = {
     salaryData: number;
     careersPage: number;
     robotsTxt: number;
+    brandReputation: number;
   };
 };
 
@@ -1319,7 +1329,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "jsonld_base_salary",
-      score: 20,
+      score: 15,
       detectedCurrency,
     };
   }
@@ -1328,7 +1338,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "multiple_ranges",
-      score: 15,
+      score: 12,
       detectedCurrency,
     };
   }
@@ -1337,7 +1347,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "single_range",
-      score: 10,
+      score: 8,
       detectedCurrency,
     };
   }
@@ -1346,7 +1356,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "mention_only",
-      score: 5,
+      score: 4,
       detectedCurrency,
     };
   }
@@ -1359,12 +1369,23 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
   };
 }
 
+/**
+ * Scoring weights (total: 100)
+ *
+ *   Careers page ........... 30  (primary signal for employer brand)
+ *   Structured data ........ 20  (JSON-LD helps AI parse the company)
+ *   Salary transparency .... 15  (key candidate question)
+ *   Brand reputation ....... 15  (review platform presence + sentiment)
+ *   Bot access ............. 10  (foundational gate check)
+ *   llms.txt ............... 10  (emerging best practice, low adoption)
+ */
+
 function scoreLlmsCheck(hasLlmsTxt: boolean, llmsTxtHasEmployment: boolean): number {
   if (hasLlmsTxt && llmsTxtHasEmployment) {
-    return 25;
+    return 10;
   }
   if (hasLlmsTxt) {
-    return 12;
+    return 5;
   }
   return 0;
 }
@@ -1372,11 +1393,15 @@ function scoreLlmsCheck(hasLlmsTxt: boolean, llmsTxtHasEmployment: boolean): num
 function scoreJsonLdCheck(schemas: string[]): number {
   const hasJobSchema = schemas.includes("JobPosting") || schemas.includes("EmployerAggregateRating");
   if (hasJobSchema) {
-    return 25;
+    return 20;
   }
 
   if (schemas.includes("Organization")) {
-    return 12;
+    return 10;
+  }
+
+  if (schemas.length > 0) {
+    return 4;
   }
 
   return 0;
@@ -1384,24 +1409,24 @@ function scoreJsonLdCheck(schemas: string[]): number {
 
 function scoreCareersCheck(status: CareersPageStatus): number {
   if (status === "full") {
-    return 15;
+    return 30;
   }
   if (status === "partial") {
-    return 8;
+    return 15;
   }
   return 0;
 }
 
 function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number): number {
   if (status === "allows") {
-    return 15;
+    return 10;
   }
   if (status === "partial") {
-    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 7);
-    return 8 + partialBonus;
+    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 5);
+    return 5 + partialBonus;
   }
   if (status === "no_rules") {
-    return 8;
+    return 5;
   }
   return 0;
 }
@@ -1552,12 +1577,16 @@ export async function runWebsiteChecks(
     }
   }
 
+  // Brand reputation check (runs in parallel-safe position — all other data collected)
+  const brandReputation = await checkBrandReputation(companyName);
+
   const scoreBreakdown = {
     llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
     jsonld: scoreJsonLdCheck(jsonldSchemasFound),
     salaryData: salaryScore,
     careersPage: scoreCareersCheck(careersPageStatus),
     robotsTxt: scoreRobotsCheck(robotsTxtStatus, robotsTxtAllowedBots.length),
+    brandReputation: scoreBrandReputation(brandReputation),
   };
 
   const score =
@@ -1565,7 +1594,8 @@ export async function runWebsiteChecks(
     scoreBreakdown.jsonld +
     scoreBreakdown.salaryData +
     scoreBreakdown.careersPage +
-    scoreBreakdown.robotsTxt;
+    scoreBreakdown.robotsTxt +
+    scoreBreakdown.brandReputation;
 
   return {
     domain: normalizedDomain || domain.trim(),
@@ -1587,6 +1617,7 @@ export async function runWebsiteChecks(
     robotsTxtStatus,
     robotsTxtAllowedBots,
     robotsTxtBlockedBots,
+    brandReputation,
     score,
     scoreBreakdown,
   };

@@ -21,6 +21,7 @@ import {
   CurrencyCircleDollar,
   ShieldWarning,
   ArrowSquareOut,
+  ChatsCircle,
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
@@ -168,7 +169,79 @@ function getCareersDetail(r: WebsiteCheckResult): string {
   return "No careers page found. AI can't point candidates to your jobs.";
 }
 
-/* ── Bot-protection assist card ────────────────────── */
+function getBrandReputationDetail(r: WebsiteCheckResult): string {
+  const { brandReputation } = r;
+  if (brandReputation.sourceCount === 0)
+    return "No employer review data found online. AI has nothing to reference when candidates ask what it's like to work here.";
+  if (brandReputation.sentiment === "negative")
+    return `Found on ${brandReputation.sourceCount} review platform${brandReputation.sourceCount > 1 ? "s" : ""} — and the signals are concerning. AI may be surfacing negative sentiment to candidates.`;
+  if (brandReputation.sentiment === "positive")
+    return `Found on ${brandReputation.sourceCount} review platform${brandReputation.sourceCount > 1 ? "s" : ""} with positive signals. AI is likely presenting you favourably to candidates.`;
+  if (brandReputation.sentiment === "mixed")
+    return `Found on ${brandReputation.sourceCount} review platform${brandReputation.sourceCount > 1 ? "s" : ""} with mixed signals. AI may give candidates an inconsistent picture.`;
+  return `Found on ${brandReputation.sourceCount} review platform${brandReputation.sourceCount > 1 ? "s" : ""}. AI uses these to form opinions about your employer brand.`;
+}
+
+/* ── LLM Teaser (locked preview) ──────────────────── */
+
+const LLM_MODELS = [
+  { name: "ChatGPT", icon: "🤖" },
+  { name: "Google AI", icon: "🔍" },
+  { name: "Perplexity", icon: "🧠" },
+  { name: "Copilot", icon: "💼" },
+  { name: "Claude", icon: "🎯" },
+  { name: "Meta AI", icon: "📱" },
+];
+
+function LlmTeaser({ companyName }: { companyName: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay: 0.8 }}
+      className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_2px_16px_rgba(28,25,23,0.06),0_1px_4px_rgba(28,25,23,0.04)]"
+    >
+      <div className="mb-4">
+        <h3 className="text-[15px] font-semibold text-neutral-950 mb-1">
+          What AI tells candidates about {companyName}
+        </h3>
+        <p className="text-[13px] text-neutral-500">
+          See exactly what each AI model says when candidates ask about working here.
+        </p>
+      </div>
+
+      <div className="space-y-2.5 mb-5">
+        {LLM_MODELS.slice(0, 3).map((model) => (
+          <div
+            key={model.name}
+            className="flex items-center gap-3 rounded-lg bg-neutral-50 px-4 py-3"
+          >
+            <span className="text-base shrink-0">{model.icon}</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-medium text-neutral-700">{model.name}</p>
+              <div className="mt-1 h-3 rounded-full bg-gradient-to-r from-neutral-200 to-neutral-100 w-full" />
+              <div className="mt-1 h-3 rounded-full bg-gradient-to-r from-neutral-200 to-neutral-100 w-4/5" />
+            </div>
+            <span className="text-[11px] font-medium text-neutral-400 shrink-0">🔒</span>
+          </div>
+        ))}
+      </div>
+
+      <a
+        href="/pricing"
+        className="flex items-center justify-center gap-2 rounded-lg bg-brand-accent px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+      >
+        See what AI says about you
+      </a>
+
+      <p className="text-[11px] text-neutral-400 text-center mt-2.5">
+        Full reports check {LLM_MODELS.length} AI models. Plans start at £49/mo.
+      </p>
+    </motion.div>
+  );
+}
+
+/* ── Bot-protection card ──────────────────────────── */
 
 interface BotProtectCardProps {
   blockedUrl: string;
@@ -265,6 +338,7 @@ export function AuditResults({ result }: AuditResultsProps) {
     scoreBreakdown.salaryData,
     scoreBreakdown.careersPage,
     scoreBreakdown.robotsTxt,
+    scoreBreakdown.brandReputation,
   ].filter((s) => s > 0).length;
 
   const scanDate = new Date().toLocaleDateString("en-GB", {
@@ -287,7 +361,7 @@ export function AuditResults({ result }: AuditResultsProps) {
       >
         <p className="text-sm text-neutral-600 text-center">
           <span className="font-semibold text-neutral-950">{passed}</span> of{" "}
-          <span className="font-semibold text-neutral-950">5</span> checks
+          <span className="font-semibold text-neutral-950">6</span> checks
           passed
         </p>
       </motion.div>
@@ -295,36 +369,12 @@ export function AuditResults({ result }: AuditResultsProps) {
       {/* Cards */}
       <div className="space-y-3">
         <CheckCard
-          icon={<ChatCircleText size={22} weight="duotone" />}
-          name="AI Instructions"
-          earned={scoreBreakdown.llmsTxt}
-          max={25}
-          detail={getLlmsDetail(result)}
-          index={0}
-        />
-        <CheckCard
-          icon={<TreeStructure size={22} weight="duotone" />}
-          name="Structured Data"
-          earned={scoreBreakdown.jsonld}
-          max={25}
-          detail={getJsonldDetail(result)}
-          index={1}
-        />
-        <CheckCard
-          icon={getCurrencyIcon(result.detectedCurrency)}
-          name="Salary Transparency"
-          earned={scoreBreakdown.salaryData}
-          max={20}
-          detail={getSalaryDetail(result)}
-          index={2}
-        />
-        <CheckCard
           icon={<Briefcase size={22} weight="duotone" />}
           name="Careers Page"
           earned={scoreBreakdown.careersPage}
-          max={15}
+          max={30}
           detail={getCareersDetail(result)}
-          index={3}
+          index={0}
         />
 
         {/* Bot-protection conversion card */}
@@ -334,12 +384,44 @@ export function AuditResults({ result }: AuditResultsProps) {
           )}
 
         <CheckCard
+          icon={<TreeStructure size={22} weight="duotone" />}
+          name="Structured Data"
+          earned={scoreBreakdown.jsonld}
+          max={20}
+          detail={getJsonldDetail(result)}
+          index={1}
+        />
+        <CheckCard
+          icon={<ChatsCircle size={22} weight="duotone" />}
+          name="Brand Reputation"
+          earned={scoreBreakdown.brandReputation}
+          max={15}
+          detail={getBrandReputationDetail(result)}
+          index={2}
+        />
+        <CheckCard
+          icon={getCurrencyIcon(result.detectedCurrency)}
+          name="Salary Transparency"
+          earned={scoreBreakdown.salaryData}
+          max={15}
+          detail={getSalaryDetail(result)}
+          index={3}
+        />
+        <CheckCard
           icon={<ShieldCheck size={22} weight="duotone" />}
           name="Bot Access"
           earned={scoreBreakdown.robotsTxt}
-          max={15}
+          max={10}
           detail={getRobotsDetail(result)}
           index={4}
+        />
+        <CheckCard
+          icon={<ChatCircleText size={22} weight="duotone" />}
+          name="AI Instructions"
+          earned={scoreBreakdown.llmsTxt}
+          max={10}
+          detail={getLlmsDetail(result)}
+          index={5}
         />
       </div>
 
@@ -368,6 +450,9 @@ export function AuditResults({ result }: AuditResultsProps) {
           Scanned on {scanDate}
         </p>
       </motion.div>
+
+      {/* LLM Teaser — locked preview of what AI models say */}
+      <LlmTeaser companyName={companyName} />
     </div>
   );
 }

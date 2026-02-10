@@ -162,11 +162,11 @@ Allow: /
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("jsonld_base_salary");
-      expect(result.scoreBreakdown.salaryData).toBe(20);
+      expect(result.scoreBreakdown.salaryData).toBe(15);
       expect(result.detectedCurrency).toBe("GBP");
     });
 
-    it("scores 15 when multiple concrete salary ranges are listed on careers page", async () => {
+    it("scores 12 when multiple concrete salary ranges are listed on careers page", async () => {
       vi.stubGlobal(
         "fetch",
         createFetchMock(
@@ -178,7 +178,7 @@ Allow: /
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("multiple_ranges");
-      expect(result.scoreBreakdown.salaryData).toBe(15);
+      expect(result.scoreBreakdown.salaryData).toBe(12);
     });
 
     it("scores 5 for mention-only salary language with no disclosed range", async () => {
@@ -193,7 +193,7 @@ Allow: /
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("mention_only");
-      expect(result.scoreBreakdown.salaryData).toBe(5);
+      expect(result.scoreBreakdown.salaryData).toBe(4);
     });
 
     it("does not score salary data when careers page has no salary references", async () => {
@@ -273,7 +273,7 @@ Allow: /
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("single_range");
-      expect(result.scoreBreakdown.salaryData).toBe(10);
+      expect(result.scoreBreakdown.salaryData).toBe(8);
       expect(fetchedUrls).toContain("https://example.com/jobs/staff-frontend-engineer");
       expect(fetchedUrls).not.toContain("https://example.com/about");
     });
@@ -338,8 +338,8 @@ Allow: /
         "Anthropic",
         "CCBot",
       ]);
-      expect(result.scoreBreakdown.robotsTxt).toBeGreaterThan(8);
-      expect(result.scoreBreakdown.robotsTxt).toBeLessThan(15);
+      expect(result.scoreBreakdown.robotsTxt).toBeGreaterThan(5);
+      expect(result.scoreBreakdown.robotsTxt).toBeLessThan(10);
     });
 
     it("does not call fetch when URL validation fails", async () => {
@@ -563,7 +563,7 @@ Allow: /
 
       expect(result.careersPageStatus).toBe("full");
       expect(result.careersPageUrl).toBe("https://careers.bbc.co.uk/");
-      expect(result.scoreBreakdown.careersPage).toBe(15);
+      expect(result.scoreBreakdown.careersPage).toBe(30);
       expect(fetchedUrls).toContain("https://bbc.co.uk/careers");
       expect(fetchedUrls).toContain("https://careers.bbc.co.uk/");
     });

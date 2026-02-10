@@ -30,6 +30,11 @@ const createMockResult = (
   robotsTxtStatus: "not_found",
   robotsTxtAllowedBots: [],
   robotsTxtBlockedBots: [],
+  brandReputation: {
+    platforms: [],
+    sentiment: "unknown",
+    sourceCount: 0,
+  },
   score: 0,
   scoreBreakdown: {
     llmsTxt: 0,
@@ -37,6 +42,7 @@ const createMockResult = (
     salaryData: 0,
     careersPage: 0,
     robotsTxt: 0,
+    brandReputation: 0,
   },
   ...overrides,
 });
@@ -77,20 +83,22 @@ describe("AuditResults", () => {
     it("should display score contribution (earned/max)", () => {
       const result = createMockResult({
         scoreBreakdown: {
-          llmsTxt: 12,
-          jsonld: 25,
+          llmsTxt: 5,
+          jsonld: 20,
           salaryData: 0,
-          careersPage: 15,
+          careersPage: 30,
           robotsTxt: 8,
+          brandReputation: 10,
         },
       });
       render(<AuditResults result={result} />);
 
-      expect(screen.getByText("12/25")).toBeInTheDocument();
-      expect(screen.getByText("25/25")).toBeInTheDocument();
-      expect(screen.getByText("0/20")).toBeInTheDocument();
-      expect(screen.getByText("15/15")).toBeInTheDocument();
-      expect(screen.getByText("8/15")).toBeInTheDocument();
+      expect(screen.getByText("5/10")).toBeInTheDocument();
+      expect(screen.getByText("20/20")).toBeInTheDocument();
+      expect(screen.getByText("0/15")).toBeInTheDocument();
+      expect(screen.getByText("30/30")).toBeInTheDocument();
+      expect(screen.getByText("8/10")).toBeInTheDocument();
+      expect(screen.getByText("10/15")).toBeInTheDocument();
     });
   });
 
@@ -210,7 +218,7 @@ describe("AuditResults", () => {
     it("should show positive message when salary data is found", () => {
       const result = createMockResult({
         hasSalaryData: true,
-        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 20, careersPage: 0, robotsTxt: 0 },
+        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 20, careersPage: 0, robotsTxt: 0, brandReputation: 0 },
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/Salary information is visible to AI crawlers/)).toBeInTheDocument();
@@ -219,7 +227,7 @@ describe("AuditResults", () => {
     it("should show negative message when no salary data found", () => {
       const result = createMockResult({
         hasSalaryData: false,
-        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 0, careersPage: 0, robotsTxt: 0 },
+        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 0, careersPage: 0, robotsTxt: 0, brandReputation: 0 },
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/No salary data found/)).toBeInTheDocument();
