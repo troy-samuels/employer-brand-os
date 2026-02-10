@@ -4,7 +4,7 @@
  */
 
 import { validateUrl } from "@/lib/audit/url-validator";
-import { renderPage } from "@/lib/audit/headless-render";
+import { renderPage, renderBotProtectedPage } from "@/lib/audit/headless-render";
 
 const FETCH_TIMEOUT_MS = 5000;
 const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
@@ -862,8 +862,25 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
     }
   }
 
-  // If we found nothing usable but detected bot protection, report it
+  // If we found nothing usable but detected bot protection, try the fallback chain
   if (bestResult.status === "not_found" && firstBlockedUrl) {
+    const rendered = await renderBotProtectedPage(firstBlockedUrl);
+    if (rendered.html) {
+      const textLength = stripHtmlTags(rendered.html).length;
+      const resolvedUrl = rendered.url || firstBlockedUrl;
+
+      if (textLength > 1000) {
+        return { status: "full", url: resolvedUrl, blockedUrl: null, html: rendered.html };
+      }
+      if (textLength >= 200) {
+        return { status: "partial", url: resolvedUrl, blockedUrl: null, html: rendered.html };
+      }
+      if (textLength > 0) {
+        return { status: "none", url: resolvedUrl, blockedUrl: null, html: rendered.html };
+      }
+    }
+
+    // All fallbacks failed — report as bot-protected
     return { status: "bot_protected", url: null, blockedUrl: firstBlockedUrl, html: "" };
   }
 
