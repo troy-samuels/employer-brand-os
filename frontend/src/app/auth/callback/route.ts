@@ -1,6 +1,16 @@
+/**
+ * @module app/auth/callback/route
+ * Module implementation for route.ts.
+ */
+
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 
+/**
+ * Executes GET.
+ * @param request - request input.
+ * @returns The resulting value.
+ */
 export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')

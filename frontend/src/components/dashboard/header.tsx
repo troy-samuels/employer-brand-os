@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/header
+ * Module implementation for header.tsx.
+ */
+
 "use client";
 
 import { usePathname } from "next/navigation";
@@ -11,6 +16,10 @@ const titles: Record<string, string> = {
   "/dashboard/settings": "Settings",
 };
 
+/**
+ * Executes DashboardHeader.
+ * @returns The resulting value.
+ */
 export function DashboardHeader() {
   const pathname = usePathname();
   const title = titles[pathname] || "Dashboard";

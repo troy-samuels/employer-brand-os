@@ -1,21 +1,32 @@
-'use client'
+/**
+ * @module components/demo/typing-animation
+ * Provides reusable typing and reveal text presentation helpers.
+ */
 
-import { useEffect, useState, useRef } from 'react'
-import { cn } from '@/lib/utils'
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
+import { cn } from "@/lib/utils";
 
 interface TypingAnimationProps {
-  text: string
-  speed?: number
-  className?: string
-  onComplete?: () => void
+  text: string;
+  speed?: number;
+  className?: string;
+  onComplete?: () => void;
   highlightPatterns?: {
-    pattern: RegExp
-    className: string
-  }[]
-  cursor?: boolean
-  delay?: number
+    pattern: RegExp;
+    className: string;
+  }[];
+  cursor?: boolean;
+  delay?: number;
 }
 
+/**
+ * Types out a string with optional syntax highlighting and cursor animation.
+ * @param props - Typing animation configuration.
+ * @returns The rendered typing animation element.
+ */
 export function TypingAnimation({
   text,
   speed = 30,
@@ -25,64 +36,68 @@ export function TypingAnimation({
   cursor = true,
   delay = 0,
 }: TypingAnimationProps) {
-  const [displayedText, setDisplayedText] = useState('')
-  const [isComplete, setIsComplete] = useState(false)
-  const [hasStarted, setHasStarted] = useState(false)
-  const indexRef = useRef(0)
+  const [displayedText, setDisplayedText] = useState("");
+  const [isComplete, setIsComplete] = useState(false);
+  const indexRef = useRef(0);
 
   useEffect(() => {
-    // Reset when text changes
-    setDisplayedText('')
-    setIsComplete(false)
-    setHasStarted(false)
-    indexRef.current = 0
+    let typingTimer: ReturnType<typeof setInterval> | null = null;
+    indexRef.current = 0;
 
-    // Start delay
-    const delayTimer = setTimeout(() => {
-      setHasStarted(true)
-    }, delay)
+    const resetTimer = setTimeout(() => {
+      setDisplayedText("");
+      setIsComplete(false);
+    }, 0);
 
-    return () => clearTimeout(delayTimer)
-  }, [text, delay])
+    const startTimer = setTimeout(() => {
+      typingTimer = setInterval(() => {
+        if (indexRef.current < text.length) {
+          setDisplayedText(text.slice(0, indexRef.current + 1));
+          indexRef.current += 1;
+          return;
+        }
 
-  useEffect(() => {
-    if (!hasStarted) return
+        if (typingTimer) {
+          clearInterval(typingTimer);
+        }
+        setIsComplete(true);
+        onComplete?.();
+      }, speed);
+    }, delay);
 
-    const timer = setInterval(() => {
-      if (indexRef.current < text.length) {
-        setDisplayedText(text.slice(0, indexRef.current + 1))
-        indexRef.current++
-      } else {
-        clearInterval(timer)
-        setIsComplete(true)
-        onComplete?.()
+    return () => {
+      clearTimeout(resetTimer);
+      clearTimeout(startTimer);
+      if (typingTimer) {
+        clearInterval(typingTimer);
       }
-    }, speed)
-
-    return () => clearInterval(timer)
-  }, [text, speed, onComplete, hasStarted])
+    };
+  }, [delay, onComplete, speed, text]);
 
   // Apply highlighting to displayed text
   const highlightText = (content: string) => {
     if (highlightPatterns.length === 0) {
-      return content
+      return content;
     }
 
-    let result: (string | React.ReactElement)[] = [content]
+    let result: (string | React.ReactElement)[] = [content];
 
     highlightPatterns.forEach(({ pattern, className: highlightClass }, patternIndex) => {
       result = result.flatMap((part, partIndex) => {
-        if (typeof part !== 'string') return part
+        if (typeof part !== "string") return part;
 
-        const segments: (string | React.ReactElement)[] = []
-        let lastIndex = 0
-        let match
+        const segments: (string | React.ReactElement)[] = [];
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
 
-        const regex = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g')
+        const regex = new RegExp(
+          pattern.source,
+          pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`,
+        );
 
         while ((match = regex.exec(part)) !== null) {
           if (match.index > lastIndex) {
-            segments.push(part.slice(lastIndex, match.index))
+            segments.push(part.slice(lastIndex, match.index));
           }
           segments.push(
             <span
@@ -90,81 +105,89 @@ export function TypingAnimation({
               className={highlightClass}
             >
               {match[0]}
-            </span>
-          )
-          lastIndex = regex.lastIndex
+            </span>,
+          );
+          lastIndex = regex.lastIndex;
         }
 
         if (lastIndex < part.length) {
-          segments.push(part.slice(lastIndex))
+          segments.push(part.slice(lastIndex));
         }
 
-        return segments.length > 0 ? segments : [part]
-      })
-    })
+        return segments.length > 0 ? segments : [part];
+      });
+    });
 
-    return result
-  }
+    return result;
+  };
 
   return (
-    <span className={cn('inline', className)}>
+    <span className={cn("inline", className)}>
       {highlightText(displayedText)}
       {cursor && !isComplete && (
         <span className="inline-block w-2 h-5 ml-0.5 bg-current animate-pulse" />
       )}
     </span>
-  )
+  );
 }
 
 // Streaming version for real API responses
 interface StreamingTextProps {
-  className?: string
+  className?: string;
   highlightPatterns?: {
-    pattern: RegExp
-    className: string
-  }[]
+    pattern: RegExp;
+    className: string;
+  }[];
 }
 
+/**
+ * Provides imperative helpers for streaming text UIs.
+ * @param props - Streaming text view configuration.
+ * @returns Stream state, control methods, and rendered component.
+ */
 export function StreamingText({
   className,
   highlightPatterns = [],
 }: StreamingTextProps) {
-  const [text, setText] = useState('')
-  const [isStreaming, setIsStreaming] = useState(false)
+  const [text, setText] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
 
   const append = (chunk: string) => {
-    setText((prev) => prev + chunk)
-  }
+    setText((prev) => prev + chunk);
+  };
 
   const start = () => {
-    setText('')
-    setIsStreaming(true)
-  }
+    setText("");
+    setIsStreaming(true);
+  };
 
   const stop = () => {
-    setIsStreaming(false)
-  }
+    setIsStreaming(false);
+  };
 
   const highlightText = (content: string) => {
     if (highlightPatterns.length === 0) {
-      return content
+      return content;
     }
 
-    let result: (string | React.ReactElement)[] = [content]
+    let result: (string | React.ReactElement)[] = [content];
 
     highlightPatterns.forEach(({ pattern, className: highlightClass }, patternIndex) => {
       result = result.flatMap((part, partIndex) => {
-        if (typeof part !== 'string') return part
+        if (typeof part !== "string") return part;
 
-        const segments: (string | React.ReactElement)[] = []
-        let lastIndex = 0
-        let match
+        const segments: (string | React.ReactElement)[] = [];
+        let lastIndex = 0;
+        let match: RegExpExecArray | null;
 
-        const regex = new RegExp(pattern.source, pattern.flags.includes('g') ? pattern.flags : pattern.flags + 'g')
+        const regex = new RegExp(
+          pattern.source,
+          pattern.flags.includes("g") ? pattern.flags : `${pattern.flags}g`,
+        );
 
         while ((match = regex.exec(part)) !== null) {
           if (match.index > lastIndex) {
-            segments.push(part.slice(lastIndex, match.index))
+            segments.push(part.slice(lastIndex, match.index));
           }
           segments.push(
             <span
@@ -172,21 +195,21 @@ export function StreamingText({
               className={highlightClass}
             >
               {match[0]}
-            </span>
-          )
-          lastIndex = regex.lastIndex
+            </span>,
+          );
+          lastIndex = regex.lastIndex;
         }
 
         if (lastIndex < part.length) {
-          segments.push(part.slice(lastIndex))
+          segments.push(part.slice(lastIndex));
         }
 
-        return segments.length > 0 ? segments : [part]
-      })
-    })
+        return segments.length > 0 ? segments : [part];
+      });
+    });
 
-    return result
-  }
+    return result;
+  };
 
   return {
     text,
@@ -195,44 +218,49 @@ export function StreamingText({
     start,
     stop,
     component: (
-      <span className={cn('inline', className)}>
+      <span className={cn("inline", className)}>
         {highlightText(text)}
         {isStreaming && (
           <span className="inline-block w-2 h-5 ml-0.5 bg-current animate-pulse" />
         )}
       </span>
     ),
-  }
+  };
 }
 
 // Dramatic reveal animation for section headers
 interface RevealTextProps {
-  text: string
-  className?: string
-  delay?: number
+  text: string;
+  className?: string;
+  delay?: number;
 }
 
+/**
+ * Reveals text with delayed fade and transform animation.
+ * @param props - Reveal text options.
+ * @returns The reveal text element.
+ */
 export function RevealText({ text, className, delay = 0 }: RevealTextProps) {
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsVisible(true)
-    }, delay)
-    return () => clearTimeout(timer)
-  }, [delay])
+      setIsVisible(true);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [delay]);
 
   return (
     <span
       className={cn(
-        'inline-block transition-all duration-700',
+        "inline-block transition-all duration-700",
         isVisible
-          ? 'opacity-100 translate-y-0 blur-0'
-          : 'opacity-0 translate-y-4 blur-sm',
-        className
+          ? "opacity-100 translate-y-0 blur-0"
+          : "opacity-0 translate-y-4 blur-sm",
+        className,
       )}
     >
       {text}
     </span>
-  )
+  );
 }

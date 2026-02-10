@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/audit-results
+ * Renders audit score cards and explanatory insights for each scored category.
+ */
+
 "use client";
 
 import { motion } from "framer-motion";
@@ -17,7 +22,7 @@ import {
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
-import type { WebsiteCheckResult, CurrencyCode, AtsName } from "@/lib/audit/website-checks";
+import type { WebsiteCheckResult, CurrencyCode } from "@/lib/audit/website-checks";
 import { ScoreGauge } from "./score-gauge";
 
 interface AuditResultsProps {
@@ -189,6 +194,11 @@ function getScoreSummary(score: number): string {
 
 /* ── Main ──────────────────────────────────────────── */
 
+/**
+ * Displays full audit score breakdown, checks, and follow-up guidance.
+ * @param props - Component props containing the finalized audit result.
+ * @returns The composed audit results layout.
+ */
 export function AuditResults({ result }: AuditResultsProps) {
   const { score, scoreBreakdown, companyName } = result;
 

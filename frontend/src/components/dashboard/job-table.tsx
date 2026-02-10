@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/job-table
+ * Module implementation for job-table.tsx.
+ */
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,6 +23,11 @@ interface JobTableProps {
   onToggleStatus: (jobId: string, status: JobPosting["status"]) => void;
 }
 
+/**
+ * Executes JobTable.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function JobTable({ jobs, onEdit, onDelete, onToggleStatus }: JobTableProps) {
   if (jobs.length === 0) {
     return (

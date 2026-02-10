@@ -1,5 +1,13 @@
+/**
+ * @module features/facts/schemas/facts.schema
+ * Module implementation for facts.schema.ts.
+ */
+
 import { z } from 'zod';
 
+/**
+ * Exposes exported value(s): companyFactsSchema.
+ */
 export const companyFactsSchema = z.object({
   companyName: z
     .string()
@@ -30,8 +38,14 @@ export const companyFactsSchema = z.object({
   }
 );
 
+/**
+ * Defines the CompanyFactsFormData contract.
+ */
 export type CompanyFactsFormData = z.infer<typeof companyFactsSchema>;
 
+/**
+ * Exposes exported value(s): BENEFIT_OPTIONS.
+ */
 export const BENEFIT_OPTIONS = [
   { id: 'health', label: 'Health Insurance' },
   { id: '401k', label: '401(k) Matching' },
@@ -45,12 +59,18 @@ export const BENEFIT_OPTIONS = [
   { id: 'wellness', label: 'Wellness Programs' },
 ] as const;
 
+/**
+ * Exposes exported value(s): CURRENCY_OPTIONS.
+ */
 export const CURRENCY_OPTIONS = [
   { value: 'USD', label: 'USD ($)' },
   { value: 'EUR', label: 'EUR (€)' },
   { value: 'GBP', label: 'GBP (£)' },
 ] as const;
 
+/**
+ * Exposes exported value(s): REMOTE_POLICY_OPTIONS.
+ */
 export const REMOTE_POLICY_OPTIONS = [
   { value: 'remote', label: 'Fully Remote' },
   { value: 'hybrid', label: 'Hybrid' },

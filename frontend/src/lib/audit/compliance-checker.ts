@@ -1,5 +1,15 @@
+/**
+ * @module lib/audit/compliance-checker
+ * Module implementation for compliance-checker.ts.
+ */
+
 import type { ComplianceViolation } from "@/types/audit";
 
+/**
+ * Executes checkCompliance.
+ * @param domain - domain input.
+ * @returns The resulting value.
+ */
 export async function checkCompliance(domain: string): Promise<ComplianceViolation[]> {
   return [
     {

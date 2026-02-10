@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/audit-input
+ * Module implementation for audit-input.tsx.
+ */
+
 "use client";
 
 import { useState, type FormEvent, type KeyboardEvent } from "react";
@@ -9,6 +14,11 @@ interface AuditInputProps {
   isLoading?: boolean;
 }
 
+/**
+ * Executes AuditInput.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function AuditInput({ onSubmit, isLoading = false }: AuditInputProps) {
   const [value, setValue] = useState("");
 

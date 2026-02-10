@@ -1,7 +1,16 @@
+/**
+ * @module components/landing/cta
+ * Module implementation for cta.tsx.
+ */
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+/**
+ * Executes CTA.
+ * @returns The resulting value.
+ */
 export default function CTA() {
   return (
     <section className="py-16 lg:py-20 bg-brand-deep">

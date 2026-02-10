@@ -1,4 +1,9 @@
 /**
+ * @module features/api-keys/index
+ * Module implementation for index.ts.
+ */
+
+/**
  * API Keys Feature
  * Exports for API key management functionality
  */

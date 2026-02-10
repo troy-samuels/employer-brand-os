@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/score-gauge
+ * Module implementation for score-gauge.tsx.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -22,6 +27,11 @@ function getVerdict(score: number): string {
   return "Best in class";
 }
 
+/**
+ * Executes ScoreGauge.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
   const [count, setCount] = useState(0);
 

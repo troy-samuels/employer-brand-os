@@ -1,3 +1,8 @@
+/**
+ * @module features/facts/components/company-facts-form
+ * Module implementation for company-facts-form.tsx.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -39,6 +44,11 @@ interface CompanyFactsFormProps {
   defaultValues: CompanyFactsFormData | null;
 }
 
+/**
+ * Executes CompanyFactsForm.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function CompanyFactsForm({ defaultValues }: CompanyFactsFormProps) {
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'success' | 'error'>('idle');

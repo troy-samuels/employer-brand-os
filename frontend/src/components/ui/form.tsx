@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/form
+ * Module implementation for form.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

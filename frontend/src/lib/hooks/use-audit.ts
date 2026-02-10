@@ -1,11 +1,23 @@
+/**
+ * @module lib/hooks/use-audit
+ * Module implementation for use-audit.ts.
+ */
+
 "use client";
 
 import { useState, useCallback } from "react";
 
 import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
 
+/**
+ * Defines the AuditState contract.
+ */
 export type AuditState = "idle" | "running" | "complete";
 
+/**
+ * Executes useAudit.
+ * @returns The resulting value.
+ */
 export function useAudit() {
   const [state, setState] = useState<AuditState>("idle");
   const [result, setResult] = useState<WebsiteCheckResult | null>(null);

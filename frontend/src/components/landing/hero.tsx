@@ -1,7 +1,16 @@
+/**
+ * @module components/landing/hero
+ * Module implementation for hero.tsx.
+ */
+
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 
+/**
+ * Executes Hero.
+ * @returns The resulting value.
+ */
 export default function Hero() {
   return (
     <section className="bg-neutral-50 py-20 lg:py-24">

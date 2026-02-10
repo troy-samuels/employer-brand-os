@@ -1,5 +1,14 @@
+/**
+ * @module components/shared/footer
+ * Module implementation for footer.tsx.
+ */
+
 import Link from "next/link";
 
+/**
+ * Executes Footer.
+ * @returns The resulting value.
+ */
 export function Footer() {
   return (
     <footer className="border-t border-neutral-200 bg-white">

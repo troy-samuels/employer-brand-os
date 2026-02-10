@@ -1,3 +1,8 @@
+/**
+ * @module features/facts/index
+ * Module implementation for index.ts.
+ */
+
 // Components
 export { CompanyFactsForm } from './components/company-facts-form';
 

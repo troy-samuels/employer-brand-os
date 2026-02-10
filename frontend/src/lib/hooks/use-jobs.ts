@@ -1,9 +1,18 @@
+/**
+ * @module lib/hooks/use-jobs
+ * Module implementation for use-jobs.ts.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import type { JobPosting } from "@/types/jobs";
 
+/**
+ * Executes useJobs.
+ * @returns The resulting value.
+ */
 export function useJobs() {
   const [jobs, setJobs] = useState<JobPosting[]>([]);
   const [isLoading, setIsLoading] = useState(true);

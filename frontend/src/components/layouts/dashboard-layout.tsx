@@ -1,9 +1,19 @@
+/**
+ * @module components/layouts/dashboard-layout
+ * Module implementation for dashboard-layout.tsx.
+ */
+
 import { Sidebar } from './sidebar';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
+/**
+ * Executes DashboardLayout.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <div className="flex h-screen bg-background">

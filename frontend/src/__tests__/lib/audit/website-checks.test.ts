@@ -1,3 +1,8 @@
+/**
+ * @module __tests__/lib/audit/website-checks.test
+ * Module implementation for website-checks.test.ts.
+ */
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { parseRobotsPolicy, runWebsiteChecks } from "@/lib/audit/website-checks";

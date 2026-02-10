@@ -1,11 +1,23 @@
+/**
+ * @module app/security/page
+ * Module implementation for page.tsx.
+ */
+
 import type { Metadata } from 'next';
 
+/**
+ * Exposes exported value(s): metadata.
+ */
 export const metadata: Metadata = {
   title: 'Security — Rankwell',
   description:
     'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
 };
 
+/**
+ * Executes SecurityPage.
+ * @returns The resulting value.
+ */
 export default function SecurityPage() {
   return (
     <main className="min-h-screen bg-white">

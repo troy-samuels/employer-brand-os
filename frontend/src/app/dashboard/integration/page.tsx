@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/integration/page
+ * Module implementation for page.tsx.
+ */
+
 'use client';
 
 import { useState, useEffect, useTransition } from 'react';
@@ -9,6 +14,10 @@ import type { GetApiKeyResult } from '@/features/api-keys';
 const PIXEL_ENDPOINT_BASE = process.env.NEXT_PUBLIC_APP_URL || 'https://rankwell.io';
 const CDN_ENDPOINT = `${PIXEL_ENDPOINT_BASE.replace(/\/$/, '')}/api/pixel/v1/script`;
 
+/**
+ * Executes IntegrationPage.
+ * @returns The resulting value.
+ */
 export default function IntegrationPage() {
   const [keyData, setKeyData] = useState<GetApiKeyResult | null>(null);
   const [newRawKey, setNewRawKey] = useState<string | null>(null);

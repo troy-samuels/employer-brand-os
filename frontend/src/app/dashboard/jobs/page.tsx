@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/jobs/page
+ * Module implementation for page.tsx.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,6 +15,10 @@ import { toast } from "@/components/ui/sonner";
 import { useJobs } from "@/lib/hooks/use-jobs";
 import type { JobPosting } from "@/types/jobs";
 
+/**
+ * Executes JobsPage.
+ * @returns The resulting value.
+ */
 export default function JobsPage() {
   const { jobs: fetchedJobs, isLoading } = useJobs();
   const [jobs, setJobs] = useState<JobPosting[]>([]);

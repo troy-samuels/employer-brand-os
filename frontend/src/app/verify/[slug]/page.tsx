@@ -1,3 +1,8 @@
+/**
+ * @module app/verify/[slug]/page
+ * Module implementation for page.tsx.
+ */
+
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -329,6 +334,11 @@ function generateJsonLd(data: TruthPageData): object[] {
 }
 
 // Metadata generation
+/**
+ * Executes generateMetadata.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const data = await getTruthPageData(slug);
@@ -362,6 +372,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+/**
+ * Executes TruthPage.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export default async function TruthPage({ params }: PageProps) {
   const { slug } = await params;
   const data = await getTruthPageData(slug);

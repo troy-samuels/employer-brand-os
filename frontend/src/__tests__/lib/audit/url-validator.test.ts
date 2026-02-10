@@ -1,3 +1,8 @@
+/**
+ * @module __tests__/lib/audit/url-validator.test
+ * Module implementation for url-validator.test.ts.
+ */
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { isPrivateOrReservedIp, validateUrl } from "@/lib/audit/url-validator";

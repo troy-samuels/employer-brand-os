@@ -1,3 +1,8 @@
+/**
+ * @module lib/pixel/request-signing
+ * Module implementation for request-signing.ts.
+ */
+
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 
@@ -57,6 +62,11 @@ function nonceCacheKey(secret: string, nonce: string): string {
   return `${secretHash}:${nonce}`;
 }
 
+/**
+ * Executes buildSigningPayload.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export function buildSigningPayload(input: BuildPayloadInput): string {
   const bodyHash = sha256(input.body ?? "");
 
@@ -69,11 +79,23 @@ export function buildSigningPayload(input: BuildPayloadInput): string {
   ].join("\n");
 }
 
+/**
+ * Executes createRequestSignature.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export function createRequestSignature(input: BuildPayloadInput & { secret: string }): string {
   const payload = buildSigningPayload(input);
   return createHmac("sha256", input.secret).update(payload).digest("base64");
 }
 
+/**
+ * Executes verifyPixelRequestSignature.
+ * @param request - request input.
+ * @param secret - secret input.
+ * @param options - options input.
+ * @returns The resulting value.
+ */
 export function verifyPixelRequestSignature(
   request: NextRequest,
   secret: string,
@@ -155,6 +177,9 @@ export function verifyPixelRequestSignature(
   return { ok: true };
 }
 
+/**
+ * Exposes exported value(s): pixelSignatureHeaders.
+ */
 export const pixelSignatureHeaders = {
   signature: SIGNATURE_HEADER,
   timestamp: TIMESTAMP_HEADER,

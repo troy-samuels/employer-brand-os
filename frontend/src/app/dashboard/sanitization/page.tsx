@@ -1,7 +1,16 @@
+/**
+ * @module app/dashboard/sanitization/page
+ * Module implementation for page.tsx.
+ */
+
 import { getMappings } from '@/features/sanitization/actions/sanitization-actions';
 import { MappingsTable } from './mappings-table';
 import { AddMappingButton } from './add-mapping-button';
 
+/**
+ * Executes SanitizationPage.
+ * @returns The resulting value.
+ */
 export default async function SanitizationPage() {
   const { mappings, total, error } = await getMappings();
 

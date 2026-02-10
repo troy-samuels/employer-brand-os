@@ -1,7 +1,16 @@
+/**
+ * @module app/dashboard/compliance/page
+ * Module implementation for page.tsx.
+ */
+
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { SAMPLE_AUDIT_RESULT } from "@/lib/utils/constants";
 
+/**
+ * Executes CompliancePage.
+ * @returns The resulting value.
+ */
 export default function CompliancePage() {
   return (
     <Card variant="bordered" padding="lg">

@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/sanitization/add-mapping-button
+ * Module implementation for add-mapping-button.tsx.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -5,6 +10,10 @@ import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MappingFormDialog } from './mapping-form-dialog';
 
+/**
+ * Executes AddMappingButton.
+ * @returns The resulting value.
+ */
 export function AddMappingButton() {
   const [isOpen, setIsOpen] = useState(false);
 

@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/sonner
+ * Module implementation for sonner.tsx.
+ */
+
 "use client"
 
 import type { ComponentProps } from "react"

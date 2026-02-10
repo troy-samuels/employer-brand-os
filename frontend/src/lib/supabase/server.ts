@@ -1,6 +1,15 @@
+/**
+ * @module lib/supabase/server
+ * Module implementation for server.ts.
+ */
+
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
+/**
+ * Executes createClient.
+ * @returns The resulting value.
+ */
 export async function createClient() {
   const cookieStore = await cookies()
 

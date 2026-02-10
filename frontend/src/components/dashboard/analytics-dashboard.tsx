@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/analytics-dashboard
+ * Module implementation for analytics-dashboard.tsx.
+ */
+
 import { Card } from "@/components/ui/card";
 import { Chart } from "@/components/ui/chart";
 import type { AnalyticsOverview } from "@/types/analytics";
@@ -6,6 +11,11 @@ interface AnalyticsDashboardProps {
   overview: AnalyticsOverview;
 }
 
+/**
+ * Executes AnalyticsDashboard.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function AnalyticsDashboard({ overview }: AnalyticsDashboardProps) {
   return (
     <div className="space-y-6">

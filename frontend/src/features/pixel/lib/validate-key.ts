@@ -1,12 +1,14 @@
 /**
+ * @module features/pixel/lib/validate-key
  * API Key Validation
  * Validates Smart Pixel API keys against the database
  */
 
-import { createHash } from 'node:crypto';
-import { supabaseAdmin } from '@/lib/supabase/admin';
-import { logApiKeyValidation } from '@/lib/audit/audit-logger';
-import type { ValidatedPixelKey } from '../types/pixel.types';
+import { createHash } from "node:crypto";
+
+import { logApiKeyValidation } from "@/lib/audit/audit-logger";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import type { ValidatedPixelKey } from "../types/pixel.types";
 
 /**
  * Validate an API key and return the associated pixel configuration
@@ -30,7 +32,7 @@ export async function validateApiKey(
   const keyPrefix = extractKeyPrefix(fullKey);
 
   try {
-    const admin = supabaseAdmin as any;
+    const admin = supabaseAdmin;
 
     // Query API keys table by key_prefix.
     const { data: pixel, error } = await admin
@@ -193,6 +195,8 @@ export async function validateApiKey(
 /**
  * Extract the key prefix from a full API key
  * Format: bos_live_xxxxxxxx or bos_test_xxxxxxxx
+ * @param fullKey - Full API key value.
+ * @returns The fixed-length key prefix used for indexed lookup.
  */
 export function extractKeyPrefix(fullKey: string): string {
   // Return first 16 characters as the prefix

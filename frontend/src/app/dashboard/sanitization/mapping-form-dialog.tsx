@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/sanitization/mapping-form-dialog
+ * Module implementation for mapping-form-dialog.tsx.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -33,6 +38,11 @@ interface MappingFormDialogProps {
   mapping?: JobTitleMapping;
 }
 
+/**
+ * Executes MappingFormDialog.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function MappingFormDialog({
   open,
   onClose,

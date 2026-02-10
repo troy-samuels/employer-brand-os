@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/competitive-analysis
+ * Module implementation for competitive-analysis.tsx.
+ */
+
 import { Card } from "@/components/ui/card";
 import type { CompetitorInsight } from "@/types/audit";
 
@@ -5,6 +10,11 @@ interface CompetitiveAnalysisProps {
   competitors: CompetitorInsight[];
 }
 
+/**
+ * Executes CompetitiveAnalysis.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function CompetitiveAnalysis({ competitors }: CompetitiveAnalysisProps) {
   return (
     <Card variant="bordered" padding="lg">

@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/dialog
+ * Module implementation for dialog.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

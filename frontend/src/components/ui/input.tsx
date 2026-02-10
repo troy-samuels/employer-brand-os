@@ -1,7 +1,15 @@
+/**
+ * @module components/ui/input
+ * Module implementation for input.tsx.
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
+/**
+ * Defines the InputProps contract.
+ */
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;

@@ -1,3 +1,8 @@
+/**
+ * @module features/sanitization/index
+ * Module implementation for index.ts.
+ */
+
 // Sanitization Engine Feature
 // Part of Layer 1: Infrastructure - ATS Code Translation
 

@@ -1,3 +1,8 @@
+/**
+ * @module middleware
+ * Module implementation for middleware.ts.
+ */
+
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { validateCsrf } from "@/lib/utils/csrf";
@@ -162,6 +167,11 @@ function withSecurityHeaders(
   return response;
 }
 
+/**
+ * Executes middleware.
+ * @param request - request input.
+ * @returns The resulting value.
+ */
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isApiRoute = pathname.startsWith("/api");
@@ -263,6 +273,9 @@ export async function middleware(request: NextRequest) {
   return withSecurityHeaders(supabaseResponse, pathname, nonce);
 }
 
+/**
+ * Exposes exported value(s): config.
+ */
 export const config = {
   matcher: [
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",

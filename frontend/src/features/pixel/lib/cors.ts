@@ -1,4 +1,9 @@
 /**
+ * @module features/pixel/lib/cors
+ * Module implementation for cors.ts.
+ */
+
+/**
  * CORS Headers Helper
  * Builds dynamic CORS headers for the Smart Pixel API
  *

@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/select
+ * Module implementation for select.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

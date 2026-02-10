@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/checkbox
+ * Module implementation for checkbox.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

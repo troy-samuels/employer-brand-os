@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/dropdown-menu
+ * Module implementation for dropdown-menu.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/audit-gate
+ * Module implementation for audit-gate.tsx.
+ */
+
 "use client";
 
 import { useState, type FormEvent } from "react";
@@ -33,6 +38,11 @@ function getCtaCopy(score: number) {
   };
 }
 
+/**
+ * Executes AuditGate.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function AuditGate({ score = 0, companySlug }: AuditGateProps) {
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);

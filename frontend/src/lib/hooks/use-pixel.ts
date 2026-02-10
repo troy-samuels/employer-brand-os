@@ -1,3 +1,8 @@
+/**
+ * @module lib/hooks/use-pixel
+ * Module implementation for use-pixel.ts.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -10,6 +15,10 @@ interface PixelStatus {
   jobs_injected: number;
 }
 
+/**
+ * Executes usePixel.
+ * @returns The resulting value.
+ */
 export function usePixel() {
   const [status, setStatus] = useState<PixelStatus | null>(null);
   const [isLoading, setIsLoading] = useState(true);

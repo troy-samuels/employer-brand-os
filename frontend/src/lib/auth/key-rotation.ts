@@ -1,8 +1,17 @@
+/**
+ * @module lib/auth/key-rotation
+ * Rotates organization API keys with configurable grace periods.
+ */
+
 import { createHash, randomBytes } from "node:crypto";
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
 const DEFAULT_GRACE_HOURS = 24;
 
+/**
+ * Defines the RotatedApiKey contract.
+ */
 export type RotatedApiKey = {
   keyId: string;
   rawKey: string;
@@ -12,6 +21,10 @@ export type RotatedApiKey = {
   oldKeysExpireAt: string;
 };
 
+/**
+ * Generates a secure API key, deterministic prefix, and persisted hash.
+ * @returns Key material used for insert and caller response.
+ */
 function generateSecureKey(): { raw: string; prefix: string; hash: string } {
   const randomPart = randomBytes(16).toString("hex");
   const raw = `pk_live_${randomPart}`;
@@ -20,16 +33,24 @@ function generateSecureKey(): { raw: string; prefix: string; hash: string } {
   return { raw, prefix, hash };
 }
 
+/**
+ * Returns a new date offset by the provided number of hours.
+ * @param date - Baseline date.
+ * @param hours - Number of hours to add.
+ * @returns A new date with the offset applied.
+ */
 function addHours(date: Date, hours: number): Date {
   return new Date(date.getTime() + hours * 60 * 60 * 1000);
 }
 
 /**
  * Marks expired keys as inactive for an organization.
+ * @param organizationId - Organization identifier.
+ * @returns A promise that resolves after key expiration cleanup.
  */
 export async function expireRotatedKeys(organizationId: string): Promise<void> {
   const nowIso = new Date().toISOString();
-  const admin = supabaseAdmin as any;
+  const admin = supabaseAdmin;
 
   await admin
     .from("api_keys")
@@ -42,6 +63,8 @@ export async function expireRotatedKeys(organizationId: string): Promise<void> {
 
 /**
  * Rotate API key while keeping current active keys valid during a short grace window.
+ * @param params - Rotation settings and key metadata.
+ * @returns The newly rotated key details including temporary raw key value.
  */
 export async function rotateApiKey(params: {
   organizationId: string;
@@ -51,7 +74,7 @@ export async function rotateApiKey(params: {
   rateLimitPerMinute?: number;
   gracePeriodHours?: number;
 }): Promise<RotatedApiKey> {
-  const admin = supabaseAdmin as any;
+  const admin = supabaseAdmin;
   const now = new Date();
   const gracePeriodHours = params.gracePeriodHours ?? DEFAULT_GRACE_HOURS;
   const oldKeysExpireAt = addHours(now, gracePeriodHours).toISOString();

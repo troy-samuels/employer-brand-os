@@ -1,3 +1,8 @@
+/**
+ * @module __tests__/lib/audit/company-resolver.test
+ * Module implementation for company-resolver.test.ts.
+ */
+
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { normalizeUrl, resolveCompanyUrl } from "@/lib/audit/company-resolver";
 import { validateUrl } from "@/lib/audit/url-validator";
@@ -223,9 +228,9 @@ describe("company-resolver", () => {
     });
 
     it("should try country-specific TLDs like .co.uk and .de", async () => {
-      let attemptedUrls: string[] = [];
+      const attemptedUrls: string[] = [];
       
-      global.fetch = vi.fn((url: string | URL | Request, init?: RequestInit) => {
+      global.fetch = vi.fn((url: string | URL | Request) => {
         const urlString = typeof url === "string" ? url : url.toString();
         attemptedUrls.push(urlString);
         
@@ -245,7 +250,7 @@ describe("company-resolver", () => {
     it("should fallback to web search when TLD guessing fails", async () => {
       let searchCalled = false;
       
-      global.fetch = vi.fn((url: string | URL | Request, init?: RequestInit) => {
+      global.fetch = vi.fn((url: string | URL | Request) => {
         const urlString = typeof url === "string" ? url : url.toString();
         
         // Mock DuckDuckGo API call

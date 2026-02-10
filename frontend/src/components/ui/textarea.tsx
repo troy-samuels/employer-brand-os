@@ -1,10 +1,22 @@
-import * as React from "react"
+/**
+ * @module components/ui/textarea
+ * Exposes a styled textarea component with forwarded ref support.
+ */
 
-import { cn } from "@/lib/utils"
+import * as React from "react";
 
-export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+import { cn } from "@/lib/utils";
 
+/**
+ * Props supported by the textarea primitive.
+ */
+export type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement>;
+
+/**
+ * Renders a styled textarea input control.
+ * @param props - Native textarea props with optional className overrides.
+ * @returns The textarea element.
+ */
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {
     return (
@@ -16,9 +28,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         ref={ref}
         {...props}
       />
-    )
-  }
-)
-Textarea.displayName = "Textarea"
+    );
+  },
+);
+Textarea.displayName = "Textarea";
 
-export { Textarea }
+export { Textarea };

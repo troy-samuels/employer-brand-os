@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/sidebar
+ * Module implementation for sidebar.tsx.
+ */
+
 "use client";
 
 import Link from "next/link";
@@ -27,6 +32,11 @@ const navigationItems = [
   { name: "Settings", href: "/dashboard/settings", icon: Settings },
 ];
 
+/**
+ * Executes DashboardSidebar.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function DashboardSidebar({
   correctionCount = 3,
   complianceAlerts = 1,

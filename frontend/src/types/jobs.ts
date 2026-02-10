@@ -1,3 +1,11 @@
+/**
+ * Defines the EmploymentType contract.
+ */
+/**
+ * @module types/jobs
+ * Module implementation for jobs.ts.
+ */
+
 export type EmploymentType =
   | "full-time"
   | "part-time"
@@ -5,16 +13,28 @@ export type EmploymentType =
   | "temporary"
   | "internship";
 
+/**
+ * Defines the ExperienceLevel contract.
+ */
 export type ExperienceLevel = "entry" | "mid" | "senior" | "executive";
 
+/**
+ * Defines the JobStatus contract.
+ */
 export type JobStatus = "draft" | "active" | "paused" | "closed";
 
+/**
+ * Defines the JobLocation contract.
+ */
 export interface JobLocation {
   city: string;
   state: string;
   country: string;
 }
 
+/**
+ * Defines the SalaryRange contract.
+ */
 export interface SalaryRange {
   min: number;
   max: number;
@@ -22,6 +42,9 @@ export interface SalaryRange {
   period: "YEAR" | "MONTH" | "HOUR";
 }
 
+/**
+ * Defines the JobPosting contract.
+ */
 export interface JobPosting {
   id: string;
   title: string;

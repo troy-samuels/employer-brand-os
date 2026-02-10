@@ -1,7 +1,16 @@
+/**
+ * @module app/dashboard/facts/page
+ * Module implementation for page.tsx.
+ */
+
 import { CompanyFactsForm, getCompanyFacts } from '@/features/facts';
 import { Card, CardContent } from '@/components/ui/card';
 import { ShieldCheck } from 'lucide-react';
 
+/**
+ * Executes FactsPage.
+ * @returns The resulting value.
+ */
 export default async function FactsPage() {
   const existingData = await getCompanyFacts();
 

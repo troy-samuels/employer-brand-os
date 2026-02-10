@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/chart
+ * Module implementation for chart.tsx.
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -8,6 +13,11 @@ interface ChartProps {
   ariaLabel?: string;
 }
 
+/**
+ * Executes Chart.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function Chart({ data, className, ariaLabel = "Chart" }: ChartProps) {
   const max = Math.max(1, ...data);
 

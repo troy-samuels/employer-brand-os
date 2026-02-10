@@ -1,5 +1,16 @@
+/**
+ * @module lib/pixel/schema-generator
+ * Module implementation for schema-generator.ts.
+ */
+
 import type { JobPosting } from "@/types/jobs";
 
+/**
+ * Executes generateJobPostingSchema.
+ * @param jobs - jobs input.
+ * @param company - company input.
+ * @returns The resulting value.
+ */
 export function generateJobPostingSchema(jobs: JobPosting[], company: { name: string; website: string; logo_url?: string }) {
   return {
     "@context": "https://schema.org/",

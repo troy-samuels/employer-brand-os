@@ -1,4 +1,9 @@
 /**
+ * @module features/pixel/index
+ * Module implementation for index.ts.
+ */
+
+/**
  * Smart Pixel Feature
  * Public exports for the Rankwell Smart Pixel infrastructure
  */

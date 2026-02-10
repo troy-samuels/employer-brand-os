@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/company-resolver
+ * Module implementation for company-resolver.ts.
+ */
+
 import { validateUrl } from "@/lib/audit/url-validator";
 
 const FETCH_TIMEOUT_MS = 5_000;
@@ -146,6 +151,11 @@ async function searchCompanyUrl(companyName: string): Promise<string | null> {
   }
 }
 
+/**
+ * Executes normalizeUrl.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export function normalizeUrl(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) {
@@ -171,6 +181,11 @@ export function normalizeUrl(input: string): string {
   }
 }
 
+/**
+ * Executes resolveCompanyUrl.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export async function resolveCompanyUrl(
   input: string
 ): Promise<{ name: string; url: string | null }> {

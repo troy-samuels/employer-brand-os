@@ -1,3 +1,8 @@
+/**
+ * @module types/database.types
+ * Generated and augmented Supabase database model types.
+ */
+
 export type Json =
   | string
   | number
@@ -6,6 +11,9 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+/**
+ * Defines the Database contract.
+ */
 export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
@@ -101,11 +109,13 @@ export type Database = {
           is_active: boolean | null
           key_hash: string
           key_prefix: string
+          key_version: number | null
           last_used_at: string | null
           name: string | null
           organization_id: string | null
           rate_limit_per_minute: number | null
           scopes: Json | null
+          updated_at: string | null
         }
         Insert: {
           created_at?: string | null
@@ -115,11 +125,13 @@ export type Database = {
           is_active?: boolean | null
           key_hash: string
           key_prefix: string
+          key_version?: number | null
           last_used_at?: string | null
           name?: string | null
           organization_id?: string | null
           rate_limit_per_minute?: number | null
           scopes?: Json | null
+          updated_at?: string | null
         }
         Update: {
           created_at?: string | null
@@ -129,11 +141,13 @@ export type Database = {
           is_active?: boolean | null
           key_hash?: string
           key_prefix?: string
+          key_version?: number | null
           last_used_at?: string | null
           name?: string | null
           organization_id?: string | null
           rate_limit_per_minute?: number | null
           scopes?: Json | null
+          updated_at?: string | null
         }
         Relationships: [
           {
@@ -154,41 +168,56 @@ export type Database = {
       }
       audit_logs: {
         Row: {
+          actor: string | null
           action: string
           created_at: string | null
           id: string
           ip_address: unknown
+          metadata: Json | null
           new_values: Json | null
           old_values: Json | null
           organization_id: string | null
           record_id: string | null
+          resource: string | null
+          result: string | null
           table_name: string
+          timestamp: string | null
           user_agent: string | null
           user_id: string | null
         }
         Insert: {
+          actor?: string | null
           action: string
           created_at?: string | null
           id?: string
           ip_address?: unknown
+          metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
           organization_id?: string | null
           record_id?: string | null
+          resource?: string | null
+          result?: string | null
           table_name: string
+          timestamp?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
         Update: {
+          actor?: string | null
           action?: string
           created_at?: string | null
           id?: string
           ip_address?: unknown
+          metadata?: Json | null
           new_values?: Json | null
           old_values?: Json | null
           organization_id?: string | null
           record_id?: string | null
+          resource?: string | null
+          result?: string | null
           table_name?: string
+          timestamp?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -208,6 +237,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_leads: {
+        Row: {
+          company_slug: string | null
+          created_at: string | null
+          email: string
+          email_domain: string
+          id: string
+          score: number | null
+        }
+        Insert: {
+          company_slug?: string | null
+          created_at?: string | null
+          email: string
+          email_domain: string
+          id?: string
+          score?: number | null
+        }
+        Update: {
+          company_slug?: string | null
+          created_at?: string | null
+          email?: string
+          email_domain?: string
+          id?: string
+          score?: number | null
+        }
+        Relationships: []
       }
       compliance_checks: {
         Row: {
@@ -723,6 +779,83 @@ export type Database = {
           },
         ]
       }
+      job_title_mappings: {
+        Row: {
+          aliases: string[] | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          internal_code: string
+          is_active: boolean | null
+          job_family: string | null
+          level_indicator: string | null
+          location_id: string | null
+          organization_id: string | null
+          public_title: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          aliases?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          internal_code: string
+          is_active?: boolean | null
+          job_family?: string | null
+          level_indicator?: string | null
+          location_id?: string | null
+          organization_id?: string | null
+          public_title: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          aliases?: string[] | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          internal_code?: string
+          is_active?: boolean | null
+          job_family?: string | null
+          level_indicator?: string | null
+          location_id?: string | null
+          organization_id?: string | null
+          public_title?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "job_title_mappings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_title_mappings_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_title_mappings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "job_title_mappings_updated_by_fkey"
+            columns: ["updated_by"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           address_city: string | null
@@ -974,6 +1107,33 @@ export type Database = {
           },
         ]
       }
+      rate_limits: {
+        Row: {
+          bucket_key: string
+          count: number
+          created_at: string | null
+          expires_at: string
+          id: string
+          updated_at: string | null
+        }
+        Insert: {
+          bucket_key: string
+          count?: number
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          updated_at?: string | null
+        }
+        Update: {
+          bucket_key?: string
+          count?: number
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       user_location_access: {
         Row: {
           can_edit_facts: boolean | null
@@ -1099,6 +1259,9 @@ type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
 
 type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
 
+/**
+ * Defines the Tables contract.
+ */
 export type Tables<
   DefaultSchemaTableNameOrOptions extends
     | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
@@ -1128,6 +1291,9 @@ export type Tables<
       : never
     : never
 
+/**
+ * Defines the TablesInsert contract.
+ */
 export type TablesInsert<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
@@ -1153,6 +1319,9 @@ export type TablesInsert<
       : never
     : never
 
+/**
+ * Defines the TablesUpdate contract.
+ */
 export type TablesUpdate<
   DefaultSchemaTableNameOrOptions extends
     | keyof DefaultSchema["Tables"]
@@ -1178,6 +1347,9 @@ export type TablesUpdate<
       : never
     : never
 
+/**
+ * Defines the Enums contract.
+ */
 export type Enums<
   DefaultSchemaEnumNameOrOptions extends
     | keyof DefaultSchema["Enums"]
@@ -1195,6 +1367,9 @@ export type Enums<
     ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
     : never
 
+/**
+ * Defines the CompositeTypes contract.
+ */
 export type CompositeTypes<
   PublicCompositeTypeNameOrOptions extends
     | keyof DefaultSchema["CompositeTypes"]
@@ -1212,6 +1387,9 @@ export type CompositeTypes<
     ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
     : never
 
+/**
+ * Exposes exported value(s): Constants.
+ */
 export const Constants = {
   graphql_public: {
     Enums: {},

@@ -1,15 +1,22 @@
-'use server';
+/**
+ * @module features/api-keys/actions/generate-key
+ * Server actions for creating, fetching, and revoking organization API keys.
+ */
 
-import { revalidatePath } from 'next/cache';
-import { supabaseAdmin } from '@/lib/supabase/admin';
-import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
-import { expireRotatedKeys, rotateApiKey } from '@/lib/auth/key-rotation';
-import { logAdminAction } from '@/lib/audit/audit-logger';
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+import { logAdminAction } from "@/lib/audit/audit-logger";
+import { getUserOrganization, hasPermission } from "@/lib/auth/get-user-org";
+import { expireRotatedKeys, rotateApiKey } from "@/lib/auth/key-rotation";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import type { Json } from "@/types/database.types";
 import type {
   GenerateKeyResult,
   GetApiKeyResult,
   RevokeKeyResult,
-} from '../types/api-key.types';
+} from "../types/api-key.types";
 
 /**
  * Generate a new production API key for the current user's organization
@@ -19,9 +26,11 @@ import type {
  * - User must have admin permission
  * - Key rotation keeps previous key valid for 24 hours
  * - Raw key is returned once, then only hash is stored
+ * @param name - Optional display name for the generated key.
+ * @returns Result object containing new key metadata on success.
  */
 export async function generateApiKey(
-  name: string = 'Production Key'
+  name: string = "Production Key",
 ): Promise<GenerateKeyResult> {
   try {
     // 1. Verify user and organization
@@ -76,6 +85,7 @@ export async function generateApiKey(
 
 /**
  * Get the current API key for the organization (prefix only, not raw key)
+ * @returns Result object with current active key metadata when available.
  */
 export async function getApiKey(): Promise<GetApiKeyResult> {
   try {
@@ -87,7 +97,7 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
     }
 
     const orgId = userOrg.organizationId;
-    const admin = supabaseAdmin as any;
+    const admin = supabaseAdmin;
     const now = Date.now();
 
     await expireRotatedKeys(orgId);
@@ -149,7 +159,7 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
         organizationId: newestKey.organization_id ?? '',
         name: newestKey.name ?? 'API Key',
         keyPrefix: newestKey.key_prefix,
-        scopes: (newestKey.scopes as string[]) ?? [],
+        scopes: jsonToStringArray(newestKey.scopes),
         keyVersion: newestKey.key_version ?? 1,
         isActive: newestKey.is_active ?? false,
         createdAt: newestKey.created_at ?? new Date().toISOString(),
@@ -166,6 +176,8 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
 
 /**
  * Revoke the current API key
+ * @param keyId - API key identifier to revoke.
+ * @returns Result object indicating whether revocation succeeded.
  */
 export async function revokeApiKey(keyId: string): Promise<RevokeKeyResult> {
   try {
@@ -181,7 +193,7 @@ export async function revokeApiKey(keyId: string): Promise<RevokeKeyResult> {
       return { success: false, error: 'Only administrators can revoke API keys' };
     }
 
-    const admin = supabaseAdmin as any;
+    const admin = supabaseAdmin;
 
     // Revoke key (verify it belongs to user's org)
     const { error } = await admin
@@ -215,4 +227,17 @@ export async function revokeApiKey(keyId: string): Promise<RevokeKeyResult> {
     console.error('Error revoking API key:', error);
     return { success: false, error: 'An unexpected error occurred' };
   }
+}
+
+/**
+ * Converts JSON values from Supabase to a list of string scopes.
+ * @param value - JSON value returned from the database.
+ * @returns A normalized list of key scopes.
+ */
+function jsonToStringArray(value: Json | null): string[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.filter((item): item is string => typeof item === "string");
 }

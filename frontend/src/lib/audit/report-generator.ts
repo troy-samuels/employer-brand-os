@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/report-generator
+ * Module implementation for report-generator.ts.
+ */
+
 import type { AuditResult } from "@/types/audit";
 
 function escapePdfText(text: string) {
@@ -91,6 +96,11 @@ function buildPdfBuffer(auditResult: AuditResult) {
   return Buffer.from(pdf, "utf8");
 }
 
+/**
+ * Executes generateAuditPDF.
+ * @param auditResult - auditResult input.
+ * @returns The resulting value.
+ */
 export async function generateAuditPDF(auditResult: AuditResult) {
   const pdfBuffer = buildPdfBuffer(auditResult);
   const base64 = pdfBuffer.toString("base64");

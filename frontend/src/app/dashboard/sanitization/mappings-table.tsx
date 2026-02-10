@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/sanitization/mappings-table
+ * Module implementation for mappings-table.tsx.
+ */
+
 'use client';
 
 import { useState } from 'react';
@@ -14,6 +19,11 @@ interface MappingsTableProps {
   mappings: JobTitleMapping[];
 }
 
+/**
+ * Executes MappingsTable.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function MappingsTable({ mappings }: MappingsTableProps) {
   const [editingMapping, setEditingMapping] = useState<JobTitleMapping | null>(
     null

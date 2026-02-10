@@ -1,6 +1,14 @@
+/**
+ * @module lib/auth/get-user-org
+ * Module implementation for get-user-org.ts.
+ */
+
 import { createClient } from '@/lib/supabase/server'
 import { supabaseAdmin } from '@/lib/supabase/admin'
 
+/**
+ * Defines the UserOrganization contract.
+ */
 export interface UserOrganization {
   userId: string
   organizationId: string

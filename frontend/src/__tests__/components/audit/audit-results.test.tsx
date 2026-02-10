@@ -1,3 +1,8 @@
+/**
+ * @module __tests__/components/audit/audit-results.test
+ * Module implementation for audit-results.test.tsx.
+ */
+
 import { describe, it, expect } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { AuditResults } from "@/components/audit/audit-results";

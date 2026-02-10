@@ -1,4 +1,9 @@
 /**
+ * @module components/landing/testimonials
+ * Module implementation for testimonials.tsx.
+ */
+
+/**
  * Before/After Comparison — replaces fictional testimonials.
  * Shows what AI says about a company now vs. after Rankwell.
  */

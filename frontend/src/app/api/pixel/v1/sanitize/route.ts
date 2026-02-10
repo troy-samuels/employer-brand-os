@@ -1,4 +1,5 @@
 /**
+ * @module app/api/pixel/v1/sanitize/route
  * Sanitization Engine API Endpoint
  * GET /api/pixel/v1/sanitize
  *
@@ -12,17 +13,19 @@
  * 4. Audit logging - All requests logged
  */
 
-import { NextRequest } from 'next/server';
-import { z } from 'zod';
-import { validateApiKey } from '@/features/pixel/lib/validate-key';
-import { verifyPixelRequestSignature } from '@/lib/pixel/request-signing';
+import { NextRequest } from "next/server";
+import { z } from "zod";
+
 import {
-  buildSuccessHeaders,
   buildErrorHeaders,
   buildPreflightResponse,
-} from '@/features/pixel/lib/cors';
-import { sanitizeJobCode } from '@/features/sanitization/lib/sanitize';
-import type { SanitizationResult } from '@/features/sanitization/types/sanitization.types';
+  buildSuccessHeaders,
+} from "@/features/pixel/lib/cors";
+import { validateApiKey } from "@/features/pixel/lib/validate-key";
+import { sanitizeJobCode } from "@/features/sanitization/lib/sanitize";
+import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
+import { API_ERROR_CODE } from "@/lib/utils/api-errors";
+import { type ApiErrorResponse } from "@/lib/utils/api-response";
 
 // Query parameter schema
 const sanitizeQuerySchema = z.object({
@@ -36,44 +39,40 @@ const sanitizeQuerySchema = z.object({
     .max(100, 'Internal code too long'),
 });
 
-interface SanitizeErrorResponse {
-  error:
-    | 'invalid_key'
-    | 'missing_code'
-    | 'invalid_signature'
-    | 'replay_detected'
-    | 'internal_error';
-  message: string;
-}
+const SANITIZE_ERROR_CODE = {
+  invalidKey: "invalid_key",
+  missingCode: "missing_code",
+} as const;
 
 /**
- * Handle OPTIONS preflight requests
+ * Handles CORS preflight checks for sanitize requests.
+ * @param request - The incoming preflight request.
+ * @returns A preflight response with CORS headers when origin is provided.
  */
 export async function OPTIONS(request: NextRequest): Promise<Response> {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
-  if (origin) {
-    return buildPreflightResponse(origin);
+  try {
+    if (origin) {
+      return buildPreflightResponse(origin);
+    }
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    console.error("[SANITIZE] OPTIONS preflight error:", error);
+    return errorResponse(
+      API_ERROR_CODE.internal,
+      "An error occurred processing the request",
+      500,
+      origin,
+    );
   }
-
-  return new Response(null, { status: 204 });
 }
 
 /**
- * Handle GET requests for job code sanitization
- *
- * Query Parameters:
- * - key: API key (required) - format: bos_live_xxx or bos_test_xxx
- * - code: Internal job code (required) - e.g., L4-Eng-NY
- *
- * Returns:
- * {
- *   originalCode: string,
- *   publicTitle: string | null,
- *   jobFamily: string | null,
- *   levelIndicator: string | null,
- *   sanitized: boolean
- * }
+ * Sanitizes internal ATS job codes into public-friendly titles.
+ * @param request - The incoming sanitize request.
+ * @returns Sanitization output or a standardized error response.
  */
 export async function GET(request: NextRequest): Promise<Response> {
   const startTime = Date.now();
@@ -98,7 +97,7 @@ export async function GET(request: NextRequest): Promise<Response> {
 
       if (errors.key) {
         return errorResponse(
-          'invalid_key',
+          SANITIZE_ERROR_CODE.invalidKey,
           'Missing or invalid API key parameter',
           400,
           origin
@@ -106,7 +105,7 @@ export async function GET(request: NextRequest): Promise<Response> {
       }
 
       return errorResponse(
-        'missing_code',
+        SANITIZE_ERROR_CODE.missingCode,
         'Missing or invalid code parameter',
         400,
         origin
@@ -123,7 +122,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     });
     if (!validatedKey) {
       return errorResponse(
-        'invalid_key',
+        SANITIZE_ERROR_CODE.invalidKey,
         'API key not found or inactive',
         401,
         origin
@@ -134,8 +133,8 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (!signatureResult.ok) {
       const errorCode =
         signatureResult.error === 'replay_detected'
-          ? 'replay_detected'
-          : 'invalid_signature';
+          ? API_ERROR_CODE.replayDetected
+          : API_ERROR_CODE.invalidSignature;
 
       return errorResponse(
         errorCode,
@@ -173,7 +172,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     console.error('[SANITIZE] Error processing request:', error);
 
     return errorResponse(
-      'internal_error',
+      API_ERROR_CODE.internal,
       'An error occurred processing the request',
       500,
       origin
@@ -185,16 +184,17 @@ export async function GET(request: NextRequest): Promise<Response> {
  * Build a standardized error response
  */
 function errorResponse(
-  errorCode: SanitizeErrorResponse['error'],
+  errorCode: string,
   message: string,
   status: number,
   origin: string | null
 ): Response {
   const headers = buildErrorHeaders(origin || undefined);
 
-  const body: SanitizeErrorResponse = {
-    error: errorCode,
-    message,
+  const body: ApiErrorResponse = {
+    error: message,
+    code: errorCode,
+    status,
   };
 
   return new Response(JSON.stringify(body), {

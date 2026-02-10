@@ -1,4 +1,9 @@
 /**
+ * @module lib/supabase/admin
+ * Module implementation for admin.ts.
+ */
+
+/**
  * Supabase Admin Client
  * Uses service role key for server-side operations that bypass RLS
  * SECURITY: Only use in API routes, never expose to client

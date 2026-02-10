@@ -1,3 +1,8 @@
+/**
+ * @module lib/utils/rate-limiter
+ * Provides a Supabase-backed rate limiter with in-memory fallback.
+ */
+
 type MemoryBucket = {
   count: number;
   expiresAt: number;
@@ -5,13 +10,24 @@ type MemoryBucket = {
 
 const fallbackStore = new Map<string, MemoryBucket>();
 
+/**
+ * Applies request quotas using persistent buckets with graceful fallback.
+ */
 export class RateLimiter {
+  /**
+   * Checks whether a request key can proceed within the configured window.
+   * @param key - The request identity key.
+   * @param scope - The logical rate-limit scope.
+   * @param limit - Maximum number of allowed requests in the window.
+   * @param windowSeconds - Window duration in seconds.
+   * @returns `true` when request is allowed, otherwise `false`.
+   */
   async check(
     key: string | null,
     scope: string,
     limit: number,
     windowSeconds: number
-  ) {
+  ): Promise<boolean> {
     if (!key) return true;
 
     const bucketKey = `${scope}:${key}`;
@@ -24,7 +40,7 @@ export class RateLimiter {
     try {
       // Dynamic import avoids circular dependency issues at module load.
       const { supabaseAdmin } = await import("@/lib/supabase/admin");
-      const admin = supabaseAdmin as any;
+      const admin = supabaseAdmin;
 
       // Best-effort cleanup of expired buckets.
       const { error: cleanupError } = await admin

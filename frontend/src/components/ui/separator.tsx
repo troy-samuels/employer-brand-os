@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/separator
+ * Module implementation for separator.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

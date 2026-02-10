@@ -1,9 +1,18 @@
+/**
+ * @module lib/hooks/use-analytics
+ * Module implementation for use-analytics.ts.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
 import { toast } from "@/components/ui/sonner";
 import type { AnalyticsOverview } from "@/types/analytics";
 
+/**
+ * Executes useAnalytics.
+ * @returns The resulting value.
+ */
 export function useAnalytics() {
   const [overview, setOverview] = useState<AnalyticsOverview | null>(null);
   const [isLoading, setIsLoading] = useState(true);

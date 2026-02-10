@@ -1,3 +1,8 @@
+/**
+ * @module app/verify/[slug]/not-found
+ * Module implementation for not-found.tsx.
+ */
+
 import Link from 'next/link';
 
 /**

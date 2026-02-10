@@ -1,101 +1,118 @@
-// @ts-nocheck — job_title_mappings not in generated Supabase types yet
-'use server';
+/**
+ * @module features/sanitization/actions/sanitization-actions
+ * Server actions for managing organization-specific job title mappings.
+ */
 
-import { revalidatePath } from 'next/cache';
-import { supabaseAdmin } from '@/lib/supabase/admin';
-import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
-import type { JobTitleMappingFormData } from '../schemas/sanitization.schema';
+"use server";
+
+import { revalidatePath } from "next/cache";
+
+import { getUserOrganization, hasPermission } from "@/lib/auth/get-user-org";
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import type { JobTitleMappingFormData } from "../schemas/sanitization.schema";
 import type {
-  JobTitleMapping,
-  SaveMappingResult,
   DeleteMappingResult,
+  JobTitleMapping,
   MappingListResult,
-} from '../types/sanitization.types';
+  SaveMappingResult,
+} from "../types/sanitization.types";
 
-async function requireOrganization(permission: 'view' | 'edit') {
+/**
+ * Ensures the current user can access organization sanitization settings.
+ * @param permission - Required permission level for the requested action.
+ * @returns Authenticated organization context or an error message.
+ */
+async function requireOrganization(
+  permission: "view" | "edit",
+): Promise<{ userOrg?: Awaited<ReturnType<typeof getUserOrganization>>; error?: string }> {
   const userOrg = await getUserOrganization();
 
   if (!userOrg) {
-    return { error: 'You must be logged in to access sanitization settings' };
+    return { error: "You must be logged in to access sanitization settings" };
   }
 
   if (!hasPermission(userOrg.userRole, permission)) {
-    return { error: 'You do not have permission to perform this action' };
+    return { error: "You do not have permission to perform this action" };
   }
 
   return { userOrg };
 }
 
 /**
- * Get all job title mappings for the organization
+ * Gets all job title mappings for the user's organization.
+ * @returns Mapping list result including total row count.
  */
 export async function getMappings(): Promise<MappingListResult> {
   try {
-    const auth = await requireOrganization('view');
+    const auth = await requireOrganization("view");
     if (!auth.userOrg) {
       return { mappings: [], total: 0, error: auth.error };
     }
 
     const orgId = auth.userOrg.organizationId;
     const { data, error, count } = await supabaseAdmin
-      .from('job_title_mappings' as any)
-      .select('*', { count: 'exact' })
-      .eq('organization_id', orgId)
-      .order('created_at', { ascending: false });
+      .from("job_title_mappings")
+      .select("*", { count: "exact" })
+      .eq("organization_id", orgId)
+      .order("created_at", { ascending: false });
 
     if (error) {
-      console.error('Error fetching mappings:', error);
-      return { mappings: [], total: 0, error: 'Failed to load mappings' };
+      console.error("Error fetching mappings:", error);
+      return { mappings: [], total: 0, error: "Failed to load mappings" };
     }
 
     return {
-      mappings: data as unknown as JobTitleMapping[],
-      total: count || 0,
+      mappings: (data ?? []) as JobTitleMapping[],
+      total: count ?? 0,
     };
   } catch (error) {
-    console.error('Unexpected error fetching mappings:', error);
+    console.error("Unexpected error fetching mappings:", error);
     return { mappings: [], total: 0 };
   }
 }
 
 /**
- * Get a single mapping by ID
+ * Gets a single mapping by identifier.
+ * @param id - Mapping identifier.
+ * @returns The mapping when found and accessible, otherwise `null`.
  */
 export async function getMapping(id: string): Promise<JobTitleMapping | null> {
   try {
-    const auth = await requireOrganization('view');
+    const auth = await requireOrganization("view");
     if (!auth.userOrg) {
       return null;
     }
 
     const orgId = auth.userOrg.organizationId;
     const { data, error } = await supabaseAdmin
-      .from('job_title_mappings' as any)
-      .select('*')
-      .eq('id', id)
-      .eq('organization_id', orgId)
+      .from("job_title_mappings")
+      .select("*")
+      .eq("id", id)
+      .eq("organization_id", orgId)
       .single();
 
     if (error) {
-      console.error('Error fetching mapping:', error);
+      console.error("Error fetching mapping:", error);
       return null;
     }
 
-    return data as unknown as JobTitleMapping;
+    return data as JobTitleMapping;
   } catch (error) {
-    console.error('Unexpected error fetching mapping:', error);
+    console.error("Unexpected error fetching mapping:", error);
     return null;
   }
 }
 
 /**
- * Create a new job title mapping
+ * Creates a new job title mapping.
+ * @param data - Mapping form payload.
+ * @returns Result indicating whether creation succeeded.
  */
 export async function createMapping(
-  data: JobTitleMappingFormData
+  data: JobTitleMappingFormData,
 ): Promise<SaveMappingResult> {
   try {
-    const auth = await requireOrganization('edit');
+    const auth = await requireOrganization("edit");
     if (!auth.userOrg) {
       return { success: false, error: auth.error };
     }
@@ -104,10 +121,10 @@ export async function createMapping(
     const userId = auth.userOrg.userId;
     // Check if internal code already exists
     const { data: existing } = await supabaseAdmin
-      .from('job_title_mappings' as any)
-      .select('id')
-      .eq('organization_id', orgId)
-      .eq('internal_code', data.internalCode)
+      .from("job_title_mappings")
+      .select("id")
+      .eq("organization_id", orgId)
+      .eq("internal_code", data.internalCode)
       .single();
 
     if (existing) {
@@ -118,7 +135,7 @@ export async function createMapping(
     }
 
     const { data: created, error } = await supabaseAdmin
-      .from('job_title_mappings' as any)
+      .from("job_title_mappings")
       .insert({
         organization_id: orgId,
         internal_code: data.internalCode,
@@ -135,31 +152,34 @@ export async function createMapping(
       .single();
 
     if (error) {
-      console.error('Error creating mapping:', error);
-      return { success: false, error: 'Failed to create mapping' };
+      console.error("Error creating mapping:", error);
+      return { success: false, error: "Failed to create mapping" };
     }
 
-    revalidatePath('/dashboard/sanitization');
+    revalidatePath("/dashboard/sanitization");
 
     return {
       success: true,
-      mapping: created as unknown as JobTitleMapping,
+      mapping: created as JobTitleMapping,
     };
   } catch (error) {
-    console.error('Unexpected error creating mapping:', error);
-    return { success: false, error: 'An unexpected error occurred' };
+    console.error("Unexpected error creating mapping:", error);
+    return { success: false, error: "An unexpected error occurred" };
   }
 }
 
 /**
- * Update an existing job title mapping
+ * Updates an existing job title mapping.
+ * @param id - Mapping identifier.
+ * @param data - Mapping form payload.
+ * @returns Result indicating whether the update succeeded.
  */
 export async function updateMapping(
   id: string,
-  data: JobTitleMappingFormData
+  data: JobTitleMappingFormData,
 ): Promise<SaveMappingResult> {
   try {
-    const auth = await requireOrganization('edit');
+    const auth = await requireOrganization("edit");
     if (!auth.userOrg) {
       return { success: false, error: auth.error };
     }
@@ -168,10 +188,10 @@ export async function updateMapping(
     const userId = auth.userOrg.userId;
     // Check if internal code is being changed and already exists
     const { data: existing } = await supabaseAdmin
-      .from('job_title_mappings' as any)
-      .select('id, internal_code')
-      .eq('organization_id', orgId)
-      .eq('internal_code', data.internalCode)
+      .from("job_title_mappings")
+      .select("id, internal_code")
+      .eq("organization_id", orgId)
+      .eq("internal_code", data.internalCode)
       .single();
 
     if (existing && existing.id !== id) {
@@ -182,7 +202,7 @@ export async function updateMapping(
     }
 
     const { data: updated, error } = await supabaseAdmin
-      .from('job_title_mappings' as any)
+      .from("job_title_mappings")
       .update({
         internal_code: data.internalCode,
         public_title: data.publicTitle,
@@ -194,68 +214,73 @@ export async function updateMapping(
         updated_at: new Date().toISOString(),
         updated_by: userId,
       })
-      .eq('id', id)
-      .eq('organization_id', orgId)
+      .eq("id", id)
+      .eq("organization_id", orgId)
       .select()
       .single();
 
     if (error) {
-      console.error('Error updating mapping:', error);
-      return { success: false, error: 'Failed to update mapping' };
+      console.error("Error updating mapping:", error);
+      return { success: false, error: "Failed to update mapping" };
     }
 
-    revalidatePath('/dashboard/sanitization');
+    revalidatePath("/dashboard/sanitization");
 
     return {
       success: true,
-      mapping: updated as unknown as JobTitleMapping,
+      mapping: updated as JobTitleMapping,
     };
   } catch (error) {
-    console.error('Unexpected error updating mapping:', error);
-    return { success: false, error: 'An unexpected error occurred' };
+    console.error("Unexpected error updating mapping:", error);
+    return { success: false, error: "An unexpected error occurred" };
   }
 }
 
 /**
- * Delete a job title mapping
+ * Deletes a job title mapping.
+ * @param id - Mapping identifier.
+ * @returns Result indicating whether the deletion succeeded.
  */
 export async function deleteMapping(id: string): Promise<DeleteMappingResult> {
   try {
-    const auth = await requireOrganization('edit');
+    const auth = await requireOrganization("edit");
     if (!auth.userOrg) {
       return { success: false, error: auth.error };
     }
 
     const orgId = auth.userOrg.organizationId;
     const { error } = await supabaseAdmin
-      .from('job_title_mappings' as any)
+      .from("job_title_mappings")
       .delete()
-      .eq('id', id)
-      .eq('organization_id', orgId);
+      .eq("id", id)
+      .eq("organization_id", orgId);
 
     if (error) {
-      console.error('Error deleting mapping:', error);
-      return { success: false, error: 'Failed to delete mapping' };
+      console.error("Error deleting mapping:", error);
+      return { success: false, error: "Failed to delete mapping" };
     }
 
-    revalidatePath('/dashboard/sanitization');
+    revalidatePath("/dashboard/sanitization");
 
     return { success: true };
   } catch (error) {
-    console.error('Unexpected error deleting mapping:', error);
-    return { success: false, error: 'An unexpected error occurred' };
+    console.error("Unexpected error deleting mapping:", error);
+    return { success: false, error: "An unexpected error occurred" };
   }
 }
 
 /**
- * Toggle active status of a mapping
+ * Toggles the active state of a mapping.
+ * @param id - Mapping identifier.
+ * @param isActive - Desired active state.
+ * @returns Result indicating whether the status update succeeded.
  */
 export async function toggleMappingActive(
   id: string,
-  isActive: boolean
+  isActive: boolean,
 ): Promise<SaveMappingResult> {
   try {
-    const auth = await requireOrganization('edit');
+    const auth = await requireOrganization("edit");
     if (!auth.userOrg) {
       return { success: false, error: auth.error };
     }
@@ -263,30 +288,30 @@ export async function toggleMappingActive(
     const orgId = auth.userOrg.organizationId;
     const userId = auth.userOrg.userId;
     const { data: updated, error } = await supabaseAdmin
-      .from('job_title_mappings' as any)
+      .from("job_title_mappings")
       .update({
         is_active: isActive,
         updated_at: new Date().toISOString(),
         updated_by: userId,
       })
-      .eq('id', id)
-      .eq('organization_id', orgId)
+      .eq("id", id)
+      .eq("organization_id", orgId)
       .select()
       .single();
 
     if (error) {
-      console.error('Error toggling mapping:', error);
-      return { success: false, error: 'Failed to update mapping status' };
+      console.error("Error toggling mapping:", error);
+      return { success: false, error: "Failed to update mapping status" };
     }
 
-    revalidatePath('/dashboard/sanitization');
+    revalidatePath("/dashboard/sanitization");
 
     return {
       success: true,
-      mapping: updated as unknown as JobTitleMapping,
+      mapping: updated as JobTitleMapping,
     };
   } catch (error) {
-    console.error('Unexpected error toggling mapping:', error);
-    return { success: false, error: 'An unexpected error occurred' };
+    console.error("Unexpected error toggling mapping:", error);
+    return { success: false, error: "An unexpected error occurred" };
   }
 }

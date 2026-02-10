@@ -1,7 +1,19 @@
+/**
+ * @module app/api/audit/leads/route
+ * Captures audit lead emails submitted after audit completion.
+ */
+
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod/v4";
+import { z } from "zod";
+
 import { logAuditRequest } from "@/lib/audit/audit-logger";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
+import {
+  apiErrorResponse,
+  apiSuccessResponse,
+  type ApiErrorResponse,
+} from "@/lib/utils/api-response";
 import { validateCsrf } from "@/lib/utils/csrf";
 
 const CONSUMER_DOMAINS = new Set([
@@ -20,115 +32,142 @@ const CONSUMER_DOMAINS = new Set([
   "live.com",
 ]);
 
+const AUDIT_LEADS_RESOURCE = "api.audit.leads";
+
 const leadSchema = z.object({
-  email: z.email(),
+  email: z.string().email(),
   companySlug: z.string().optional(),
   score: z.number().int().optional(),
 });
 
-export async function POST(request: NextRequest) {
+interface AuditLeadSuccessResponse {
+  success: true;
+}
+
+/**
+ * Stores a lead capture submission for the audit funnel.
+ * @param request - The incoming lead capture request.
+ * @returns A success payload or a standardized error response.
+ */
+export async function POST(
+  request: NextRequest,
+): Promise<NextResponse<AuditLeadSuccessResponse | ApiErrorResponse>> {
   const actor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
 
-  // CSRF check
-  if (!validateCsrf(request)) {
-    void logAuditRequest({
-      actor,
-      result: "denied",
-      resource: "api.audit.leads",
-      metadata: { reason: "csrf_failed" },
-    });
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
-
-  let body: unknown;
   try {
-    body = await request.json();
-  } catch {
-    void logAuditRequest({
-      actor,
-      result: "failure",
-      resource: "api.audit.leads",
-      metadata: { reason: "invalid_json" },
-    });
-    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
-  }
+    if (!validateCsrf(request)) {
+      void logAuditRequest({
+        actor,
+        result: "denied",
+        resource: AUDIT_LEADS_RESOURCE,
+        metadata: { reason: "csrf_failed" },
+      });
+      return apiErrorResponse({
+        error: API_ERROR_MESSAGE.forbidden,
+        code: API_ERROR_CODE.invalidOrigin,
+        status: 403,
+      });
+    }
 
-  const parsed = leadSchema.safeParse(body);
-  if (!parsed.success) {
-    void logAuditRequest({
-      actor,
-      result: "failure",
-      resource: "api.audit.leads",
-      metadata: { reason: "schema_validation_failed" },
-    });
-    return NextResponse.json(
-      { error: "Please enter a valid email address" },
-      { status: 400 }
-    );
-  }
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      void logAuditRequest({
+        actor,
+        result: "failure",
+        resource: AUDIT_LEADS_RESOURCE,
+        metadata: { reason: "invalid_json" },
+      });
+      return apiErrorResponse({
+        error: "Invalid JSON",
+        code: API_ERROR_CODE.invalidJson,
+        status: 400,
+      });
+    }
 
-  const { email, companySlug, score } = parsed.data;
-  const emailDomain = email.split("@")[1]?.toLowerCase();
+    const parsed = leadSchema.safeParse(body);
+    if (!parsed.success) {
+      void logAuditRequest({
+        actor,
+        result: "failure",
+        resource: AUDIT_LEADS_RESOURCE,
+        metadata: { reason: "schema_validation_failed" },
+      });
+      return apiErrorResponse({
+        error: "Please enter a valid email address",
+        code: API_ERROR_CODE.invalidPayload,
+        status: 400,
+      });
+    }
 
-  if (!emailDomain || CONSUMER_DOMAINS.has(emailDomain)) {
-    void logAuditRequest({
-      actor,
-      result: "failure",
-      resource: "api.audit.leads",
-      metadata: {
-        reason: "consumer_email_domain",
-        email_domain: emailDomain ?? null,
-      },
-    });
-    return NextResponse.json(
-      { error: "Please use your work email address" },
-      { status: 400 }
-    );
-  }
+    const { email, companySlug, score } = parsed.data;
+    const emailDomain = email.split("@")[1]?.toLowerCase();
 
-  // Insert into Supabase — gracefully handle if table doesn't exist yet
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { error: dbError } = await (supabaseAdmin as any)
-      .from("audit_leads")
-      .insert({
+    if (!emailDomain || CONSUMER_DOMAINS.has(emailDomain)) {
+      void logAuditRequest({
+        actor,
+        result: "failure",
+        resource: AUDIT_LEADS_RESOURCE,
+        metadata: {
+          reason: "consumer_email_domain",
+          email_domain: emailDomain ?? null,
+        },
+      });
+      return apiErrorResponse({
+        error: "Please use your work email address",
+        code: API_ERROR_CODE.invalidPayload,
+        status: 400,
+      });
+    }
+
+    try {
+      const { error: dbError } = await supabaseAdmin.from("audit_leads").insert({
         email,
         email_domain: emailDomain,
         company_slug: companySlug ?? null,
         score: score ?? null,
       });
 
-    if (dbError) {
-      console.error("[audit/leads] Supabase insert error:", dbError.message);
+      if (dbError) {
+        console.error("[audit/leads] Supabase insert error:", dbError.message);
+        void logAuditRequest({
+          actor,
+          result: "failure",
+          resource: AUDIT_LEADS_RESOURCE,
+          metadata: { reason: "db_insert_error", db_error: dbError.message },
+        });
+        // Keep success to avoid interrupting funnel UX.
+      }
+    } catch (error) {
+      console.error("[audit/leads] Unexpected error:", error);
       void logAuditRequest({
         actor,
         result: "failure",
-        resource: "api.audit.leads",
-        metadata: { reason: "db_insert_error", db_error: dbError.message },
+        resource: AUDIT_LEADS_RESOURCE,
+        metadata: { reason: "unexpected_error" },
       });
-      // Still return success so we don't break the UX flow
+      // Keep success to avoid interrupting funnel UX.
     }
-  } catch (err) {
-    console.error("[audit/leads] Unexpected error:", err);
+
     void logAuditRequest({
       actor,
-      result: "failure",
-      resource: "api.audit.leads",
-      metadata: { reason: "unexpected_error" },
+      result: "success",
+      resource: AUDIT_LEADS_RESOURCE,
+      metadata: {
+        company_slug: companySlug ?? null,
+        score: score ?? null,
+        email_domain: emailDomain,
+      },
     });
-    // Still return success
+
+    return apiSuccessResponse<AuditLeadSuccessResponse>({ success: true });
+  } catch (error) {
+    console.error("[audit/leads] Route error:", error);
+    return apiErrorResponse({
+      error: API_ERROR_MESSAGE.internal,
+      code: API_ERROR_CODE.internal,
+      status: 500,
+    });
   }
-
-  void logAuditRequest({
-    actor,
-    result: "success",
-    resource: "api.audit.leads",
-    metadata: {
-      company_slug: companySlug ?? null,
-      score: score ?? null,
-      email_domain: emailDomain,
-    },
-  });
-
-  return NextResponse.json({ success: true });
 }

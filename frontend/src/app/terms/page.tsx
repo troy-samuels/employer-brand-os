@@ -1,11 +1,23 @@
+/**
+ * @module app/terms/page
+ * Module implementation for page.tsx.
+ */
+
 import type { Metadata } from 'next';
 
+/**
+ * Exposes exported value(s): metadata.
+ */
 export const metadata: Metadata = {
   title: 'Terms of Service — Rankwell',
   description:
     'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
 };
 
+/**
+ * Executes TermsPage.
+ * @returns The resulting value.
+ */
 export default function TermsPage() {
   const lastUpdated = '9 February 2026';
 

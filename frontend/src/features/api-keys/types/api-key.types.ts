@@ -1,4 +1,9 @@
 /**
+ * @module features/api-keys/types/api-key.types
+ * Module implementation for api-key.types.ts.
+ */
+
+/**
  * API Key Management Types
  * Type definitions for Rankwell API key generation and management
  */
@@ -17,6 +22,9 @@ export interface ApiKeyRecord {
   graceExpiresAt: string | null;
 }
 
+/**
+ * Defines the GenerateKeyResult contract.
+ */
 export interface GenerateKeyResult {
   success: boolean;
   error?: string;
@@ -28,6 +36,9 @@ export interface GenerateKeyResult {
   keyId?: string;
 }
 
+/**
+ * Defines the GetApiKeyResult contract.
+ */
 export interface GetApiKeyResult {
   success: boolean;
   error?: string;
@@ -39,15 +50,24 @@ export interface GetApiKeyResult {
   key?: ApiKeyRecord;
 }
 
+/**
+ * Defines the RevokeKeyResult contract.
+ */
 export interface RevokeKeyResult {
   success: boolean;
   error?: string;
 }
 
+/**
+ * Defines the ApiKeyScope contract.
+ */
 export type ApiKeyScope =
   | 'pixel:read'
   | 'pixel:write'
   | 'facts:read'
   | 'facts:write';
 
+/**
+ * Exposes exported value(s): DEFAULT_SCOPES.
+ */
 export const DEFAULT_SCOPES: ApiKeyScope[] = ['pixel:read', 'facts:read'];

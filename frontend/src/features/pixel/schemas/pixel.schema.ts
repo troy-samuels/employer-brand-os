@@ -1,4 +1,9 @@
 /**
+ * @module features/pixel/schemas/pixel.schema
+ * Module implementation for pixel.schema.ts.
+ */
+
+/**
  * Smart Pixel Zod Schemas
  * Runtime validation for pixel API requests and responses
  */
@@ -6,6 +11,9 @@
 import { z } from 'zod';
 
 // API key format: bos_live_xxxx or bos_test_xxxx (16+ chars)
+/**
+ * Exposes exported value(s): apiKeySchema.
+ */
 export const apiKeySchema = z
   .string()
   .min(16, 'API key must be at least 16 characters')
@@ -15,12 +23,18 @@ export const apiKeySchema = z
   );
 
 // Query parameters for pixel facts endpoint
+/**
+ * Exposes exported value(s): pixelFactsQuerySchema.
+ */
 export const pixelFactsQuerySchema = z.object({
   key: apiKeySchema,
   location: z.string().uuid().optional(),
 });
 
 // Domain pattern (supports wildcards like *.example.com)
+/**
+ * Exposes exported value(s): domainPatternSchema.
+ */
 export const domainPatternSchema = z
   .string()
   .regex(
@@ -29,6 +43,9 @@ export const domainPatternSchema = z
   );
 
 // Pixel error response
+/**
+ * Exposes exported value(s): pixelErrorSchema.
+ */
 export const pixelErrorSchema = z.object({
   error: z.enum(['invalid_key', 'domain_not_allowed', 'rate_limited', 'internal_error']),
   message: z.string(),
@@ -36,9 +53,15 @@ export const pixelErrorSchema = z.object({
 });
 
 // Fact value - flexible JSONB
+/**
+ * Exposes exported value(s): factValueSchema.
+ */
 export const factValueSchema = z.record(z.string(), z.unknown());
 
 // Employer fact from database
+/**
+ * Exposes exported value(s): employerFactSchema.
+ */
 export const employerFactSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
@@ -50,6 +73,9 @@ export const employerFactSchema = z.object({
 });
 
 // Organization data
+/**
+ * Exposes exported value(s): organizationSchema.
+ */
 export const organizationSchema = z.object({
   id: z.string().uuid(),
   name: z.string(),
@@ -59,6 +85,9 @@ export const organizationSchema = z.object({
 });
 
 // Smart pixel from database
+/**
+ * Exposes exported value(s): smartPixelSchema.
+ */
 export const smartPixelSchema = z.object({
   id: z.string().uuid(),
   organisation_id: z.string().uuid(),
@@ -70,9 +99,27 @@ export const smartPixelSchema = z.object({
 });
 
 // Type exports from schemas
+/**
+ * Defines the ApiKeyInput contract.
+ */
 export type ApiKeyInput = z.infer<typeof apiKeySchema>;
+/**
+ * Defines the PixelFactsQuery contract.
+ */
 export type PixelFactsQuery = z.infer<typeof pixelFactsQuerySchema>;
+/**
+ * Defines the PixelError contract.
+ */
 export type PixelError = z.infer<typeof pixelErrorSchema>;
+/**
+ * Defines the EmployerFactRow contract.
+ */
 export type EmployerFactRow = z.infer<typeof employerFactSchema>;
+/**
+ * Defines the OrganizationRow contract.
+ */
 export type OrganizationRow = z.infer<typeof organizationSchema>;
+/**
+ * Defines the SmartPixelRow contract.
+ */
 export type SmartPixelRow = z.infer<typeof smartPixelSchema>;

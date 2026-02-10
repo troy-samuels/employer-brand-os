@@ -1,8 +1,21 @@
+/**
+ * @module lib/utils/validation
+ * Module implementation for validation.ts.
+ */
+
 import { z } from "zod";
 
+/**
+ * Exposes exported value(s): domainRegex.
+ */
 export const domainRegex =
   /^(?=.{1,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
 
+/**
+ * Executes normalizeDomain.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export function normalizeDomain(input: string) {
   const trimmed = input.trim();
   if (!trimmed) return "";
@@ -22,6 +35,9 @@ export function normalizeDomain(input: string) {
   }
 }
 
+/**
+ * Exposes exported value(s): auditFormSchema.
+ */
 export const auditFormSchema = z.object({
   companyDomain: z
     .string()
@@ -33,4 +49,7 @@ export const auditFormSchema = z.object({
   industry: z.string().optional(),
 });
 
+/**
+ * Defines the AuditFormValues contract.
+ */
 export type AuditFormValues = z.infer<typeof auditFormSchema>;

@@ -1,3 +1,8 @@
+/**
+ * @module features/facts/actions/save-facts
+ * Module implementation for save-facts.ts.
+ */
+
 'use server';
 
 import { revalidatePath } from 'next/cache';
@@ -8,6 +13,11 @@ import type { CompanyFactsFormData } from '../schemas/facts.schema';
 import type { SaveFactsResult } from '../types/facts.types';
 import type { Json } from '@/types/database.types';
 
+/**
+ * Executes saveCompanyFacts.
+ * @param data - data input.
+ * @returns The resulting value.
+ */
 export async function saveCompanyFacts(
   data: CompanyFactsFormData
 ): Promise<SaveFactsResult> {
@@ -280,6 +290,10 @@ async function getOrCreateDefinition(params: {
   return created?.id || '';
 }
 
+/**
+ * Executes getCompanyFacts.
+ * @returns The resulting value.
+ */
 export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
   try {
     // Get authenticated user's organization

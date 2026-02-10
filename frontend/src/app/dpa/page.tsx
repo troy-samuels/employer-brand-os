@@ -1,11 +1,23 @@
+/**
+ * @module app/dpa/page
+ * Module implementation for page.tsx.
+ */
+
 import type { Metadata } from 'next';
 
+/**
+ * Exposes exported value(s): metadata.
+ */
 export const metadata: Metadata = {
   title: 'Data Processing Agreement — Rankwell',
   description:
     'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
 };
 
+/**
+ * Executes DpaPage.
+ * @returns The resulting value.
+ */
 export default function DpaPage() {
   const lastUpdated = '9 February 2026';
 

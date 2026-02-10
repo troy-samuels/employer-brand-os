@@ -1,3 +1,8 @@
+/**
+ * @module __tests__/api/audit/route.test
+ * Module implementation for route.test.ts.
+ */
+
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { NextRequest } from "next/server";
 

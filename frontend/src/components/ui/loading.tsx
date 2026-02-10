@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/loading
+ * Module implementation for loading.tsx.
+ */
+
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
@@ -7,6 +12,11 @@ interface LoadingProps {
   className?: string;
 }
 
+/**
+ * Executes Loading.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function Loading({ label = "Loading...", className }: LoadingProps) {
   return (
     <div className={cn("flex items-center gap-3 text-sm text-gray-600", className)}>

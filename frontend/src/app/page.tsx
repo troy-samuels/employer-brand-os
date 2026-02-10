@@ -1,3 +1,8 @@
+/**
+ * @module app/page
+ * Module implementation for page.tsx.
+ */
+
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +19,10 @@ import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { useAudit } from "@/lib/hooks/use-audit";
 
+/**
+ * Executes Home.
+ * @returns The resulting value.
+ */
 export default function Home() {
   const { state, isLoading, result, error, runAudit, reset } = useAudit();
 

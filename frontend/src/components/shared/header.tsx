@@ -1,5 +1,14 @@
+/**
+ * @module components/shared/header
+ * Module implementation for header.tsx.
+ */
+
 import Link from "next/link";
 
+/**
+ * Executes Header.
+ * @returns The resulting value.
+ */
 export function Header() {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-neutral-200 bg-white/90 backdrop-blur-sm">

@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/badge
+ * Module implementation for badge.tsx.
+ */
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -21,10 +26,18 @@ const badgeVariants = cva(
   }
 );
 
+/**
+ * Defines the BadgeProps contract.
+ */
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLSpanElement>,
     VariantProps<typeof badgeVariants> {}
 
+/**
+ * Executes Badge.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function Badge({ className, variant, ...props }: BadgeProps) {
   return <span className={cn(badgeVariants({ variant, className }))} {...props} />;
 }

@@ -1,4 +1,5 @@
 /**
+ * @module app/api/pixel/v1/facts/route
  * Smart Pixel Facts API Endpoint
  * GET /api/pixel/v1/facts
  *
@@ -13,45 +14,55 @@
  * 5. Audit logging - All requests logged for forensics
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { validateApiKey } from '@/features/pixel/lib/validate-key';
-import { validateDomain } from '@/features/pixel/lib/validate-domain';
-import { generateJsonLd } from '@/features/pixel/lib/generate-jsonld';
-import { verifyPixelRequestSignature } from '@/lib/pixel/request-signing';
+import { NextRequest } from "next/server";
+
 import {
-  buildSuccessHeaders,
   buildErrorHeaders,
   buildPreflightResponse,
+  buildSuccessHeaders,
 } from '@/features/pixel/lib/cors';
+import { generateJsonLd } from "@/features/pixel/lib/generate-jsonld";
+import { validateApiKey } from "@/features/pixel/lib/validate-key";
+import { validateDomain } from "@/features/pixel/lib/validate-domain";
 import { pixelFactsQuerySchema } from '@/features/pixel/schemas/pixel.schema';
-import type { PixelErrorResponse } from '@/features/pixel/types/pixel.types';
+import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
+import { API_ERROR_CODE } from "@/lib/utils/api-errors";
+import { type ApiErrorResponse } from "@/lib/utils/api-response";
+
+const PIXEL_FACTS_ERROR_CODE = {
+  domainNotAllowed: "domain_not_allowed",
+  invalidKey: "invalid_key",
+} as const;
 
 /**
- * Handle OPTIONS preflight requests
- * Required for CORS to work with cross-origin requests
+ * Handles CORS preflight checks for the facts endpoint.
+ * @param request - The incoming preflight request.
+ * @returns A preflight response with CORS headers when origin is provided.
  */
 export async function OPTIONS(request: NextRequest): Promise<Response> {
-  const origin = request.headers.get('origin');
+  const origin = request.headers.get("origin");
 
-  // For preflight, we allow the request if origin is provided
-  // The actual validation happens on the GET request
-  if (origin) {
-    return buildPreflightResponse(origin);
+  try {
+    if (origin) {
+      return buildPreflightResponse(origin);
+    }
+
+    return new Response(null, { status: 204 });
+  } catch (error) {
+    console.error("[PIXEL] OPTIONS preflight error:", error);
+    return errorResponse(
+      API_ERROR_CODE.internal,
+      "An error occurred processing the request",
+      500,
+      origin,
+    );
   }
-
-  return new Response(null, { status: 204 });
 }
 
 /**
- * Handle GET requests for employer facts
- *
- * Query Parameters:
- * - key: API key (required) - format: bos_live_xxx or bos_test_xxx
- * - location: Location ID (optional) - UUID for multi-location filtering
- *
- * Headers checked:
- * - Origin: Primary domain validation
- * - Referer: Fallback domain validation
+ * Returns verified employer facts as JSON-LD.
+ * @param request - The incoming facts request.
+ * @returns A JSON-LD payload or a standardized error response.
  */
 export async function GET(request: NextRequest): Promise<Response> {
   const startTime = Date.now();
@@ -76,7 +87,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (!queryResult.success) {
       console.error('[PIXEL] Validation error:', queryResult.error.format());
       return errorResponse(
-        'invalid_key',
+        PIXEL_FACTS_ERROR_CODE.invalidKey,
         'Missing or invalid API key parameter',
         400,
         origin
@@ -93,7 +104,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     });
     if (!validatedKey) {
       return errorResponse(
-        'invalid_key',
+        PIXEL_FACTS_ERROR_CODE.invalidKey,
         'API key not found or inactive',
         401,
         origin
@@ -105,8 +116,8 @@ export async function GET(request: NextRequest): Promise<Response> {
     if (!signatureResult.ok) {
       const errorCode =
         signatureResult.error === 'replay_detected'
-          ? 'replay_detected'
-          : 'invalid_signature';
+          ? API_ERROR_CODE.replayDetected
+          : API_ERROR_CODE.invalidSignature;
 
       return errorResponse(
         errorCode,
@@ -130,7 +141,7 @@ export async function GET(request: NextRequest): Promise<Response> {
       );
 
       return errorResponse(
-        'domain_not_allowed',
+        PIXEL_FACTS_ERROR_CODE.domainNotAllowed,
         'Origin not in allowed domains',
         403,
         origin
@@ -167,7 +178,7 @@ export async function GET(request: NextRequest): Promise<Response> {
     console.error('[PIXEL] Error generating JSON-LD:', error);
 
     return errorResponse(
-      'internal_error',
+      API_ERROR_CODE.internal,
       'An error occurred processing the request',
       500,
       origin
@@ -179,16 +190,17 @@ export async function GET(request: NextRequest): Promise<Response> {
  * Build a standardized error response
  */
 function errorResponse(
-  errorCode: PixelErrorResponse['error'],
+  errorCode: string,
   message: string,
   status: number,
   origin: string | null
 ): Response {
   const headers = buildErrorHeaders(origin || undefined);
 
-  const body: PixelErrorResponse = {
-    error: errorCode,
-    message,
+  const body: ApiErrorResponse = {
+    error: message,
+    code: errorCode,
+    status,
   };
 
   return new Response(JSON.stringify(body), {

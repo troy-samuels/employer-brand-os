@@ -1,11 +1,23 @@
+/**
+ * @module app/privacy/page
+ * Module implementation for page.tsx.
+ */
+
 import type { Metadata } from 'next';
 
+/**
+ * Exposes exported value(s): metadata.
+ */
 export const metadata: Metadata = {
   title: 'Privacy Policy — Rankwell',
   description:
     'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
 };
 
+/**
+ * Executes PrivacyPage.
+ * @returns The resulting value.
+ */
 export default function PrivacyPage() {
   const lastUpdated = '9 February 2026';
 

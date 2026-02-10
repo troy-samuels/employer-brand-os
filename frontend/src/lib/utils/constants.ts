@@ -1,7 +1,15 @@
+/**
+ * @module lib/utils/constants
+ * Module implementation for constants.ts.
+ */
+
 import type { AuditResult } from "@/types/audit";
 import type { AnalyticsOverview } from "@/types/analytics";
 import type { JobPosting } from "@/types/jobs";
 
+/**
+ * Exposes exported value(s): SAMPLE_AUDIT_RESULT.
+ */
 export const SAMPLE_AUDIT_RESULT: AuditResult = {
   id: "audit_demo_001",
   company_domain: "acme.com",
@@ -78,6 +86,9 @@ export const SAMPLE_AUDIT_RESULT: AuditResult = {
   created_at: new Date().toISOString(),
 };
 
+/**
+ * Exposes exported value(s): SAMPLE_JOBS.
+ */
 export const SAMPLE_JOBS: JobPosting[] = [
   {
     id: "job_001",
@@ -122,6 +133,9 @@ export const SAMPLE_JOBS: JobPosting[] = [
   },
 ];
 
+/**
+ * Exposes exported value(s): SAMPLE_ANALYTICS.
+ */
 export const SAMPLE_ANALYTICS: AnalyticsOverview = {
   metrics: [
     { label: "AI Visibility Score", value: "7.1/10", change: "+0.8" },

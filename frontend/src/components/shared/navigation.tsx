@@ -1,3 +1,8 @@
+/**
+ * @module components/shared/navigation
+ * Module implementation for navigation.tsx.
+ */
+
 import Link from "next/link";
 
 const navItems = [
@@ -7,6 +12,10 @@ const navItems = [
   { label: "Audit", href: "#audit" },
 ];
 
+/**
+ * Executes Navigation.
+ * @returns The resulting value.
+ */
 export function Navigation() {
   return (
     <nav className="hidden items-center gap-8 text-sm text-gray-600 md:flex">

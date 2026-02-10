@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/audit-logger
+ * Records audit and security events to persistent storage.
+ */
+
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import type { Json } from "@/types/database.types";
 
@@ -23,12 +28,14 @@ function toJson(value: Record<string, unknown> | undefined): Json {
 
 /**
  * Write an audit event. Logging failures are intentionally non-fatal.
+ * @param input - Structured audit event details.
+ * @returns A promise that resolves when the write attempt completes.
  */
 export async function logAuditEvent(input: AuditLogInput): Promise<void> {
   const timestamp = new Date().toISOString();
 
   try {
-    await (supabaseAdmin as any).from("audit_logs").insert({
+    await supabaseAdmin.from("audit_logs").insert({
       created_at: timestamp,
       timestamp,
       action: input.action,
@@ -49,6 +56,11 @@ export async function logAuditEvent(input: AuditLogInput): Promise<void> {
   }
 }
 
+/**
+ * Records API key validation outcomes in the audit trail.
+ * @param input - Validation metadata and result.
+ * @returns A promise that resolves when logging has completed.
+ */
 export async function logApiKeyValidation(input: {
   apiKeyPrefix: string;
   result: AuditResult;
@@ -68,6 +80,11 @@ export async function logApiKeyValidation(input: {
   });
 }
 
+/**
+ * Records inbound audit endpoint requests for security monitoring.
+ * @param input - Request actor, result, and metadata.
+ * @returns A promise that resolves when logging has completed.
+ */
 export async function logAuditRequest(input: {
   actor: string;
   result: AuditResult;
@@ -84,6 +101,11 @@ export async function logAuditRequest(input: {
   });
 }
 
+/**
+ * Records Smart Pixel script load events.
+ * @param input - Pixel load details.
+ * @returns A promise that resolves when logging has completed.
+ */
 export async function logPixelLoad(input: {
   actor: string;
   result: AuditResult;
@@ -99,6 +121,11 @@ export async function logPixelLoad(input: {
   });
 }
 
+/**
+ * Records privileged admin operations for traceability.
+ * @param input - Admin action metadata.
+ * @returns A promise that resolves when logging has completed.
+ */
 export async function logAdminAction(input: {
   actor: string;
   action: string;

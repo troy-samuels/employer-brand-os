@@ -1,3 +1,8 @@
+/**
+ * @module app/dashboard/pixel/page
+ * Module implementation for page.tsx.
+ */
+
 "use client";
 
 import { PixelStatus } from "@/components/dashboard/pixel-status";
@@ -5,6 +10,10 @@ import { Card } from "@/components/ui/card";
 import { Loading } from "@/components/ui/loading";
 import { usePixel } from "@/lib/hooks/use-pixel";
 
+/**
+ * Executes PixelPage.
+ * @returns The resulting value.
+ */
 export default function PixelPage() {
   const { status, isLoading } = usePixel();
 

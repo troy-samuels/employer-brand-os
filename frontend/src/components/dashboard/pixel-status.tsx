@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/pixel-status
+ * Module implementation for pixel-status.tsx.
+ */
+
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 
@@ -8,6 +13,11 @@ interface PixelStatusProps {
   jobsInjected: number;
 }
 
+/**
+ * Executes PixelStatus.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function PixelStatus({ status, lastSeen, schemaVersion, jobsInjected }: PixelStatusProps) {
   return (
     <Card variant="bordered" padding="lg">

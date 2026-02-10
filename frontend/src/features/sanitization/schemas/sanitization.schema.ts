@@ -1,3 +1,8 @@
+/**
+ * @module features/sanitization/schemas/sanitization.schema
+ * Module implementation for sanitization.schema.ts.
+ */
+
 import { z } from 'zod';
 
 /**
@@ -38,6 +43,9 @@ export const jobTitleMappingSchema = z.object({
     .default(true),
 });
 
+/**
+ * Defines the JobTitleMappingFormData contract.
+ */
 export type JobTitleMappingFormData = z.input<typeof jobTitleMappingSchema>;
 
 /**
@@ -48,6 +56,9 @@ export const sanitizeRequestSchema = z.object({
   code: z.string().min(1, 'Internal code is required'),
 });
 
+/**
+ * Defines the SanitizeRequestData contract.
+ */
 export type SanitizeRequestData = z.infer<typeof sanitizeRequestSchema>;
 
 /**

@@ -1,3 +1,8 @@
+/**
+ * @module components/landing/features
+ * Module implementation for features.tsx.
+ */
+
 import { Eye, ShieldCheck, BarChart3 } from "lucide-react";
 
 const features = [
@@ -21,6 +26,10 @@ const features = [
   },
 ];
 
+/**
+ * Executes Features.
+ * @returns The resulting value.
+ */
 export default function Features() {
   return (
     <section id="how-it-works" className="py-16 lg:py-20 bg-white">

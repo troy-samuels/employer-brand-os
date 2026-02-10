@@ -1,7 +1,18 @@
+/**
+ * @module lib/pixel/script-artifact
+ * Module implementation for script-artifact.ts.
+ */
+
 import { createHash } from "node:crypto";
 
+/**
+ * Exposes exported value(s): PIXEL_SCRIPT_VERSION.
+ */
 export const PIXEL_SCRIPT_VERSION = "1.0.0";
 
+/**
+ * Exposes exported value(s): PIXEL_SCRIPT_BODY.
+ */
 export const PIXEL_SCRIPT_BODY = `(() => {
   const EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
 
@@ -127,5 +138,11 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 const sriDigest = createHash("sha384").update(PIXEL_SCRIPT_BODY).digest("base64");
 const etagDigest = createHash("sha256").update(PIXEL_SCRIPT_BODY).digest("hex");
 
+/**
+ * Exposes exported value(s): PIXEL_SCRIPT_SRI.
+ */
 export const PIXEL_SCRIPT_SRI = `sha384-${sriDigest}`;
+/**
+ * Exposes exported value(s): PIXEL_SCRIPT_ETAG.
+ */
 export const PIXEL_SCRIPT_ETAG = `"pixel-${PIXEL_SCRIPT_VERSION}-${etagDigest.slice(0, 24)}"`;

@@ -1,6 +1,15 @@
+/**
+ * @module app/dashboard/page
+ * Module implementation for page.tsx.
+ */
+
 import { PixelStatus } from "@/components/dashboard/pixel-status";
 import { Card } from "@/components/ui/card";
 
+/**
+ * Executes DashboardPage.
+ * @returns The resulting value.
+ */
 export default function DashboardPage() {
   return (
     <div className="space-y-8">

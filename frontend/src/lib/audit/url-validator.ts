@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/url-validator
+ * Module implementation for url-validator.ts.
+ */
+
 import * as dns from "node:dns/promises";
 import { isIP } from "node:net";
 
@@ -37,6 +42,9 @@ type UrlValidationFailureReason =
   | "dns_lookup_failed"
   | "private_network";
 
+/**
+ * Defines the UrlValidationResult contract.
+ */
 export type UrlValidationResult =
   | {
       ok: true;
@@ -214,6 +222,11 @@ function isPrivateOrReservedIPv6(address: string): boolean {
   return false;
 }
 
+/**
+ * Executes isPrivateOrReservedIp.
+ * @param address - address input.
+ * @returns The resulting value.
+ */
 export function isPrivateOrReservedIp(address: string): boolean {
   const normalized = address.trim().toLowerCase().split("%")[0] ?? address.trim().toLowerCase();
   const family = isIP(normalized);
@@ -265,6 +278,11 @@ async function resolveHostname(hostname: string): Promise<string[] | null> {
   }
 }
 
+/**
+ * Executes validateUrl.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export async function validateUrl(input: string): Promise<UrlValidationResult> {
   const parsed = parseUrlCandidate(input);
   if (!parsed) {
@@ -299,6 +317,11 @@ export async function validateUrl(input: string): Promise<UrlValidationResult> {
   };
 }
 
+/**
+ * Executes isLikelyDomainOrUrl.
+ * @param input - input input.
+ * @returns The resulting value.
+ */
 export function isLikelyDomainOrUrl(input: string): boolean {
   const parsed = parseUrlCandidate(input);
   if (!parsed) {

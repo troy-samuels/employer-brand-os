@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/website-checks
+ * Module implementation for website-checks.ts.
+ */
+
 import { validateUrl } from "@/lib/audit/url-validator";
 
 const FETCH_TIMEOUT_MS = 5000;
@@ -244,6 +249,9 @@ type SalaryDetectionResult = {
   detectedCurrency: CurrencyCode;
 };
 
+/**
+ * Defines the CurrencyCode contract.
+ */
 export type CurrencyCode =
   | "GBP"
   | "USD"
@@ -275,8 +283,14 @@ export type CurrencyCode =
   | "BDT"
   | null;
 
+/**
+ * Defines the AuditStatus contract.
+ */
 export type AuditStatus = "success" | "no_website" | "unreachable" | "empty";
 
+/**
+ * Defines the AtsName contract.
+ */
 export type AtsName =
   | "Greenhouse"
   | "Lever"
@@ -301,6 +315,9 @@ export type AtsName =
   | "Comeet"
   | null;
 
+/**
+ * Exposes exported value(s): ATS_HOST_MAP.
+ */
 export const ATS_HOST_MAP: Record<string, AtsName> = {
   "boards.greenhouse.io": "Greenhouse",
   "greenhouse.io": "Greenhouse",
@@ -330,6 +347,9 @@ export const ATS_HOST_MAP: Record<string, AtsName> = {
   "comeet.com": "Comeet",
 };
 
+/**
+ * Defines the WebsiteCheckResult contract.
+ */
 export type WebsiteCheckResult = {
   domain: string;
   companyName: string;
@@ -850,6 +870,11 @@ function evaluateBotAccess(groups: RobotsGroup[], botAgents: readonly string[]):
   return bestMatch.type === "allow" ? "allow" : "block";
 }
 
+/**
+ * Executes parseRobotsPolicy.
+ * @param robotsTxt - robotsTxt input.
+ * @returns The resulting value.
+ */
 export function parseRobotsPolicy(robotsTxt: string): RobotsPolicyParseResult {
   const groups = parseRobotsGroups(robotsTxt);
 
@@ -1157,6 +1182,12 @@ function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number): nu
   return 0;
 }
 
+/**
+ * Executes runWebsiteChecks.
+ * @param domain - domain input.
+ * @param companyName - companyName input.
+ * @returns The resulting value.
+ */
 export async function runWebsiteChecks(
   domain: string,
   companyName: string

@@ -1,6 +1,14 @@
+/**
+ * @module app/how-we-score/page
+ * Module implementation for page.tsx.
+ */
+
 import type { Metadata } from "next";
 import Link from "next/link";
 
+/**
+ * Exposes exported value(s): metadata.
+ */
 export const metadata: Metadata = {
   title: "How We Score Your AI Visibility | Rankwell",
   description:
@@ -40,6 +48,10 @@ const CHECKS = [
   },
 ];
 
+/**
+ * Executes HowWeScorePage.
+ * @returns The resulting value.
+ */
 export default function HowWeScorePage() {
   return (
     <main className="min-h-screen bg-neutral-50">

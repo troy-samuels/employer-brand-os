@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/card
+ * Module implementation for card.tsx.
+ */
+
 import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
@@ -23,6 +28,9 @@ const cardVariants = cva("rounded-lg bg-white", {
   },
 });
 
+/**
+ * Defines the CardProps contract.
+ */
 export interface CardProps
   extends React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof cardVariants> {}

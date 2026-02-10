@@ -1,3 +1,8 @@
+/**
+ * @module components/landing/pricing
+ * Module implementation for pricing.tsx.
+ */
+
 import Link from "next/link";
 import { Check } from "lucide-react";
 
@@ -51,6 +56,10 @@ const plans = [
   },
 ];
 
+/**
+ * Executes Pricing.
+ * @returns The resulting value.
+ */
 export default function Pricing() {
   return (
     <section id="pricing" className="py-16 lg:py-20 bg-neutral-50">

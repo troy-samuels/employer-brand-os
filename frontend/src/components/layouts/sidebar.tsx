@@ -1,3 +1,8 @@
+/**
+ * @module components/layouts/sidebar
+ * Module implementation for sidebar.tsx.
+ */
+
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -34,6 +39,10 @@ const navigation = [
   },
 ];
 
+/**
+ * Executes Sidebar.
+ * @returns The resulting value.
+ */
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();

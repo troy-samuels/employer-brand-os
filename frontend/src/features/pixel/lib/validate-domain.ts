@@ -1,4 +1,9 @@
 /**
+ * @module features/pixel/lib/validate-domain
+ * Module implementation for validate-domain.ts.
+ */
+
+/**
  * Domain Validation
  * Validates request origin against allowed domains with wildcard support
  *

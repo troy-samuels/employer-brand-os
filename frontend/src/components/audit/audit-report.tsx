@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/audit-report
+ * Module implementation for audit-report.tsx.
+ */
+
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { AuditResult } from "@/types/audit";
@@ -6,6 +11,11 @@ interface AuditReportProps {
   result: AuditResult;
 }
 
+/**
+ * Executes AuditReport.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function AuditReport({ result }: AuditReportProps) {
   return (
     <Card variant="bordered" padding="lg">

@@ -1,3 +1,8 @@
+/**
+ * @module components/audit/audit-progress
+ * Displays animated progress feedback while an audit request is running.
+ */
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -18,15 +23,13 @@ interface AuditProgressProps {
   isRunning: boolean;
 }
 
+/**
+ * Shows audit scan progress text and completion summary.
+ * @param props - Component props containing current run state and result.
+ * @returns The progress UI for in-flight or completed audits.
+ */
 export function AuditProgress({ result, isRunning }: AuditProgressProps) {
-  const [revealedCount, setRevealedCount] = useState(0);
   const [activeLabel, setActiveLabel] = useState(CHECK_LABELS[0]?.label ?? "");
-
-  useEffect(() => {
-    if (!result) {
-      setRevealedCount(0);
-    }
-  }, [result]);
 
   useEffect(() => {
     if (!isRunning || result) return;
@@ -37,15 +40,6 @@ export function AuditProgress({ result, isRunning }: AuditProgressProps) {
     }, 800);
     return () => clearInterval(timer);
   }, [isRunning, result]);
-
-  useEffect(() => {
-    if (!result) return;
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    for (let i = 1; i <= CHECK_LABELS.length; i++) {
-      timers.push(setTimeout(() => setRevealedCount(i), i * 300));
-    }
-    return () => timers.forEach(clearTimeout);
-  }, [result]);
 
   // Scanning
   if (isRunning && !result) {

@@ -1,4 +1,5 @@
 /**
+ * @module features/pixel/types/pixel.types
  * Smart Pixel Types
  * Core type definitions for the Rankwell Smart Pixel infrastructure
  */
@@ -16,6 +17,9 @@ export interface ValidatedPixelKey {
 }
 
 // Domain validation result
+/**
+ * Defines the DomainValidationResult contract.
+ */
 export interface DomainValidationResult {
   valid: boolean;
   matchedDomain: string | null;
@@ -23,6 +27,9 @@ export interface DomainValidationResult {
 }
 
 // Rate limit check result
+/**
+ * Defines the RateLimitResult contract.
+ */
 export interface RateLimitResult {
   allowed: boolean;
   remaining: number;
@@ -31,6 +38,9 @@ export interface RateLimitResult {
 }
 
 // JSON-LD generation options
+/**
+ * Defines the JsonLdOptions contract.
+ */
 export interface JsonLdOptions {
   organisationId: string;
   locationId?: string;
@@ -38,6 +48,9 @@ export interface JsonLdOptions {
 }
 
 // Employer fact from database
+/**
+ * Defines the EmployerFact contract.
+ */
 export interface EmployerFact {
   id: string;
   name: string;
@@ -49,6 +62,9 @@ export interface EmployerFact {
 }
 
 // Organization data for JSON-LD
+/**
+ * Defines the OrganizationData contract.
+ */
 export interface OrganizationData {
   id: string;
   name: string;
@@ -58,19 +74,27 @@ export interface OrganizationData {
 }
 
 // Pixel API error response
+/**
+ * Defines the PixelErrorResponse contract.
+ */
 export interface PixelErrorResponse {
-  error:
-    | 'invalid_key'
-    | 'domain_not_allowed'
-    | 'rate_limited'
-    | 'invalid_signature'
-    | 'replay_detected'
-    | 'internal_error';
-  message: string;
+  error: string;
+  code?:
+    | "invalid_key"
+    | "domain_not_allowed"
+    | "rate_limited"
+    | "invalid_signature"
+    | "replay_detected"
+    | "internal_error"
+    | "missing_code";
+  status: number;
   retryAfter?: number;
 }
 
 // Pixel event for audit logging
+/**
+ * Defines the PixelEvent contract.
+ */
 export interface PixelEvent {
   organisationId: string;
   apiKeyId: string;
@@ -85,6 +109,9 @@ export interface PixelEvent {
 }
 
 // JSON-LD schema.org types
+/**
+ * Defines the JsonLdOrganization contract.
+ */
 export interface JsonLdOrganization {
   '@context': 'https://schema.org';
   '@type': 'Organization';

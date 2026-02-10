@@ -1,4 +1,9 @@
 /**
+ * @module features/pixel/lib/generate-jsonld
+ * Module implementation for generate-jsonld.ts.
+ */
+
+/**
  * JSON-LD Generator
  * Builds schema.org compliant JSON-LD from employer facts
  *

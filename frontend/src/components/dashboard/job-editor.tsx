@@ -1,3 +1,8 @@
+/**
+ * @module components/dashboard/job-editor
+ * Module implementation for job-editor.tsx.
+ */
+
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -21,6 +26,11 @@ interface JobEditorProps {
   onSave: (job: JobPosting) => Promise<void>;
 }
 
+/**
+ * Executes JobEditor.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function JobEditor({ job, isOpen, onClose, onSave }: JobEditorProps) {
   const [formData, setFormData] = useState<JobPosting | null>(null);
   const [isSaving, setIsSaving] = useState(false);

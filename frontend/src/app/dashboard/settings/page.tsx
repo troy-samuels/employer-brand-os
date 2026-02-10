@@ -1,7 +1,16 @@
+/**
+ * @module app/dashboard/settings/page
+ * Module implementation for page.tsx.
+ */
+
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
+/**
+ * Executes SettingsPage.
+ * @returns The resulting value.
+ */
 export default function SettingsPage() {
   return (
     <Card variant="bordered" padding="lg">

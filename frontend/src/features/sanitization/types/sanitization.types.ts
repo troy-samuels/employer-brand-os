@@ -1,4 +1,9 @@
 /**
+ * @module features/sanitization/types/sanitization.types
+ * Module implementation for sanitization.types.ts.
+ */
+
+/**
  * Sanitization Engine Types
  * Part of Layer 1: Infrastructure - ATS Code Translation
  */
@@ -21,6 +26,9 @@ export interface JobTitleMapping {
   updated_by: string | null;
 }
 
+/**
+ * Defines the SanitizationResult contract.
+ */
 export interface SanitizationResult {
   originalCode: string;
   publicTitle: string | null;
@@ -29,17 +37,26 @@ export interface SanitizationResult {
   sanitized: boolean;
 }
 
+/**
+ * Defines the SaveMappingResult contract.
+ */
 export interface SaveMappingResult {
   success: boolean;
   error?: string;
   mapping?: JobTitleMapping;
 }
 
+/**
+ * Defines the DeleteMappingResult contract.
+ */
 export interface DeleteMappingResult {
   success: boolean;
   error?: string;
 }
 
+/**
+ * Defines the BulkImportResult contract.
+ */
 export interface BulkImportResult {
   success: boolean;
   imported: number;
@@ -47,6 +64,9 @@ export interface BulkImportResult {
   errors: string[];
 }
 
+/**
+ * Defines the MappingListResult contract.
+ */
 export interface MappingListResult {
   mappings: JobTitleMapping[];
   total: number;

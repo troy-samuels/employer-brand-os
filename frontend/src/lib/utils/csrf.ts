@@ -1,5 +1,15 @@
+/**
+ * @module lib/utils/csrf
+ * Module implementation for csrf.ts.
+ */
+
 import { type NextRequest } from 'next/server';
 
+/**
+ * Executes validateCsrf.
+ * @param request - request input.
+ * @returns The resulting value.
+ */
 export function validateCsrf(request: NextRequest): boolean {
   const origin = request.headers.get('origin');
   if (!origin) return false;

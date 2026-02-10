@@ -1,3 +1,8 @@
+/**
+ * @module lib/audit/audit-engine
+ * Module implementation for audit-engine.ts.
+ */
+
 import type { AuditResult } from "@/types/audit";
 import { SAMPLE_AUDIT_RESULT } from "@/lib/utils/constants";
 import { runLlmTests } from "@/lib/audit/llm-testing";
@@ -9,6 +14,9 @@ interface AuditRequest {
   email: string;
 }
 
+/**
+ * Defines the AuditEngine class.
+ */
 export class AuditEngine {
   async runComprehensiveAudit({ domain, name, email }: AuditRequest): Promise<AuditResult> {
     const llm_test_results = await runLlmTests(domain);

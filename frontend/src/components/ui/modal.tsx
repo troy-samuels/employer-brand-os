@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/modal
+ * Module implementation for modal.tsx.
+ */
+
 "use client";
 
 import {

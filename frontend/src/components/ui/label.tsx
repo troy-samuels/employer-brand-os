@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/label
+ * Module implementation for label.tsx.
+ */
+
 "use client"
 
 import * as React from "react"

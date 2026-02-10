@@ -1,3 +1,8 @@
+/**
+ * @module components/ui/button
+ * Module implementation for button.tsx.
+ */
+
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
@@ -27,6 +32,9 @@ const buttonVariants = cva(
   }
 );
 
+/**
+ * Defines the ButtonProps contract.
+ */
 export interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "size">,
     VariantProps<typeof buttonVariants> {
@@ -34,6 +42,11 @@ export interface ButtonProps
   asChild?: boolean;
 }
 
+/**
+ * Executes Button.
+ * @param param1 - param1 input.
+ * @returns The resulting value.
+ */
 export function Button({
   className,
   variant,

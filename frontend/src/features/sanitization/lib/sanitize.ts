@@ -1,10 +1,16 @@
-// @ts-nocheck — job_title_mappings not in generated Supabase types yet
-import { supabaseAdmin } from '@/lib/supabase/admin';
-import type { SanitizationResult } from '../types/sanitization.types';
+/**
+ * @module features/sanitization/lib/sanitize
+ * Resolves internal job codes into public-facing job metadata.
+ */
+
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import type { SanitizationResult } from "../types/sanitization.types";
 
 /**
  * Sanitize a job code by looking up the mapping
  * Checks both exact matches and aliases
+ * @param params - Organization scope and internal code to sanitize.
+ * @returns A normalized sanitization result.
  */
 export async function sanitizeJobCode(params: {
   organizationId: string;
@@ -15,11 +21,11 @@ export async function sanitizeJobCode(params: {
   try {
     // First try exact match
     const { data: exactMatch } = await supabaseAdmin
-      .from('job_title_mappings')
-      .select('public_title, job_family, level_indicator')
-      .eq('organization_id', organizationId)
-      .eq('internal_code', internalCode)
-      .eq('is_active', true)
+      .from("job_title_mappings")
+      .select("public_title, job_family, level_indicator")
+      .eq("organization_id", organizationId)
+      .eq("internal_code", internalCode)
+      .eq("is_active", true)
       .single();
 
     if (exactMatch) {
@@ -34,11 +40,11 @@ export async function sanitizeJobCode(params: {
 
     // Try alias match - check if code exists in any aliases array
     const { data: aliasMatch } = await supabaseAdmin
-      .from('job_title_mappings')
-      .select('public_title, job_family, level_indicator, aliases')
-      .eq('organization_id', organizationId)
-      .eq('is_active', true)
-      .contains('aliases', [internalCode]);
+      .from("job_title_mappings")
+      .select("public_title, job_family, level_indicator, aliases")
+      .eq("organization_id", organizationId)
+      .eq("is_active", true)
+      .contains("aliases", [internalCode]);
 
     if (aliasMatch && aliasMatch.length > 0) {
       const match = aliasMatch[0];
@@ -60,7 +66,7 @@ export async function sanitizeJobCode(params: {
       sanitized: false,
     };
   } catch (error) {
-    console.error('Error sanitizing job code:', error);
+    console.error("Error sanitizing job code:", error);
     return {
       originalCode: internalCode,
       publicTitle: null,
@@ -73,6 +79,8 @@ export async function sanitizeJobCode(params: {
 
 /**
  * Batch sanitize multiple job codes
+ * @param params - Organization scope and list of internal codes.
+ * @returns Sanitization results for each requested code.
  */
 export async function sanitizeJobCodes(params: {
   organizationId: string;
@@ -82,10 +90,10 @@ export async function sanitizeJobCodes(params: {
 
   // Get all mappings for this org in one query
   const { data: mappings } = await supabaseAdmin
-    .from('job_title_mappings')
-    .select('internal_code, public_title, job_family, level_indicator, aliases')
-    .eq('organization_id', organizationId)
-    .eq('is_active', true);
+    .from("job_title_mappings")
+    .select("internal_code, public_title, job_family, level_indicator, aliases")
+    .eq("organization_id", organizationId)
+    .eq("is_active", true);
 
   if (!mappings || mappings.length === 0) {
     return internalCodes.map((code) => ({
