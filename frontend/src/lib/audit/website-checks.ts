@@ -1396,7 +1396,7 @@ export async function runWebsiteChecks(
       llmsTxtHasEmployment = LLMS_EMPLOYMENT_KEYWORDS.some((keyword) => llmsText.includes(keyword));
     }
 
-    const homepageResponse = await fetchSafe(homepageUrl);
+    const homepageResponse = await fetchSafe(homepageUrl, true);
 
     if (!homepageResponse.ok) {
       auditStatus = "unreachable";
@@ -1412,6 +1412,12 @@ export async function runWebsiteChecks(
     const careersCheck = await runCareersCheck(normalizedDomain);
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
+
+    // If the homepage appeared empty (JS-rendered shell) but we found real
+    // content elsewhere, upgrade the overall status — the site isn't truly empty.
+    if (auditStatus === "empty" && careersPageStatus === "full") {
+      auditStatus = "success";
+    }
 
     // Detect ATS from the careers URL hostname
     if (careersPageUrl) {
