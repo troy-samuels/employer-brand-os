@@ -109,6 +109,8 @@ const CAREERS_PATHS = [
 ];
 
 const MAX_SAMPLED_JOB_LISTING_PAGES = 12;
+const CAREERS_SUBDOMAIN_PREFIXES = ["careers", "jobs"] as const;
+const MAX_META_REFRESH_REDIRECT_HOPS = 2;
 
 const ATS_HOST_SUFFIXES = [
   "boards.greenhouse.io",
@@ -228,6 +230,7 @@ type SafeFetchResult = {
   ok: boolean;
   status: number | null;
   text: string;
+  url: string;
 };
 
 type CareersCheckResult = {
@@ -386,6 +389,7 @@ async function fetchSafe(url: string): Promise<SafeFetchResult> {
       ok: false,
       status: null,
       text: "",
+      url,
     };
   }
 
@@ -405,12 +409,14 @@ async function fetchSafe(url: string): Promise<SafeFetchResult> {
       ok: true,
       status: response.status,
       text,
+      url: typeof response.url === "string" && response.url ? response.url : url,
     };
   } catch {
     return {
       ok: false,
       status: null,
       text: "",
+      url,
     };
   } finally {
     clearTimeout(timeoutId);
@@ -432,8 +438,136 @@ function normalizeDomain(input: string): string {
   }
 }
 
+function stripLeadingWww(hostname: string): string {
+  return hostname.startsWith("www.") ? hostname.slice(4) : hostname;
+}
+
 function isSameDomain(hostname: string, domain: string): boolean {
   return hostname === domain || hostname.endsWith(`.${domain}`);
+}
+
+function getCareersCandidateUrls(domain: string): string[] {
+  const normalizedDomain = domain.toLowerCase();
+  const baseDomain = stripLeadingWww(normalizedDomain);
+  const urls: string[] = [];
+  const seen = new Set<string>();
+
+  const appendCandidate = (candidateUrl: string): void => {
+    try {
+      const normalized = new URL(candidateUrl).toString();
+      if (seen.has(normalized)) {
+        return;
+      }
+      seen.add(normalized);
+      urls.push(normalized);
+    } catch {
+      // Skip malformed candidate URLs.
+    }
+  };
+
+  for (const path of CAREERS_PATHS) {
+    appendCandidate(`https://${normalizedDomain}${path}`);
+  }
+
+  for (const prefix of CAREERS_SUBDOMAIN_PREFIXES) {
+    appendCandidate(`https://${prefix}.${normalizedDomain}`);
+    if (baseDomain !== normalizedDomain) {
+      appendCandidate(`https://${prefix}.${baseDomain}`);
+    }
+  }
+
+  return urls;
+}
+
+function extractMetaRefreshRedirectUrl(html: string, baseUrl: string): string | null {
+  const metaTagRegex = /<meta\b[^>]*>/gi;
+
+  for (const match of html.matchAll(metaTagRegex)) {
+    const tag = match[0] ?? "";
+    if (!/\bhttp-equiv\s*=\s*(?:"refresh"|'refresh'|refresh)\b/i.test(tag)) {
+      continue;
+    }
+
+    const contentMatch = tag.match(/\bcontent\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i);
+    const contentValue = (contentMatch?.[1] ?? contentMatch?.[2] ?? contentMatch?.[3] ?? "").trim();
+    if (!contentValue) {
+      continue;
+    }
+
+    const urlMatch = contentValue.match(/(?:^|;)\s*url\s*=\s*(.+)$/i);
+    if (!urlMatch?.[1]) {
+      continue;
+    }
+
+    const rawTarget = urlMatch[1].trim().replace(/^['"]|['"]$/g, "");
+    if (!rawTarget) {
+      continue;
+    }
+
+    try {
+      const resolvedUrl = new URL(rawTarget, baseUrl);
+      if (!/^https?:$/i.test(resolvedUrl.protocol)) {
+        continue;
+      }
+      resolvedUrl.hash = "";
+      return resolvedUrl.toString();
+    } catch {
+      continue;
+    }
+  }
+
+  return null;
+}
+
+function isAllowedCareersRedirectTarget(targetUrl: string, domain: string): boolean {
+  try {
+    const normalizedDomain = domain.toLowerCase();
+    const baseDomain = stripLeadingWww(normalizedDomain);
+    const target = new URL(targetUrl);
+    const targetHostname = target.hostname.toLowerCase();
+
+    if (isSameDomain(targetHostname, normalizedDomain) || isSameDomain(targetHostname, baseDomain)) {
+      return true;
+    }
+
+    return CAREERS_SUBDOMAIN_PREFIXES.some((prefix) => {
+      const sameDomainVariant = `${prefix}.${normalizedDomain}`;
+      const baseDomainVariant = `${prefix}.${baseDomain}`;
+      return targetHostname === sameDomainVariant || targetHostname === baseDomainVariant;
+    });
+  } catch {
+    return false;
+  }
+}
+
+async function fetchCareersPage(url: string, domain: string): Promise<SafeFetchResult> {
+  let currentResponse = await fetchSafe(url);
+  if (!currentResponse.ok || currentResponse.status !== 200) {
+    return currentResponse;
+  }
+
+  const visitedUrls = new Set<string>([currentResponse.url]);
+
+  for (let hop = 0; hop < MAX_META_REFRESH_REDIRECT_HOPS; hop += 1) {
+    const metaRefreshUrl = extractMetaRefreshRedirectUrl(currentResponse.text, currentResponse.url);
+    if (!metaRefreshUrl || visitedUrls.has(metaRefreshUrl)) {
+      break;
+    }
+
+    if (!isAllowedCareersRedirectTarget(metaRefreshUrl, domain)) {
+      break;
+    }
+
+    visitedUrls.add(metaRefreshUrl);
+    const redirectedResponse = await fetchSafe(metaRefreshUrl);
+    if (!redirectedResponse.ok || redirectedResponse.status !== 200) {
+      break;
+    }
+
+    currentResponse = redirectedResponse;
+  }
+
+  return currentResponse;
 }
 
 function isTrustedAtsHost(hostname: string): boolean {
@@ -454,7 +588,7 @@ function isAtsSubdomain(hostname: string, domain: string): boolean {
   if (!hostname.endsWith(`.${domain}`)) {
     return false;
   }
-  
+
   const subdomain = hostname.slice(0, -(domain.length + 1));
   return ATS_SUBDOMAINS.includes(subdomain);
 }
@@ -637,30 +771,46 @@ function collectJsonLdTypes(node: unknown, typeSet: Set<string>): void {
 }
 
 async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
-  for (const path of CAREERS_PATHS) {
-    const careersUrl = `https://${domain}${path}`;
-    const response = await fetchSafe(careersUrl);
+  const statusRank: Record<CareersPageStatus, number> = {
+    not_found: 0,
+    none: 1,
+    partial: 2,
+    full: 3,
+  };
+  let bestResult: CareersCheckResult = {
+    status: "not_found",
+    url: null,
+    html: "",
+  };
+
+  for (const careersUrl of getCareersCandidateUrls(domain)) {
+    const response = await fetchCareersPage(careersUrl, domain);
 
     if (!response.ok || response.status !== 200) {
       continue;
     }
 
     const textLength = stripHtmlTags(response.text).length;
+    const resolvedUrl = response.url || careersUrl;
+
     if (textLength > 1000) {
-      return { status: "full", url: careersUrl, html: response.text };
+      return { status: "full", url: resolvedUrl, html: response.text };
     }
     if (textLength >= 200) {
-      return { status: "partial", url: careersUrl, html: response.text };
+      const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, html: response.text };
+      if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
+        bestResult = candidateResult;
+      }
+      continue;
     }
 
-    return { status: "none", url: careersUrl, html: response.text };
+    const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, html: response.text };
+    if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
+      bestResult = candidateResult;
+    }
   }
 
-  return {
-    status: "not_found",
-    url: null,
-    html: "",
-  };
+  return bestResult;
 }
 
 function selectHighestConfidenceSalaryDetection(

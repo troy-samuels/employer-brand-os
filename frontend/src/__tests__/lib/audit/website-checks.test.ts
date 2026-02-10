@@ -494,5 +494,78 @@ Allow: /
       expect(result.careersPageStatus).toBe("full");
       expect(result.careersPageUrl).toBe("https://example.de/karriere");
     });
+
+    it("follows same-domain meta refresh to careers subdomain and scores final content", async () => {
+      const richCareersHtml = `<html><body>${"Open roles and apply now. ".repeat(220)}</body></html>`;
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (url.endsWith("/llms.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/robots.txt")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url.endsWith("/sitemap.xml")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url === "https://bbc.co.uk/careers") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () =>
+              Promise.resolve(
+                '<html><head><meta http-equiv="refresh" content="0; url=https://careers.bbc.co.uk"></head><body>Redirecting</body></html>',
+              ),
+          });
+        }
+
+        if (url === "https://careers.bbc.co.uk/" || url === "https://careers.bbc.co.uk") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(richCareersHtml),
+          });
+        }
+
+        if (url.endsWith("/")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve("<html><body>Home</body></html>"),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          text: () => Promise.resolve(""),
+        });
+      });
+
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await runWebsiteChecks("bbc.co.uk", "BBC");
+      const fetchedUrls = fetchMock.mock.calls.map((call) => call[0]);
+
+      expect(result.careersPageStatus).toBe("full");
+      expect(result.careersPageUrl).toBe("https://careers.bbc.co.uk/");
+      expect(result.scoreBreakdown.careersPage).toBe(15);
+      expect(fetchedUrls).toContain("https://bbc.co.uk/careers");
+      expect(fetchedUrls).toContain("https://careers.bbc.co.uk/");
+    });
   });
 });
