@@ -24,6 +24,7 @@ import {
   ChatsCircle,
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
+import Image from "next/image";
 
 import type { WebsiteCheckResult, CurrencyCode } from "@/lib/audit/website-checks";
 import { ScoreGauge } from "./score-gauge";
@@ -185,12 +186,12 @@ function getBrandReputationDetail(r: WebsiteCheckResult): string {
 /* ── LLM Teaser (locked preview) ──────────────────── */
 
 const LLM_MODELS = [
-  { name: "ChatGPT", icon: "🤖" },
-  { name: "Google AI", icon: "🔍" },
-  { name: "Perplexity", icon: "🧠" },
-  { name: "Copilot", icon: "💼" },
-  { name: "Claude", icon: "🎯" },
-  { name: "Meta AI", icon: "📱" },
+  { name: "ChatGPT", logo: "/logos/chatgpt.svg" },
+  { name: "Google AI", logo: "/logos/google-ai.svg" },
+  { name: "Perplexity", logo: "/logos/perplexity.svg" },
+  { name: "Copilot", logo: "/logos/copilot.svg" },
+  { name: "Claude", logo: "/logos/claude.svg" },
+  { name: "Meta AI", logo: "/logos/meta-ai.svg" },
 ];
 
 function LlmTeaser({ companyName }: { companyName: string }) {
@@ -216,7 +217,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
             key={model.name}
             className="flex items-center gap-3 rounded-lg bg-neutral-50 px-4 py-3"
           >
-            <span className="text-base shrink-0">{model.icon}</span>
+            <Image src={model.logo} alt={model.name} width={24} height={24} className="shrink-0 rounded" />
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-medium text-neutral-700">{model.name}</p>
               <div className="mt-1 h-3 rounded-full bg-gradient-to-r from-neutral-200 to-neutral-100 w-full" />

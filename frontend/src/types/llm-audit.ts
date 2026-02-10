@@ -28,8 +28,8 @@ export interface LlmModelMeta {
   requiredTier: PlanTier;
   /** Approximate reach description for UI display. */
   reach: string;
-  /** Icon identifier or emoji for UI. */
-  icon: string;
+  /** Path to logo SVG in /public/logos/. */
+  logo: string;
 }
 
 /** Registry of all monitored models with metadata. */
@@ -40,7 +40,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "OpenAI",
     requiredTier: "starter",
     reach: "Most-used AI assistant globally",
-    icon: "🟢",
+    logo: "/logos/chatgpt.svg",
   },
   {
     id: "google-ai",
@@ -48,7 +48,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "Google",
     requiredTier: "starter",
     reach: "Appears in Google search results",
-    icon: "🔵",
+    logo: "/logos/google-ai.svg",
   },
   {
     id: "perplexity",
@@ -56,7 +56,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "Perplexity AI",
     requiredTier: "starter",
     reach: "Research-focused, cites sources",
-    icon: "🟣",
+    logo: "/logos/perplexity.svg",
   },
   {
     id: "copilot",
@@ -64,7 +64,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "Microsoft",
     requiredTier: "growth",
     reach: "Built into Bing, Edge, Windows, Office",
-    icon: "🔷",
+    logo: "/logos/copilot.svg",
   },
   {
     id: "claude",
@@ -72,7 +72,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "Anthropic",
     requiredTier: "scale",
     reach: "Popular with technical & professional users",
-    icon: "🟠",
+    logo: "/logos/claude.svg",
   },
   {
     id: "meta-ai",
@@ -80,7 +80,7 @@ export const LLM_MODELS: LlmModelMeta[] = [
     provider: "Meta",
     requiredTier: "scale",
     reach: "WhatsApp, Instagram, Facebook — massive passive reach",
-    icon: "🔵",
+    logo: "/logos/meta-ai.svg",
   },
 ];
 
