@@ -13,6 +13,7 @@ import { AuditResults } from "@/components/audit/audit-results";
 import { AuditGate } from "@/components/audit/audit-gate";
 import Features from "@/components/landing/features";
 import BeforeAfter from "@/components/landing/testimonials";
+import MonitorPreview from "@/components/landing/monitor-preview";
 import Pricing from "@/components/landing/pricing";
 import CTA from "@/components/landing/cta";
 import { Header } from "@/components/shared/header";
@@ -200,6 +201,7 @@ export default function Home() {
 
         <Features />
         <BeforeAfter />
+        <MonitorPreview />
         <Pricing />
         <CTA />
       </main>

@@ -30,7 +30,13 @@ export {
 } from './schemas/pixel.schema';
 
 // Utilities
-export { validateApiKey, extractKeyPrefix } from './lib/validate-key';
+export {
+  validateApiKey,
+  validateApiKeyWithStatus,
+  extractKeyPrefix,
+  isValidPixelApiKeyFormat,
+  PIXEL_API_KEY_REGEX,
+} from './lib/validate-key';
 export { validateDomain, isValidDomainPattern } from './lib/validate-domain';
 export { generateJsonLd } from './lib/generate-jsonld';
 export {

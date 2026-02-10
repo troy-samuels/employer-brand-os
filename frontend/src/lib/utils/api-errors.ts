@@ -8,13 +8,18 @@
  */
 export const API_ERROR_CODE = {
   badRequest: "bad_request",
+  domainNotAllowed: "domain_not_allowed",
   forbidden: "forbidden",
   internal: "internal_error",
+  invalidKey: "invalid_key",
+  invalidKeyFormat: "invalid_key_format",
   invalidJson: "invalid_json",
   invalidOrigin: "invalid_origin",
   invalidPayload: "invalid_payload",
   invalidSignature: "invalid_signature",
+  keyExpired: "key_expired",
   malformedRequest: "malformed_request",
+  missingApiKey: "missing_api_key",
   missingHeader: "missing_header",
   notFound: "not_found",
   rateLimited: "rate_limited",

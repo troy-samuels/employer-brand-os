@@ -10,6 +10,31 @@ import { logApiKeyValidation } from "@/lib/audit/audit-logger";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import type { ValidatedPixelKey } from "../types/pixel.types";
 
+export const PIXEL_API_KEY_REGEX = /^bos_(live|test)_[a-zA-Z0-9]+$/;
+
+export type ApiKeyValidationFailureReason =
+  | "invalid_format"
+  | "not_found_or_inactive"
+  | "expired"
+  | "hash_mismatch"
+  | "missing_organization"
+  | "unexpected_error";
+
+export type ApiKeyValidationResult =
+  | {
+      ok: true;
+      key: ValidatedPixelKey;
+    }
+  | {
+      ok: false;
+      reason: ApiKeyValidationFailureReason;
+    };
+
+export function isValidPixelApiKeyFormat(fullKey: string): boolean {
+  const trimmed = fullKey.trim();
+  return trimmed.length >= 16 && PIXEL_API_KEY_REGEX.test(trimmed);
+}
+
 /**
  * Validate an API key and return the associated pixel configuration
  *
@@ -29,7 +54,27 @@ export async function validateApiKey(
     resource?: string;
   }
 ): Promise<ValidatedPixelKey | null> {
-  const keyPrefix = extractKeyPrefix(fullKey);
+  const result = await validateApiKeyWithStatus(fullKey, context);
+  return result.ok ? result.key : null;
+}
+
+export async function validateApiKeyWithStatus(
+  fullKey: string,
+  context?: {
+    ipAddress?: string | null;
+    userAgent?: string | null;
+    resource?: string;
+  }
+): Promise<ApiKeyValidationResult> {
+  const trimmedKey = fullKey.trim();
+  if (!isValidPixelApiKeyFormat(trimmedKey)) {
+    return {
+      ok: false,
+      reason: "invalid_format",
+    };
+  }
+
+  const keyPrefix = extractKeyPrefix(trimmedKey);
 
   try {
     const admin = supabaseAdmin;
@@ -63,12 +108,15 @@ export async function validateApiKey(
           user_agent: context?.userAgent ?? null,
         },
       });
-      return null;
+      return {
+        ok: false,
+        reason: "not_found_or_inactive",
+      };
     }
 
     // Check expiration
     if (pixel.expires_at && new Date(pixel.expires_at) < new Date()) {
-      await admin
+      void admin
         .from('api_keys')
         .update({
           is_active: false,
@@ -87,10 +135,13 @@ export async function validateApiKey(
           key_version: pixel.key_version ?? null,
         },
       });
-      return null;
+      return {
+        ok: false,
+        reason: "expired",
+      };
     }
 
-    const candidateHash = createHash('sha256').update(fullKey).digest('hex');
+    const candidateHash = createHash('sha256').update(trimmedKey).digest('hex');
     if (candidateHash !== pixel.key_hash) {
       void logApiKeyValidation({
         apiKeyPrefix: keyPrefix,
@@ -104,7 +155,10 @@ export async function validateApiKey(
           key_version: pixel.key_version ?? null,
         },
       });
-      return null;
+      return {
+        ok: false,
+        reason: "hash_mismatch",
+      };
     }
 
     // Update last_used_at timestamp (fire and forget - don't block response)
@@ -130,7 +184,10 @@ export async function validateApiKey(
           key_version: pixel.key_version ?? null,
         },
       });
-      return null;
+      return {
+        ok: false,
+        reason: "missing_organization",
+      };
     }
 
     // Fetch allowed domains from the organization's smart pixel config
@@ -167,14 +224,17 @@ export async function validateApiKey(
     });
 
     return {
-      id: pixel.id,
-      organisationId: organizationId,
-      allowedDomains,
-      rateLimitPerMinute: pixel.rate_limit_per_minute ?? 100,
-      isActive: pixel.is_active ?? false,
-      expiresAt: pixel.expires_at ? new Date(pixel.expires_at) : null,
-      name: pixel.name,
-      keyVersion: pixel.key_version ?? 1,
+      ok: true,
+      key: {
+        id: pixel.id,
+        organisationId: organizationId,
+        allowedDomains,
+        rateLimitPerMinute: pixel.rate_limit_per_minute ?? 100,
+        isActive: pixel.is_active ?? false,
+        expiresAt: pixel.expires_at ? new Date(pixel.expires_at) : null,
+        name: pixel.name,
+        keyVersion: pixel.key_version ?? 1,
+      },
     };
   } catch (error) {
     console.error('Error validating API key:', error);
@@ -188,7 +248,10 @@ export async function validateApiKey(
         user_agent: context?.userAgent ?? null,
       },
     });
-    return null;
+    return {
+      ok: false,
+      reason: "unexpected_error",
+    };
   }
 }
 
@@ -200,5 +263,5 @@ export async function validateApiKey(
  */
 export function extractKeyPrefix(fullKey: string): string {
   // Return first 16 characters as the prefix
-  return fullKey.substring(0, 16);
+  return fullKey.trim().substring(0, 16);
 }

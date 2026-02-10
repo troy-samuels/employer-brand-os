@@ -12,6 +12,8 @@ export interface ApiErrorResponse {
   error: string;
   code?: string;
   status: number;
+  retryAfter?: number;
+  details?: unknown;
 }
 
 /**
@@ -21,6 +23,8 @@ export interface ApiErrorResponseOptions {
   error: string;
   code?: string;
   status: number;
+  retryAfter?: number;
+  details?: unknown;
   headers?: HeadersInit;
 }
 
@@ -36,6 +40,8 @@ export function apiErrorResponse(
     error: options.error,
     status: options.status,
     ...(options.code ? { code: options.code } : {}),
+    ...(options.retryAfter !== undefined ? { retryAfter: options.retryAfter } : {}),
+    ...(options.details !== undefined ? { details: options.details } : {}),
   };
 
   return NextResponse.json(body, {
