@@ -18,7 +18,7 @@ export default function CTA() {
           className="bg-white text-brand-deep hover:bg-neutral-100 font-semibold"
           asChild
         >
-          <Link href="/audit">Get your free audit</Link>
+          <Link href="/#audit">Get your free audit</Link>
         </Button>
       </div>
     </section>
