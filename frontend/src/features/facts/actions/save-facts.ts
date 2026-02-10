@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
+import { logAdminAction } from '@/lib/audit/audit-logger';
 import type { CompanyFactsFormData } from '../schemas/facts.schema';
 import type { SaveFactsResult } from '../types/facts.types';
 import type { Json } from '@/types/database.types';
@@ -85,6 +86,19 @@ export async function saveCompanyFacts(
 
     // Revalidate the facts page to show updated data
     revalidatePath('/dashboard/facts');
+
+    await logAdminAction({
+      actor: userOrg.userId,
+      action: 'facts.updated',
+      resource: 'organizations',
+      result: 'success',
+      organizationId: orgId,
+      userId: userOrg.userId,
+      recordId: orgId,
+      metadata: {
+        company_name: data.companyName,
+      },
+    });
 
     return { success: true };
   } catch (error) {

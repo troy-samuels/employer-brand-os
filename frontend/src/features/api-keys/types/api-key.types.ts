@@ -9,10 +9,12 @@ export interface ApiKeyRecord {
   name: string;
   keyPrefix: string;
   scopes: string[];
+  keyVersion: number;
   isActive: boolean;
   createdAt: string;
   lastUsedAt: string | null;
   expiresAt: string | null;
+  graceExpiresAt: string | null;
 }
 
 export interface GenerateKeyResult {

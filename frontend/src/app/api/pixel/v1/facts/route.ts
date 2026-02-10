@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { validateApiKey } from '@/features/pixel/lib/validate-key';
 import { validateDomain } from '@/features/pixel/lib/validate-domain';
 import { generateJsonLd } from '@/features/pixel/lib/generate-jsonld';
+import { verifyPixelRequestSignature } from '@/lib/pixel/request-signing';
 import {
   buildSuccessHeaders,
   buildErrorHeaders,
@@ -56,6 +57,8 @@ export async function GET(request: NextRequest): Promise<Response> {
   const startTime = Date.now();
   const origin = request.headers.get('origin');
   const referer = request.headers.get('referer');
+  const ipAddress = extractClientIp(request);
+  const userAgent = request.headers.get('user-agent');
 
   try {
     // Parse and validate query parameters
@@ -83,12 +86,32 @@ export async function GET(request: NextRequest): Promise<Response> {
     const { key, location } = queryResult.data;
 
     // Layer 3: Validate API key
-    const validatedKey = await validateApiKey(key);
+    const validatedKey = await validateApiKey(key, {
+      ipAddress,
+      userAgent,
+      resource: 'pixel.v1.facts',
+    });
     if (!validatedKey) {
       return errorResponse(
         'invalid_key',
         'API key not found or inactive',
         401,
+        origin
+      );
+    }
+
+    // Layer 4: Verify request signature and replay protection
+    const signatureResult = verifyPixelRequestSignature(request, key);
+    if (!signatureResult.ok) {
+      const errorCode =
+        signatureResult.error === 'replay_detected'
+          ? 'replay_detected'
+          : 'invalid_signature';
+
+      return errorResponse(
+        errorCode,
+        signatureResult.message,
+        signatureResult.status,
         origin
       );
     }
@@ -172,6 +195,23 @@ function errorResponse(
     status,
     headers,
   });
+}
+
+function extractClientIp(request: NextRequest): string | null {
+  const realIp = request.headers.get('x-real-ip')?.trim();
+  if (realIp) {
+    return realIp;
+  }
+
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) {
+    const [first] = forwarded.split(',');
+    if (first?.trim()) {
+      return first.trim();
+    }
+  }
+
+  return null;
 }
 
 /**

@@ -15,6 +15,7 @@
 import { NextRequest } from 'next/server';
 import { z } from 'zod';
 import { validateApiKey } from '@/features/pixel/lib/validate-key';
+import { verifyPixelRequestSignature } from '@/lib/pixel/request-signing';
 import {
   buildSuccessHeaders,
   buildErrorHeaders,
@@ -36,7 +37,12 @@ const sanitizeQuerySchema = z.object({
 });
 
 interface SanitizeErrorResponse {
-  error: 'invalid_key' | 'missing_code' | 'internal_error';
+  error:
+    | 'invalid_key'
+    | 'missing_code'
+    | 'invalid_signature'
+    | 'replay_detected'
+    | 'internal_error';
   message: string;
 }
 
@@ -72,6 +78,8 @@ export async function OPTIONS(request: NextRequest): Promise<Response> {
 export async function GET(request: NextRequest): Promise<Response> {
   const startTime = Date.now();
   const origin = request.headers.get('origin');
+  const ipAddress = extractClientIp(request);
+  const userAgent = request.headers.get('user-agent');
 
   try {
     // Parse and validate query parameters
@@ -108,12 +116,31 @@ export async function GET(request: NextRequest): Promise<Response> {
     const { key, code } = queryResult.data;
 
     // Validate API key
-    const validatedKey = await validateApiKey(key);
+    const validatedKey = await validateApiKey(key, {
+      ipAddress,
+      userAgent,
+      resource: 'pixel.v1.sanitize',
+    });
     if (!validatedKey) {
       return errorResponse(
         'invalid_key',
         'API key not found or inactive',
         401,
+        origin
+      );
+    }
+
+    const signatureResult = verifyPixelRequestSignature(request, key);
+    if (!signatureResult.ok) {
+      const errorCode =
+        signatureResult.error === 'replay_detected'
+          ? 'replay_detected'
+          : 'invalid_signature';
+
+      return errorResponse(
+        errorCode,
+        signatureResult.message,
+        signatureResult.status,
         origin
       );
     }
@@ -174,6 +201,23 @@ function errorResponse(
     status,
     headers,
   });
+}
+
+function extractClientIp(request: NextRequest): string | null {
+  const realIp = request.headers.get('x-real-ip')?.trim();
+  if (realIp) {
+    return realIp;
+  }
+
+  const forwarded = request.headers.get('x-forwarded-for');
+  if (forwarded) {
+    const [first] = forwarded.split(',');
+    if (first?.trim()) {
+      return first.trim();
+    }
+  }
+
+  return null;
 }
 
 /**

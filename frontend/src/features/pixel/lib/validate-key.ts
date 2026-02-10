@@ -5,6 +5,7 @@
 
 import { createHash } from 'node:crypto';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { logApiKeyValidation } from '@/lib/audit/audit-logger';
 import type { ValidatedPixelKey } from '../types/pixel.types';
 
 /**
@@ -19,12 +20,20 @@ import type { ValidatedPixelKey } from '../types/pixel.types';
  * @returns Validated key data or null if invalid
  */
 export async function validateApiKey(
-  fullKey: string
+  fullKey: string,
+  context?: {
+    ipAddress?: string | null;
+    userAgent?: string | null;
+    resource?: string;
+  }
 ): Promise<ValidatedPixelKey | null> {
+  const keyPrefix = extractKeyPrefix(fullKey);
+
   try {
-    // Query smart_pixels table by key_prefix
-    // The key_prefix column stores the identifiable portion of the key
-    const { data: pixel, error } = await supabaseAdmin
+    const admin = supabaseAdmin as any;
+
+    // Query API keys table by key_prefix.
+    const { data: pixel, error } = await admin
       .from('api_keys')
       .select(`
         id,
@@ -32,30 +41,72 @@ export async function validateApiKey(
         name,
         scopes,
         key_hash,
+        key_version,
         rate_limit_per_minute,
         is_active,
         expires_at
       `)
-      .eq('key_prefix', extractKeyPrefix(fullKey))
+      .eq('key_prefix', keyPrefix)
       .eq('is_active', true)
       .single();
 
     if (error || !pixel) {
+      void logApiKeyValidation({
+        apiKeyPrefix: keyPrefix,
+        result: 'failure',
+        ipAddress: context?.ipAddress ?? null,
+        metadata: {
+          reason: 'not_found_or_inactive',
+          resource: context?.resource ?? 'pixel',
+          user_agent: context?.userAgent ?? null,
+        },
+      });
       return null;
     }
 
     // Check expiration
     if (pixel.expires_at && new Date(pixel.expires_at) < new Date()) {
+      await admin
+        .from('api_keys')
+        .update({
+          is_active: false,
+        })
+        .eq('id', pixel.id);
+
+      void logApiKeyValidation({
+        apiKeyPrefix: keyPrefix,
+        result: 'failure',
+        organizationId: pixel.organization_id ?? null,
+        ipAddress: context?.ipAddress ?? null,
+        metadata: {
+          reason: 'expired',
+          resource: context?.resource ?? 'pixel',
+          user_agent: context?.userAgent ?? null,
+          key_version: pixel.key_version ?? null,
+        },
+      });
       return null;
     }
 
     const candidateHash = createHash('sha256').update(fullKey).digest('hex');
     if (candidateHash !== pixel.key_hash) {
+      void logApiKeyValidation({
+        apiKeyPrefix: keyPrefix,
+        result: 'failure',
+        organizationId: pixel.organization_id ?? null,
+        ipAddress: context?.ipAddress ?? null,
+        metadata: {
+          reason: 'hash_mismatch',
+          resource: context?.resource ?? 'pixel',
+          user_agent: context?.userAgent ?? null,
+          key_version: pixel.key_version ?? null,
+        },
+      });
       return null;
     }
 
     // Update last_used_at timestamp (fire and forget - don't block response)
-    supabaseAdmin
+    admin
       .from('api_keys')
       .update({ last_used_at: new Date().toISOString() })
       .eq('id', pixel.id)
@@ -66,6 +117,17 @@ export async function validateApiKey(
     // Ensure organization_id exists
     const organizationId = pixel.organization_id;
     if (!organizationId) {
+      void logApiKeyValidation({
+        apiKeyPrefix: keyPrefix,
+        result: 'failure',
+        ipAddress: context?.ipAddress ?? null,
+        metadata: {
+          reason: 'missing_organization',
+          resource: context?.resource ?? 'pixel',
+          user_agent: context?.userAgent ?? null,
+          key_version: pixel.key_version ?? null,
+        },
+      });
       return null;
     }
 
@@ -90,6 +152,18 @@ export async function validateApiKey(
       }
     }
 
+    void logApiKeyValidation({
+      apiKeyPrefix: keyPrefix,
+      result: 'success',
+      organizationId,
+      ipAddress: context?.ipAddress ?? null,
+      metadata: {
+        resource: context?.resource ?? 'pixel',
+        user_agent: context?.userAgent ?? null,
+        key_version: pixel.key_version ?? null,
+      },
+    });
+
     return {
       id: pixel.id,
       organisationId: organizationId,
@@ -98,9 +172,20 @@ export async function validateApiKey(
       isActive: pixel.is_active ?? false,
       expiresAt: pixel.expires_at ? new Date(pixel.expires_at) : null,
       name: pixel.name,
+      keyVersion: pixel.key_version ?? 1,
     };
   } catch (error) {
     console.error('Error validating API key:', error);
+    void logApiKeyValidation({
+      apiKeyPrefix: keyPrefix,
+      result: 'failure',
+      ipAddress: context?.ipAddress ?? null,
+      metadata: {
+        reason: 'unexpected_error',
+        resource: context?.resource ?? 'pixel',
+        user_agent: context?.userAgent ?? null,
+      },
+    });
     return null;
   }
 }

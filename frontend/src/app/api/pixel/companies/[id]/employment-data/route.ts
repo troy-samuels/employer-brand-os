@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 import { getEmploymentData } from "@/lib/pixel/pixel-manager";
+import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
 
 export async function GET(
   request: NextRequest,
@@ -14,6 +15,14 @@ export async function GET(
       return NextResponse.json(
         { error: "Missing pixel ID" },
         { status: 400 }
+      );
+    }
+
+    const signatureResult = verifyPixelRequestSignature(request, pixelId);
+    if (!signatureResult.ok) {
+      return NextResponse.json(
+        { error: signatureResult.message },
+        { status: signatureResult.status }
       );
     }
 

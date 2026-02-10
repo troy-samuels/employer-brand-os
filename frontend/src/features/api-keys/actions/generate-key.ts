@@ -1,38 +1,15 @@
 'use server';
 
-/**
- * API Key Generation Server Action
- * Generates secure production API keys for the Smart Pixel
- *
- * Security:
- * - Raw key is returned ONLY ONCE at creation time
- * - Hash is stored in DB (SHA-256)
- * - Key prefix is stored for lookup/display
- */
-
-import { randomBytes, createHash } from 'crypto';
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
+import { expireRotatedKeys, rotateApiKey } from '@/lib/auth/key-rotation';
+import { logAdminAction } from '@/lib/audit/audit-logger';
 import type {
   GenerateKeyResult,
   GetApiKeyResult,
   RevokeKeyResult,
-  DEFAULT_SCOPES,
 } from '../types/api-key.types';
-
-/**
- * Generate a cryptographically secure API key
- * Format: pk_live_<32 random hex chars>
- */
-function generateSecureKey(): { raw: string; prefix: string; hash: string } {
-  const randomPart = randomBytes(16).toString('hex');
-  const raw = `pk_live_${randomPart}`;
-  const prefix = raw.substring(0, 16); // pk_live_xxxxxxxx
-  const hash = createHash('sha256').update(raw).digest('hex');
-
-  return { raw, prefix, hash };
-}
 
 /**
  * Generate a new production API key for the current user's organization
@@ -40,7 +17,7 @@ function generateSecureKey(): { raw: string; prefix: string; hash: string } {
  * Business Logic:
  * - User must be authenticated and belong to an organization
  * - User must have admin permission
- * - Only one active key per organization (revokes existing)
+ * - Key rotation keeps previous key valid for 24 hours
  * - Raw key is returned once, then only hash is stored
  */
 export async function generateApiKey(
@@ -59,62 +36,37 @@ export async function generateApiKey(
       return { success: false, error: 'Only administrators can generate API keys' };
     }
 
-    const orgId = userOrg.organizationId;
-
-    // 3. Revoke any existing active keys for this organization
-    await supabaseAdmin
-      .from('api_keys')
-      .update({
-        is_active: false,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('organization_id', orgId)
-      .eq('is_active', true);
-
-    // 4. Generate new secure key
-    const { raw, prefix, hash } = generateSecureKey();
-
-    // 5. Store key in database (hash only)
-    const { data: newKey, error: insertError } = await supabaseAdmin
-      .from('api_keys')
-      .insert({
-        organization_id: orgId,
-        name,
-        key_prefix: prefix,
-        key_hash: hash,
-        scopes: ['pixel:read', 'facts:read'],
-        is_active: true,
-        rate_limit_per_minute: 100,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select('id')
-      .single();
-
-    if (insertError || !newKey) {
-      console.error('Error creating API key:', insertError);
-      return { success: false, error: 'Failed to create API key' };
-    }
-
-    // 6. Create audit log entry
-    await supabaseAdmin.from('audit_logs').insert({
-      organization_id: orgId,
-      user_id: userOrg.userId,
-      action: 'api_key.created',
-      table_name: 'api_keys',
-      record_id: newKey.id,
-      new_values: { name, key_prefix: prefix },
+    const rotatedKey = await rotateApiKey({
+      organizationId: userOrg.organizationId,
+      createdBy: userOrg.userId,
+      name,
+      scopes: ['pixel:read', 'facts:read'],
+      rateLimitPerMinute: 100,
+      gracePeriodHours: 24,
     });
 
-    // 7. Revalidate the integration page
+    await logAdminAction({
+      actor: userOrg.userId,
+      action: 'api_key.rotated',
+      resource: 'api_keys',
+      result: 'success',
+      organizationId: userOrg.organizationId,
+      userId: userOrg.userId,
+      recordId: rotatedKey.keyId,
+      metadata: {
+        key_prefix: rotatedKey.keyPrefix,
+        key_version: rotatedKey.keyVersion,
+        old_keys_expire_at: rotatedKey.oldKeysExpireAt,
+      },
+    });
+
     revalidatePath('/dashboard/integration');
 
-    // Return the raw key ONE TIME ONLY
     return {
       success: true,
-      rawKey: raw,
-      keyPrefix: prefix,
-      keyId: newKey.id,
+      rawKey: rotatedKey.rawKey,
+      keyPrefix: rotatedKey.keyPrefix,
+      keyId: rotatedKey.keyId,
     };
   } catch (error) {
     console.error('Unexpected error generating API key:', error);
@@ -135,9 +87,13 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
     }
 
     const orgId = userOrg.organizationId;
+    const admin = supabaseAdmin as any;
+    const now = Date.now();
 
-    // 2. Query for active key
-    const { data: key, error } = await supabaseAdmin
+    await expireRotatedKeys(orgId);
+
+    // Query all active keys and select the newest key version.
+    const { data: keys, error } = await admin
       .from('api_keys')
       .select(`
         id,
@@ -148,30 +104,58 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
         is_active,
         created_at,
         last_used_at,
-        expires_at
+        expires_at,
+        key_version
       `)
       .eq('organization_id', orgId)
-      .eq('is_active', true)
-      .single();
+      .eq('is_active', true);
 
-    if (error || !key) {
+    if (error || !Array.isArray(keys) || keys.length === 0) {
       return { success: true, hasKey: false };
     }
+
+    const validKeys = keys.filter(
+      (key: { expires_at?: string | null }) =>
+        !key.expires_at || new Date(key.expires_at).getTime() > now
+    );
+
+    if (validKeys.length === 0) {
+      return { success: true, hasKey: false };
+    }
+
+    const newestKey = validKeys.sort(
+      (
+        left: { key_version?: number | null; created_at?: string | null },
+        right: { key_version?: number | null; created_at?: string | null }
+      ) => {
+        const versionDiff = (right.key_version ?? 1) - (left.key_version ?? 1);
+        if (versionDiff !== 0) {
+          return versionDiff;
+        }
+
+        return (
+          new Date(right.created_at ?? 0).getTime() -
+          new Date(left.created_at ?? 0).getTime()
+        );
+      }
+    )[0];
 
     return {
       success: true,
       hasKey: true,
-      keyPrefix: key.key_prefix,
+      keyPrefix: newestKey.key_prefix,
       key: {
-        id: key.id,
-        organizationId: key.organization_id ?? '',
-        name: key.name ?? 'API Key',
-        keyPrefix: key.key_prefix,
-        scopes: (key.scopes as string[]) ?? [],
-        isActive: key.is_active ?? false,
-        createdAt: key.created_at ?? new Date().toISOString(),
-        lastUsedAt: key.last_used_at,
-        expiresAt: key.expires_at,
+        id: newestKey.id,
+        organizationId: newestKey.organization_id ?? '',
+        name: newestKey.name ?? 'API Key',
+        keyPrefix: newestKey.key_prefix,
+        scopes: (newestKey.scopes as string[]) ?? [],
+        keyVersion: newestKey.key_version ?? 1,
+        isActive: newestKey.is_active ?? false,
+        createdAt: newestKey.created_at ?? new Date().toISOString(),
+        lastUsedAt: newestKey.last_used_at,
+        expiresAt: newestKey.expires_at,
+        graceExpiresAt: newestKey.expires_at,
       },
     };
   } catch (error) {
@@ -197,11 +181,14 @@ export async function revokeApiKey(keyId: string): Promise<RevokeKeyResult> {
       return { success: false, error: 'Only administrators can revoke API keys' };
     }
 
-    // 3. Revoke key (verify it belongs to user's org)
-    const { error } = await supabaseAdmin
+    const admin = supabaseAdmin as any;
+
+    // Revoke key (verify it belongs to user's org)
+    const { error } = await admin
       .from('api_keys')
       .update({
         is_active: false,
+        expires_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       })
       .eq('id', keyId)
@@ -211,13 +198,14 @@ export async function revokeApiKey(keyId: string): Promise<RevokeKeyResult> {
       return { success: false, error: 'Failed to revoke API key' };
     }
 
-    // 4. Audit log
-    await supabaseAdmin.from('audit_logs').insert({
-      organization_id: userOrg.organizationId,
-      user_id: userOrg.userId,
+    await logAdminAction({
+      actor: userOrg.userId,
       action: 'api_key.revoked',
-      table_name: 'api_keys',
-      record_id: keyId,
+      resource: 'api_keys',
+      result: 'success',
+      organizationId: userOrg.organizationId,
+      userId: userOrg.userId,
+      recordId: keyId,
     });
 
     revalidatePath('/dashboard/integration');

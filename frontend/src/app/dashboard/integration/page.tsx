@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { generateApiKey, getApiKey } from '@/features/api-keys';
 import type { GetApiKeyResult } from '@/features/api-keys';
 
-const CDN_ENDPOINT = 'https://cdn.rankwell.io/pixel.js';
+const PIXEL_ENDPOINT_BASE = process.env.NEXT_PUBLIC_APP_URL || 'https://rankwell.io';
+const CDN_ENDPOINT = `${PIXEL_ENDPOINT_BASE.replace(/\/$/, '')}/api/pixel/v1/script`;
 
 export default function IntegrationPage() {
   const [keyData, setKeyData] = useState<GetApiKeyResult | null>(null);

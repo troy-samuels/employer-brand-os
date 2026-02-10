@@ -78,6 +78,11 @@ vi.mock("@/lib/utils/csrf", () => ({
   validateCsrf: vi.fn(() => true),
 }));
 
+vi.mock("@/lib/audit/audit-logger", () => ({
+  logAuditRequest: vi.fn(() => Promise.resolve()),
+  logAuditEvent: vi.fn(() => Promise.resolve()),
+}));
+
 vi.mock("@/lib/utils/rate-limiter", () => ({
   RateLimiter: class {
     async check() {

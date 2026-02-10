@@ -26,8 +26,11 @@ export function buildCorsHeaders(origin: string): Headers {
   // Only GET is needed for reading facts
   headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
-  // Minimal headers needed
-  headers.set('Access-Control-Allow-Headers', 'Content-Type');
+  // Signature headers are required for pixel request authentication.
+  headers.set(
+    'Access-Control-Allow-Headers',
+    'Content-Type, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
+  );
 
   // Cache preflight for 24 hours
   headers.set('Access-Control-Max-Age', '86400');

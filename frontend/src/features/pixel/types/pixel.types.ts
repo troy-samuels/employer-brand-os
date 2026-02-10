@@ -12,6 +12,7 @@ export interface ValidatedPixelKey {
   isActive: boolean;
   expiresAt: Date | null;
   name: string | null;
+  keyVersion: number;
 }
 
 // Domain validation result
@@ -58,7 +59,13 @@ export interface OrganizationData {
 
 // Pixel API error response
 export interface PixelErrorResponse {
-  error: 'invalid_key' | 'domain_not_allowed' | 'rate_limited' | 'internal_error';
+  error:
+    | 'invalid_key'
+    | 'domain_not_allowed'
+    | 'rate_limited'
+    | 'invalid_signature'
+    | 'replay_detected'
+    | 'internal_error';
   message: string;
   retryAfter?: number;
 }

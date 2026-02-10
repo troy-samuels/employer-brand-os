@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod/v4";
+import { logAuditRequest } from "@/lib/audit/audit-logger";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { validateCsrf } from "@/lib/utils/csrf";
 
@@ -26,8 +27,16 @@ const leadSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const actor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+
   // CSRF check
   if (!validateCsrf(request)) {
+    void logAuditRequest({
+      actor,
+      result: "denied",
+      resource: "api.audit.leads",
+      metadata: { reason: "csrf_failed" },
+    });
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
 
@@ -35,11 +44,23 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
+    void logAuditRequest({
+      actor,
+      result: "failure",
+      resource: "api.audit.leads",
+      metadata: { reason: "invalid_json" },
+    });
     return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const parsed = leadSchema.safeParse(body);
   if (!parsed.success) {
+    void logAuditRequest({
+      actor,
+      result: "failure",
+      resource: "api.audit.leads",
+      metadata: { reason: "schema_validation_failed" },
+    });
     return NextResponse.json(
       { error: "Please enter a valid email address" },
       { status: 400 }
@@ -50,6 +71,15 @@ export async function POST(request: NextRequest) {
   const emailDomain = email.split("@")[1]?.toLowerCase();
 
   if (!emailDomain || CONSUMER_DOMAINS.has(emailDomain)) {
+    void logAuditRequest({
+      actor,
+      result: "failure",
+      resource: "api.audit.leads",
+      metadata: {
+        reason: "consumer_email_domain",
+        email_domain: emailDomain ?? null,
+      },
+    });
     return NextResponse.json(
       { error: "Please use your work email address" },
       { status: 400 }
@@ -70,12 +100,35 @@ export async function POST(request: NextRequest) {
 
     if (dbError) {
       console.error("[audit/leads] Supabase insert error:", dbError.message);
+      void logAuditRequest({
+        actor,
+        result: "failure",
+        resource: "api.audit.leads",
+        metadata: { reason: "db_insert_error", db_error: dbError.message },
+      });
       // Still return success so we don't break the UX flow
     }
   } catch (err) {
     console.error("[audit/leads] Unexpected error:", err);
+    void logAuditRequest({
+      actor,
+      result: "failure",
+      resource: "api.audit.leads",
+      metadata: { reason: "unexpected_error" },
+    });
     // Still return success
   }
+
+  void logAuditRequest({
+    actor,
+    result: "success",
+    resource: "api.audit.leads",
+    metadata: {
+      company_slug: companySlug ?? null,
+      score: score ?? null,
+      email_domain: emailDomain,
+    },
+  });
 
   return NextResponse.json({ success: true });
 }

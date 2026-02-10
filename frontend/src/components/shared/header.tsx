@@ -15,6 +15,12 @@ export function Header() {
             How we score
           </Link>
           <Link
+            href="/security"
+            className="text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Security
+          </Link>
+          <Link
             href="/#audit"
             className="rounded-xl bg-neutral-950 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
           >
