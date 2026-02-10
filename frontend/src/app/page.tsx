@@ -25,7 +25,7 @@ import { useAudit } from "@/lib/hooks/use-audit";
  * @returns The resulting value.
  */
 export default function Home() {
-  const { state, isLoading, result, error, runAudit, reset } = useAudit();
+  const { state, isLoading, isAssisting, result, error, runAudit, submitClientHtml, reset } = useAudit();
 
   return (
     <div className="min-h-screen bg-neutral-50">
@@ -106,7 +106,11 @@ export default function Home() {
                   className="mx-auto w-full max-w-lg space-y-10"
                 >
                   {/* Score + cards */}
-                  <AuditResults result={result} />
+                  <AuditResults
+                    result={result}
+                    onSubmitClientHtml={submitClientHtml}
+                    isAssisting={isAssisting}
+                  />
 
                   {/* Email capture */}
                   <AuditGate score={result.score} companySlug={result.companySlug} />

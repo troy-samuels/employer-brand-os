@@ -220,7 +220,7 @@ const AI_BOTS = [
   },
 ] as const;
 
-type CareersPageStatus = "full" | "partial" | "none" | "not_found";
+type CareersPageStatus = "full" | "partial" | "none" | "not_found" | "bot_protected";
 type RobotsTxtStatus = "allows" | "partial" | "blocks" | "no_rules" | "not_found";
 type SalaryConfidence =
   | "none"
@@ -234,11 +234,13 @@ type SafeFetchResult = {
   status: number | null;
   text: string;
   url: string;
+  isBotProtected: boolean;
 };
 
 type CareersCheckResult = {
   status: CareersPageStatus;
   url: string | null;
+  blockedUrl: string | null;
   html: string;
 };
 
@@ -370,6 +372,7 @@ export type WebsiteCheckResult = {
   detectedCurrency: CurrencyCode;
   careersPageStatus: CareersPageStatus;
   careersPageUrl: string | null;
+  careersBlockedUrl: string | null;
   atsDetected: AtsName;
   hasSitemap: boolean;
   robotsTxtStatus: RobotsTxtStatus;
@@ -385,6 +388,19 @@ export type WebsiteCheckResult = {
   };
 };
 
+function isBotProtectionResponse(status: number, text: string): boolean {
+  if (status !== 403) return false;
+  // Cloudflare challenge pages contain these markers
+  return (
+    text.includes("cf-mitigated") ||
+    text.includes("cf-challenge") ||
+    text.includes("challenge-platform") ||
+    text.includes("Just a moment...") ||
+    text.includes("Checking your browser") ||
+    text.includes("Attention Required")
+  );
+}
+
 async function fetchSafe(url: string, useHeadlessFallback = false): Promise<SafeFetchResult> {
   const validation = await validateUrl(url);
   if (!validation.ok) {
@@ -393,6 +409,7 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
       status: null,
       text: "",
       url,
+      isBotProtected: false,
     };
   }
 
@@ -409,6 +426,7 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
 
     const text = await response.text();
     const resolvedUrl = typeof response.url === "string" && response.url ? response.url : url;
+    const botProtected = isBotProtectionResponse(response.status, text);
 
     if (
       useHeadlessFallback &&
@@ -423,6 +441,7 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
           status: response.status,
           text: renderedPage.html,
           url: renderedPage.url || resolvedUrl,
+          isBotProtected: false,
         };
       }
     }
@@ -432,6 +451,7 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
       status: response.status,
       text,
       url: resolvedUrl,
+      isBotProtected: botProtected,
     };
   } catch {
     return {
@@ -439,6 +459,7 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
       status: null,
       text: "",
       url,
+      isBotProtected: false,
     };
   } finally {
     clearTimeout(timeoutId);
@@ -723,7 +744,7 @@ function createCompanySlug(companyName: string): string {
   return slug || "company";
 }
 
-function stripHtmlTags(html: string): string {
+export function stripHtmlTags(html: string): string {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, " ")
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
@@ -795,6 +816,7 @@ function collectJsonLdTypes(node: unknown, typeSet: Set<string>): void {
 async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
   const statusRank: Record<CareersPageStatus, number> = {
     not_found: 0,
+    bot_protected: 0.5,
     none: 1,
     partial: 2,
     full: 3,
@@ -802,11 +824,19 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
   let bestResult: CareersCheckResult = {
     status: "not_found",
     url: null,
+    blockedUrl: null,
     html: "",
   };
 
+  let firstBlockedUrl: string | null = null;
+
   for (const careersUrl of getCareersCandidateUrls(domain)) {
     const response = await fetchCareersPage(careersUrl, domain);
+
+    // Track the first bot-protected URL we encounter
+    if (response.isBotProtected && !firstBlockedUrl) {
+      firstBlockedUrl = response.url || careersUrl;
+    }
 
     if (!response.ok || response.status !== 200) {
       continue;
@@ -816,20 +846,25 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
     const resolvedUrl = response.url || careersUrl;
 
     if (textLength > 1000) {
-      return { status: "full", url: resolvedUrl, html: response.text };
+      return { status: "full", url: resolvedUrl, blockedUrl: null, html: response.text };
     }
     if (textLength >= 200) {
-      const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, html: response.text };
+      const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, blockedUrl: null, html: response.text };
       if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
         bestResult = candidateResult;
       }
       continue;
     }
 
-    const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, html: response.text };
+    const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, blockedUrl: null, html: response.text };
     if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
       bestResult = candidateResult;
     }
+  }
+
+  // If we found nothing usable but detected bot protection, report it
+  if (bestResult.status === "not_found" && firstBlockedUrl) {
+    return { status: "bot_protected", url: null, blockedUrl: firstBlockedUrl, html: "" };
   }
 
   return bestResult;
@@ -1378,6 +1413,7 @@ export async function runWebsiteChecks(
   let detectedCurrency: CurrencyCode = null;
   let careersPageStatus: CareersPageStatus = "not_found";
   let careersPageUrl: string | null = null;
+  let careersBlockedUrl: string | null = null;
   let atsDetected: AtsName = null;
   let hasSitemap = false;
   let robotsTxtStatus: RobotsTxtStatus = "not_found";
@@ -1412,6 +1448,7 @@ export async function runWebsiteChecks(
     const careersCheck = await runCareersCheck(normalizedDomain);
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
+    careersBlockedUrl = careersCheck.blockedUrl;
 
     // If the homepage appeared empty (JS-rendered shell) but we found real
     // content elsewhere, upgrade the overall status — the site isn't truly empty.
@@ -1527,6 +1564,7 @@ export async function runWebsiteChecks(
     detectedCurrency,
     careersPageStatus,
     careersPageUrl,
+    careersBlockedUrl,
     atsDetected,
     hasSitemap,
     robotsTxtStatus,

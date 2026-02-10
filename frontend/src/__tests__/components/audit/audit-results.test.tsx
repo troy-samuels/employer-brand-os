@@ -24,6 +24,7 @@ const createMockResult = (
   detectedCurrency: null,
   careersPageStatus: "not_found",
   careersPageUrl: null,
+  careersBlockedUrl: null,
   atsDetected: null,
   hasSitemap: false,
   robotsTxtStatus: "not_found",

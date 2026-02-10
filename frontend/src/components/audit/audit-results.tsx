@@ -5,6 +5,7 @@
 
 "use client";
 
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 import {
   ChatCircleText,
@@ -19,6 +20,10 @@ import {
   Briefcase,
   ShieldCheck,
   CurrencyCircleDollar,
+  ShieldWarning,
+  ArrowSquareOut,
+  Copy,
+  CheckCircle,
 } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
@@ -27,6 +32,8 @@ import { ScoreGauge } from "./score-gauge";
 
 interface AuditResultsProps {
   result: WebsiteCheckResult;
+  onSubmitClientHtml?: (html: string, url: string) => Promise<void>;
+  isAssisting?: boolean;
 }
 
 /* ── Helpers ───────────────────────────────────────── */
@@ -159,9 +166,126 @@ function getCareersDetail(r: WebsiteCheckResult): string {
       return `Your careers page redirects to an external ATS (${r.atsDetected}) — most AI crawlers can't read this content.`;
     return `Found a careers page at ${r.careersPageUrl}, but it's thin on detail.`;
   }
+  if (r.careersPageStatus === "bot_protected")
+    return "Your careers page has bot protection — we couldn't read it, and neither can AI crawlers.";
   if (r.careersPageStatus === "none")
     return "Your careers page exists but barely has any content for AI to work with.";
   return "No careers page found. AI can't point candidates to your jobs.";
+}
+
+/* ── Bot-protection assist card ────────────────────── */
+
+function generateAssistSnippet(callbackUrl: string, pageUrl: string, domain: string): string {
+  return `fetch("${callbackUrl}",{method:"POST",headers:{"Content-Type":"application/json","Origin":location.origin},body:JSON.stringify({html:document.documentElement.outerHTML,url:location.href,domain:"${domain}"})}).then(r=>r.ok?"✅ Sent to Rankwell!":"❌ Error").then(alert)`;
+}
+
+interface BotProtectAssistProps {
+  blockedUrl: string;
+  domain: string;
+  onSubmitClientHtml: (html: string, url: string) => Promise<void>;
+  isAssisting: boolean;
+}
+
+function BotProtectAssist({ blockedUrl, domain, onSubmitClientHtml, isAssisting }: BotProtectAssistProps) {
+  const [copied, setCopied] = useState(false);
+  const [listening, setListening] = useState(false);
+
+  // For production, this would be the real domain. In dev, use localhost.
+  const callbackUrl = typeof window !== "undefined"
+    ? `${window.location.origin}/api/audit/client-crawl`
+    : "/api/audit/client-crawl";
+
+  const snippet = generateAssistSnippet(callbackUrl, blockedUrl, domain);
+
+  const handleCopy = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(snippet);
+      setCopied(true);
+      setListening(true);
+      setTimeout(() => setCopied(false), 2000);
+
+      // Open the page in a new tab
+      window.open(blockedUrl, "_blank", "noopener");
+
+      // Start listening for the result via polling
+      // The user will paste the snippet in the console on that page
+      // which will POST to our API. We listen via a message event or polling.
+    } catch {
+      // Fallback: select the text for manual copy
+    }
+  }, [snippet, blockedUrl]);
+
+  // Listen for postMessage from the snippet (cross-tab communication)
+  // Actually, the snippet POSTs directly to our API. We'll use the
+  // onSubmitClientHtml callback that gets triggered when the parent
+  // detects the submission via polling or state update.
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.15 }}
+      className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5"
+    >
+      <div className="flex items-start gap-3 mb-4">
+        <ShieldWarning size={20} weight="duotone" className="text-amber-600 mt-0.5 shrink-0" />
+        <div>
+          <h4 className="text-[14px] font-semibold text-neutral-950">
+            Bot protection detected
+          </h4>
+          <p className="text-[13px] text-neutral-500 mt-1 leading-relaxed">
+            This page blocks automated scanners. You can help us read it in two clicks.
+          </p>
+        </div>
+      </div>
+
+      {!isAssisting && !listening && (
+        <div className="space-y-2.5">
+          <button
+            onClick={handleCopy}
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+          >
+            {copied ? (
+              <>
+                <CheckCircle size={16} weight="bold" />
+                Copied — opening page…
+              </>
+            ) : (
+              <>
+                <Copy size={16} weight="bold" />
+                Copy scanner & open page
+              </>
+            )}
+          </button>
+          <p className="text-[11px] text-neutral-400 text-center leading-relaxed">
+            Opens the careers page in a new tab. Paste the copied code into your
+            browser console (F12 → Console → paste → Enter). Results update automatically.
+          </p>
+        </div>
+      )}
+
+      {(listening || isAssisting) && (
+        <div className="flex items-center gap-2.5 py-2">
+          <div className="h-4 w-4 rounded-full border-2 border-amber-500 border-t-transparent animate-spin" />
+          <p className="text-[13px] text-amber-700 font-medium">
+            {isAssisting ? "Analysing submitted page…" : "Waiting for page data…"}
+          </p>
+        </div>
+      )}
+
+      {/* Pixel conversion CTA */}
+      <div className="mt-4 pt-3.5 border-t border-amber-200/60">
+        <p className="text-[12px] text-neutral-500 leading-relaxed">
+          <span className="font-medium text-neutral-700">Want automatic access?</span>{" "}
+          Install the Rankwell pixel on your site — it runs from your domain, so bot protection
+          doesn&apos;t apply.{" "}
+          <a href="/pricing" className="text-brand-accent hover:underline font-medium">
+            Learn more →
+          </a>
+        </p>
+      </div>
+    </motion.div>
+  );
 }
 
 function getRobotsDetail(r: WebsiteCheckResult): string {
@@ -199,7 +323,7 @@ function getScoreSummary(score: number): string {
  * @param props - Component props containing the finalized audit result.
  * @returns The composed audit results layout.
  */
-export function AuditResults({ result }: AuditResultsProps) {
+export function AuditResults({ result, onSubmitClientHtml, isAssisting = false }: AuditResultsProps) {
   const { score, scoreBreakdown, companyName } = result;
 
   const passed = [
@@ -269,6 +393,19 @@ export function AuditResults({ result }: AuditResultsProps) {
           detail={getCareersDetail(result)}
           index={3}
         />
+
+        {/* Bot-protection assist card */}
+        {result.careersPageStatus === "bot_protected" &&
+          result.careersBlockedUrl &&
+          onSubmitClientHtml && (
+            <BotProtectAssist
+              blockedUrl={result.careersBlockedUrl}
+              domain={result.domain}
+              onSubmitClientHtml={onSubmitClientHtml}
+              isAssisting={isAssisting}
+            />
+          )}
+
         <CheckCard
           icon={<ShieldCheck size={22} weight="duotone" />}
           name="Bot Access"
