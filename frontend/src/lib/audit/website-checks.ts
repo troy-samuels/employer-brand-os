@@ -4,9 +4,12 @@
  */
 
 import { validateUrl } from "@/lib/audit/url-validator";
+import { renderPage } from "@/lib/audit/headless-render";
 
 const FETCH_TIMEOUT_MS = 5000;
 const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
+const HEADLESS_FALLBACK_MAX_TEXT_CHARS = 500;
+const HEADLESS_FALLBACK_MIN_HTML_BYTES = 5000;
 
 const LLMS_EMPLOYMENT_KEYWORDS = [
   "career",
@@ -382,7 +385,7 @@ export type WebsiteCheckResult = {
   };
 };
 
-async function fetchSafe(url: string): Promise<SafeFetchResult> {
+async function fetchSafe(url: string, useHeadlessFallback = false): Promise<SafeFetchResult> {
   const validation = await validateUrl(url);
   if (!validation.ok) {
     return {
@@ -405,11 +408,30 @@ async function fetchSafe(url: string): Promise<SafeFetchResult> {
     });
 
     const text = await response.text();
+    const resolvedUrl = typeof response.url === "string" && response.url ? response.url : url;
+
+    if (
+      useHeadlessFallback &&
+      response.status === 200 &&
+      stripHtmlTags(text).length < HEADLESS_FALLBACK_MAX_TEXT_CHARS &&
+      Buffer.byteLength(text, "utf8") > HEADLESS_FALLBACK_MIN_HTML_BYTES
+    ) {
+      const renderedPage = await renderPage(resolvedUrl);
+      if (renderedPage.html) {
+        return {
+          ok: true,
+          status: response.status,
+          text: renderedPage.html,
+          url: renderedPage.url || resolvedUrl,
+        };
+      }
+    }
+
     return {
       ok: true,
       status: response.status,
       text,
-      url: typeof response.url === "string" && response.url ? response.url : url,
+      url: resolvedUrl,
     };
   } catch {
     return {
@@ -541,7 +563,7 @@ function isAllowedCareersRedirectTarget(targetUrl: string, domain: string): bool
 }
 
 async function fetchCareersPage(url: string, domain: string): Promise<SafeFetchResult> {
-  let currentResponse = await fetchSafe(url);
+  let currentResponse = await fetchSafe(url, true);
   if (!currentResponse.ok || currentResponse.status !== 200) {
     return currentResponse;
   }
@@ -559,7 +581,7 @@ async function fetchCareersPage(url: string, domain: string): Promise<SafeFetchR
     }
 
     visitedUrls.add(metaRefreshUrl);
-    const redirectedResponse = await fetchSafe(metaRefreshUrl);
+    const redirectedResponse = await fetchSafe(metaRefreshUrl, true);
     if (!redirectedResponse.ok || redirectedResponse.status !== 200) {
       break;
     }
