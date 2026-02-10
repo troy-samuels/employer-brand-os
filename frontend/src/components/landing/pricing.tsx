@@ -12,7 +12,7 @@ const highlights = [
     audience: "1–50 employees",
     price: "£49",
     features: [
-      "AI Visibility Score audit",
+      "3 LLM reputation checks",
       "Pixel & verification page",
       "Monthly reputation snapshot",
     ],
@@ -23,8 +23,8 @@ const highlights = [
     price: "£149",
     highlighted: true,
     features: [
+      "4 LLM reputation checks",
       "Weekly Monday Report",
-      "Salary transparency compliance",
       "Hallucination alerts",
     ],
   },
@@ -33,9 +33,9 @@ const highlights = [
     audience: "500+ employees",
     price: "£399",
     features: [
-      "Unlimited locations",
+      "6 LLMs — full coverage",
       "Competitor benchmarking",
-      "Priority crawl requests",
+      "Unlimited locations",
     ],
   },
 ];

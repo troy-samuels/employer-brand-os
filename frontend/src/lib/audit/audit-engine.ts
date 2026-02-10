@@ -1,26 +1,43 @@
 /**
  * @module lib/audit/audit-engine
- * Module implementation for audit-engine.ts.
+ * Orchestrates the full audit: website checks + per-LLM reputation checks.
  */
 
 import type { AuditResult } from "@/types/audit";
+import type { ComprehensiveLlmAudit, PlanTier } from "@/types/llm-audit";
 import { SAMPLE_AUDIT_RESULT } from "@/lib/utils/constants";
-import { runLlmTests } from "@/lib/audit/llm-testing";
+import { runLlmTests, runLlmTestsLegacy } from "@/lib/audit/llm-testing";
 import { checkCompliance } from "@/lib/audit/compliance-checker";
 
 interface AuditRequest {
   domain: string;
   name: string;
   email: string;
+  /** Plan tier determines which LLMs are checked. Defaults to free (website only). */
+  tier?: PlanTier;
 }
 
 /**
- * Defines the AuditEngine class.
+ * The AuditEngine runs website checks (free, deterministic) and
+ * per-LLM reputation checks (paid, gated by plan tier).
  */
 export class AuditEngine {
-  async runComprehensiveAudit({ domain, name, email }: AuditRequest): Promise<AuditResult> {
-    const llm_test_results = await runLlmTests(domain);
+  /**
+   * Run the full audit — website checks + LLM reputation checks.
+   * The `tier` parameter controls which LLM models are queried.
+   */
+  async runComprehensiveAudit({ domain, name, email, tier }: AuditRequest): Promise<AuditResult & { llmAudit?: ComprehensiveLlmAudit }> {
+    // Website checks (always free, deterministic, zero API cost)
     const compliance_violations = await checkCompliance(domain);
+
+    // Legacy LLM test results (backward compat with existing UI)
+    const llm_test_results = await runLlmTestsLegacy(domain);
+
+    // Per-LLM audit (gated by tier — only runs for paid plans)
+    let llmAudit: ComprehensiveLlmAudit | undefined;
+    if (tier) {
+      llmAudit = await runLlmTests(domain, tier);
+    }
 
     return {
       ...SAMPLE_AUDIT_RESULT,
@@ -31,6 +48,7 @@ export class AuditEngine {
       llm_test_results,
       compliance_violations,
       created_at: new Date().toISOString(),
+      ...(llmAudit ? { llmAudit } : {}),
     };
   }
 }

@@ -25,8 +25,11 @@ const plans = [
     monthlyPrice: 49,
     annualPrice: 39,
     description: "See how AI represents you and start fixing it.",
+    llmCount: 3,
+    llmNames: "ChatGPT, Google AI, Perplexity",
     features: [
       "AI Visibility Score audit",
+      "3 LLM reputation checks",
       "Pixel installation (1 domain)",
       "Employer facts dashboard",
       "Hosted verification page",
@@ -42,8 +45,11 @@ const plans = [
     monthlyPrice: 149,
     annualPrice: 119,
     description: "Weekly monitoring, compliance, and hallucination alerts.",
+    llmCount: 4,
+    llmNames: "+ Microsoft Copilot",
     features: [
       "Everything in Starter",
+      "4 LLM reputation checks",
       "Weekly Monday Report",
       "Up to 5 locations",
       "Salary transparency compliance",
@@ -61,8 +67,11 @@ const plans = [
     monthlyPrice: 399,
     annualPrice: 319,
     description: "Full AI reputation control with competitor intelligence.",
+    llmCount: 6,
+    llmNames: "+ Claude, Meta AI",
     features: [
       "Everything in Growth",
+      "6 LLM reputation checks — full coverage",
       "Unlimited locations",
       "Competitor benchmarking",
       "Advanced sanitisation rules",
@@ -111,7 +120,7 @@ const faqs = [
   },
   {
     q: "What AI models does Rankwell monitor?",
-    a: "We currently track ChatGPT, Claude, Perplexity, Google AI Overviews, and Microsoft Copilot. New models are added as they gain adoption.",
+    a: "Starter covers ChatGPT, Google AI Overviews, and Perplexity — the three highest-reach models for candidate research. Growth adds Microsoft Copilot. Scale covers all six including Claude and Meta AI. We add new models as they gain adoption.",
   },
 ];
 
