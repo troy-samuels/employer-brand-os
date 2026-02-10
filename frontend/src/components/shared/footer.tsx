@@ -34,6 +34,12 @@ export function Footer() {
               How we score
             </Link>
             <Link
+              href="/pricing"
+              className="hover:text-neutral-950 transition-colors"
+            >
+              Pricing
+            </Link>
+            <Link
               href="/security"
               className="hover:text-neutral-950 transition-colors"
             >

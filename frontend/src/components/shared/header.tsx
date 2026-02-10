@@ -24,6 +24,12 @@ export function Header() {
             How we score
           </Link>
           <Link
+            href="/pricing"
+            className="text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Pricing
+          </Link>
+          <Link
             href="/security"
             className="text-neutral-500 hover:text-neutral-950 transition-colors"
           >

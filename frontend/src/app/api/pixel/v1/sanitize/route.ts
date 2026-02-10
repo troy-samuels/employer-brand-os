@@ -7,25 +7,33 @@
  * Translates internal job codes (e.g., L4-Eng-NY) to public titles (e.g., Senior Software Engineer)
  *
  * Security layers:
- * 1. CORS - Dynamic origin validation
- * 2. API key validation - Key must be active and not expired
- * 3. Rate limiting - Per-key request limits
- * 4. Audit logging - All requests logged
+ * 1. CORS + preflight allowlist checks
+ * 2. API key validation - Includes missing/format/expiry handling
+ * 3. Request signing verification + replay protection
+ * 4. Domain allowlist validation
+ * 5. Rate limiting - Per-key request limits
+ * 6. Audit logging - All requests logged
  */
 
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import {
-  buildErrorHeaders,
   buildPreflightResponse,
   buildSuccessHeaders,
 } from "@/features/pixel/lib/cors";
-import { validateApiKey } from "@/features/pixel/lib/validate-key";
+import {
+  getCorsOrigin,
+  pixelErrorResponse,
+  requireApiKey,
+  requireDomain,
+  requireRateLimit,
+  zodValidationDetails,
+} from "@/features/pixel/lib/pixel-api";
 import { sanitizeJobCode } from "@/features/sanitization/lib/sanitize";
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
-import { API_ERROR_CODE } from "@/lib/utils/api-errors";
-import { type ApiErrorResponse } from "@/lib/utils/api-response";
+import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 
 // Query parameter schema
 const sanitizeQuerySchema = z.object({
@@ -39,33 +47,49 @@ const sanitizeQuerySchema = z.object({
     .max(100, 'Internal code too long'),
 });
 
-const SANITIZE_ERROR_CODE = {
-  invalidKey: "invalid_key",
-  missingCode: "missing_code",
-} as const;
-
 /**
  * Handles CORS preflight checks for sanitize requests.
  * @param request - The incoming preflight request.
  * @returns A preflight response with CORS headers when origin is provided.
  */
 export async function OPTIONS(request: NextRequest): Promise<Response> {
-  const origin = request.headers.get("origin");
+  markPixelServiceRequest();
+  const origin = getCorsOrigin(request.headers.get("origin"));
 
   try {
     if (origin) {
-      return buildPreflightResponse(origin);
+      const url = new URL(request.url);
+      const keyResult = await requireApiKey(
+        url.searchParams.get("key"),
+        request,
+        "pixel.v1.sanitize.preflight",
+        origin
+      );
+      if (!keyResult.ok) {
+        return keyResult.response;
+      }
+
+      const domainResult = requireDomain(
+        origin,
+        null,
+        keyResult.validatedKey.allowedDomains
+      );
+      if (!domainResult.ok) {
+        return domainResult.response;
+      }
+
+      return buildPreflightResponse(origin, keyResult.validatedKey.allowedDomains);
     }
 
     return new Response(null, { status: 204 });
   } catch (error) {
     console.error("[SANITIZE] OPTIONS preflight error:", error);
-    return errorResponse(
-      API_ERROR_CODE.internal,
-      "An error occurred processing the request",
-      500,
+    return pixelErrorResponse({
+      code: API_ERROR_CODE.internal,
+      message: API_ERROR_MESSAGE.internal,
+      status: 500,
       origin,
-    );
+    });
   }
 }
 
@@ -75,59 +99,43 @@ export async function OPTIONS(request: NextRequest): Promise<Response> {
  * @returns Sanitization output or a standardized error response.
  */
 export async function GET(request: NextRequest): Promise<Response> {
+  markPixelServiceRequest();
   const startTime = Date.now();
-  const origin = request.headers.get('origin');
-  const ipAddress = extractClientIp(request);
-  const userAgent = request.headers.get('user-agent');
+  const origin = getCorsOrigin(request.headers.get('origin'));
+  const referer = request.headers.get('referer');
 
   try {
-    // Parse and validate query parameters
     const url = new URL(request.url);
     const rawKey = url.searchParams.get('key');
     const rawCode = url.searchParams.get('code');
+    const keyResult = await requireApiKey(
+      rawKey,
+      request,
+      "pixel.v1.sanitize",
+      origin
+    );
+    if (!keyResult.ok) {
+      return keyResult.response;
+    }
 
-    const params: { key?: string; code?: string } = {};
-    if (rawKey !== null) params.key = rawKey;
-    if (rawCode !== null) params.code = rawCode;
+    const params: { key: string; code?: string } = { key: keyResult.key };
+    if (rawCode !== null) {
+      params.code = rawCode;
+    }
 
     const queryResult = sanitizeQuerySchema.safeParse(params);
 
     if (!queryResult.success) {
-      const errors = queryResult.error.format();
-
-      if (errors.key) {
-        return errorResponse(
-          SANITIZE_ERROR_CODE.invalidKey,
-          'Missing or invalid API key parameter',
-          400,
-          origin
-        );
-      }
-
-      return errorResponse(
-        SANITIZE_ERROR_CODE.missingCode,
-        'Missing or invalid code parameter',
-        400,
-        origin
-      );
+      return pixelErrorResponse({
+        code: API_ERROR_CODE.malformedRequest,
+        message: "Malformed request parameters",
+        status: 400,
+        origin,
+        details: zodValidationDetails(queryResult.error),
+      });
     }
 
     const { key, code } = queryResult.data;
-
-    // Validate API key
-    const validatedKey = await validateApiKey(key, {
-      ipAddress,
-      userAgent,
-      resource: 'pixel.v1.sanitize',
-    });
-    if (!validatedKey) {
-      return errorResponse(
-        SANITIZE_ERROR_CODE.invalidKey,
-        'API key not found or inactive',
-        401,
-        origin
-      );
-    }
 
     const signatureResult = verifyPixelRequestSignature(request, key);
     if (!signatureResult.ok) {
@@ -136,31 +144,48 @@ export async function GET(request: NextRequest): Promise<Response> {
           ? API_ERROR_CODE.replayDetected
           : API_ERROR_CODE.invalidSignature;
 
-      return errorResponse(
-        errorCode,
-        signatureResult.message,
-        signatureResult.status,
-        origin
-      );
+      return pixelErrorResponse({
+        code: errorCode,
+        message: signatureResult.message,
+        status: signatureResult.status,
+        origin,
+      });
     }
 
-    // Sanitize the job code
+    const domainResult = requireDomain(
+      origin,
+      referer,
+      keyResult.validatedKey.allowedDomains
+    );
+    if (!domainResult.ok) {
+      return domainResult.response;
+    }
+
+    const rateLimitResult = await requireRateLimit(
+      "pixel.v1.sanitize",
+      keyResult.validatedKey.id,
+      keyResult.validatedKey.rateLimitPerMinute,
+      origin
+    );
+    if (!rateLimitResult.ok) {
+      return rateLimitResult.response;
+    }
+
     const result = await sanitizeJobCode({
-      organizationId: validatedKey.organisationId,
+      organizationId: keyResult.validatedKey.organisationId,
       internalCode: code,
     });
 
-    // Build response
-    const headers = buildSuccessHeaders(origin || '');
+    const headers = buildSuccessHeaders(origin);
+    headers.set('Content-Type', 'application/json; charset=utf-8');
     headers.set('X-Response-Time', `${Date.now() - startTime}ms`);
 
-    // Log the sanitization request (async, don't block)
     logSanitizeEvent({
-      organisationId: validatedKey.organisationId,
-      apiKeyId: validatedKey.id,
+      organisationId: keyResult.validatedKey.organisationId,
+      apiKeyId: keyResult.validatedKey.id,
       internalCode: code,
       sanitized: result.sanitized,
-      origin: origin || '',
+      origin: origin || referer || '',
       responseTimeMs: Date.now() - startTime,
     });
 
@@ -171,53 +196,13 @@ export async function GET(request: NextRequest): Promise<Response> {
   } catch (error) {
     console.error('[SANITIZE] Error processing request:', error);
 
-    return errorResponse(
-      API_ERROR_CODE.internal,
-      'An error occurred processing the request',
-      500,
-      origin
-    );
+    return pixelErrorResponse({
+      code: API_ERROR_CODE.internal,
+      message: API_ERROR_MESSAGE.internal,
+      status: 500,
+      origin,
+    });
   }
-}
-
-/**
- * Build a standardized error response
- */
-function errorResponse(
-  errorCode: string,
-  message: string,
-  status: number,
-  origin: string | null
-): Response {
-  const headers = buildErrorHeaders(origin || undefined);
-
-  const body: ApiErrorResponse = {
-    error: message,
-    code: errorCode,
-    status,
-  };
-
-  return new Response(JSON.stringify(body), {
-    status,
-    headers,
-  });
-}
-
-function extractClientIp(request: NextRequest): string | null {
-  const realIp = request.headers.get('x-real-ip')?.trim();
-  if (realIp) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    const [first] = forwarded.split(',');
-    if (first?.trim()) {
-      return first.trim();
-    }
-  }
-
-  return null;
 }
 
 /**

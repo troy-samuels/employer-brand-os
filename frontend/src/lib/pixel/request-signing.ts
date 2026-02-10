@@ -10,6 +10,7 @@ const SIGNATURE_HEADER = "x-rankwell-signature";
 const TIMESTAMP_HEADER = "x-rankwell-timestamp";
 const NONCE_HEADER = "x-rankwell-nonce";
 const DEFAULT_ALLOWED_DRIFT_SECONDS = 300;
+const DEFAULT_MAX_NONCE_STORE_ENTRIES = 10000;
 
 const nonceStore = new Map<string, number>();
 
@@ -54,6 +55,25 @@ function cleanupNonceStore(nowSeconds: number): void {
     if (expiresAt <= nowSeconds) {
       nonceStore.delete(nonceKey);
     }
+  }
+}
+
+function trimNonceStore(maxEntries: number): void {
+  if (nonceStore.size <= maxEntries) {
+    return;
+  }
+
+  const entriesByExpiry = Array.from(nonceStore.entries()).sort(
+    (left, right) => left[1] - right[1]
+  );
+  const entriesToDelete = nonceStore.size - maxEntries;
+
+  for (let index = 0; index < entriesToDelete; index += 1) {
+    const entry = entriesByExpiry[index];
+    if (!entry) {
+      break;
+    }
+    nonceStore.delete(entry[0]);
   }
 }
 
@@ -103,6 +123,7 @@ export function verifyPixelRequestSignature(
     body?: string;
     nowSeconds?: number;
     allowedDriftSeconds?: number;
+    maxNonceEntries?: number;
   }
 ): SignatureVerificationResult {
   const signature = request.headers.get(SIGNATURE_HEADER);
@@ -130,6 +151,7 @@ export function verifyPixelRequestSignature(
 
   const nowSeconds = options?.nowSeconds ?? Math.floor(Date.now() / 1000);
   const allowedDriftSeconds = options?.allowedDriftSeconds ?? DEFAULT_ALLOWED_DRIFT_SECONDS;
+  const maxNonceEntries = options?.maxNonceEntries ?? DEFAULT_MAX_NONCE_STORE_ENTRIES;
   if (Math.abs(nowSeconds - parsedTimestamp) > allowedDriftSeconds) {
     return {
       ok: false,
@@ -173,6 +195,7 @@ export function verifyPixelRequestSignature(
     };
   }
 
+  trimNonceStore(Math.max(1, maxNonceEntries - 1));
   nonceStore.set(replayKey, nowSeconds + allowedDriftSeconds);
   return { ok: true };
 }

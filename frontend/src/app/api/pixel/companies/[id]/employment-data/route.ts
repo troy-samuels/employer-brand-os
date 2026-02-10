@@ -6,21 +6,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { buildCorsHeaders } from "@/features/pixel/lib/cors";
+import {
+  getCorsOrigin,
+  pixelErrorResponse,
+  requireApiKey,
+  requireDomain,
+  requireRateLimit,
+} from "@/features/pixel/lib/pixel-api";
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { getEmploymentData } from "@/lib/pixel/pixel-manager";
 import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
-import { API_ERROR_CODE } from "@/lib/utils/api-errors";
+import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
-  apiErrorResponse,
   apiSuccessResponse,
   type ApiErrorResponse,
 } from "@/lib/utils/api-response";
 
 const companyParamsSchema = z.object({
   id: z.string().min(1),
-});
-
-const pixelHeadersSchema = z.object({
-  pixelId: z.string().min(1),
 });
 
 type EmploymentDataResponse = Awaited<ReturnType<typeof getEmploymentData>>;
@@ -34,52 +38,86 @@ type EmploymentDataResponse = Awaited<ReturnType<typeof getEmploymentData>>;
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> },
-): Promise<NextResponse<EmploymentDataResponse | ApiErrorResponse>> {
+): Promise<Response> {
+  markPixelServiceRequest();
+  const origin = getCorsOrigin(request.headers.get("origin"));
+  const referer = request.headers.get("referer");
+
   try {
     const parsedParams = companyParamsSchema.safeParse(await params);
     if (!parsedParams.success) {
-      return apiErrorResponse({
-        error: "Invalid company id",
-        code: API_ERROR_CODE.invalidPayload,
-        status: 400,
-      });
+      return NextResponse.json(
+        {
+          error: "Invalid company id",
+          code: API_ERROR_CODE.invalidPayload,
+          status: 400,
+        } satisfies ApiErrorResponse,
+        { status: 400 }
+      );
     }
 
-    const headersInput = {
-      pixelId: request.headers.get("X-Rankwell-Pixel-ID") ?? "",
-    };
-    const parsedHeaders = pixelHeadersSchema.safeParse(headersInput);
-    if (!parsedHeaders.success) {
-      return apiErrorResponse({
-        error: "Missing pixel ID",
-        code: API_ERROR_CODE.missingHeader,
-        status: 400,
-      });
+    const keyResult = await requireApiKey(
+      request.headers.get("X-Rankwell-Pixel-ID"),
+      request,
+      "pixel.companies.employment-data",
+      origin
+    );
+    if (!keyResult.ok) {
+      return keyResult.response;
     }
 
     const { id: companyId } = parsedParams.data;
-    const { pixelId } = parsedHeaders.data;
+    const domainResult = requireDomain(
+      origin,
+      referer,
+      keyResult.validatedKey.allowedDomains
+    );
+    if (!domainResult.ok) {
+      return domainResult.response;
+    }
 
-    const signatureResult = verifyPixelRequestSignature(request, pixelId);
+    const rateLimitResult = await requireRateLimit(
+      "pixel.companies.employment-data",
+      keyResult.validatedKey.id,
+      keyResult.validatedKey.rateLimitPerMinute,
+      origin
+    );
+    if (!rateLimitResult.ok) {
+      return rateLimitResult.response;
+    }
+
+    const signatureResult = verifyPixelRequestSignature(request, keyResult.key);
     if (!signatureResult.ok) {
-      return apiErrorResponse({
-        error: signatureResult.message,
+      return pixelErrorResponse({
         code:
           signatureResult.error === "replay_detected"
             ? API_ERROR_CODE.replayDetected
             : API_ERROR_CODE.invalidSignature,
+        message: signatureResult.message,
         status: signatureResult.status,
+        origin,
       });
     }
 
     const data = await getEmploymentData(companyId);
-    return apiSuccessResponse<EmploymentDataResponse>(data);
+    const headers = new Headers({
+      "Cache-Control": "no-store",
+    });
+    if (origin) {
+      const corsHeaders = buildCorsHeaders(origin);
+      corsHeaders.forEach((value, key) => {
+        headers.set(key, value);
+      });
+    }
+
+    return apiSuccessResponse<EmploymentDataResponse>(data, { headers });
   } catch (error) {
     console.error("Pixel data error:", error);
-    return apiErrorResponse({
-      error: "Unable to load employment data",
+    return pixelErrorResponse({
+      message: API_ERROR_MESSAGE.internal,
       code: API_ERROR_CODE.internal,
       status: 500,
+      origin,
     });
   }
 }

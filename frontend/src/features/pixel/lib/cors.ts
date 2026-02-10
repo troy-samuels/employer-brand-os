@@ -3,6 +3,8 @@
  * Module implementation for cors.ts.
  */
 
+import { validateDomain } from './validate-domain';
+
 /**
  * CORS Headers Helper
  * Builds dynamic CORS headers for the Smart Pixel API
@@ -50,8 +52,8 @@ export function buildCorsHeaders(origin: string): Headers {
  * Build headers for a successful JSON-LD response
  * Includes CORS headers plus caching configuration
  */
-export function buildSuccessHeaders(origin: string): Headers {
-  const headers = buildCorsHeaders(origin);
+export function buildSuccessHeaders(origin?: string | null): Headers {
+  const headers = new Headers();
 
   // Cache for 5 minutes - balances freshness with performance
   headers.set('Cache-Control', 'public, max-age=300, s-maxage=300');
@@ -62,6 +64,13 @@ export function buildSuccessHeaders(origin: string): Headers {
   // Version header for debugging
   headers.set('X-Rankwell-Version', '1.0');
 
+  if (origin) {
+    const corsHeaders = buildCorsHeaders(origin);
+    corsHeaders.forEach((value, key) => {
+      headers.set(key, value);
+    });
+  }
+
   return headers;
 }
 
@@ -69,7 +78,7 @@ export function buildSuccessHeaders(origin: string): Headers {
  * Build headers for an error response
  * No caching, includes CORS for error visibility
  */
-export function buildErrorHeaders(origin?: string): Headers {
+export function buildErrorHeaders(origin?: string | null): Headers {
   const headers = new Headers();
 
   // If we have a valid origin, include CORS headers so client can read error
@@ -91,7 +100,23 @@ export function buildErrorHeaders(origin?: string): Headers {
  * Handle OPTIONS preflight request
  * Returns 204 No Content with CORS headers
  */
-export function buildPreflightResponse(origin: string): Response {
+export function buildPreflightResponse(
+  origin: string,
+  allowedDomains?: string[]
+): Response {
+  if (allowedDomains) {
+    const domainResult = validateDomain(origin, null, allowedDomains);
+    if (!domainResult.valid) {
+      return new Response(null, {
+        status: 403,
+        headers: new Headers({
+          'Cache-Control': 'no-store',
+          Vary: 'Origin',
+        }),
+      });
+    }
+  }
+
   const headers = buildCorsHeaders(origin);
 
   return new Response(null, {

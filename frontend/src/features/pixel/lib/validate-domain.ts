@@ -85,17 +85,58 @@ function extractHostname(urlOrHostname: string | null): string | null {
   }
 
   try {
+    const trimmed = urlOrHostname.trim();
+    if (!trimmed || trimmed === 'null') {
+      return null;
+    }
+
     // If it looks like a URL, parse it
-    if (urlOrHostname.includes('://')) {
-      const url = new URL(urlOrHostname);
-      return url.hostname.toLowerCase();
+    if (trimmed.includes('://')) {
+      const url = new URL(trimmed);
+      return normalizeHostname(url.hostname);
     }
 
     // Otherwise treat as bare hostname
-    return urlOrHostname.toLowerCase();
+    return normalizeHostname(trimmed);
   } catch {
     return null;
   }
+}
+
+function normalizeHostname(hostname: string): string | null {
+  const normalizedInput = hostname.trim().toLowerCase();
+  if (!normalizedInput) {
+    return null;
+  }
+
+  const withoutPath = normalizedInput.split(/[/?#]/)[0];
+  const withoutPort = withoutPath.split(':')[0];
+  const withoutTrailingDot = withoutPort.endsWith('.')
+    ? withoutPort.slice(0, -1)
+    : withoutPort;
+
+  return withoutTrailingDot || null;
+}
+
+function stripWww(hostname: string): string {
+  return hostname.startsWith('www.') ? hostname.slice(4) : hostname;
+}
+
+function parseDomainPattern(pattern: string): { wildcard: boolean; hostname: string } | null {
+  const trimmed = pattern.trim().toLowerCase();
+  if (!trimmed) {
+    return null;
+  }
+
+  const wildcard = trimmed.startsWith('*.');
+  const rawHostname = wildcard ? trimmed.slice(2) : trimmed;
+  const hostname = extractHostname(rawHostname);
+
+  if (!hostname) {
+    return null;
+  }
+
+  return { wildcard, hostname };
 }
 
 /**
@@ -110,27 +151,33 @@ function findMatchingDomain(
   allowedDomains: string[]
 ): string | null {
   const normalizedHostname = hostname.toLowerCase();
+  const canonicalHostname = stripWww(normalizedHostname);
 
   for (const pattern of allowedDomains) {
-    const normalizedPattern = pattern.toLowerCase();
+    const parsedPattern = parseDomainPattern(pattern);
+    if (!parsedPattern) {
+      continue;
+    }
 
-    // Exact match
-    if (normalizedHostname === normalizedPattern) {
+    const canonicalPatternHost = stripWww(parsedPattern.hostname);
+
+    // Exact match with www/non-www tolerance.
+    if (!parsedPattern.wildcard && canonicalHostname === canonicalPatternHost) {
       return pattern;
     }
 
     // Wildcard match: *.example.com
-    if (normalizedPattern.startsWith('*.')) {
-      const baseDomain = normalizedPattern.slice(2); // Remove "*."
-
-      // Check if hostname ends with .baseDomain (subdomain match)
-      // This prevents suffix attacks: evil.com cannot match *.example.com
-      if (normalizedHostname.endsWith(`.${baseDomain}`)) {
-        return pattern;
+    if (parsedPattern.wildcard) {
+      const baseDomain = canonicalPatternHost;
+      if (!baseDomain) {
+        continue;
       }
 
-      // Also match the base domain itself (*.example.com matches example.com)
-      if (normalizedHostname === baseDomain) {
+      // Match base domain and all subdomains, while preventing suffix attacks.
+      if (
+        canonicalHostname === baseDomain ||
+        canonicalHostname.endsWith(`.${baseDomain}`)
+      ) {
         return pattern;
       }
     }

@@ -1,65 +1,45 @@
 /**
  * @module components/landing/pricing
- * Module implementation for pricing.tsx.
+ * Simplified pricing teaser on the homepage — links through to /pricing.
  */
 
 import Link from "next/link";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-
-const plans = [
+const highlights = [
   {
-    name: "Visibility",
-    price: "£299",
-    period: "/month",
-    description: "See what AI says about you and start correcting it.",
+    name: "Starter",
+    audience: "1–50 employees",
+    price: "£49",
     features: [
-      "Shadow Salary audit",
-      "AI-readable data injection",
-      "Hosted verification page",
-      "Basic Monday Report",
+      "AI Visibility Score audit",
+      "Pixel & verification page",
+      "Monthly reputation snapshot",
     ],
-    cta: "Start with Visibility",
-    href: "/",
   },
   {
-    name: "Compliance",
-    price: "£899",
-    period: "/month",
-    description: "Full AI reputation control with automated pay transparency.",
-    features: [
-      "Everything in Visibility",
-      "Auto-compliance by jurisdiction",
-      "Compensation Confidence Score",
-      "Full Monday Report with competitor benchmarking",
-      "Hallucination monitoring",
-    ],
-    cta: "Start with Compliance",
-    href: "/",
+    name: "Growth",
+    audience: "51–500 employees",
+    price: "£149",
     highlighted: true,
+    features: [
+      "Weekly Monday Report",
+      "Salary transparency compliance",
+      "Hallucination alerts",
+    ],
   },
   {
-    name: "Enterprise",
-    price: "Custom",
-    period: "",
-    description: "Multi-location management, custom AI training, and dedicated support.",
+    name: "Scale",
+    audience: "500+ employees",
+    price: "£399",
     features: [
-      "Everything in Compliance",
       "Unlimited locations",
-      "Custom AI model training",
-      "White-glove onboarding",
-      "Dedicated account manager",
+      "Competitor benchmarking",
+      "Priority crawl requests",
     ],
-    cta: "Talk to us",
-    href: "mailto:hello@rankwell.io",
   },
 ];
 
-/**
- * Executes Pricing.
- * @returns The resulting value.
- */
 export default function Pricing() {
   return (
     <section id="pricing" className="py-16 lg:py-20 bg-neutral-50">
@@ -70,13 +50,13 @@ export default function Pricing() {
             Cheaper than one bad hire
           </h2>
           <p className="text-neutral-600 mt-3 max-w-xl">
-            If Rankwell prevents even one candidate from ruling you out based on
-            wrong AI data, it&apos;s paid for itself for the year.
+            Plans scale with your team. The free audit is always free —
+            no signup, no credit card.
           </p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {plans.map((plan) => (
+          {highlights.map((plan) => (
             <div
               key={plan.name}
               className={`rounded-xl bg-white p-6 lg:p-8 border ${
@@ -85,50 +65,56 @@ export default function Pricing() {
                   : "border-neutral-200"
               }`}
             >
-              <div className="mb-6">
+              <div className="mb-5">
                 <h3 className="text-base font-semibold text-neutral-950">
                   {plan.name}
                 </h3>
+                <p className="text-xs font-medium text-neutral-400 mt-1">
+                  {plan.audience}
+                </p>
                 <div className="mt-3 flex items-baseline gap-1">
                   <span className="text-3xl font-bold text-neutral-950">
                     {plan.price}
                   </span>
-                  {plan.period && (
-                    <span className="text-neutral-500 text-sm">{plan.period}</span>
-                  )}
+                  <span className="text-neutral-500 text-sm">/month</span>
                 </div>
-                <p className="text-neutral-600 text-sm mt-3 leading-relaxed">
-                  {plan.description}
-                </p>
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-3">
                 {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2.5 text-sm text-neutral-600">
-                    <Check className="h-4 w-4 text-status-verified mt-0.5 shrink-0" strokeWidth={2} />
+                  <li
+                    key={feature}
+                    className="flex items-start gap-2.5 text-sm text-neutral-600"
+                  >
+                    <Check
+                      className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0"
+                      strokeWidth={2}
+                    />
                     {feature}
                   </li>
                 ))}
               </ul>
-
-              <Button
-                variant={plan.highlighted ? "primary" : "secondary"}
-                size="md"
-                className="w-full"
-                asChild
-              >
-                <Link href={plan.href}>{plan.cta}</Link>
-              </Button>
             </div>
           ))}
         </div>
 
-        <div className="mt-8 text-center">
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-950 hover:text-neutral-700 transition-colors"
+          >
+            See full pricing & FAQ
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+          <span className="text-neutral-300 hidden sm:inline">·</span>
           <p className="text-sm text-neutral-500">
-            Agency wholesale pricing available — £150/month per location for 10+ locations.{" "}
-            <Link href="mailto:hello@rankwell.io" className="text-brand-accent hover:underline">
+            Enterprise & agency pricing available.{" "}
+            <a
+              href="mailto:hello@rankwell.io"
+              className="text-brand-accent hover:underline"
+            >
               Get in touch
-            </Link>
+            </a>
           </p>
         </div>
       </div>

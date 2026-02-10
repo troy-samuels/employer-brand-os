@@ -14,125 +14,235 @@ export const PIXEL_SCRIPT_VERSION = "1.0.0";
  * Exposes exported value(s): PIXEL_SCRIPT_BODY.
  */
 export const PIXEL_SCRIPT_BODY = `(() => {
-  const EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+  try {
+    const EMPTY_SHA256 = "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855";
+    const globalObject = typeof window === "object" ? window : null;
+    const doc = typeof document === "object" ? document : null;
 
-  function resolveScriptTag() {
-    if (document.currentScript) {
-      return document.currentScript;
+    if (!globalObject || !doc) {
+      return;
     }
 
-    const scripts = document.getElementsByTagName("script");
-    for (let i = scripts.length - 1; i >= 0; i -= 1) {
-      const src = scripts[i].getAttribute("src") || "";
-      if (src.includes("/api/pixel/v1/script")) {
-        return scripts[i];
-      }
-    }
+    function noop() {}
 
-    return null;
-  }
+    function resolveScriptTag() {
+      try {
+        if (doc.currentScript) {
+          return doc.currentScript;
+        }
 
-  function randomNonce() {
-    if (window.crypto && typeof window.crypto.randomUUID === "function") {
-      return window.crypto.randomUUID();
-    }
+        const scripts = doc.getElementsByTagName("script");
+        for (let i = scripts.length - 1; i >= 0; i -= 1) {
+          const src = scripts[i].getAttribute("src") || "";
+          if (src.includes("/api/pixel/v1/script")) {
+            return scripts[i];
+          }
+        }
+      } catch {}
 
-    return String(Date.now()) + Math.random().toString(16).slice(2);
-  }
-
-  function toBase64(buffer) {
-    let binary = "";
-    const bytes = new Uint8Array(buffer);
-    for (let i = 0; i < bytes.length; i += 1) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  }
-
-  async function signRequest(secret, payload) {
-    const encoder = new TextEncoder();
-    const key = await crypto.subtle.importKey(
-      "raw",
-      encoder.encode(secret),
-      { name: "HMAC", hash: "SHA-256" },
-      false,
-      ["sign"]
-    );
-    const signature = await crypto.subtle.sign("HMAC", key, encoder.encode(payload));
-    return toBase64(signature);
-  }
-
-  async function fetchJsonLd(config) {
-    const factsUrl = new URL("/api/pixel/v1/facts", config.apiBase);
-    factsUrl.searchParams.set("key", config.apiKey);
-    if (config.location) {
-      factsUrl.searchParams.set("location", config.location);
-    }
-
-    const timestamp = String(Math.floor(Date.now() / 1000));
-    const nonce = randomNonce();
-    const pathWithQuery = factsUrl.pathname + factsUrl.search;
-    const payload = ["GET", pathWithQuery, timestamp, nonce, EMPTY_SHA256].join("\\n");
-    const signature = await signRequest(config.apiKey, payload);
-
-    const response = await fetch(factsUrl.toString(), {
-      method: "GET",
-      mode: "cors",
-      credentials: "omit",
-      headers: {
-        "X-Rankwell-Timestamp": timestamp,
-        "X-Rankwell-Nonce": nonce,
-        "X-Rankwell-Signature": signature
-      }
-    });
-
-    if (!response.ok) {
       return null;
     }
 
-    return response.json();
-  }
+    function randomNonce() {
+      try {
+        const cryptoObject = globalObject.crypto;
+        if (cryptoObject && typeof cryptoObject.randomUUID === "function") {
+          return cryptoObject.randomUUID();
+        }
 
-  async function injectSchema(config) {
-    try {
-      const schema = await fetchJsonLd(config);
-      if (!schema || typeof schema !== "object") {
-        return;
-      }
+        if (cryptoObject && typeof cryptoObject.getRandomValues === "function") {
+          const bytes = new Uint8Array(16);
+          cryptoObject.getRandomValues(bytes);
+          let token = "";
+          for (let index = 0; index < bytes.length; index += 1) {
+            token += bytes[index].toString(16).padStart(2, "0");
+          }
+          return token;
+        }
+      } catch {}
 
-      const existing = document.getElementById("rankwell-pixel-jsonld");
-      if (existing && existing.parentNode) {
-        existing.parentNode.removeChild(existing);
-      }
-
-      const node = document.createElement("script");
-      node.type = "application/ld+json";
-      node.id = "rankwell-pixel-jsonld";
-      node.text = JSON.stringify(schema);
-      document.head.appendChild(node);
-    } catch {
-      // No-op by design: the host page should never break because of the pixel.
+      return String(Date.now()) + Math.random().toString(16).slice(2);
     }
-  }
 
-  const scriptTag = resolveScriptTag();
-  if (!scriptTag) {
-    return;
-  }
+    function toBase64(buffer) {
+      try {
+        if (typeof btoa !== "function") {
+          return "";
+        }
 
-  const apiKey = scriptTag.getAttribute("data-key");
-  if (!apiKey) {
-    return;
-  }
+        let binary = "";
+        const bytes = new Uint8Array(buffer);
+        for (let i = 0; i < bytes.length; i += 1) {
+          binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+      } catch {
+        return "";
+      }
+    }
 
-  const apiBase = scriptTag.getAttribute("data-api-base") || new URL(scriptTag.src).origin;
-  const location = scriptTag.getAttribute("data-location") || "";
+    function parseJson(text) {
+      try {
+        return JSON.parse(text);
+      } catch {
+        return null;
+      }
+    }
 
-  injectSchema({
-    apiKey,
-    apiBase,
-    location
-  });
+    function resolveApiBase(scriptTag) {
+      try {
+        const configuredBase = scriptTag.getAttribute("data-api-base");
+        if (configuredBase) {
+          return configuredBase;
+        }
+
+        const source = scriptTag.getAttribute("src");
+        if (source) {
+          const baseHref =
+            doc.baseURI || (globalObject.location ? globalObject.location.href : "");
+          return new URL(source, baseHref).origin;
+        }
+
+        return globalObject.location ? globalObject.location.origin : "";
+      } catch {
+        return "";
+      }
+    }
+
+    async function signRequest(secret, payload) {
+      try {
+        const cryptoObject = globalObject.crypto;
+        if (!cryptoObject || !cryptoObject.subtle || typeof TextEncoder !== "function") {
+          return "";
+        }
+
+        const encoder = new TextEncoder();
+        const key = await cryptoObject.subtle.importKey(
+          "raw",
+          encoder.encode(secret),
+          { name: "HMAC", hash: "SHA-256" },
+          false,
+          ["sign"]
+        );
+        const signature = await cryptoObject.subtle.sign(
+          "HMAC",
+          key,
+          encoder.encode(payload)
+        );
+        return toBase64(signature);
+      } catch {
+        return "";
+      }
+    }
+
+    async function fetchJsonLd(config) {
+      try {
+        if (typeof fetch !== "function" || typeof URL !== "function") {
+          return null;
+        }
+
+        const factsUrl = new URL("/api/pixel/v1/facts", config.apiBase);
+        factsUrl.searchParams.set("key", config.apiKey);
+        if (config.location) {
+          factsUrl.searchParams.set("location", config.location);
+        }
+
+        const timestamp = String(Math.floor(Date.now() / 1000));
+        const nonce = randomNonce();
+        const pathWithQuery = factsUrl.pathname + factsUrl.search;
+        const payload = ["GET", pathWithQuery, timestamp, nonce, EMPTY_SHA256].join("\\n");
+        const signature = await signRequest(config.apiKey, payload);
+
+        if (!signature) {
+          return null;
+        }
+
+        let response;
+        try {
+          response = await fetch(factsUrl.toString(), {
+            method: "GET",
+            mode: "cors",
+            credentials: "omit",
+            headers: {
+              "X-Rankwell-Timestamp": timestamp,
+              "X-Rankwell-Nonce": nonce,
+              "X-Rankwell-Signature": signature
+            }
+          });
+        } catch {
+          return null;
+        }
+
+        if (!response || !response.ok) {
+          return null;
+        }
+
+        const text = await response.text();
+        if (!text) {
+          return null;
+        }
+
+        const parsed = parseJson(text);
+        if (!parsed || typeof parsed !== "object") {
+          return null;
+        }
+
+        return parsed;
+      } catch {
+        return null;
+      }
+    }
+
+    async function injectSchema(config) {
+      try {
+        const schema = await fetchJsonLd(config);
+        if (!schema || typeof schema !== "object") {
+          return;
+        }
+
+        const existing = doc.getElementById("rankwell-pixel-jsonld");
+        if (existing && existing.parentNode) {
+          existing.parentNode.removeChild(existing);
+        }
+
+        const head = doc.head || doc.getElementsByTagName("head")[0];
+        if (!head) {
+          return;
+        }
+
+        const node = doc.createElement("script");
+        node.type = "application/ld+json";
+        node.id = "rankwell-pixel-jsonld";
+        node.text = JSON.stringify(schema);
+        head.appendChild(node);
+      } catch {}
+    }
+
+    const scriptTag = resolveScriptTag();
+    if (!scriptTag) {
+      return;
+    }
+
+    const apiKey = (scriptTag.getAttribute("data-key") || "").trim();
+    if (!apiKey) {
+      return;
+    }
+
+    const apiBase = resolveApiBase(scriptTag);
+    if (!apiBase) {
+      return;
+    }
+
+    const location = (scriptTag.getAttribute("data-location") || "").trim();
+    const pending = injectSchema({
+      apiKey,
+      apiBase,
+      location
+    });
+    if (pending && typeof pending.catch === "function") {
+      pending.catch(noop);
+    }
+  } catch {}
 })();`;
 
 const sriDigest = createHash("sha384").update(PIXEL_SCRIPT_BODY).digest("base64");

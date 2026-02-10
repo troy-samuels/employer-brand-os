@@ -112,12 +112,20 @@ export default function HowWeScorePage() {
             Rankwell automatically optimises your employer brand for AI — so when
             candidates ask about you, the answers are yours.
           </p>
-          <Link
-            href="/"
-            className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors"
-          >
-            Run your free audit
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors"
+            >
+              Run your free audit
+            </Link>
+            <Link
+              href="/pricing"
+              className="inline-flex items-center justify-center rounded-xl border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-300 hover:text-white hover:border-neutral-500 transition-colors"
+            >
+              See pricing
+            </Link>
+          </div>
         </div>
       </div>
     </main>

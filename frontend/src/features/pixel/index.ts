@@ -40,6 +40,15 @@ export {
 export { validateDomain, isValidDomainPattern } from './lib/validate-domain';
 export { generateJsonLd } from './lib/generate-jsonld';
 export {
+  extractClientIp,
+  getCorsOrigin,
+  pixelErrorResponse,
+  requireApiKey,
+  requireDomain,
+  requireRateLimit,
+  zodValidationDetails,
+} from './lib/pixel-api';
+export {
   buildCorsHeaders,
   buildSuccessHeaders,
   buildErrorHeaders,

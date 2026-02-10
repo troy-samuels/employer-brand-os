@@ -11,6 +11,7 @@ import {
   PIXEL_SCRIPT_SRI,
   PIXEL_SCRIPT_VERSION,
 } from "@/lib/pixel/script-artifact";
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
   apiErrorResponse,
@@ -39,6 +40,8 @@ interface IntegrityResponse {
 export async function GET(
   request: Request,
 ): Promise<NextResponse<IntegrityResponse | ApiErrorResponse>> {
+  markPixelServiceRequest();
+
   try {
     const url = new URL(request.url);
     const query = Object.fromEntries(url.searchParams);
@@ -62,6 +65,9 @@ export async function GET(
       {
         headers: {
           "Cache-Control": "public, max-age=300, s-maxage=300",
+          ETag: PIXEL_SCRIPT_ETAG,
+          "X-Rankwell-SRI": PIXEL_SCRIPT_SRI,
+          "X-Rankwell-Script-Version": PIXEL_SCRIPT_VERSION,
         },
       },
     );

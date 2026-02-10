@@ -7,32 +7,33 @@
  * It returns verified employer facts as JSON-LD for injection into client websites.
  *
  * Security layers:
- * 1. CORS - Dynamic origin validation
+ * 1. CORS + preflight allowlist checks
  * 2. Domain allowlist - Server-side origin check
- * 3. API key validation - Key must be active and not expired
- * 4. Rate limiting - Per-key request limits
- * 5. Audit logging - All requests logged for forensics
+ * 3. API key validation - Includes missing/format/expiry handling
+ * 4. Request signing verification + replay protection
+ * 5. Rate limiting - Per-key request limits
+ * 6. Audit logging - All requests logged for forensics
  */
 
 import { NextRequest } from "next/server";
 
 import {
-  buildErrorHeaders,
   buildPreflightResponse,
   buildSuccessHeaders,
 } from '@/features/pixel/lib/cors';
 import { generateJsonLd } from "@/features/pixel/lib/generate-jsonld";
-import { validateApiKey } from "@/features/pixel/lib/validate-key";
-import { validateDomain } from "@/features/pixel/lib/validate-domain";
+import {
+  getCorsOrigin,
+  pixelErrorResponse,
+  requireApiKey,
+  requireDomain,
+  requireRateLimit,
+  zodValidationDetails,
+} from "@/features/pixel/lib/pixel-api";
 import { pixelFactsQuerySchema } from '@/features/pixel/schemas/pixel.schema';
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
-import { API_ERROR_CODE } from "@/lib/utils/api-errors";
-import { type ApiErrorResponse } from "@/lib/utils/api-response";
-
-const PIXEL_FACTS_ERROR_CODE = {
-  domainNotAllowed: "domain_not_allowed",
-  invalidKey: "invalid_key",
-} as const;
+import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 
 /**
  * Handles CORS preflight checks for the facts endpoint.
@@ -40,22 +41,43 @@ const PIXEL_FACTS_ERROR_CODE = {
  * @returns A preflight response with CORS headers when origin is provided.
  */
 export async function OPTIONS(request: NextRequest): Promise<Response> {
-  const origin = request.headers.get("origin");
+  markPixelServiceRequest();
+  const origin = getCorsOrigin(request.headers.get("origin"));
 
   try {
     if (origin) {
-      return buildPreflightResponse(origin);
+      const url = new URL(request.url);
+      const keyResult = await requireApiKey(
+        url.searchParams.get("key"),
+        request,
+        "pixel.v1.facts.preflight",
+        origin
+      );
+      if (!keyResult.ok) {
+        return keyResult.response;
+      }
+
+      const domainResult = requireDomain(
+        origin,
+        null,
+        keyResult.validatedKey.allowedDomains
+      );
+      if (!domainResult.ok) {
+        return domainResult.response;
+      }
+
+      return buildPreflightResponse(origin, keyResult.validatedKey.allowedDomains);
     }
 
     return new Response(null, { status: 204 });
   } catch (error) {
     console.error("[PIXEL] OPTIONS preflight error:", error);
-    return errorResponse(
-      API_ERROR_CODE.internal,
-      "An error occurred processing the request",
-      500,
+    return pixelErrorResponse({
+      code: API_ERROR_CODE.internal,
+      message: API_ERROR_MESSAGE.internal,
+      status: 500,
       origin,
-    );
+    });
   }
 }
 
@@ -65,53 +87,45 @@ export async function OPTIONS(request: NextRequest): Promise<Response> {
  * @returns A JSON-LD payload or a standardized error response.
  */
 export async function GET(request: NextRequest): Promise<Response> {
+  markPixelServiceRequest();
   const startTime = Date.now();
-  const origin = request.headers.get('origin');
+  const origin = getCorsOrigin(request.headers.get('origin'));
   const referer = request.headers.get('referer');
-  const ipAddress = extractClientIp(request);
-  const userAgent = request.headers.get('user-agent');
 
   try {
-    // Parse and validate query parameters
     const url = new URL(request.url);
     const rawKey = url.searchParams.get('key');
     const rawLocation = url.searchParams.get('location');
+    const keyResult = await requireApiKey(
+      rawKey,
+      request,
+      "pixel.v1.facts",
+      origin
+    );
+    if (!keyResult.ok) {
+      return keyResult.response;
+    }
 
-    // Build params object, excluding null values (Zod optional expects undefined, not null)
-    const params: { key?: string; location?: string } = {};
-    if (rawKey !== null) params.key = rawKey;
-    if (rawLocation !== null) params.location = rawLocation;
+    const params: { key: string; location?: string } = {
+      key: keyResult.key,
+    };
+    if (rawLocation !== null) {
+      params.location = rawLocation;
+    }
 
     const queryResult = pixelFactsQuerySchema.safeParse(params);
-
     if (!queryResult.success) {
-      console.error('[PIXEL] Validation error:', queryResult.error.format());
-      return errorResponse(
-        PIXEL_FACTS_ERROR_CODE.invalidKey,
-        'Missing or invalid API key parameter',
-        400,
-        origin
-      );
+      return pixelErrorResponse({
+        code: API_ERROR_CODE.malformedRequest,
+        message: "Malformed request parameters",
+        status: 400,
+        origin,
+        details: zodValidationDetails(queryResult.error),
+      });
     }
 
     const { key, location } = queryResult.data;
 
-    // Layer 3: Validate API key
-    const validatedKey = await validateApiKey(key, {
-      ipAddress,
-      userAgent,
-      resource: 'pixel.v1.facts',
-    });
-    if (!validatedKey) {
-      return errorResponse(
-        PIXEL_FACTS_ERROR_CODE.invalidKey,
-        'API key not found or inactive',
-        401,
-        origin
-      );
-    }
-
-    // Layer 4: Verify request signature and replay protection
     const signatureResult = verifyPixelRequestSignature(request, key);
     if (!signatureResult.ok) {
       const errorCode =
@@ -119,54 +133,47 @@ export async function GET(request: NextRequest): Promise<Response> {
           ? API_ERROR_CODE.replayDetected
           : API_ERROR_CODE.invalidSignature;
 
-      return errorResponse(
-        errorCode,
-        signatureResult.message,
-        signatureResult.status,
-        origin
-      );
+      return pixelErrorResponse({
+        code: errorCode,
+        message: signatureResult.message,
+        status: signatureResult.status,
+        origin,
+      });
     }
 
-    // Layer 2: Validate domain against allowlist
-    const domainResult = validateDomain(
+    const domainResult = requireDomain(
       origin,
       referer,
-      validatedKey.allowedDomains
+      keyResult.validatedKey.allowedDomains
     );
-
-    if (!domainResult.valid) {
-      // Log suspicious request for security monitoring
-      console.warn(
-        `[PIXEL] Domain validation failed: ${domainResult.requestedOrigin} not in ${validatedKey.allowedDomains.join(', ')}`
-      );
-
-      return errorResponse(
-        PIXEL_FACTS_ERROR_CODE.domainNotAllowed,
-        'Origin not in allowed domains',
-        403,
-        origin
-      );
+    if (!domainResult.ok) {
+      return domainResult.response;
     }
 
-    // Generate JSON-LD from verified facts
+    const rateLimitResult = await requireRateLimit(
+      "pixel.v1.facts",
+      keyResult.validatedKey.id,
+      keyResult.validatedKey.rateLimitPerMinute,
+      origin
+    );
+    if (!rateLimitResult.ok) {
+      return rateLimitResult.response;
+    }
+
     const jsonLd = await generateJsonLd({
-      organisationId: validatedKey.organisationId,
+      organisationId: keyResult.validatedKey.organisationId,
       locationId: location,
     });
 
-    // Build response with CORS headers
-    const responseOrigin = domainResult.requestedOrigin || origin || '';
-    const headers = buildSuccessHeaders(responseOrigin);
+    const headers = buildSuccessHeaders(origin);
 
-    // Add timing header for performance monitoring
     headers.set('X-Response-Time', `${Date.now() - startTime}ms`);
 
-    // Log successful request (async, don't block response)
     logPixelEvent({
-      organisationId: validatedKey.organisationId,
-      apiKeyId: validatedKey.id,
+      organisationId: keyResult.validatedKey.organisationId,
+      apiKeyId: keyResult.validatedKey.id,
       eventType: 'schema_inject',
-      origin: responseOrigin,
+      origin: origin || referer || "",
       responseTimeMs: Date.now() - startTime,
     });
 
@@ -177,53 +184,13 @@ export async function GET(request: NextRequest): Promise<Response> {
   } catch (error) {
     console.error('[PIXEL] Error generating JSON-LD:', error);
 
-    return errorResponse(
-      API_ERROR_CODE.internal,
-      'An error occurred processing the request',
-      500,
-      origin
-    );
+    return pixelErrorResponse({
+      code: API_ERROR_CODE.internal,
+      message: API_ERROR_MESSAGE.internal,
+      status: 500,
+      origin,
+    });
   }
-}
-
-/**
- * Build a standardized error response
- */
-function errorResponse(
-  errorCode: string,
-  message: string,
-  status: number,
-  origin: string | null
-): Response {
-  const headers = buildErrorHeaders(origin || undefined);
-
-  const body: ApiErrorResponse = {
-    error: message,
-    code: errorCode,
-    status,
-  };
-
-  return new Response(JSON.stringify(body), {
-    status,
-    headers,
-  });
-}
-
-function extractClientIp(request: NextRequest): string | null {
-  const realIp = request.headers.get('x-real-ip')?.trim();
-  if (realIp) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get('x-forwarded-for');
-  if (forwarded) {
-    const [first] = forwarded.split(',');
-    if (first?.trim()) {
-      return first.trim();
-    }
-  }
-
-  return null;
 }
 
 /**

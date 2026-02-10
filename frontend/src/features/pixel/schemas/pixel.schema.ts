@@ -47,7 +47,19 @@ export const domainPatternSchema = z
  * Exposes exported value(s): pixelErrorSchema.
  */
 export const pixelErrorSchema = z.object({
-  error: z.enum(['invalid_key', 'domain_not_allowed', 'rate_limited', 'internal_error']),
+  error: z.enum([
+    'invalid_key_format',
+    'missing_api_key',
+    'invalid_key',
+    'key_expired',
+    'domain_not_allowed',
+    'rate_limited',
+    'invalid_signature',
+    'replay_detected',
+    'malformed_request',
+    'internal_error',
+    'missing_code',
+  ]),
   message: z.string(),
   retryAfter: z.number().optional(),
 });

@@ -80,15 +80,20 @@ export interface OrganizationData {
 export interface PixelErrorResponse {
   error: string;
   code?:
+    | "invalid_key_format"
     | "invalid_key"
+    | "missing_api_key"
+    | "key_expired"
     | "domain_not_allowed"
     | "rate_limited"
     | "invalid_signature"
     | "replay_detected"
+    | "malformed_request"
     | "internal_error"
     | "missing_code";
   status: number;
   retryAfter?: number;
+  details?: unknown;
 }
 
 // Pixel event for audit logging

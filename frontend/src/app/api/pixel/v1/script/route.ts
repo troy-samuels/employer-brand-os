@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { logPixelLoad } from "@/lib/audit/audit-logger";
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import {
   PIXEL_SCRIPT_BODY,
   PIXEL_SCRIPT_ETAG,
@@ -56,6 +57,8 @@ function getClientIp(request: NextRequest): string {
 export async function GET(
   request: NextRequest,
 ): Promise<Response | NextResponse<ApiErrorResponse>> {
+  markPixelServiceRequest();
+
   try {
     const query = Object.fromEntries(request.nextUrl.searchParams);
     const parsedQuery = scriptQuerySchema.safeParse(query);

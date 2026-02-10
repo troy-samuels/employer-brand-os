@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
   apiErrorResponse,
@@ -32,6 +33,8 @@ interface PixelStatusResponse {
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<PixelStatusResponse | ApiErrorResponse>> {
+  markPixelServiceRequest();
+
   try {
     const query = Object.fromEntries(request.nextUrl.searchParams);
     const parsedQuery = pixelStatusQuerySchema.safeParse(query);
