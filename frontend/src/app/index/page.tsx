@@ -1,0 +1,421 @@
+/**
+ * @module app/index/page
+ * The AI Employer Index — a live, public leaderboard ranking companies
+ * by AI visibility score.
+ *
+ * SEO play: "UK AI Employer Visibility Rankings" — unique dataset nobody
+ * else has. Every company listed is a backlink magnet and a conversion funnel.
+ *
+ * Data updates nightly from aggregated free audits.
+ */
+
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Trophy,
+  TrendingUp,
+  Search,
+  BarChart3,
+  Building2,
+} from "lucide-react";
+import Image from "next/image";
+
+import { supabaseAdmin } from "@/lib/supabase/admin";
+import { Header } from "@/components/shared/header";
+import { Footer } from "@/components/shared/footer";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const db = supabaseAdmin as any;
+
+/* ------------------------------------------------------------------ */
+/* Metadata                                                            */
+/* ------------------------------------------------------------------ */
+
+export const metadata: Metadata = {
+  title: "AI Employer Visibility Index | Rankwell",
+  description:
+    "The definitive ranking of how accurately AI represents UK employers. See which companies are visible to ChatGPT, Google AI, Perplexity, and more — and which are invisible.",
+  openGraph: {
+    title: "AI Employer Visibility Index | Rankwell",
+    description:
+      "Which companies are AI-visible? The live leaderboard of employer brand scores across 6 AI models.",
+    type: "website",
+  },
+  alternates: {
+    canonical: "https://rankwell.io/index",
+  },
+};
+
+/* ------------------------------------------------------------------ */
+/* Types                                                               */
+/* ------------------------------------------------------------------ */
+
+interface IndexCompany {
+  company_name: string;
+  company_slug: string;
+  company_domain: string;
+  score: number;
+  has_llms_txt: boolean;
+  has_jsonld: boolean;
+  has_salary_data: boolean;
+  careers_page_status: string;
+  robots_txt_status: string;
+  updated_at: string;
+}
+
+/* ------------------------------------------------------------------ */
+/* Data                                                                */
+/* ------------------------------------------------------------------ */
+
+async function getIndexData(): Promise<{
+  companies: IndexCompany[];
+  stats: {
+    total: number;
+    avgScore: number;
+    pctNoLlmsTxt: number;
+    pctNoSalary: number;
+    topScore: number;
+    bottomScore: number;
+  };
+}> {
+  // Get all public audits, deduplicated by company (latest only)
+  const { data: companies, error } = await db
+    .from("public_audits")
+    .select(
+      "company_name, company_slug, company_domain, score, has_llms_txt, has_jsonld, has_salary_data, careers_page_status, robots_txt_status, updated_at"
+    )
+    .order("score", { ascending: false })
+    .limit(500);
+
+  if (error || !companies || companies.length === 0) {
+    return {
+      companies: [],
+      stats: {
+        total: 0,
+        avgScore: 0,
+        pctNoLlmsTxt: 0,
+        pctNoSalary: 0,
+        topScore: 0,
+        bottomScore: 0,
+      },
+    };
+  }
+
+  // Deduplicate by domain (keep highest score)
+  const seen = new Set<string>();
+  const deduped: IndexCompany[] = [];
+  for (const c of companies as IndexCompany[]) {
+    if (!seen.has(c.company_domain)) {
+      seen.add(c.company_domain);
+      deduped.push(c);
+    }
+  }
+
+  const scores = deduped.map((c) => c.score);
+  const total = deduped.length;
+  const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / total);
+  const pctNoLlmsTxt = Math.round(
+    (deduped.filter((c) => !c.has_llms_txt).length / total) * 100
+  );
+  const pctNoSalary = Math.round(
+    (deduped.filter((c) => !c.has_salary_data).length / total) * 100
+  );
+
+  return {
+    companies: deduped,
+    stats: {
+      total,
+      avgScore,
+      pctNoLlmsTxt,
+      pctNoSalary,
+      topScore: scores[0] ?? 0,
+      bottomScore: scores[scores.length - 1] ?? 0,
+    },
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Helpers                                                             */
+/* ------------------------------------------------------------------ */
+
+function scoreColor(score: number): string {
+  if (score >= 70) return "text-emerald-600";
+  if (score >= 40) return "text-amber-600";
+  return "text-red-600";
+}
+
+function scoreBadgeBg(score: number): string {
+  if (score >= 70) return "bg-emerald-50 border-emerald-200";
+  if (score >= 40) return "bg-amber-50 border-amber-200";
+  return "bg-red-50 border-red-200";
+}
+
+function rankMedal(rank: number): string | null {
+  if (rank === 1) return "🥇";
+  if (rank === 2) return "🥈";
+  if (rank === 3) return "🥉";
+  return null;
+}
+
+function checkCount(c: IndexCompany): number {
+  let count = 0;
+  if (c.has_llms_txt) count++;
+  if (c.has_jsonld) count++;
+  if (c.has_salary_data) count++;
+  if (c.careers_page_status === "full") count++;
+  if (c.robots_txt_status === "allows") count++;
+  return count;
+}
+
+/* ------------------------------------------------------------------ */
+/* Page                                                                */
+/* ------------------------------------------------------------------ */
+
+export const revalidate = 3600; // Revalidate every hour
+
+export default async function IndexPage() {
+  const { companies, stats } = await getIndexData();
+
+  const hasData = companies.length > 0;
+
+  return (
+    <div className="min-h-screen bg-neutral-50">
+      <Header />
+
+      <main>
+        {/* ── Hero ───────────────────────────────────── */}
+        <section className="bg-white border-b border-neutral-200">
+          <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-16 lg:py-20">
+            <div className="flex items-start gap-3 mb-4">
+              <Trophy className="h-6 w-6 text-brand-accent mt-0.5" />
+              <p className="text-sm font-semibold text-brand-accent tracking-wide uppercase">
+                AI Employer Index
+              </p>
+            </div>
+            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight max-w-2xl">
+              Which employers are visible to AI — and which are invisible?
+            </h1>
+            <p className="mt-4 text-lg text-neutral-500 max-w-2xl leading-relaxed">
+              The live ranking of how accurately AI models represent employers
+              to job seekers. Based on real audits across ChatGPT, Google AI,
+              Perplexity, and more.
+            </p>
+
+            {/* Stats bar */}
+            {hasData && (
+              <div className="mt-8 flex flex-wrap gap-6">
+                <div className="flex items-center gap-2">
+                  <Building2 className="h-4 w-4 text-neutral-400" />
+                  <span className="text-sm text-neutral-600">
+                    <strong className="text-neutral-950">{stats.total}</strong> companies ranked
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <BarChart3 className="h-4 w-4 text-neutral-400" />
+                  <span className="text-sm text-neutral-600">
+                    Average score: <strong className="text-neutral-950">{stats.avgScore}/100</strong>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <TrendingUp className="h-4 w-4 text-neutral-400" />
+                  <span className="text-sm text-neutral-600">
+                    <strong className="text-neutral-950">{stats.pctNoLlmsTxt}%</strong> have no AI instructions
+                  </span>
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+
+        {/* ── Headline insight banner ────────────────── */}
+        {hasData && (
+          <section className="border-b border-neutral-200 bg-neutral-950">
+            <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <p className="text-sm text-neutral-300">
+                <span className="text-white font-semibold">{stats.pctNoSalary}%</span> of
+                audited companies have no salary data visible to AI.
+                Candidates asking about pay get guesses, not facts.
+              </p>
+              <Link
+                href="/#audit"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-neutral-300 transition-colors shrink-0"
+              >
+                Check your company
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </section>
+        )}
+
+        {/* ── Rankings table ─────────────────────────── */}
+        <section className="py-12 lg:py-16">
+          <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
+            {!hasData ? (
+              /* Empty state — pre-launch */
+              <div className="text-center py-20">
+                <Search className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-neutral-950 mb-2">
+                  The Index is building
+                </h2>
+                <p className="text-neutral-500 max-w-md mx-auto mb-8">
+                  Every free audit adds a company to the ranking. Be one of the first
+                  to see where you stand.
+                </p>
+                <Link
+                  href="/#audit"
+                  className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+                >
+                  Run the first audit
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* Top 3 podium */}
+                {companies.length >= 3 && (
+                  <div className="grid gap-4 md:grid-cols-3 mb-10">
+                    {companies.slice(0, 3).map((company, i) => (
+                      <Link
+                        key={company.company_slug}
+                        href={`/company/${company.company_slug}`}
+                        className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-shadow"
+                      >
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-2xl">{rankMedal(i + 1)}</span>
+                          <span
+                            className={`text-2xl font-bold tabular-nums ${scoreColor(company.score)}`}
+                          >
+                            {company.score}
+                          </span>
+                        </div>
+                        <h3 className="text-base font-semibold text-neutral-950 group-hover:text-brand-accent transition-colors">
+                          {company.company_name}
+                        </h3>
+                        <p className="text-xs text-neutral-400 mt-1">
+                          {company.company_domain} · {checkCount(company)}/5 checks
+                        </p>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                {/* Full table */}
+                <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden">
+                  {/* Table header */}
+                  <div className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3 border-b border-neutral-100 bg-neutral-50/80 text-xs font-semibold text-neutral-500">
+                    <span>#</span>
+                    <span>Company</span>
+                    <span className="text-center hidden sm:block">Careers</span>
+                    <span className="text-center hidden sm:block">Data</span>
+                    <span className="text-center hidden sm:block">Salary</span>
+                    <span className="text-center hidden sm:block">Bots</span>
+                    <span className="text-center hidden sm:block">llms.txt</span>
+                    <span className="text-right">Score</span>
+                  </div>
+
+                  {/* Rows */}
+                  {companies.map((company, i) => (
+                    <Link
+                      key={company.company_slug}
+                      href={`/company/${company.company_slug}`}
+                      className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3.5 border-b border-neutral-50 hover:bg-neutral-50/50 transition-colors items-center group"
+                    >
+                      <span className="text-sm font-medium text-neutral-400 tabular-nums">
+                        {i + 1}
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-sm font-semibold text-neutral-950 truncate group-hover:text-brand-accent transition-colors">
+                          {company.company_name}
+                        </p>
+                        <p className="text-xs text-neutral-400 truncate">
+                          {company.company_domain}
+                        </p>
+                      </div>
+                      <span className="text-center hidden sm:block">
+                        {company.careers_page_status === "full" ? (
+                          <span className="text-emerald-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      <span className="text-center hidden sm:block">
+                        {company.has_jsonld ? (
+                          <span className="text-emerald-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      <span className="text-center hidden sm:block">
+                        {company.has_salary_data ? (
+                          <span className="text-emerald-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      <span className="text-center hidden sm:block">
+                        {company.robots_txt_status === "allows" ? (
+                          <span className="text-emerald-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      <span className="text-center hidden sm:block">
+                        {company.has_llms_txt ? (
+                          <span className="text-emerald-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      <span
+                        className={`text-right text-sm font-bold tabular-nums ${scoreColor(company.score)}`}
+                      >
+                        {company.score}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+
+                {/* Table footer */}
+                <div className="mt-4 text-center">
+                  <p className="text-xs text-neutral-400">
+                    Rankings update hourly based on the latest audit data.
+                    Scores calculated using the{" "}
+                    <Link
+                      href="/how-we-score"
+                      className="underline hover:text-neutral-600"
+                    >
+                      Rankwell methodology
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* ── Not listed CTA ─────────────────────────── */}
+        <section className="py-12 lg:py-16 border-t border-neutral-200 bg-white">
+          <div className="mx-auto max-w-2xl px-6 text-center">
+            <h2 className="text-xl lg:text-2xl font-bold text-neutral-950 mb-3">
+              Don&apos;t see your company?
+            </h2>
+            <p className="text-sm text-neutral-500 mb-6 max-w-md mx-auto">
+              Run a free audit and your company joins the index automatically.
+              30 seconds, no signup required.
+            </p>
+            <Link
+              href="/#audit"
+              className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+            >
+              Audit your company
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      <Footer />
+    </div>
+  );
+}

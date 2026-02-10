@@ -18,6 +18,18 @@ export function Header() {
         </Link>
         <nav className="flex items-center gap-6 text-sm">
           <Link
+            href="/index"
+            className="text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Index
+          </Link>
+          <Link
+            href="/blog"
+            className="text-neutral-500 hover:text-neutral-950 transition-colors"
+          >
+            Blog
+          </Link>
+          <Link
             href="/how-we-score"
             className="text-neutral-500 hover:text-neutral-950 transition-colors"
           >
