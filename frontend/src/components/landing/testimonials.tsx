@@ -2,13 +2,14 @@
  * @module components/landing/testimonials
  * Before/After comparison — simulated LLM chat interfaces showing
  * what candidates see when they ask AI about a company, with and
- * without Rankwell active. The showpiece section of the landing page.
+ * without Rankwell active. Closely mimics real ChatGPT 5.2 UI.
  */
 
 "use client";
 
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { Plus, Pencil, EllipsisVertical, Mic, AudioLines, ChevronDown } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Animation variants
@@ -49,7 +50,33 @@ const USER_QUESTION =
   "What's it like to work at Meridian Tech? What's the salary for a senior engineer?";
 
 // ---------------------------------------------------------------------------
-// Error / Verified badge components
+// Source pill component (mimics ChatGPT inline citations)
+// ---------------------------------------------------------------------------
+
+function SourcePill({ label, extra }: { label: string; extra?: string }) {
+  return (
+    <span className="inline-flex items-center gap-1 ml-1.5 px-2 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-400 font-medium whitespace-nowrap align-middle">
+      {label}
+      {extra && <span className="text-neutral-500">{extra}</span>}
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Verified source pill (green tint for "with Rankwell")
+// ---------------------------------------------------------------------------
+
+function VerifiedSourcePill({ label }: { label: string }) {
+  return (
+    <span className="inline-flex items-center gap-1 ml-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium whitespace-nowrap align-middle">
+      <span>✓</span>
+      {label}
+    </span>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Error / Verified inline badges
 // ---------------------------------------------------------------------------
 
 function ErrorBadge({ children }: { children: React.ReactNode }) {
@@ -71,194 +98,237 @@ function VerifiedBadge({ children }: { children: React.ReactNode }) {
 }
 
 // ---------------------------------------------------------------------------
-// ChatGPT-style header
+// ChatGPT 5.2 header (matches real UI)
 // ---------------------------------------------------------------------------
 
 function ChatGPTHeader() {
   return (
-    <div className="flex items-center gap-2 px-4 pt-4 pb-2">
-      <Image
-        src="/logos/chatgpt.svg"
-        alt="ChatGPT"
-        width={20}
-        height={20}
-        className="rounded-sm"
-      />
-      <span className="text-[13px] font-semibold text-neutral-300">
-        ChatGPT
-      </span>
+    <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04]">
+      <div className="flex items-center gap-3">
+        <div className="flex flex-col gap-[3px] w-5 h-5 justify-center">
+          <span className="w-4 h-[1.5px] bg-neutral-400 rounded-full" />
+          <span className="w-3 h-[1.5px] bg-neutral-400 rounded-full" />
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="text-[14px] font-semibold text-white">ChatGPT</span>
+          <span className="text-[14px] text-neutral-500">5.2</span>
+          <ChevronDown className="w-3 h-3 text-neutral-500 ml-0.5" />
+        </div>
+      </div>
+      <div className="flex items-center gap-3">
+        <Pencil className="w-[18px] h-[18px] text-neutral-400" />
+        <EllipsisVertical className="w-[18px] h-[18px] text-neutral-400" />
+      </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// User message bubble (ChatGPT-style)
+// User message bubble (right-aligned, ChatGPT style)
 // ---------------------------------------------------------------------------
 
 function UserMessage({ text }: { text: string }) {
   return (
-    <div className="flex justify-end px-4 pb-3">
-      <div className="max-w-[85%] bg-[#2f2f2f] rounded-2xl rounded-br-md px-4 py-2.5">
-        <p className="text-[13px] text-neutral-200 leading-relaxed">{text}</p>
+    <div className="flex justify-end px-4 py-3">
+      <div className="max-w-[80%] bg-[#303030] rounded-[20px] px-4 py-2.5">
+        <p className="text-[14px] text-neutral-100 leading-relaxed">{text}</p>
       </div>
     </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Main ChatGPT comparison panels
+// ChatGPT bottom input bar
+// ---------------------------------------------------------------------------
+
+function ChatGPTInputBar() {
+  return (
+    <div className="px-3 py-3 border-t border-white/[0.04]">
+      <div className="flex items-center gap-2 bg-[#303030] rounded-full px-4 py-2.5">
+        <Plus className="w-5 h-5 text-neutral-400 shrink-0" />
+        <span className="flex-1 text-[14px] text-neutral-500">Ask anything</span>
+        <Mic className="w-5 h-5 text-neutral-400 shrink-0" />
+        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
+          <AudioLines className="w-4 h-4 text-neutral-300" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// WITHOUT Rankwell — ChatGPT panel
 // ---------------------------------------------------------------------------
 
 function ChatGPTWithout() {
   return (
-    <div className="rounded-2xl bg-[#212121] border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/40">
+    <div className="rounded-2xl bg-[#212121] border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/40 flex flex-col">
       <ChatGPTHeader />
       <UserMessage text={USER_QUESTION} />
 
-      {/* AI response area */}
-      <div className="px-4 pb-5 space-y-3">
-        {/* ChatGPT-style avatar + response */}
-        <div className="flex gap-3">
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#10a37f] flex items-center justify-center mt-0.5">
-            <Image
-              src="/logos/chatgpt.svg"
-              alt=""
-              width={16}
-              height={16}
-              className="brightness-200"
-            />
+      {/* AI response — plain text, no avatar, matches real ChatGPT 5.2 */}
+      <div className="px-4 pb-4 flex-1">
+        <div className="space-y-4">
+          <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+            Here&apos;s a general picture of what it&apos;s like working at{" "}
+            <strong className="text-white">Meridian Tech</strong> — plus typical
+            engineer salaries — based on employee reviews and salary data
+            (mostly from anonymous sites like Glassdoor and Indeed):
+          </p>
+
+          {/* Section heading — emoji + bold, matches real GPT output */}
+          <div>
+            <p className="text-[14px] font-semibold text-white mb-2.5">
+              👩‍💼 What employees say about working there
+            </p>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Many employees describe <strong className="text-white">Meridian Tech</strong> as
+                  having a <em>decent work culture with good colleagues and knowledgeable
+                  peers</em>. Some reviews mention supportive management and a positive team
+                  atmosphere.
+                  <SourcePill label="Glassdoor" />
+                  <span className="ml-2"><ErrorBadge>Unverified</ErrorBadge></span>
+                </p>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Compensation and benefits generally get <em>mixed reviews</em> — often
+                  described as <em>average or decent</em>, but not exceptional.
+                  <SourcePill label="Glassdoor" />
+                  <span className="ml-2"><ErrorBadge>Vague</ErrorBadge></span>
+                </p>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  A few reviews mention more <em>chaotic work environments or weaker
+                  management structures</em>, so experiences appear to vary a lot by
+                  team or location.
+                  <SourcePill label="Indeed" />
+                  <span className="ml-2"><ErrorBadge>Damaging</ErrorBadge></span>
+                </p>
+              </li>
+            </ul>
           </div>
-          <div className="flex-1 space-y-3 min-w-0">
-            <p className="text-[13px] text-neutral-300 leading-relaxed">
-              Based on available information, Meridian Tech is a mid-size
-              technology company. Here&apos;s what I found:
+
+          {/* Salary section */}
+          <div>
+            <p className="text-[14px] font-semibold text-white mb-2.5">
+              💰 Senior Engineer salary
             </p>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Estimated range: <strong className="text-white">£55,000 – £68,000</strong> based
+                  on aggregated data from job boards and anonymous submissions.
+                  <SourcePill label="Glassdoor" />
+                  <SourcePill label="Indeed" />
+                  <span className="ml-2"><ErrorBadge>Wrong — actual: £75-95K</ErrorBadge></span>
+                </p>
+              </li>
+            </ul>
+          </div>
 
-            {/* Salary — wrong */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-200 leading-relaxed">
-                <span className="font-semibold text-white">
-                  💰 Salary (Senior Engineer):
-                </span>{" "}
-                £55,000 – £68,000
-              </p>
-              <ErrorBadge>Wrong — actual: £75-95K</ErrorBadge>
-            </div>
-
-            {/* Remote — wrong */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-200 leading-relaxed">
-                <span className="font-semibold text-white">
-                  🏠 Remote Policy:
-                </span>{" "}
-                Limited remote options based on recent reviews
-              </p>
-              <ErrorBadge>Outdated</ErrorBadge>
-            </div>
-
-            {/* Benefits — missing */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-300 leading-relaxed italic">
-                <span className="font-semibold text-white not-italic">
-                  🎁 Benefits:
-                </span>{" "}
-                No specific benefits data available
-              </p>
-              <ErrorBadge>No data</ErrorBadge>
-            </div>
-
-            {/* Sources */}
-            <p className="text-[11px] text-neutral-500 pt-2 border-t border-white/[0.06]">
-              Sources: reddit.com/r/ukjobs (2023), glassdoor.com
-            </p>
+          <div className="flex items-center gap-2 pt-1">
+            <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+            <span className="text-[11px] text-neutral-500">Show more</span>
           </div>
         </div>
       </div>
+
+      <ChatGPTInputBar />
     </div>
   );
 }
 
+// ---------------------------------------------------------------------------
+// WITH Rankwell — ChatGPT panel
+// ---------------------------------------------------------------------------
+
 function ChatGPTWith() {
   return (
-    <div className="rounded-2xl bg-[#212121] border border-emerald-500/10 overflow-hidden shadow-2xl shadow-emerald-900/10">
+    <div className="rounded-2xl bg-[#212121] border border-emerald-500/10 overflow-hidden shadow-2xl shadow-emerald-900/10 flex flex-col">
       <ChatGPTHeader />
       <UserMessage text={USER_QUESTION} />
 
-      {/* AI response area */}
-      <div className="px-4 pb-5 space-y-3">
-        <div className="flex gap-3">
-          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-[#10a37f] flex items-center justify-center mt-0.5">
-            <Image
-              src="/logos/chatgpt.svg"
-              alt=""
-              width={16}
-              height={16}
-              className="brightness-200"
-            />
+      {/* AI response — same structure, verified data */}
+      <div className="px-4 pb-4 flex-1">
+        <div className="space-y-4">
+          <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+            Here&apos;s a detailed overview of working at{" "}
+            <strong className="text-white">Meridian Tech</strong>, based on
+            verified employer data and recent employee insights:
+          </p>
+
+          {/* Section heading */}
+          <div>
+            <p className="text-[14px] font-semibold text-white mb-2.5">
+              👩‍💼 What employees say about working there
+            </p>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Meridian Tech operates a <strong className="text-white">remote-first culture</strong> with
+                  optional London office 2 days/week. Employees highlight strong autonomy,
+                  transparent leadership, and a collaborative engineering culture.
+                  <VerifiedSourcePill label="meridiantech.com" />
+                </p>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  The company offers a comprehensive benefits package including{" "}
+                  <strong className="text-white">private healthcare, £2,000 annual learning budget,
+                  30 days holiday</strong>, and enhanced parental leave.
+                  <VerifiedSourcePill label="meridiantech.com" />
+                </p>
+              </li>
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Recent Glassdoor reviews (2024-25) rate the company{" "}
+                  <strong className="text-white">4.2/5</strong> with particular praise for
+                  engineering leadership and career progression pathways.
+                  <VerifiedSourcePill label="meridiantech.com" />
+                  <SourcePill label="Glassdoor" />
+                </p>
+              </li>
+            </ul>
           </div>
-          <div className="flex-1 space-y-3 min-w-0">
-            <p className="text-[13px] text-neutral-300 leading-relaxed">
-              Based on verified employer data, here&apos;s the latest on Meridian
-              Tech:
+
+          {/* Salary section */}
+          <div>
+            <p className="text-[14px] font-semibold text-white mb-2.5">
+              💰 Senior Engineer salary
             </p>
+            <ul className="space-y-3">
+              <li className="flex gap-2">
+                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
+                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
+                  Published salary range: <strong className="text-white">£75,000 – £95,000</strong> base,
+                  plus equity and annual bonus. The company publishes transparent salary
+                  bands on their careers page.
+                  <VerifiedSourcePill label="meridiantech.com/careers" />
+                  <span className="ml-2"><VerifiedBadge>Verified 2 days ago</VerifiedBadge></span>
+                </p>
+              </li>
+            </ul>
+          </div>
 
-            {/* Salary — correct */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-200 leading-relaxed">
-                <span className="font-semibold text-white">
-                  💰 Salary (Senior Engineer):
-                </span>{" "}
-                £75,000 – £95,000
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                <VerifiedBadge>Verified 2 days ago</VerifiedBadge>
-              </div>
-            </div>
-
-            {/* Remote — correct */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-200 leading-relaxed">
-                <span className="font-semibold text-white">
-                  🏠 Remote Policy:
-                </span>{" "}
-                Remote-first, with optional London office 2 days/week
-              </p>
-              <VerifiedBadge>Employer confirmed</VerifiedBadge>
-            </div>
-
-            {/* Benefits — full */}
-            <div className="space-y-1.5">
-              <p className="text-[13px] text-neutral-200 leading-relaxed">
-                <span className="font-semibold text-white">
-                  🎁 Benefits:
-                </span>
-              </p>
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  "Private healthcare",
-                  "£2K learning budget",
-                  "30 days holiday",
-                  "Enhanced parental leave",
-                ].map((b) => (
-                  <span
-                    key={b}
-                    className="px-2 py-0.5 bg-white/[0.06] text-neutral-300 text-[11px] rounded-md"
-                  >
-                    {b}
-                  </span>
-                ))}
-              </div>
-              <VerifiedBadge>Verified</VerifiedBadge>
-            </div>
-
-            {/* Sources */}
-            <p className="text-[11px] text-neutral-500 pt-2 border-t border-white/[0.06]">
-              Sources: meridiantech.com/careers{" "}
-              <span className="text-emerald-500">(verified via Rankwell pixel)</span>
-            </p>
+          <div className="flex items-center gap-2 pt-1">
+            <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
+            <span className="text-[11px] text-neutral-500">Show more</span>
           </div>
         </div>
       </div>
+
+      <ChatGPTInputBar />
     </div>
   );
 }
@@ -272,7 +342,6 @@ interface MiniCardProps {
   name: string;
   withoutContent: React.ReactNode;
   withContent: React.ReactNode;
-  accentColor?: string;
   bgClass?: string;
 }
 
@@ -451,12 +520,12 @@ export default function BeforeAfter() {
             What candidates see when they ask AI about you
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
-            A candidate asks ChatGPT about working at a mid-size tech company.
+            A candidate asks ChatGPT about working at your company.
             Here&apos;s what changes when Rankwell is active.
           </p>
         </motion.div>
 
-        {/* Main comparison — two ChatGPT interfaces side by side */}
+        {/* Main comparison — two ChatGPT 5.2 interfaces side by side */}
         <div className="grid gap-6 lg:gap-8 md:grid-cols-2 mb-8">
           {/* Without Rankwell */}
           <motion.div variants={fadeUp}>

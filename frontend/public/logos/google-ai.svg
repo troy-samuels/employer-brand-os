@@ -1,7 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <circle cx="16" cy="16" r="16" fill="#fff"/>
-  <path d="M23.32 16.18c0-.57-.05-1.12-.14-1.64H16v3.1h4.1a3.5 3.5 0 0 1-1.52 2.3v1.92h2.46c1.44-1.33 2.28-3.28 2.28-5.68z" fill="#4285F4"/>
-  <path d="M16 24c2.06 0 3.78-.68 5.04-1.84l-2.46-1.92c-.68.46-1.55.73-2.58.73-1.98 0-3.66-1.34-4.26-3.14H9.2v1.98A7.99 7.99 0 0 0 16 24z" fill="#34A853"/>
-  <path d="M11.74 17.83a4.8 4.8 0 0 1 0-3.06V12.8H9.2a8 8 0 0 0 0 7.2z" fill="#FBBC05"/>
-  <path d="M16 11.63c1.12 0 2.12.38 2.91 1.14l2.18-2.18A7.14 7.14 0 0 0 16 8a7.99 7.99 0 0 0-6.8 4.8l2.54 1.97c.6-1.8 2.28-3.14 4.26-3.14z" fill="#EA4335"/>
-</svg>
+<svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="gemini-grad" x1="0" y1="24" x2="24" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#439DDF"/><stop offset=".52" stop-color="#4F87ED"/><stop offset=".78" stop-color="#9476C5"/><stop offset=".89" stop-color="#BC688E"/><stop offset="1" stop-color="#D6645D"/></linearGradient></defs><path d="M11.04 19.32Q12 21.51 12 24q0-2.49.93-4.68.96-2.19 2.58-3.81t3.81-2.55Q21.51 12 24 12q-2.49 0-4.68-.93a12.3 12.3 0 0 1-3.81-2.58 12.3 12.3 0 0 1-2.58-3.81Q12 2.49 12 0q0 2.49-.96 4.68-.93 2.19-2.55 3.81a12.3 12.3 0 0 1-3.81 2.58Q2.49 12 0 12q2.49 0 4.68.96 2.19.93 3.81 2.55t2.55 3.81" fill="url(#gemini-grad)"/></svg>

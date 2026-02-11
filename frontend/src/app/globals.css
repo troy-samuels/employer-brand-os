@@ -100,12 +100,12 @@
 :root {
   --radius: 12px;
 
-  /* Brand Colours */
-  --brand-deep: #1B2559;
-  --brand-accent: #4F6BF6;
-  --brand-accent-hover: #3D56D6;
-  --brand-accent-light: #EEF1FE;
-  --brand-accent-subtle: #F6F7FF;
+  /* Brand Colours — Neutral (revisit accent later) */
+  --brand-deep: #18181B;
+  --brand-accent: #3F3F46;
+  --brand-accent-hover: #27272A;
+  --brand-accent-light: #F4F4F5;
+  --brand-accent-subtle: #FAFAFA;
 
   /* Warm Neutral Palette */
   --neutral-950: #1C1917;
