@@ -30,12 +30,15 @@ export default function Home() {
   const { state, isLoading, result, error, runAudit, reset } = useAudit();
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-white">
       <Header />
 
       <main>
-        <section id="audit" className="scroll-mt-28">
-          <div className="mx-auto flex max-w-[1200px] flex-col items-center px-6 py-20 lg:px-12 lg:py-32">
+        <section id="audit" className="scroll-mt-28 relative overflow-hidden">
+          {/* Subtle background pattern */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-40" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-neutral-50/80" />
+          <div className="relative mx-auto flex max-w-[1200px] flex-col items-center px-6 py-24 lg:px-12 lg:py-40">
             {/* ── Headline ───────────────────────────────── */}
             <AnimatePresence mode="wait">
               {state !== "complete" && (
@@ -45,14 +48,15 @@ export default function Home() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.35 }}
-                  className="mb-12 max-w-xl text-center"
+                  className="mb-14 max-w-2xl text-center"
                 >
-                  <h1 className="mb-3 text-3xl font-bold leading-tight tracking-tight text-neutral-950 sm:text-4xl lg:text-5xl">
+                  <p className="overline mb-5">AI Employer Visibility</p>
+                  <h1 className="mb-4 text-4xl font-bold leading-[1.08] tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl">
                     Is AI telling the truth
                     <br />
                     <span className="text-brand-accent">about your company?</span>
                   </h1>
-                  <p className="text-base text-neutral-500">
+                  <p className="text-lg text-neutral-500 max-w-lg mx-auto">
                     Find out in 30 seconds. Completely free.
                   </p>
                 </motion.div>

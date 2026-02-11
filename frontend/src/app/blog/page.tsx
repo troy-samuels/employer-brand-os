@@ -104,28 +104,30 @@ export default function BlogPage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-16 lg:py-20">
-            <p className="text-sm font-semibold text-brand-accent mb-3 tracking-wide uppercase">
+        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+          <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-20 lg:py-24">
+            <p className="overline mb-4">
               Blog
             </p>
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight max-w-2xl">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight max-w-2xl">
               Research & insights on AI employer visibility
             </h1>
-            <p className="mt-4 text-lg text-neutral-500 max-w-xl">
+            <p className="mt-5 text-lg text-neutral-500 max-w-xl leading-relaxed">
               Data-driven analysis from thousands of employer audits.
               No fluff, no listicles — just what the numbers say.
             </p>
           </div>
         </section>
 
-        <section className="py-12 lg:py-16">
+        <section className="py-14 lg:py-20">
           <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
             {/* Featured post */}
             {featured && (
               <Link
                 href={`/blog/${featured.slug}`}
-                className="group block rounded-2xl bg-white border border-neutral-200 p-8 lg:p-10 mb-8 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-shadow"
+                className="group block rounded-2xl bg-white border border-neutral-200 p-8 lg:p-10 mb-8 hover:shadow-elevated hover:border-neutral-300 transition-all duration-300"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <span className="inline-flex items-center rounded-full bg-brand-accent/10 px-3 py-1 text-xs font-semibold text-brand-accent">
@@ -152,7 +154,7 @@ export default function BlogPage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-shadow"
+                  className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                 >
                   <div className="flex items-center gap-3 mb-3">
                     <span className="inline-flex items-center rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs font-medium text-neutral-600">
@@ -173,9 +175,9 @@ export default function BlogPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-12 lg:py-16 border-t border-neutral-200 bg-white">
+        <section className="py-16 lg:py-20 border-t border-neutral-200 bg-white">
           <div className="mx-auto max-w-2xl px-6 text-center">
-            <h2 className="text-xl font-bold text-neutral-950 mb-3">
+            <h2 className="text-xl lg:text-2xl font-bold text-neutral-950 mb-3 tracking-tight">
               Want to see your own data?
             </h2>
             <p className="text-sm text-neutral-500 mb-6">

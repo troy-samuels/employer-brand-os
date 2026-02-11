@@ -131,18 +131,18 @@ function CrawlerTableRow({ crawler, index }: { crawler: CrawlerRow; index: numbe
 
 export default function CrawlerIntelligence() {
   return (
-    <section className="py-16 lg:py-20 bg-white">
+    <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-neutral-50">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
         {/* ── Header ─────────────────────────────────── */}
-        <div className="mb-12">
+        <div className="mb-14 lg:mb-16">
           <div className="mb-3 flex items-center gap-2">
             <Bot className="h-4 w-4 text-brand-accent" />
             <p className="overline">Crawler intelligence</p>
           </div>
-          <h2 className="max-w-xl text-3xl font-bold text-neutral-950">
+          <h2 className="max-w-xl text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
             Know which AI models can read your site
           </h2>
-          <p className="mt-3 max-w-xl text-neutral-600">
+          <p className="mt-4 max-w-xl text-neutral-500 leading-relaxed">
             AI crawlers visit your site daily to learn about your company.
             See exactly which ones get in — and which ones you&apos;re invisible to.
           </p>

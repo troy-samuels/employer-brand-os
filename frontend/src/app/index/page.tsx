@@ -22,12 +22,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { untypedTable } from "@/lib/supabase/untyped-table";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabaseAdmin as any;
 
 /* ------------------------------------------------------------------ */
 /* Metadata                                                            */
@@ -81,8 +78,7 @@ async function getIndexData(): Promise<{
   };
 }> {
   // Get all public audits, deduplicated by company (latest only)
-  const { data: companies, error } = await db
-    .from("public_audits")
+  const { data: companies, error } = await untypedTable("public_audits")
     .select(
       "company_name, company_slug, company_domain, score, has_llms_txt, has_jsonld, has_salary_data, careers_page_status, robots_txt_status, updated_at"
     )
@@ -186,18 +182,20 @@ export default async function IndexPage() {
 
       <main>
         {/* ── Hero ───────────────────────────────────── */}
-        <section className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-16 lg:py-20">
-            <div className="flex items-start gap-3 mb-4">
+        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+          <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-20 lg:py-24">
+            <div className="flex items-start gap-3 mb-5">
               <Trophy className="h-6 w-6 text-brand-accent mt-0.5" />
-              <p className="text-sm font-semibold text-brand-accent tracking-wide uppercase">
+              <p className="overline">
                 AI Employer Index
               </p>
             </div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight max-w-2xl">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight max-w-2xl">
               Which employers are visible to AI — and which are invisible?
             </h1>
-            <p className="mt-4 text-lg text-neutral-500 max-w-2xl leading-relaxed">
+            <p className="mt-5 text-lg text-neutral-500 max-w-2xl leading-relaxed">
               The live ranking of how accurately AI models represent employers
               to job seekers. Based on real audits across ChatGPT, Google AI,
               Perplexity, and more.
@@ -250,7 +248,7 @@ export default async function IndexPage() {
         )}
 
         {/* ── Rankings table ─────────────────────────── */}
-        <section className="py-12 lg:py-16">
+        <section className="py-14 lg:py-20">
           <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
             {!hasData ? (
               /* Empty state — pre-launch */
@@ -279,7 +277,7 @@ export default async function IndexPage() {
                       <Link
                         key={company.company_slug}
                         href={`/company/${company.company_slug}`}
-                        className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-[0_4px_24px_rgba(0,0,0,0.06)] transition-shadow"
+                        className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                       >
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-2xl">{rankMedal(i + 1)}</span>

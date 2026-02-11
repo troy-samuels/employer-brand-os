@@ -62,18 +62,20 @@ export default function HowWeScorePage() {
   return (
     <main className="min-h-screen bg-neutral-50">
       {/* Header */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-2xl mx-auto px-6 py-16 text-center">
+      <div className="bg-white border-b border-neutral-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+        <div className="relative max-w-2xl mx-auto px-6 py-20 lg:py-24 text-center">
           <Link
             href="/"
-            className="inline-block text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors mb-8"
+            className="inline-block text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors duration-200 mb-8"
           >
             ← Back to audit
           </Link>
-          <h1 className="text-3xl font-bold text-neutral-950 tracking-tight">
+          <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
             How we calculate your score
           </h1>
-          <p className="mt-4 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
             Your AI Visibility Score is based on six checks that measure how
             well AI models can find, read, and accurately describe your employer
             brand.
@@ -82,17 +84,17 @@ export default function HowWeScorePage() {
       </div>
 
       {/* Checks */}
-      <div className="max-w-2xl mx-auto px-6 py-12 space-y-6">
+      <div className="max-w-2xl mx-auto px-6 py-14 space-y-5">
         {CHECKS.map((check) => (
           <div
             key={check.name}
-            className="rounded-2xl bg-white p-6 shadow-[0_1px_4px_rgba(28,25,23,0.06),0_1px_2px_rgba(28,25,23,0.04)]"
+            className="rounded-2xl bg-white p-6 lg:p-7 border border-neutral-100 shadow-card hover:shadow-card-hover transition-shadow duration-300"
           >
-            <div className="flex items-baseline justify-between gap-4 mb-3">
+            <div className="flex items-center justify-between gap-4 mb-3">
               <h2 className="text-[15px] font-semibold text-neutral-950">
                 {check.name}
               </h2>
-              <span className="text-sm font-semibold tabular-nums text-neutral-400 shrink-0">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-accent-light px-2.5 py-0.5 text-xs font-bold tabular-nums text-brand-accent shrink-0">
                 {check.weight} pts
               </span>
             </div>

@@ -137,15 +137,17 @@ export default function PricingPage() {
 
       <main>
         {/* ── Hero ───────────────────────────────────── */}
-        <section className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20 text-center">
-            <p className="text-sm font-semibold text-brand-accent mb-3 tracking-wide uppercase">
+        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:40px_40px] opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+          <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24 text-center">
+            <p className="overline mb-4">
               Pricing
             </p>
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight">
               Cheaper than one bad hire
             </h1>
-            <p className="mt-4 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
+            <p className="mt-5 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
               Plans scale with your company. The free audit is always free.
               When you&apos;re ready to fix what it finds, pick the tier that
               fits.
@@ -202,9 +204,9 @@ export default function PricingPage() {
         </section>
 
         {/* ── Plan cards ─────────────────────────────── */}
-        <section className="py-16 lg:py-20">
+        <section className="py-20 lg:py-24">
           <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-3 items-start">
               {plans.map((plan) => {
                 const price = annual ? plan.annualPrice : plan.monthlyPrice;
                 const Icon = plan.icon;
@@ -215,10 +217,10 @@ export default function PricingPage() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className={`relative rounded-2xl bg-white p-6 lg:p-8 border ${
+                    className={`relative rounded-2xl bg-white p-7 lg:p-8 border transition-all duration-300 ${
                       plan.highlighted
-                        ? "border-brand-accent border-t-2 shadow-[0_4px_24px_rgba(0,0,0,0.08)]"
-                        : "border-neutral-200"
+                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated md:scale-[1.03]"
+                        : "border-neutral-200 hover:shadow-card-hover hover:border-neutral-300"
                     }`}
                   >
                     {plan.highlighted && (
@@ -285,9 +287,9 @@ export default function PricingPage() {
 
                     <Link
                       href={plan.href}
-                      className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-colors ${
+                      className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
                         plan.highlighted
-                          ? "bg-neutral-950 text-white hover:bg-neutral-800"
+                          ? "bg-brand-accent text-white hover:bg-brand-accent-hover shadow-md shadow-brand-accent/20"
                           : "bg-neutral-100 text-neutral-950 hover:bg-neutral-200"
                       }`}
                     >
@@ -360,9 +362,9 @@ export default function PricingPage() {
         </section>
 
         {/* ── FAQ ────────────────────────────────────── */}
-        <section className="border-t border-neutral-200 bg-white py-16 lg:py-20">
+        <section className="border-t border-neutral-200 bg-white py-20 lg:py-24">
           <div className="mx-auto max-w-2xl px-6">
-            <h2 className="text-2xl font-bold text-neutral-950 mb-10">
+            <h2 className="text-2xl lg:text-3xl font-bold text-neutral-950 mb-12 tracking-tight">
               Frequently asked questions
             </h2>
 

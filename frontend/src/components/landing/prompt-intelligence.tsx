@@ -98,18 +98,18 @@ export default function PromptIntelligence() {
   const active = PROMPT_CATEGORIES.find((c) => c.id === activeId) ?? PROMPT_CATEGORIES[0];
 
   return (
-    <section className="py-16 lg:py-20 bg-neutral-50">
+    <section className="py-20 lg:py-28 bg-gradient-to-b from-neutral-50 to-white">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
         {/* ── Header ─────────────────────────────────── */}
-        <div className="mb-12">
+        <div className="mb-14 lg:mb-16">
           <div className="mb-3 flex items-center gap-2">
             <MessageSquare className="h-4 w-4 text-brand-accent" />
             <p className="overline">Prompt intelligence</p>
           </div>
-          <h2 className="max-w-xl text-3xl font-bold text-neutral-950">
+          <h2 className="max-w-xl text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
             What candidates ask AI about you
           </h2>
-          <p className="mt-3 max-w-xl text-neutral-600">
+          <p className="mt-4 max-w-xl text-neutral-500 leading-relaxed">
             These are the 8 prompt categories that drive employer research in AI models.
             Every week, candidates ask millions of these queries — is AI getting your answers right?
           </p>

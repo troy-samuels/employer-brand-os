@@ -98,10 +98,10 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.35, delay: 0.1 * index, ease: "easeOut" }}
-      className={`rounded-2xl bg-white p-5 transition-shadow duration-200 ${
+      className={`rounded-2xl bg-white p-5 border transition-all duration-300 ${
         isFail
-          ? "shadow-[0_2px_12px_rgba(220,38,38,0.08),0_1px_3px_rgba(28,25,23,0.06)]"
-          : "shadow-[0_1px_4px_rgba(28,25,23,0.06),0_1px_2px_rgba(28,25,23,0.04)] hover:shadow-[0_4px_16px_rgba(28,25,23,0.08),0_2px_4px_rgba(28,25,23,0.04)]"
+          ? "border-status-critical/15 shadow-[0_2px_12px_rgba(220,38,38,0.08),0_1px_3px_rgba(28,25,23,0.06)]"
+          : "border-neutral-100 shadow-card hover:shadow-card-hover hover:border-neutral-200"
       }`}
     >
       <div className="flex items-start gap-4">
@@ -200,13 +200,13 @@ function LlmTeaser({ companyName }: { companyName: string }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.8 }}
-      className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-[0_2px_16px_rgba(28,25,23,0.06),0_1px_4px_rgba(28,25,23,0.04)]"
+      className="rounded-2xl border border-neutral-200 bg-gradient-to-b from-white to-neutral-50/50 p-6 shadow-card"
     >
-      <div className="mb-4">
-        <h3 className="text-[15px] font-semibold text-neutral-950 mb-1">
+      <div className="mb-5">
+        <h3 className="text-[15px] font-semibold text-neutral-950 mb-1.5">
           What AI tells candidates about {companyName}
         </h3>
-        <p className="text-[13px] text-neutral-500">
+        <p className="text-[13px] text-neutral-500 leading-relaxed">
           See exactly what each AI model says when candidates ask about working here.
         </p>
       </div>

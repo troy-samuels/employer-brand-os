@@ -25,10 +25,7 @@ import {
   Search,
 } from "lucide-react";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- public_audits not in generated types until migration runs
-const db = supabaseAdmin as any;
+import { untypedTable } from "@/lib/supabase/untyped-table";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -66,8 +63,7 @@ interface StoredAuditResult {
 /* ------------------------------------------------------------------ */
 
 async function getCompanyAudit(slug: string): Promise<StoredAuditResult | null> {
-  const { data, error } = await db
-    .from("public_audits")
+  const { data, error } = await untypedTable("public_audits")
     .select("*")
     .eq("company_slug", slug)
     .order("updated_at", { ascending: false })
@@ -289,9 +285,11 @@ export default async function CompanyPage({ params }: PageProps) {
       </div>
 
       {/* ── Score hero ──────────────────────────────── */}
-      <div className="bg-white border-b border-neutral-200">
-        <div className="max-w-3xl mx-auto px-6 py-12 lg:py-16">
-          <p className="text-sm text-neutral-400 mb-2">AI Visibility Report</p>
+      <div className="bg-white border-b border-neutral-200 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-20" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+        <div className="relative max-w-3xl mx-auto px-6 py-14 lg:py-20">
+          <p className="overline mb-3">AI Visibility Report</p>
           <h1 className="text-2xl lg:text-3xl font-bold text-neutral-950 tracking-tight mb-1">
             {audit.company_name}
           </h1>
@@ -332,7 +330,7 @@ export default async function CompanyPage({ params }: PageProps) {
       </div>
 
       {/* ── Checks breakdown ────────────────────────── */}
-      <div className="max-w-3xl mx-auto px-6 py-10">
+      <div className="max-w-3xl mx-auto px-6 py-12">
         <h2 className="text-lg font-semibold text-neutral-950 mb-6">
           What we checked
         </h2>
@@ -341,7 +339,7 @@ export default async function CompanyPage({ params }: PageProps) {
           {checks.map((check) => (
             <div
               key={check.name}
-              className="rounded-xl bg-white border border-neutral-200 p-5"
+              className="rounded-xl bg-white border border-neutral-200 p-5 hover:shadow-card transition-shadow duration-300"
             >
               <div className="flex items-start gap-3">
                 <StatusIcon status={check.status} />

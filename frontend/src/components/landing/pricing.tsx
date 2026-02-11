@@ -42,14 +42,14 @@ const highlights = [
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-16 lg:py-20 bg-neutral-50">
+    <section id="pricing" className="py-20 lg:py-28 bg-neutral-50">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
-        <div className="mb-12">
+        <div className="mb-14 lg:mb-16 text-center">
           <p className="overline mb-3">Pricing</p>
-          <h2 className="text-3xl font-bold text-neutral-950">
+          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
             Cheaper than one bad hire
           </h2>
-          <p className="text-neutral-600 mt-3 max-w-xl">
+          <p className="text-neutral-500 mt-4 max-w-xl mx-auto">
             Plans scale with your team. The free audit is always free —
             no signup, no credit card.
           </p>
@@ -59,21 +59,26 @@ export default function Pricing() {
           {highlights.map((plan) => (
             <div
               key={plan.name}
-              className={`rounded-xl bg-white p-6 lg:p-8 border ${
+              className={`relative rounded-2xl bg-white p-7 lg:p-8 border transition-all duration-300 ${
                 plan.highlighted
-                  ? "border-brand-accent border-t-2 shadow-card"
-                  : "border-neutral-200"
+                  ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated scale-[1.02]"
+                  : "border-neutral-200 hover:shadow-card-hover hover:border-neutral-300"
               }`}
             >
-              <div className="mb-5">
+              {plan.highlighted && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-brand-accent px-3 py-1 text-[11px] font-semibold text-white">
+                  Most popular
+                </span>
+              )}
+              <div className="mb-6">
                 <h3 className="text-base font-semibold text-neutral-950">
                   {plan.name}
                 </h3>
                 <p className="text-xs font-medium text-neutral-400 mt-1">
                   {plan.audience}
                 </p>
-                <div className="mt-3 flex items-baseline gap-1">
-                  <span className="text-3xl font-bold text-neutral-950">
+                <div className="mt-4 flex items-baseline gap-1">
+                  <span className="text-4xl font-bold text-neutral-950 tracking-tight">
                     {plan.price}
                   </span>
                   <span className="text-neutral-500 text-sm">/month</span>
@@ -87,8 +92,8 @@ export default function Pricing() {
                     className="flex items-start gap-2.5 text-sm text-neutral-600"
                   >
                     <Check
-                      className="h-4 w-4 text-emerald-500 mt-0.5 shrink-0"
-                      strokeWidth={2}
+                      className="h-4 w-4 text-brand-accent mt-0.5 shrink-0"
+                      strokeWidth={2.5}
                     />
                     {feature}
                   </li>

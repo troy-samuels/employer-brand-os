@@ -32,25 +32,27 @@ const features = [
  */
 export default function Features() {
   return (
-    <section id="how-it-works" className="py-16 lg:py-20 bg-white">
+    <section id="how-it-works" className="py-20 lg:py-28 bg-white">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
-        <div className="mb-12">
+        <div className="mb-14 lg:mb-16">
           <p className="overline mb-3">How Rankwell works</p>
-          <h2 className="text-3xl font-bold text-neutral-950 max-w-xl">
+          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-950 max-w-xl tracking-tight">
             Take control of what AI says about you
           </h2>
         </div>
 
-        <div className="grid gap-10 md:grid-cols-3">
-          {features.map((feature) => {
+        <div className="grid gap-8 md:grid-cols-3">
+          {features.map((feature, i) => {
             const Icon = feature.icon;
             return (
-              <div key={feature.title}>
-                <Icon className="h-6 w-6 text-brand-accent mb-4" strokeWidth={1.5} />
-                <h3 className="text-lg font-semibold text-neutral-950 mb-2">
+              <div key={feature.title} className="group relative rounded-2xl border border-neutral-100 bg-gradient-to-b from-white to-neutral-50/50 p-7 transition-all duration-300 hover:shadow-card-hover hover:border-neutral-200">
+                <div className="flex items-center justify-center h-11 w-11 rounded-xl bg-brand-accent-light mb-5">
+                  <Icon className="h-5 w-5 text-brand-accent" strokeWidth={1.5} />
+                </div>
+                <h3 className="text-lg font-semibold text-neutral-950 mb-2.5 tracking-tight">
                   {feature.title}
                 </h3>
-                <p className="text-neutral-600 leading-relaxed">
+                <p className="text-[15px] text-neutral-500 leading-relaxed">
                   {feature.description}
                 </p>
               </div>

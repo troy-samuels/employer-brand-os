@@ -32,21 +32,21 @@ export default function AIIntelligencePage() {
         </div>
 
         {/* ── Page header ───────────────────────────── */}
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pt-10 pb-6">
-          <p className="text-xs uppercase tracking-widest text-neutral-400 mb-1">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pt-12 pb-8">
+          <p className="overline mb-2">
             Rankwell
           </p>
           <h1 className="text-2xl lg:text-3xl font-bold text-neutral-950 tracking-tight">
             AI Intelligence Dashboard
           </h1>
-          <p className="mt-2 text-sm text-neutral-600 max-w-xl">
+          <p className="mt-3 text-sm text-neutral-500 max-w-xl leading-relaxed">
             Monitor how 6 major AI models represent your employer brand — track citations,
             detect hallucinations, and deploy patches.
           </p>
         </div>
 
         {/* ── Sections ──────────────────────────────── */}
-        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pb-16 space-y-16">
+        <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pb-20 space-y-20">
           {/* Section 1: Citation Map */}
           <section>
             <div className="mb-6">

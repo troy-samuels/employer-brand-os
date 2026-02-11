@@ -49,7 +49,7 @@ export function AuditInput({ onSubmit, isLoading = false }: AuditInputProps) {
           placeholder="Enter your company name or website"
           disabled={isLoading}
           aria-label="Company name or website"
-          className="flex-1 rounded-lg border border-neutral-300 bg-white px-4 py-3 text-base text-neutral-950 placeholder:text-neutral-500 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex-1 rounded-xl border border-neutral-200 bg-white px-5 py-3.5 text-base text-neutral-950 placeholder:text-neutral-400 shadow-sm focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all duration-200"
         />
         <Button
           type="submit"
@@ -57,6 +57,7 @@ export function AuditInput({ onSubmit, isLoading = false }: AuditInputProps) {
           size="lg"
           loading={isLoading}
           disabled={isLoading || !value.trim()}
+          className="rounded-xl shadow-md shadow-brand-accent/20 hover:shadow-lg hover:shadow-brand-accent/30 transition-all duration-200"
         >
           Scan Your Brand
         </Button>

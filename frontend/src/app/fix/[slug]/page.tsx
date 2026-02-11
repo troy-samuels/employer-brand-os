@@ -16,13 +16,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Search } from "lucide-react";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { untypedTable } from "@/lib/supabase/untyped-table";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { FixSections } from "./fix-sections";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- public_audits not in generated types
-const db = supabaseAdmin as any;
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -60,8 +57,7 @@ export interface StoredAuditResult {
 /* ------------------------------------------------------------------ */
 
 async function getCompanyAudit(slug: string): Promise<StoredAuditResult | null> {
-  const { data, error } = await db
-    .from("public_audits")
+  const { data, error } = await untypedTable("public_audits")
     .select("*")
     .eq("company_slug", slug)
     .order("updated_at", { ascending: false })
@@ -140,8 +136,10 @@ export default async function FixPage({ params }: PageProps) {
 
       <main>
         {/* ── Hero ──────────────────────────────────── */}
-        <section className="bg-white border-b border-neutral-200">
-          <div className="max-w-3xl mx-auto px-6 py-12 lg:py-16">
+        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+          <div className="relative max-w-3xl mx-auto px-6 py-14 lg:py-20">
             <div className="flex items-center gap-2 mb-3">
               <span className="inline-flex items-center rounded-full bg-brand-accent-light px-3 py-1 text-xs font-semibold text-brand-accent">
                 Fix It

@@ -12,6 +12,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { sanitizeHtml } from "@/lib/utils/sanitize-html";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -427,7 +428,7 @@ export default async function FaqDetailPage({ params }: PageProps) {
 
       <main>
         <article className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-2xl px-6 py-12 lg:py-16">
+          <div className="mx-auto max-w-2xl px-6 py-16 lg:py-20">
             <Link
               href="/faq"
               className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-600 transition-colors mb-8"
@@ -440,13 +441,13 @@ export default async function FaqDetailPage({ params }: PageProps) {
               {faq.category}
             </p>
 
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight leading-tight mb-8">
+            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight leading-[1.1] mb-10">
               {faq.question}
             </h1>
 
             <div
               className="prose prose-neutral prose-p:text-neutral-600 prose-p:leading-relaxed prose-headings:text-neutral-950 prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline max-w-none"
-              dangerouslySetInnerHTML={{ __html: faq.content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(faq.content) }}
             />
           </div>
         </article>
@@ -463,7 +464,7 @@ export default async function FaqDetailPage({ params }: PageProps) {
                   <Link
                     key={rs}
                     href={`/faq/${rs}`}
-                    className="group flex items-center justify-between rounded-xl bg-white border border-neutral-200 p-4 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-shadow"
+                    className="group flex items-center justify-between rounded-xl bg-white border border-neutral-200 p-4 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                   >
                     <span className="text-sm font-semibold text-neutral-950 group-hover:text-brand-accent transition-colors">
                       {allFaqTitles[rs] ?? rs}

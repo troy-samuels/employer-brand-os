@@ -27,7 +27,8 @@ export default function TermsPage() {
     <div className="min-h-screen bg-white">
       <Header />
       <main>
-      <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
+        <p className="overline mb-4">Legal</p>
         <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
           Terms of Service
         </h1>
@@ -35,7 +36,7 @@ export default function TermsPage() {
           Last updated: {lastUpdated}
         </p>
 
-        <div className="mt-12 space-y-10 text-neutral-700 leading-relaxed">
+        <div className="mt-14 space-y-10 text-neutral-700 leading-relaxed">
           {/* 1 */}
           <section>
             <h2 className="text-xl font-semibold text-neutral-950 mb-3">

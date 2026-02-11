@@ -119,18 +119,20 @@ export default function FaqPage() {
 
       <main>
         {/* Hero */}
-        <section className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-3xl px-6 py-16 lg:py-20">
-            <div className="flex items-start gap-3 mb-4">
+        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
+          <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
+          <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24">
+            <div className="flex items-start gap-3 mb-5">
               <HelpCircle className="h-6 w-6 text-brand-accent mt-0.5" />
-              <p className="text-sm font-semibold text-brand-accent tracking-wide uppercase">
+              <p className="overline">
                 FAQ
               </p>
             </div>
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight">
               Questions about AI employer visibility
             </h1>
-            <p className="mt-4 text-lg text-neutral-500">
+            <p className="mt-5 text-lg text-neutral-500 leading-relaxed">
               Deep-dive answers, not one-liners. Click through for the full
               explanation with examples and evidence.
             </p>
@@ -138,7 +140,7 @@ export default function FaqPage() {
         </section>
 
         {/* FAQ sections */}
-        <section className="py-12 lg:py-16">
+        <section className="py-14 lg:py-20">
           <div className="mx-auto max-w-3xl px-6">
             {categories.map((category) => (
               <div key={category} className="mb-12 last:mb-0">
@@ -152,7 +154,7 @@ export default function FaqPage() {
                       <Link
                         key={faq.slug}
                         href={`/faq/${faq.slug}`}
-                        className="group block rounded-xl bg-white border border-neutral-200 p-5 hover:shadow-[0_4px_16px_rgba(0,0,0,0.04)] transition-shadow"
+                        className="group block rounded-xl bg-white border border-neutral-200 p-5 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">

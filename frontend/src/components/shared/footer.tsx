@@ -11,65 +11,69 @@ import Link from "next/link";
  */
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 bg-white">
-      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-8 text-sm text-neutral-500">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+    <footer className="border-t border-neutral-200 bg-neutral-950">
+      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 lg:py-16 text-sm">
+        <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           {/* Left */}
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-3">
-              <Link href="/" className="font-semibold text-neutral-950">
-                Rankwell
-              </Link>
-              <span>© 2026</span>
-            </div>
-            <span>Verified employer data for the AI age</span>
+          <div className="flex flex-col gap-3">
+            <Link href="/" className="font-bold text-white text-lg tracking-tight">
+              Rankwell
+            </Link>
+            <span className="text-neutral-400 max-w-xs leading-relaxed">
+              Verified employer data for the AI age. Control what AI tells candidates about your company.
+            </span>
           </div>
 
           {/* Right — nav links */}
-          <nav className="flex flex-wrap gap-x-6 gap-y-2">
+          <nav className="flex flex-wrap gap-x-6 gap-y-3 text-neutral-400">
             <Link
               href="/how-we-score"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               How we score
             </Link>
             <Link
               href="/pricing"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               Pricing
             </Link>
             <Link
               href="/security"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               Security
             </Link>
             <Link
               href="/privacy"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               Privacy
             </Link>
             <Link
               href="/terms"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               Terms
             </Link>
             <Link
               href="/dpa"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               DPA
             </Link>
             <a
               href="mailto:hello@rankwell.io"
-              className="hover:text-neutral-950 transition-colors"
+              className="hover:text-white transition-colors duration-200"
             >
               Contact
             </a>
           </nav>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 pt-6 border-t border-white/10 text-neutral-500 text-xs">
+          © 2026 Rankwell. All rights reserved.
         </div>
       </div>
     </footer>

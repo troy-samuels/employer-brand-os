@@ -9,14 +9,16 @@
  */
 export default function BeforeAfter() {
   return (
-    <section id="testimonials" className="py-16 lg:py-20 bg-white">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
-        <div className="mb-12">
-          <p className="overline mb-3">The difference</p>
-          <h2 className="text-3xl font-bold text-neutral-950 max-w-xl">
+    <section id="testimonials" className="py-24 lg:py-32 bg-neutral-950 relative overflow-hidden">
+      {/* Subtle glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-accent/5 rounded-full blur-3xl" />
+      <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12">
+        <div className="mb-14 lg:mb-16">
+          <p className="overline text-brand-accent-light mb-3">The difference</p>
+          <h2 className="text-3xl lg:text-4xl font-bold text-white max-w-xl tracking-tight">
             What candidates see — before and after
           </h2>
-          <p className="text-neutral-600 mt-3 max-w-xl">
+          <p className="text-neutral-400 mt-3 max-w-xl">
             A candidate asks ChatGPT about working at a mid-size tech company. Here&apos;s
             what changes when Rankwell is active.
           </p>

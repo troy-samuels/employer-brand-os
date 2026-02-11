@@ -26,8 +26,10 @@ export default function SecurityPage() {
       <Header />
       <main>
       {/* Header */}
-      <section className="border-b border-neutral-200 bg-neutral-50">
-        <div className="mx-auto max-w-4xl px-6 py-16 sm:py-24">
+      <section className="border-b border-neutral-200 bg-neutral-50 relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-neutral-50 to-transparent" />
+        <div className="relative mx-auto max-w-4xl px-6 py-20 sm:py-28">
           <div className="flex items-center gap-3 mb-6">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
               <svg
@@ -51,7 +53,7 @@ export default function SecurityPage() {
           <h1 className="text-4xl font-bold tracking-tight text-neutral-950 sm:text-5xl">
             Security at Rankwell
           </h1>
-          <p className="mt-6 text-lg leading-8 text-neutral-600 max-w-2xl">
+          <p className="mt-6 text-lg leading-relaxed text-neutral-500 max-w-2xl">
             You&apos;re trusting us with your employer brand data. We take that
             seriously. Here&apos;s exactly how we protect it.
           </p>
@@ -59,7 +61,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Infrastructure */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Infrastructure
@@ -124,7 +126,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Encryption */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Encryption
@@ -178,7 +180,7 @@ export default function SecurityPage() {
       </section>
 
       {/* The Pixel */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             The Rankwell Pixel
@@ -265,7 +267,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Access Control */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Access Control
@@ -323,7 +325,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Compliance */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Compliance
@@ -365,7 +367,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Data Handling */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Data Handling
@@ -454,7 +456,7 @@ export default function SecurityPage() {
       </section>
 
       {/* Responsible Disclosure */}
-      <section className="border-b border-neutral-100">
+      <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
             Responsible Disclosure

@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { sanitizeHtml } from "@/lib/utils/sanitize-html";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -231,7 +232,7 @@ export default async function BlogPost({ params }: PageProps) {
 
       <main>
         <article className="bg-white border-b border-neutral-200">
-          <div className="mx-auto max-w-2xl px-6 py-12 lg:py-16">
+          <div className="mx-auto max-w-2xl px-6 py-16 lg:py-20">
             {/* Back link */}
             <Link
               href="/blog"
@@ -252,14 +253,14 @@ export default async function BlogPost({ params }: PageProps) {
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight leading-tight mb-8">
+            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight leading-[1.1] mb-10">
               {post.title}
             </h1>
 
             {/* Body */}
             <div
               className="prose prose-neutral prose-p:text-neutral-600 prose-p:leading-relaxed prose-headings:text-neutral-950 prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline max-w-none"
-              dangerouslySetInnerHTML={{ __html: post.content }}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
             />
           </div>
         </article>

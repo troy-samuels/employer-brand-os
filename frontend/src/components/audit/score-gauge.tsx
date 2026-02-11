@@ -55,17 +55,17 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="text-center space-y-5"
+      className="text-center space-y-4"
     >
       {/* Company */}
-      <p className="text-sm font-medium tracking-wide text-neutral-500 uppercase">
+      <p className="text-xs font-bold tracking-[0.15em] text-neutral-400 uppercase">
         {companyName}
       </p>
 
       {/* Score */}
       <div className="relative inline-block">
         <span
-          className="text-[7rem] leading-none font-normal tabular-nums"
+          className="text-[8rem] lg:text-[9rem] leading-none font-normal tabular-nums"
           style={{
             fontFamily: "var(--font-display)",
             color: getScoreColour(score),
@@ -74,7 +74,7 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
           {count}
         </span>
         <span
-          className="absolute -right-10 top-6 text-lg font-normal text-neutral-400"
+          className="absolute -right-12 top-8 text-xl font-normal text-neutral-300"
           style={{ fontFamily: "var(--font-display)" }}
         >
           /100
@@ -86,7 +86,7 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-base text-neutral-600"
+        className="text-base font-medium text-neutral-600"
       >
         {getVerdict(score)}
       </motion.p>

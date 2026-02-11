@@ -197,18 +197,18 @@ function RecommendationRow({
  */
 export default function MonitorPreview() {
   return (
-    <section id="monitor" className="bg-neutral-50 py-16 lg:py-20">
+    <section id="monitor" className="bg-white py-20 lg:py-28 relative">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
         {/* ── Header ─────────────────────────────────────────── */}
-        <div className="mb-12">
+        <div className="mb-14 lg:mb-16">
           <div className="mb-3 flex items-center gap-2">
             <Mail className="h-4 w-4 text-brand-accent" />
             <p className="overline">Monday report</p>
           </div>
-          <h2 className="max-w-xl text-3xl font-bold text-neutral-950">
+          <h2 className="max-w-xl text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
             Every Monday morning, know exactly where you stand
           </h2>
-          <p className="mt-3 max-w-xl text-neutral-600">
+          <p className="mt-4 max-w-xl text-neutral-500 leading-relaxed">
             A weekly email showing what AI models are saying about your company
             right now — what changed, your score trend, and exactly what to fix.
           </p>
