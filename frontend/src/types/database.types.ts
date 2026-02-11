@@ -265,6 +265,33 @@ export type Database = {
         }
         Relationships: []
       }
+      companies: {
+        Row: {
+          created_at: string
+          domain: string
+          employee_count: number | null
+          id: string
+          industry: string | null
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          domain: string
+          employee_count?: number | null
+          id?: string
+          industry?: string | null
+          name: string
+        }
+        Update: {
+          created_at?: string
+          domain?: string
+          employee_count?: number | null
+          id?: string
+          industry?: string | null
+          name?: string
+        }
+        Relationships: []
+      }
       compliance_checks: {
         Row: {
           check_type: string

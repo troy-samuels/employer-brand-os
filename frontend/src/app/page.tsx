@@ -7,7 +7,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 
-import { AuditInput } from "@/components/audit/audit-input";
+import { CompanySearch } from "@/components/audit/company-search";
 import { AuditProgress } from "@/components/audit/audit-progress";
 import { AuditResults } from "@/components/audit/audit-results";
 import { AuditGate } from "@/components/audit/audit-gate";
@@ -73,7 +73,7 @@ export default function Home() {
                   exit={{ opacity: 0 }}
                   className="w-full max-w-lg"
                 >
-                  <AuditInput onSubmit={runAudit} isLoading={isLoading} />
+                  <CompanySearch onSubmit={runAudit} isLoading={isLoading} />
                   {error && (
                     <motion.p
                       initial={{ opacity: 0 }}
