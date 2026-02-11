@@ -12,6 +12,7 @@
  */
 
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -381,12 +382,25 @@ export default async function CompanyPage({ params }: PageProps) {
 
           {/* Blurred preview cards */}
           <div className="grid gap-3 sm:grid-cols-3 mb-6">
-            {["ChatGPT", "Google AI", "Perplexity"].map((model) => (
+            {[
+              { name: "ChatGPT", logo: "/logos/chatgpt.svg" },
+              { name: "Google AI", logo: "/logos/google-ai.svg" },
+              { name: "Perplexity", logo: "/logos/perplexity.svg" },
+            ].map((model) => (
               <div
-                key={model}
+                key={model.name}
                 className="rounded-lg bg-white/5 border border-white/10 p-4 backdrop-blur"
               >
-                <p className="text-xs font-medium text-neutral-300 mb-2">{model}</p>
+                <div className="flex items-center gap-2 mb-2">
+                  <Image
+                    src={model.logo}
+                    alt={model.name}
+                    width={16}
+                    height={16}
+                    className="brightness-0 invert opacity-70"
+                  />
+                  <p className="text-xs font-medium text-neutral-300">{model.name}</p>
+                </div>
                 <div className="space-y-1.5">
                   <div className="h-2.5 w-full rounded bg-white/10" />
                   <div className="h-2.5 w-3/4 rounded bg-white/10" />

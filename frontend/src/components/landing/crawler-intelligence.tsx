@@ -6,6 +6,7 @@
 
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Bot, Eye, ShieldAlert, ArrowRight } from "lucide-react";
 
@@ -31,7 +32,7 @@ const MOCK_CRAWLERS: CrawlerRow[] = [
     pagesRead: 22,
     status: "allowed",
     note: "Full access, read 22 pages",
-    logo: "🟢",
+    logo: "/logos/google-ai.svg",
   },
   {
     name: "GPTBot",
@@ -40,7 +41,7 @@ const MOCK_CRAWLERS: CrawlerRow[] = [
     pagesRead: 8,
     status: "partial",
     note: "Blocked by robots.txt on /careers",
-    logo: "🟡",
+    logo: "/logos/chatgpt.svg",
   },
   {
     name: "PerplexityBot",
@@ -49,7 +50,7 @@ const MOCK_CRAWLERS: CrawlerRow[] = [
     pagesRead: 3,
     status: "allowed",
     note: "Read 3 pages, skipped JS-heavy content",
-    logo: "🟢",
+    logo: "/logos/perplexity.svg",
   },
   {
     name: "ClaudeBot",
@@ -58,7 +59,7 @@ const MOCK_CRAWLERS: CrawlerRow[] = [
     pagesRead: 0,
     status: "blocked",
     note: "Blocked entirely by robots.txt",
-    logo: "🔴",
+    logo: "/logos/claude.svg",
   },
   {
     name: "Meta-ExternalAgent",
@@ -67,7 +68,7 @@ const MOCK_CRAWLERS: CrawlerRow[] = [
     pagesRead: 0,
     status: "not_crawling",
     note: "Not crawling your domain",
-    logo: "⚫",
+    logo: "/logos/meta-ai.svg",
   },
 ];
 
@@ -99,6 +100,7 @@ function CrawlerTableRow({ crawler, index }: { crawler: CrawlerRow; index: numbe
     >
       <td className="py-3.5 pr-4">
         <div className="flex items-center gap-2.5">
+          <Image src={crawler.logo} alt={crawler.name} width={20} height={20} className="shrink-0" />
           <StatusDot status={crawler.status} />
           <div>
             <p className="text-sm font-semibold text-neutral-950">{crawler.name}</p>
