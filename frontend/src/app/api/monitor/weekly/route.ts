@@ -101,24 +101,9 @@ async function loadPreviousCheck(
 ): Promise<MonitorCheckResult | null> {
   try {
     // Dynamic import to avoid hard crash when env vars are missing during build
-    const { supabaseAdmin } = await import("@/lib/supabase/admin");
+    const { untypedTable } = await import("@/lib/supabase/untyped-table");
 
-    // Use type assertion — the monitor_checks table exists at runtime but the
-    // generated Database type hasn't been regenerated to include it yet.
-    const { data, error } = await (supabaseAdmin as unknown as {
-      from: (table: string) => {
-        select: (columns: string) => {
-          eq: (column: string, value: string) => {
-            order: (column: string, opts: { ascending: boolean }) => {
-              limit: (n: number) => {
-                maybeSingle: () => Promise<{ data: MonitorCheckRow | null; error: unknown }>;
-              };
-            };
-          };
-        };
-      };
-    })
-      .from("monitor_checks")
+    const { data, error } = await untypedTable("monitor_checks")
       .select("check_data, score, previous_score, changes, created_at")
       .eq("company_slug", companySlug)
       .order("created_at", { ascending: false })
@@ -150,15 +135,9 @@ async function loadPreviousCheck(
  */
 async function storeCheck(result: MonitorCheckResult): Promise<boolean> {
   try {
-    const { supabaseAdmin } = await import("@/lib/supabase/admin");
+    const { untypedTable } = await import("@/lib/supabase/untyped-table");
 
-    // Use type assertion — see loadPreviousCheck for rationale.
-    const { error } = await (supabaseAdmin as unknown as {
-      from: (table: string) => {
-        insert: (row: Record<string, unknown>) => Promise<{ error: unknown }>;
-      };
-    })
-      .from("monitor_checks")
+    const { error } = await untypedTable("monitor_checks")
       .insert({
         company_slug: result.companySlug,
         check_data: result.checkData,
@@ -233,9 +212,9 @@ export async function POST(
 
     // ── Generate email (for future sending) ───────────────────────────
     const displayName = companyName ?? companySlug;
-    // We generate the email to validate the template; actual sending is
+    // Generate the email to validate the template; actual sending is
     // handled by a separate email service when RESEND_API_KEY is configured.
-    const _emailHtml = generateMonitorEmail(result, displayName);
+    generateMonitorEmail(result, displayName);
 
     return apiSuccessResponse<WeeklyMonitorResponse>({
       check: result,

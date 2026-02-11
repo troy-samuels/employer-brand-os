@@ -3,7 +3,7 @@
  * Captures audit lead emails submitted after audit completion.
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, type NextResponse } from "next/server";
 import { z } from "zod";
 
 import { logAuditRequest } from "@/lib/audit/audit-logger";

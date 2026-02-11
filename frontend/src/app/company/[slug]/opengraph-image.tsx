@@ -8,10 +8,7 @@
 
 import { ImageResponse } from "next/og";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = supabaseAdmin as any;
+import { untypedTable } from "@/lib/supabase/untyped-table";
 
 export const runtime = "edge";
 export const alt = "Rankwell AI Visibility Score";
@@ -45,8 +42,7 @@ function scoreBg(score: number): string {
 export default async function Image({ params }: PageProps) {
   const { slug } = await params;
 
-  const { data } = await db
-    .from("public_audits")
+  const { data } = await untypedTable("public_audits")
     .select("company_name, company_domain, score, score_breakdown, has_llms_txt, has_jsonld, has_salary_data, careers_page_status, robots_txt_status")
     .eq("company_slug", slug)
     .order("updated_at", { ascending: false })

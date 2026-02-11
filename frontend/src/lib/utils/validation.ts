@@ -44,7 +44,7 @@ export const auditFormSchema = z.object({
     .min(1, "Company domain is required")
     .transform((value) => normalizeDomain(value))
     .refine((value) => domainRegex.test(value), "Invalid domain format"),
-  companyName: z.string().min(2, "Company name is required"),
+  companyName: z.string().min(2, "Company name is required").max(200, "Company name is too long"),
   email: z.string().email("Valid email address is required"),
   industry: z.string().optional(),
 });

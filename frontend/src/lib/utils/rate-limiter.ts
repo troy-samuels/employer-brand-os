@@ -1,6 +1,14 @@
 /**
  * @module lib/utils/rate-limiter
  * Provides a Supabase-backed rate limiter with in-memory fallback.
+ *
+ * **Serverless caveat:** The in-memory fallback (`fallbackStore`) will NOT
+ * share state across serverless function invocations (e.g. Vercel). Each
+ * cold start gets a fresh map. For production deployments on serverless
+ * platforms, replace the fallback with Upstash Redis:
+ *   `UPSTASH_REDIS_URL` + `UPSTASH_REDIS_TOKEN`
+ *
+ * @see https://upstash.com/docs/redis/sdks/ratelimit-ts/overview
  */
 
 type MemoryBucket = {

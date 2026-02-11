@@ -7,19 +7,15 @@
  * and the audit_count is incremented.
  */
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- table not in generated types until migration runs
-const db = supabaseAdmin as any;
+import { untypedTable, untypedRpc } from "@/lib/supabase/untyped-table";
 
 /**
  * Create or update the public audit page for a company.
  * Called after every successful free audit.
  */
 export async function upsertPublicAudit(result: WebsiteCheckResult): Promise<void> {
-  const { error } = await db
-    .from("public_audits")
+  const { error } = await untypedTable("public_audits")
     .upsert(
       {
         company_domain: result.domain,
@@ -48,14 +44,13 @@ export async function upsertPublicAudit(result: WebsiteCheckResult): Promise<voi
   }
 
   // Increment audit count separately (upsert doesn't support incrementing)
-  await db.rpc("increment_audit_count", {
+  const { error: rpcError } = await untypedRpc("increment_audit_count", {
     slug: result.companySlug,
-  }).then(({ error: rpcError }: { error: { message: string } | null }) => {
-    if (rpcError) {
-      // Not critical — the page still works without an accurate count
-      console.warn("[public-audit-store] Could not increment audit_count:", rpcError.message);
-    }
   });
+  if (rpcError) {
+    // Not critical — the page still works without an accurate count
+    console.warn("[public-audit-store] Could not increment audit_count:", rpcError.message);
+  }
 }
 
 /**

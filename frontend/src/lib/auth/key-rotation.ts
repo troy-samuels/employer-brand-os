@@ -27,7 +27,7 @@ export type RotatedApiKey = {
  */
 function generateSecureKey(): { raw: string; prefix: string; hash: string } {
   const randomPart = randomBytes(16).toString("hex");
-  const raw = `pk_live_${randomPart}`;
+  const raw = `bos_live_${randomPart}`;
   const prefix = raw.substring(0, 16);
   const hash = createHash("sha256").update(raw).digest("hex");
   return { raw, prefix, hash };

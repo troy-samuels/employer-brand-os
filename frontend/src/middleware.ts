@@ -35,6 +35,12 @@ type RateLimitBucket = {
   resetAt: number;
 };
 
+/**
+ * **Serverless caveat:** This in-memory store will NOT share state across
+ * serverless invocations. Each cold start gets a fresh map. For
+ * production-grade rate limiting on Vercel/Lambda, migrate to Upstash
+ * Redis (`@upstash/ratelimit`).
+ */
 const rateLimitStore = new Map<string, RateLimitBucket>();
 
 function getClientIp(request: NextRequest): string {

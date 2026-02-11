@@ -5,10 +5,7 @@
  */
 
 import type { MetadataRoute } from "next";
-import { supabaseAdmin } from "@/lib/supabase/admin";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- public_audits not in generated types until migration runs
-const db = supabaseAdmin as any;
+import { untypedTable } from "@/lib/supabase/untyped-table";
 
 const BASE_URL = "https://rankwell.io";
 
@@ -31,8 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const companyPages: MetadataRoute.Sitemap = [];
 
   try {
-    const { data } = await db
-      .from("public_audits")
+    const { data } = await untypedTable("public_audits")
       .select("company_slug, updated_at")
       .order("score", { ascending: false })
       .limit(10000);

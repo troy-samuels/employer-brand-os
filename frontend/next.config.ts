@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
-const strictCsp = [
+/**
+ * Fallback CSP applied at the config level. The middleware overwrites this
+ * header with a per-request nonce variant for non-static routes. This
+ * fallback covers static assets that skip middleware.
+ *
+ * IMPORTANT: Keep in sync with `buildCsp()` in `src/middleware.ts`.
+ */
+const staticCsp = [
   "default-src 'self'",
   "script-src 'self'",
   "style-src 'self' 'unsafe-inline'",
@@ -11,6 +18,7 @@ const strictCsp = [
   "base-uri 'self'",
   "form-action 'self'",
   "object-src 'none'",
+  "worker-src 'self' blob:",
 ].join("; ");
 
 const nextConfig: NextConfig = {
@@ -46,7 +54,7 @@ const nextConfig: NextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: strictCsp,
+            value: staticCsp,
           },
           {
             key: "X-Permitted-Cross-Domain-Policies",

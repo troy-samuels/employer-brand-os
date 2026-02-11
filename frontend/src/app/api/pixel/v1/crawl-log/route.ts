@@ -7,11 +7,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- crawler_visits not in generated types until migration runs
-const db = supabaseAdmin as any;
+import { untypedTable } from "@/lib/supabase/untyped-table";
 import {
   apiErrorResponse,
   apiSuccessResponse,
@@ -54,7 +51,7 @@ export async function POST(request: NextRequest) {
     const { companyId, botName, userAgent, pageUrl, timestamp, couldRead } =
       parsed.data;
 
-    const { error } = await db.from("crawler_visits").insert({
+    const { error } = await untypedTable("crawler_visits").insert({
       company_id: companyId,
       bot_name: botName,
       user_agent: userAgent,

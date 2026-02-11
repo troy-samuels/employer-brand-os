@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 
 /**
  * Hosted Truth Page
