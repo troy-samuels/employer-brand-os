@@ -38,9 +38,9 @@ export default function PixelPage() {
           Copy-paste this snippet into Google Tag Manager or your site header.
         </p>
         <pre className="rounded-lg bg-gray-900 text-gray-100 p-4 text-xs overflow-x-auto">
-{`<script src="https://cdn.rankwell.io/pixel/rankwell-pixel.js"
-  data-rankwell-company-id="company_123"
-  data-rankwell-pixel-id="px_demo_123"
+{`<script
+  src="https://rankwell.io/api/pixel/v1/script"
+  data-key="bos_live_your_full_key_here"
   async></script>`}
         </pre>
       </Card>

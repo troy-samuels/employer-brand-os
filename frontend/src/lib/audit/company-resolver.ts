@@ -8,6 +8,8 @@ import { validateUrl } from "@/lib/audit/url-validator";
 const FETCH_TIMEOUT_MS = 5_000;
 const URL_SCHEME_REGEX = /^[a-z][a-z0-9+.-]*:\/\//i;
 const USER_AGENT = "RankwellAuditBot/1.0 (+https://rankwell.io)";
+const MAX_REDIRECT_HOPS = 5;
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 
 function slugify(value: string): string {
   return value
@@ -38,11 +40,6 @@ function normalizeCompanyName(input: string): string {
 }
 
 async function fetchWithTimeout(url: string, init: RequestInit = {}): Promise<Response | null> {
-  const validation = await validateUrl(url);
-  if (!validation.ok) {
-    return null;
-  }
-
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
@@ -52,12 +49,46 @@ async function fetchWithTimeout(url: string, init: RequestInit = {}): Promise<Re
       headers.set("user-agent", USER_AGENT);
     }
 
-    return await fetch(url, {
-      ...init,
-      headers,
-      redirect: "follow",
-      signal: controller.signal,
-    });
+    let currentUrl = url;
+    let response: Response | null = null;
+
+    for (let redirectHop = 0; redirectHop <= MAX_REDIRECT_HOPS; redirectHop += 1) {
+      const validation = await validateUrl(currentUrl);
+      if (!validation.ok) {
+        return null;
+      }
+
+      response = await fetch(currentUrl, {
+        ...init,
+        headers,
+        redirect: "manual",
+        signal: controller.signal,
+      });
+
+      if (!REDIRECT_STATUSES.has(response.status)) {
+        return response;
+      }
+
+      const location = response.headers.get("location");
+      if (!location) {
+        return response;
+      }
+
+      let nextUrl: URL;
+      try {
+        nextUrl = new URL(location, currentUrl);
+      } catch {
+        return response;
+      }
+
+      if (!/^https?:$/i.test(nextUrl.protocol)) {
+        return response;
+      }
+
+      currentUrl = nextUrl.toString();
+    }
+
+    return response;
   } catch {
     return null;
   } finally {

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BrandOS Smart Pixel Test Page</title>
+  <title>Rankwell Smart Pixel Test Page</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -52,7 +52,7 @@
   </style>
 </head>
 <body>
-  <h1>BrandOS Smart Pixel Test</h1>
+  <h1>Rankwell Smart Pixel Test</h1>
 
   <div class="card">
     <h2>Status</h2>
@@ -77,12 +77,11 @@
     </div>
   </div>
 
-  <!-- BrandOS Smart Pixel - with debug mode enabled -->
+  <!-- Rankwell Smart Pixel -->
   <script
-    src="/pixel.js"
+    src="/api/pixel/v1/script"
     data-key="bos_live_d7e911bc3d094453"
-    data-api="http://localhost:3001"
-    data-debug="true"
+    data-api-base="http://localhost:3001"
     async
   ></script>
 
@@ -95,29 +94,19 @@
       eventsLog.textContent += new Date().toISOString().split('T')[1].split('.')[0] + ' - ' + msg + '\n';
     }
 
-    // Listen for BrandOS events
-    document.addEventListener('brandos:loaded', function(e) {
-      logEvent('brandos:loaded - Organization: ' + e.detail.organization);
-      statusEl.textContent = 'Success! JSON-LD injected for: ' + e.detail.organization;
-      statusEl.className = 'status success';
-      checkJsonLd();
-    });
-
-    document.addEventListener('brandos:error', function(e) {
-      logEvent('brandos:error - ' + e.detail.error);
-      statusEl.textContent = 'Error: ' + e.detail.error;
-      statusEl.className = 'status error';
-      jsonldOutput.textContent = 'No JSON-LD injected due to error';
-    });
-
     function checkJsonLd() {
-      var jsonldScript = document.getElementById('brandos-jsonld');
+      var jsonldScript = document.getElementById('rankwell-pixel-jsonld');
       if (jsonldScript) {
         try {
           var data = JSON.parse(jsonldScript.textContent);
           jsonldOutput.textContent = JSON.stringify(data, null, 2);
+          statusEl.textContent = 'Success! JSON-LD injected for: ' + (data.name || 'Organization');
+          statusEl.className = 'status success';
+          logEvent('rankwell:loaded - Organization: ' + (data.name || 'Organization'));
         } catch (e) {
           jsonldOutput.textContent = 'Error parsing JSON-LD: ' + e.message;
+          statusEl.textContent = 'Error: Unable to parse injected JSON-LD';
+          statusEl.className = 'status error';
         }
       } else {
         jsonldOutput.textContent = 'No JSON-LD script found in head';

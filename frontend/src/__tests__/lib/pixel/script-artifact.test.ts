@@ -27,4 +27,9 @@ describe("pixel script artifact", () => {
     expect(PIXEL_SCRIPT_BODY).toContain("pending.catch(noop)");
     expect(PIXEL_SCRIPT_BODY).not.toContain("console.");
   });
+
+  it("sends API keys via request headers rather than query-string params", () => {
+    expect(PIXEL_SCRIPT_BODY).toContain("\"X-Rankwell-Key\": config.apiKey");
+    expect(PIXEL_SCRIPT_BODY).not.toContain("factsUrl.searchParams.set(\"key\"");
+  });
 });

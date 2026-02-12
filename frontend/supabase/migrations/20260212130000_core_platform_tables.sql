@@ -74,6 +74,7 @@ create table if not exists public.api_keys (
   organization_id uuid references public.organizations(id) on delete cascade,
   key_hash text not null,
   key_prefix text not null,
+  allowed_domains text[] not null default '{}'::text[],
   name text,
   scopes jsonb default '[]'::jsonb,
   rate_limit_per_minute integer default 100,

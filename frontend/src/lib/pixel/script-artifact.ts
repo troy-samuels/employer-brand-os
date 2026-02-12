@@ -91,7 +91,9 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
     function resolveApiBase(scriptTag) {
       try {
-        const configuredBase = scriptTag.getAttribute("data-api-base");
+        const configuredBase =
+          scriptTag.getAttribute("data-api-base") ||
+          scriptTag.getAttribute("data-api");
         if (configuredBase) {
           return configuredBase;
         }
@@ -107,6 +109,39 @@ export const PIXEL_SCRIPT_BODY = `(() => {
       } catch {
         return "";
       }
+    }
+
+    function resolveApiKey(scriptTag) {
+      return (
+        scriptTag.getAttribute("data-key") ||
+        scriptTag.getAttribute("data-rankwell-key") ||
+        scriptTag.getAttribute("data-brandos-key") ||
+        ""
+      ).trim();
+    }
+
+    function resolveScriptNonce(scriptTag) {
+      try {
+        const directNonce = scriptTag.getAttribute("nonce");
+        if (directNonce) {
+          return directNonce;
+        }
+
+        const nonceMeta = doc.querySelector('meta[name="csp-nonce"]');
+        if (nonceMeta) {
+          const metaValue = nonceMeta.getAttribute("content");
+          if (metaValue) {
+            return metaValue;
+          }
+        }
+
+        const nonceScript = doc.querySelector("script[nonce]");
+        if (nonceScript) {
+          return nonceScript.getAttribute("nonce") || "";
+        }
+      } catch {}
+
+      return "";
     }
 
     async function signRequest(secret, payload) {
@@ -142,7 +177,6 @@ export const PIXEL_SCRIPT_BODY = `(() => {
         }
 
         const factsUrl = new URL("/api/pixel/v1/facts", config.apiBase);
-        factsUrl.searchParams.set("key", config.apiKey);
         if (config.location) {
           factsUrl.searchParams.set("location", config.location);
         }
@@ -161,12 +195,13 @@ export const PIXEL_SCRIPT_BODY = `(() => {
         try {
           response = await fetch(factsUrl.toString(), {
             method: "GET",
-            mode: "cors",
-            credentials: "omit",
-            headers: {
-              "X-Rankwell-Timestamp": timestamp,
-              "X-Rankwell-Nonce": nonce,
-              "X-Rankwell-Signature": signature
+              mode: "cors",
+              credentials: "omit",
+              headers: {
+                "X-Rankwell-Key": config.apiKey,
+                "X-Rankwell-Timestamp": timestamp,
+                "X-Rankwell-Nonce": nonce,
+                "X-Rankwell-Signature": signature
             }
           });
         } catch {
@@ -213,8 +248,66 @@ export const PIXEL_SCRIPT_BODY = `(() => {
         const node = doc.createElement("script");
         node.type = "application/ld+json";
         node.id = "rankwell-pixel-jsonld";
+        if (config.nonce) {
+          node.setAttribute("nonce", config.nonce);
+        }
         node.text = JSON.stringify(schema);
         head.appendChild(node);
+      } catch {}
+    }
+
+    function createDebouncedInjector(config) {
+      let timer = null;
+      let pending = null;
+
+      return () => {
+        if (timer) {
+          clearTimeout(timer);
+        }
+
+        timer = setTimeout(() => {
+          timer = null;
+          pending = injectSchema(config);
+          if (pending && typeof pending.catch === "function") {
+            pending.catch(noop);
+          }
+        }, 120);
+      };
+    }
+
+    function installSpaNavigationHooks(onNavigate) {
+      try {
+        if (globalObject.__rankwellPixelNavHookInstalled) {
+          return;
+        }
+        globalObject.__rankwellPixelNavHookInstalled = true;
+
+        const historyObject = globalObject.history;
+        if (!historyObject) {
+          return;
+        }
+
+        const wrapHistoryMethod = (methodName) => {
+          const original = historyObject[methodName];
+          if (typeof original !== "function") {
+            return;
+          }
+
+          historyObject[methodName] = function() {
+            const result = original.apply(this, arguments);
+            try {
+              globalObject.dispatchEvent(new Event("rankwell:navigation"));
+            } catch {}
+            return result;
+          };
+        };
+
+        wrapHistoryMethod("pushState");
+        wrapHistoryMethod("replaceState");
+
+        globalObject.addEventListener("popstate", onNavigate, { passive: true });
+        globalObject.addEventListener("hashchange", onNavigate, { passive: true });
+        globalObject.addEventListener("rankwell:navigation", onNavigate, { passive: true });
       } catch {}
     }
 
@@ -223,7 +316,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
       return;
     }
 
-    const apiKey = (scriptTag.getAttribute("data-key") || "").trim();
+    const apiKey = resolveApiKey(scriptTag);
     if (!apiKey) {
       return;
     }
@@ -233,14 +326,41 @@ export const PIXEL_SCRIPT_BODY = `(() => {
       return;
     }
 
+    const nonce = resolveScriptNonce(scriptTag);
     const location = (scriptTag.getAttribute("data-location") || "").trim();
-    const pending = injectSchema({
+    const config = {
       apiKey,
       apiBase,
-      location
-    });
-    if (pending && typeof pending.catch === "function") {
-      pending.catch(noop);
+      location,
+      nonce
+    };
+
+    const triggerInjection = createDebouncedInjector(config);
+    triggerInjection();
+    installSpaNavigationHooks(triggerInjection);
+
+    if (typeof MutationObserver === "function") {
+      const mutationObserver = new MutationObserver(() => {
+        const injected = doc.getElementById("rankwell-pixel-jsonld");
+        if (!injected) {
+          triggerInjection();
+        }
+      });
+      try {
+        mutationObserver.observe(doc.documentElement || doc, {
+          childList: true,
+          subtree: true
+        });
+      } catch {}
+    }
+
+    if (typeof globalObject.setInterval === "function") {
+      globalObject.setInterval(() => {
+        const injected = doc.getElementById("rankwell-pixel-jsonld");
+        if (!injected) {
+          triggerInjection();
+        }
+      }, 8000);
     }
   } catch {}
 })();`;

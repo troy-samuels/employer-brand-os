@@ -41,5 +41,8 @@ describe("buildPreflightResponse", () => {
     expect(response.headers.get("Access-Control-Allow-Origin")).toBe(
       "https://any.customer.site"
     );
+    expect(response.headers.get("Access-Control-Allow-Headers")).toContain(
+      "X-Rankwell-Key"
+    );
   });
 });

@@ -23,6 +23,141 @@ const STEALTH_USER_AGENT =
 
 const STEALTH_VIEWPORT = { width: 1440, height: 900 };
 
+type RenderLocaleProfile = {
+  chromiumLangArg: string;
+  acceptLanguage: string;
+  locale: string;
+  timezoneId: string;
+  scrapingBeeCountry: string;
+  navigatorLanguages: string[];
+};
+
+function getRenderLocaleProfile(url: string): RenderLocaleProfile {
+  let hostname = "";
+  try {
+    hostname = new URL(url).hostname.toLowerCase();
+  } catch {
+    hostname = "";
+  }
+
+  const profiles: Array<{ suffixes: string[]; profile: RenderLocaleProfile }> = [
+    {
+      suffixes: [".co.uk", ".uk"],
+      profile: {
+        chromiumLangArg: "en-GB,en",
+        acceptLanguage: "en-GB,en;q=0.9",
+        locale: "en-GB",
+        timezoneId: "Europe/London",
+        scrapingBeeCountry: "gb",
+        navigatorLanguages: ["en-GB", "en"],
+      },
+    },
+    {
+      suffixes: [".de"],
+      profile: {
+        chromiumLangArg: "de-DE,de,en",
+        acceptLanguage: "de-DE,de;q=0.9,en;q=0.8",
+        locale: "de-DE",
+        timezoneId: "Europe/Berlin",
+        scrapingBeeCountry: "de",
+        navigatorLanguages: ["de-DE", "de", "en"],
+      },
+    },
+    {
+      suffixes: [".fr"],
+      profile: {
+        chromiumLangArg: "fr-FR,fr,en",
+        acceptLanguage: "fr-FR,fr;q=0.9,en;q=0.8",
+        locale: "fr-FR",
+        timezoneId: "Europe/Paris",
+        scrapingBeeCountry: "fr",
+        navigatorLanguages: ["fr-FR", "fr", "en"],
+      },
+    },
+    {
+      suffixes: [".co.jp", ".jp"],
+      profile: {
+        chromiumLangArg: "ja-JP,ja,en",
+        acceptLanguage: "ja-JP,ja;q=0.9,en;q=0.7",
+        locale: "ja-JP",
+        timezoneId: "Asia/Tokyo",
+        scrapingBeeCountry: "jp",
+        navigatorLanguages: ["ja-JP", "ja", "en"],
+      },
+    },
+    {
+      suffixes: [".kr"],
+      profile: {
+        chromiumLangArg: "ko-KR,ko,en",
+        acceptLanguage: "ko-KR,ko;q=0.9,en;q=0.7",
+        locale: "ko-KR",
+        timezoneId: "Asia/Seoul",
+        scrapingBeeCountry: "kr",
+        navigatorLanguages: ["ko-KR", "ko", "en"],
+      },
+    },
+    {
+      suffixes: [".cn"],
+      profile: {
+        chromiumLangArg: "zh-CN,zh,en",
+        acceptLanguage: "zh-CN,zh;q=0.9,en;q=0.6",
+        locale: "zh-CN",
+        timezoneId: "Asia/Shanghai",
+        scrapingBeeCountry: "cn",
+        navigatorLanguages: ["zh-CN", "zh", "en"],
+      },
+    },
+    {
+      suffixes: [".in"],
+      profile: {
+        chromiumLangArg: "en-IN,en",
+        acceptLanguage: "en-IN,en;q=0.9",
+        locale: "en-IN",
+        timezoneId: "Asia/Kolkata",
+        scrapingBeeCountry: "in",
+        navigatorLanguages: ["en-IN", "en"],
+      },
+    },
+    {
+      suffixes: [".com.au", ".au"],
+      profile: {
+        chromiumLangArg: "en-AU,en",
+        acceptLanguage: "en-AU,en;q=0.9",
+        locale: "en-AU",
+        timezoneId: "Australia/Sydney",
+        scrapingBeeCountry: "au",
+        navigatorLanguages: ["en-AU", "en"],
+      },
+    },
+    {
+      suffixes: [".ca"],
+      profile: {
+        chromiumLangArg: "en-CA,en",
+        acceptLanguage: "en-CA,en;q=0.9",
+        locale: "en-CA",
+        timezoneId: "America/Toronto",
+        scrapingBeeCountry: "ca",
+        navigatorLanguages: ["en-CA", "en"],
+      },
+    },
+  ];
+
+  for (const entry of profiles) {
+    if (entry.suffixes.some((suffix) => hostname.endsWith(suffix))) {
+      return entry.profile;
+    }
+  }
+
+  return {
+    chromiumLangArg: "en-US,en",
+    acceptLanguage: "en-US,en;q=0.9",
+    locale: "en-US",
+    timezoneId: "America/New_York",
+    scrapingBeeCountry: "us",
+    navigatorLanguages: ["en-US", "en"],
+  };
+}
+
 /* ── Browser executable resolution ───────────────── */
 
 async function getChromiumOptions(): Promise<{
@@ -126,13 +261,14 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
   let browser: Awaited<ReturnType<typeof playwrightChromium.launch>> | null = null;
 
   try {
+    const localeProfile = getRenderLocaleProfile(url);
     const opts = await getChromiumOptions();
     const stealthArgs = [
       ...opts.args,
       "--disable-blink-features=AutomationControlled",
       "--disable-features=IsolateOrigins,site-per-process",
       "--disable-site-isolation-trials",
-      "--lang=en-GB,en",
+      `--lang=${localeProfile.chromiumLangArg}`,
     ];
 
     browser = await playwrightChromium.launch({
@@ -144,14 +280,14 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
     const context = await browser.newContext({
       userAgent: STEALTH_USER_AGENT,
       viewport: STEALTH_VIEWPORT,
-      locale: "en-GB",
-      timezoneId: "Europe/London",
+      locale: localeProfile.locale,
+      timezoneId: localeProfile.timezoneId,
       deviceScaleFactor: 2,
       hasTouch: false,
       javaScriptEnabled: true,
       bypassCSP: true,
       extraHTTPHeaders: {
-        "Accept-Language": "en-GB,en;q=0.9",
+        "Accept-Language": localeProfile.acceptLanguage,
         "Accept":
           "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
         "Sec-CH-UA": '"Chromium";v="131", "Not_A Brand";v="24"',
@@ -164,15 +300,15 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
     const page = await context.newPage();
 
     // Override navigator.webdriver to hide automation
-    await page.addInitScript(() => {
+    await page.addInitScript((navigatorLanguages: string[]) => {
       Object.defineProperty(navigator, "webdriver", { get: () => false });
       Object.defineProperty(navigator, "plugins", {
         get: () => [1, 2, 3, 4, 5],
       });
       Object.defineProperty(navigator, "languages", {
-        get: () => ["en-GB", "en"],
+        get: () => navigatorLanguages,
       });
-    });
+    }, localeProfile.navigatorLanguages);
 
     try {
       await page.goto(url, {
@@ -237,12 +373,13 @@ export async function renderPageScrapingBee(url: string): Promise<RenderResult> 
   }
 
   try {
+    const localeProfile = getRenderLocaleProfile(url);
     const params = new URLSearchParams({
       api_key: apiKey,
       url,
       render_js: "true",
       premium_proxy: "true",
-      country_code: "gb",
+      country_code: localeProfile.scrapingBeeCountry,
       wait_browser: "networkidle0",
       timeout: String(SCRAPINGBEE_TIMEOUT_MS),
     });

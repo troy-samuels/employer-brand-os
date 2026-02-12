@@ -8,6 +8,7 @@ import { createHash } from "node:crypto";
 
 import { logApiKeyValidation } from "@/lib/audit/audit-logger";
 import { supabaseAdmin } from "@/lib/supabase/admin";
+import { untypedTable } from "@/lib/supabase/untyped-table";
 import type { ValidatedPixelKey } from "../types/pixel.types";
 
 export const PIXEL_API_KEY_REGEX = /^bos_(live|test)_[a-zA-Z0-9]+$/;
@@ -29,6 +30,69 @@ export type ApiKeyValidationResult =
       ok: false;
       reason: ApiKeyValidationFailureReason;
     };
+
+function normalizeDomainPattern(value: string): string | null {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return null;
+  }
+
+  const wildcard = trimmed.startsWith("*.");
+  const hostCandidate = wildcard ? trimmed.slice(2) : trimmed;
+
+  try {
+    const parsed = hostCandidate.includes("://")
+      ? new URL(hostCandidate)
+      : new URL(`https://${hostCandidate}`);
+    const hostname = parsed.hostname.toLowerCase().replace(/\.$/, "");
+    if (!hostname) {
+      return null;
+    }
+    return wildcard ? `*.${hostname}` : hostname;
+  } catch {
+    return null;
+  }
+}
+
+function extractAllowedDomainsFromWebsite(website: string | null | undefined): string[] {
+  if (!website) {
+    return [];
+  }
+
+  try {
+    const url = new URL(website);
+    const hostname = url.hostname.toLowerCase().replace(/\.$/, "");
+    if (!hostname) {
+      return [];
+    }
+    return [hostname, `*.${hostname}`];
+  } catch {
+    return [];
+  }
+}
+
+function mergeAllowedDomains(...sources: Array<unknown>): string[] {
+  const seen = new Set<string>();
+  for (const source of sources) {
+    if (!Array.isArray(source)) {
+      continue;
+    }
+
+    for (const entry of source) {
+      if (typeof entry !== "string") {
+        continue;
+      }
+
+      const normalized = normalizeDomainPattern(entry);
+      if (!normalized) {
+        continue;
+      }
+      seen.add(normalized);
+    }
+  }
+
+  return Array.from(seen);
+}
 
 export function isValidPixelApiKeyFormat(fullKey: string): boolean {
   const trimmed = fullKey.trim();
@@ -80,8 +144,7 @@ export async function validateApiKeyWithStatus(
     const admin = supabaseAdmin;
 
     // Query API keys table by key_prefix.
-    const { data: pixel, error } = await admin
-      .from('api_keys')
+    const { data: pixel, error } = await untypedTable("api_keys")
       .select(`
         id,
         organization_id,
@@ -90,6 +153,7 @@ export async function validateApiKeyWithStatus(
         key_hash,
         key_version,
         rate_limit_per_minute,
+        allowed_domains,
         is_active,
         expires_at
       `)
@@ -190,26 +254,19 @@ export async function validateApiKeyWithStatus(
       };
     }
 
-    // Fetch allowed domains from the organization's smart pixel config
-    // For now, we'll use a default pattern based on the organization
+    const storedAllowedDomains = mergeAllowedDomains(
+      (pixel as { allowed_domains?: unknown }).allowed_domains,
+    );
+
+    // Fetch organization website and use as a fallback source of allowed domains.
     const { data: org } = await supabaseAdmin
       .from('organizations')
       .select('website')
       .eq('id', organizationId)
       .single();
 
-    // Build allowed domains from organization website
-    // In production, this would come from a dedicated allowed_domains column
-    const allowedDomains: string[] = [];
-    if (org?.website) {
-      try {
-        const url = new URL(org.website);
-        allowedDomains.push(url.hostname);
-        allowedDomains.push(`*.${url.hostname}`);
-      } catch {
-        // Invalid URL, skip
-      }
-    }
+    const fallbackDomains = extractAllowedDomainsFromWebsite(org?.website);
+    const allowedDomains = mergeAllowedDomains(storedAllowedDomains, fallbackDomains);
 
     void logApiKeyValidation({
       apiKeyPrefix: keyPrefix,

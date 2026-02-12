@@ -105,6 +105,18 @@ Allow: /
         "CCBot",
       ]);
     });
+
+    it("treats bots as blocked when employment paths are fully disallowed", () => {
+      const parsed = parseRobotsPolicy(`
+User-agent: GPTBot
+Disallow: /careers
+Disallow: /jobs
+      `);
+
+      expect(parsed.status).toBe("blocks");
+      expect(parsed.allowedBots).toEqual([]);
+      expect(parsed.blockedBots).toEqual(["GPTBot"]);
+    });
   });
 
   describe("runWebsiteChecks", () => {
@@ -356,6 +368,42 @@ Allow: /
       expect(result.robotsTxtStatus).toBe("not_found");
       expect(result.robotsTxtAllowedBots).toEqual([]);
       expect(result.robotsTxtBlockedBots).toEqual([]);
+    });
+
+    it("does not follow redirects into private networks", async () => {
+      vi.mocked(validateUrl).mockImplementation(async (candidate: string) => {
+        if (candidate.includes("169.254.169.254")) {
+          return {
+            ok: false,
+            reason: "private_network",
+          };
+        }
+
+        return validationPass;
+      });
+
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (url === "https://example.com/") {
+          return Promise.resolve(
+            new Response("", {
+              status: 302,
+              headers: {
+                location: "http://169.254.169.254/internal",
+              },
+            }),
+          );
+        }
+
+        return Promise.resolve(new Response("", { status: 404 }));
+      });
+
+      vi.stubGlobal("fetch", fetchMock);
+      const result = await runWebsiteChecks("example.com", "Example");
+      const fetchedUrls = fetchMock.mock.calls.map((call) => call[0]);
+
+      expect(result.status).toBe("unreachable");
+      expect(fetchedUrls).toContain("https://example.com/");
+      expect(fetchedUrls).not.toContain("http://169.254.169.254/internal");
     });
 
     it("detects multiple currency formats including non-Western", async () => {

@@ -4,48 +4,137 @@
  * POST /api/pixel/v1/crawl-log
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { z } from "zod";
 
+import {
+  buildPreflightResponse,
+  buildSuccessHeaders,
+} from "@/features/pixel/lib/cors";
+import {
+  getCorsOrigin,
+  pixelErrorResponse,
+  requireApiKey,
+  requireDomain,
+  requireRateLimit,
+} from "@/features/pixel/lib/pixel-api";
+import { markPixelServiceRequest } from "@/lib/pixel/health";
+import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import { untypedTable } from "@/lib/supabase/untyped-table";
-import {
-  apiErrorResponse,
-  apiSuccessResponse,
-} from "@/lib/utils/api-response";
+import { apiErrorResponse, apiSuccessResponse } from "@/lib/utils/api-response";
 
 export const runtime = "nodejs";
 
 const crawlLogSchema = z.object({
-  companyId: z.string().min(1),
-  botName: z.string().min(1),
-  userAgent: z.string().min(1),
-  pageUrl: z.string().url(),
+  companyId: z.string().trim().min(1).max(128),
+  botName: z.string().trim().min(1).max(128),
+  userAgent: z.string().trim().min(1).max(1024),
+  pageUrl: z.string().url().max(2048),
   timestamp: z.string().datetime().optional(),
   couldRead: z.boolean(),
 });
 
-export async function POST(request: NextRequest) {
+export async function OPTIONS(request: NextRequest): Promise<Response> {
+  markPixelServiceRequest();
+  const origin = getCorsOrigin(request.headers.get("origin"));
+
+  if (!origin) {
+    return new Response(null, { status: 204 });
+  }
+
+  // Preflight does not include header values, so we cannot validate key/domain here.
+  return buildPreflightResponse(origin, undefined, {
+    allowMethods: "POST, OPTIONS",
+  });
+}
+
+export async function POST(request: NextRequest): Promise<Response> {
+  markPixelServiceRequest();
+  const origin = getCorsOrigin(request.headers.get("origin"));
+  const referer = request.headers.get("referer");
+
   try {
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return apiErrorResponse({
-        error: API_ERROR_MESSAGE.invalidJson,
-        code: API_ERROR_CODE.invalidJson,
+    const rawBody = await request.text();
+    if (!rawBody) {
+      return pixelErrorResponse({
+        code: API_ERROR_CODE.invalidPayload,
+        message: "Invalid crawl log payload",
         status: 400,
+        origin,
       });
     }
 
-    const parsed = crawlLogSchema.safeParse(body);
-    if (!parsed.success) {
-      return apiErrorResponse({
-        error: "Invalid crawl log payload",
-        code: API_ERROR_CODE.invalidPayload,
+    let parsedBody: unknown;
+    try {
+      parsedBody = JSON.parse(rawBody);
+    } catch {
+      return pixelErrorResponse({
+        code: API_ERROR_CODE.invalidJson,
+        message: API_ERROR_MESSAGE.invalidJson,
         status: 400,
+        origin,
+      });
+    }
+
+    const parsed = crawlLogSchema.safeParse(parsedBody);
+    if (!parsed.success) {
+      return pixelErrorResponse({
+        code: API_ERROR_CODE.invalidPayload,
+        message: "Invalid crawl log payload",
+        status: 400,
+        origin,
         details: parsed.error.flatten(),
       });
+    }
+
+    const url = new URL(request.url);
+    const rawKey =
+      request.headers.get("x-rankwell-key") ??
+      url.searchParams.get("key");
+
+    const keyResult = await requireApiKey(
+      rawKey,
+      request,
+      "pixel.v1.crawl-log",
+      origin
+    );
+    if (!keyResult.ok) {
+      return keyResult.response;
+    }
+
+    const domainResult = requireDomain(
+      origin,
+      referer,
+      keyResult.validatedKey.allowedDomains
+    );
+    if (!domainResult.ok) {
+      return domainResult.response;
+    }
+
+    const signatureResult = verifyPixelRequestSignature(request, keyResult.key, {
+      body: rawBody,
+    });
+    if (!signatureResult.ok) {
+      return pixelErrorResponse({
+        code:
+          signatureResult.error === "replay_detected"
+            ? API_ERROR_CODE.replayDetected
+            : API_ERROR_CODE.invalidSignature,
+        message: signatureResult.message,
+        status: signatureResult.status,
+        origin,
+      });
+    }
+
+    const rateLimitResult = await requireRateLimit(
+      "pixel.v1.crawl-log",
+      keyResult.validatedKey.id,
+      keyResult.validatedKey.rateLimitPerMinute,
+      origin
+    );
+    if (!rateLimitResult.ok) {
+      return rateLimitResult.response;
     }
 
     const { companyId, botName, userAgent, pageUrl, timestamp, couldRead } =
@@ -63,20 +152,23 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error("Failed to log crawler visit:", error);
-      return apiErrorResponse({
-        error: API_ERROR_MESSAGE.internal,
+      return pixelErrorResponse({
         code: API_ERROR_CODE.internal,
+        message: API_ERROR_MESSAGE.internal,
         status: 500,
+        origin,
       });
     }
 
-    return apiSuccessResponse({ ok: true }, { status: 201 });
+    const headers = buildSuccessHeaders(origin);
+    return apiSuccessResponse({ ok: true }, { status: 201, headers });
   } catch (error) {
     console.error("Crawl log API error:", error);
-    return apiErrorResponse({
-      error: API_ERROR_MESSAGE.internal,
+    return pixelErrorResponse({
       code: API_ERROR_CODE.internal,
+      message: API_ERROR_MESSAGE.internal,
       status: 500,
+      origin,
     });
   }
 }
@@ -85,8 +177,9 @@ export async function POST(request: NextRequest) {
  * Reject non-POST methods.
  */
 export async function GET() {
-  return NextResponse.json(
-    { error: "Method not allowed", status: 405 },
-    { status: 405 },
-  );
+  return apiErrorResponse({
+    error: "Method not allowed",
+    code: API_ERROR_CODE.invalidPayload,
+    status: 405,
+  });
 }

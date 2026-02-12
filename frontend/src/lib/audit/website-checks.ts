@@ -15,6 +15,8 @@ const FETCH_TIMEOUT_MS = 5000;
 const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
 const HEADLESS_FALLBACK_MAX_TEXT_CHARS = 500;
 const HEADLESS_FALLBACK_MIN_HTML_BYTES = 5000;
+const HEADLESS_FALLBACK_EXTENDED_TEXT_CHARS = 1200;
+const MAX_FETCH_REDIRECT_HOPS = 5;
 
 const LLMS_EMPLOYMENT_KEYWORDS = [
   "career",
@@ -119,6 +121,7 @@ const CAREERS_PATHS = [
 const MAX_SAMPLED_JOB_LISTING_PAGES = 12;
 const CAREERS_SUBDOMAIN_PREFIXES = ["careers", "jobs"] as const;
 const MAX_META_REFRESH_REDIRECT_HOPS = 2;
+const CAREERS_PROBE_CONCURRENCY = 4;
 
 const ATS_HOST_SUFFIXES = [
   "boards.greenhouse.io",
@@ -241,6 +244,44 @@ type SafeFetchResult = {
   url: string;
   isBotProtected: boolean;
 };
+
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+const SPA_SHELL_MARKERS = [
+  "__NEXT_DATA__",
+  "id=\"__next\"",
+  "id='__next'",
+  "id=\"root\"",
+  "id='root'",
+  "data-reactroot",
+  "window.__NUXT__",
+  "ng-version",
+  "webpackJsonp",
+];
+
+function shouldUseHeadlessFallback(html: string): boolean {
+  const strippedTextLength = stripHtmlTags(html).length;
+  const htmlSize = Buffer.byteLength(html, "utf8");
+
+  if (
+    strippedTextLength < HEADLESS_FALLBACK_MAX_TEXT_CHARS &&
+    htmlSize > HEADLESS_FALLBACK_MIN_HTML_BYTES
+  ) {
+    return true;
+  }
+
+  const lowerHtml = html.toLowerCase();
+  const scriptTagCount = (lowerHtml.match(/<script\b/gi) ?? []).length;
+  const hasSpaMarker = SPA_SHELL_MARKERS.some((marker) =>
+    lowerHtml.includes(marker.toLowerCase())
+  );
+
+  return (
+    hasSpaMarker &&
+    scriptTagCount >= 6 &&
+    strippedTextLength < HEADLESS_FALLBACK_EXTENDED_TEXT_CHARS
+  );
+}
 
 type CareersCheckResult = {
   status: CareersPageStatus;
@@ -411,38 +452,74 @@ function isBotProtectionResponse(status: number, text: string): boolean {
 }
 
 async function fetchSafe(url: string, useHeadlessFallback = false): Promise<SafeFetchResult> {
-  const validation = await validateUrl(url);
-  if (!validation.ok) {
-    return {
-      ok: false,
-      status: null,
-      text: "",
-      url,
-      isBotProtected: false,
-    };
-  }
-
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
   try {
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent": AUDIT_USER_AGENT,
-      },
-      signal: controller.signal,
-    });
+    let currentUrl = url;
+    let response: Response | null = null;
+
+    for (let redirectHop = 0; redirectHop <= MAX_FETCH_REDIRECT_HOPS; redirectHop += 1) {
+      const validation = await validateUrl(currentUrl);
+      if (!validation.ok) {
+        return {
+          ok: false,
+          status: null,
+          text: "",
+          url: currentUrl,
+          isBotProtected: false,
+        };
+      }
+
+      response = await fetch(currentUrl, {
+        headers: {
+          "User-Agent": AUDIT_USER_AGENT,
+        },
+        signal: controller.signal,
+        redirect: "manual",
+      });
+
+      if (!REDIRECT_STATUSES.has(response.status)) {
+        break;
+      }
+
+      const location =
+        typeof response.headers?.get === "function"
+          ? response.headers.get("location")
+          : null;
+      if (!location) {
+        break;
+      }
+
+      let nextUrl: URL;
+      try {
+        nextUrl = new URL(location, currentUrl);
+      } catch {
+        break;
+      }
+
+      if (!/^https?:$/i.test(nextUrl.protocol)) {
+        break;
+      }
+
+      currentUrl = nextUrl.toString();
+    }
+
+    if (!response) {
+      return {
+        ok: false,
+        status: null,
+        text: "",
+        url,
+        isBotProtected: false,
+      };
+    }
 
     const text = await response.text();
-    const resolvedUrl = typeof response.url === "string" && response.url ? response.url : url;
+    const resolvedUrl = typeof response.url === "string" && response.url ? response.url : currentUrl;
     const botProtected = isBotProtectionResponse(response.status, text);
 
-    if (
-      useHeadlessFallback &&
-      response.status === 200 &&
-      stripHtmlTags(text).length < HEADLESS_FALLBACK_MAX_TEXT_CHARS &&
-      Buffer.byteLength(text, "utf8") > HEADLESS_FALLBACK_MIN_HTML_BYTES
-    ) {
+    if (useHeadlessFallback && response.status === 200 && shouldUseHeadlessFallback(text)) {
       const renderedPage = await renderPage(resolvedUrl);
       if (renderedPage.html) {
         return {
@@ -838,36 +915,47 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
   };
 
   let firstBlockedUrl: string | null = null;
+  const candidateUrls = getCareersCandidateUrls(domain);
 
-  for (const careersUrl of getCareersCandidateUrls(domain)) {
-    const response = await fetchCareersPage(careersUrl, domain);
+  for (let start = 0; start < candidateUrls.length; start += CAREERS_PROBE_CONCURRENCY) {
+    const batch = candidateUrls.slice(start, start + CAREERS_PROBE_CONCURRENCY);
+    const responses = await Promise.all(
+      batch.map((careersUrl) =>
+        fetchCareersPage(careersUrl, domain).then((response) => ({
+          careersUrl,
+          response,
+        }))
+      )
+    );
 
-    // Track the first bot-protected URL we encounter
-    if (response.isBotProtected && !firstBlockedUrl) {
-      firstBlockedUrl = response.url || careersUrl;
-    }
+    for (const { careersUrl, response } of responses) {
+      // Track the first bot-protected URL we encounter
+      if (response.isBotProtected && !firstBlockedUrl) {
+        firstBlockedUrl = response.url || careersUrl;
+      }
 
-    if (!response.ok || response.status !== 200) {
-      continue;
-    }
+      if (!response.ok || response.status !== 200) {
+        continue;
+      }
 
-    const textLength = stripHtmlTags(response.text).length;
-    const resolvedUrl = response.url || careersUrl;
+      const textLength = stripHtmlTags(response.text).length;
+      const resolvedUrl = response.url || careersUrl;
 
-    if (textLength > 1000) {
-      return { status: "full", url: resolvedUrl, blockedUrl: null, html: response.text };
-    }
-    if (textLength >= 200) {
-      const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, blockedUrl: null, html: response.text };
+      if (textLength > 1000) {
+        return { status: "full", url: resolvedUrl, blockedUrl: null, html: response.text };
+      }
+      if (textLength >= 200) {
+        const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, blockedUrl: null, html: response.text };
+        if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
+          bestResult = candidateResult;
+        }
+        continue;
+      }
+
+      const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, blockedUrl: null, html: response.text };
       if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
         bestResult = candidateResult;
       }
-      continue;
-    }
-
-    const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, blockedUrl: null, html: response.text };
-    if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
-      bestResult = candidateResult;
     }
   }
 
@@ -1064,22 +1152,12 @@ function getRuleSpecificity(rulePath: string): number {
   return rulePath.replace(/\*/g, "").replace(/\$/g, "").length;
 }
 
-function evaluateBotAccess(groups: RobotsGroup[], botAgents: readonly string[]): "allow" | "block" | "no_rules" {
-  const matchingGroups = getMatchingGroups(groups, botAgents);
-  if (matchingGroups.length === 0) {
-    return "no_rules";
-  }
-
-  const rules = matchingGroups.flatMap((group) => group.rules);
-  if (rules.length === 0) {
-    return "no_rules";
-  }
-
+function evaluateRulesForPath(rules: RobotsRule[], targetPath: string): "allow" | "block" {
   let bestMatch: RobotsRule | null = null;
   let bestSpecificity = -1;
 
   for (const rule of rules) {
-    if (!doesRuleMatchPath(rule.path, "/")) {
+    if (!doesRuleMatchPath(rule.path, targetPath)) {
       continue;
     }
 
@@ -1096,11 +1174,38 @@ function evaluateBotAccess(groups: RobotsGroup[], botAgents: readonly string[]):
   }
 
   if (!bestMatch) {
-    // If rules exist but none match "/", bots can still crawl at least part of the site.
+    // If rules exist but none match the target path, that path is crawlable.
     return "allow";
   }
 
   return bestMatch.type === "allow" ? "allow" : "block";
+}
+
+function evaluateBotAccess(groups: RobotsGroup[], botAgents: readonly string[]): "allow" | "block" | "no_rules" {
+  const matchingGroups = getMatchingGroups(groups, botAgents);
+  if (matchingGroups.length === 0) {
+    return "no_rules";
+  }
+
+  const rules = matchingGroups.flatMap((group) => group.rules);
+  if (rules.length === 0) {
+    return "no_rules";
+  }
+
+  const employmentPaths = ["/careers", "/jobs"];
+  const employmentPathAccess = employmentPaths.map((path) =>
+    evaluateRulesForPath(rules, path)
+  );
+
+  // If employment-centric paths are fully blocked for this bot, treat as blocked.
+  if (employmentPathAccess.every((access) => access === "block")) {
+    return "block";
+  }
+  if (employmentPathAccess.some((access) => access === "allow")) {
+    return "allow";
+  }
+
+  return evaluateRulesForPath(rules, "/");
 }
 
 /**
@@ -1465,15 +1570,19 @@ export async function runWebsiteChecks(
     auditStatus = "no_website";
   } else {
     const homepageUrl = `https://${normalizedDomain}/`;
+    const [llmsResponse, homepageResponse, careersCheck, robotsResponse, sitemapResponse] = await Promise.all([
+      fetchSafe(`https://${normalizedDomain}/llms.txt`),
+      fetchSafe(homepageUrl, true),
+      runCareersCheck(normalizedDomain),
+      fetchSafe(`https://${normalizedDomain}/robots.txt`),
+      fetchSafe(`https://${normalizedDomain}/sitemap.xml`),
+    ]);
 
-    const llmsResponse = await fetchSafe(`https://${normalizedDomain}/llms.txt`);
     if (llmsResponse.ok && llmsResponse.status === 200) {
       hasLlmsTxt = true;
       const llmsText = llmsResponse.text.toLowerCase();
       llmsTxtHasEmployment = LLMS_EMPLOYMENT_KEYWORDS.some((keyword) => llmsText.includes(keyword));
     }
-
-    const homepageResponse = await fetchSafe(homepageUrl, true);
 
     if (!homepageResponse.ok) {
       auditStatus = "unreachable";
@@ -1486,7 +1595,6 @@ export async function runWebsiteChecks(
 
     const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
 
-    const careersCheck = await runCareersCheck(normalizedDomain);
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
     careersBlockedUrl = careersCheck.blockedUrl;
@@ -1557,7 +1665,6 @@ export async function runWebsiteChecks(
     jsonldSchemasFound = Array.from(schemas);
     hasJsonld = jsonldSchemasFound.length > 0;
 
-    const robotsResponse = await fetchSafe(`https://${normalizedDomain}/robots.txt`);
     if (robotsResponse.ok && robotsResponse.status === 200) {
       const parsedRobots = parseRobotsPolicy(robotsResponse.text);
       robotsTxtStatus = parsedRobots.status;
@@ -1568,7 +1675,6 @@ export async function runWebsiteChecks(
     }
 
     // Check for sitemap.xml
-    const sitemapResponse = await fetchSafe(`https://${normalizedDomain}/sitemap.xml`);
     if (sitemapResponse.ok && sitemapResponse.status === 200) {
       // Basic validation: check if it looks like an XML sitemap
       const sitemapText = sitemapResponse.text;

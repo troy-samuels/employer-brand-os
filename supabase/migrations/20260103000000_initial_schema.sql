@@ -110,7 +110,8 @@ CREATE TABLE api_keys (
     organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,
 
     key_hash TEXT NOT NULL, -- hashed API key (never store plaintext)
-    key_prefix TEXT NOT NULL, -- first 8 chars for identification (e.g., "bos_live_")
+    key_prefix TEXT NOT NULL, -- deterministic prefix for indexed lookup
+    allowed_domains TEXT[] NOT NULL DEFAULT '{}', -- explicit origin allowlist for this key
     name TEXT, -- friendly name: "Production Pixel", "Staging"
 
     -- Permissions

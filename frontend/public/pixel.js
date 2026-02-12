@@ -1,120 +1,65 @@
 /**
- * BrandOS Smart Pixel v1.0
- * Injects verified employer JSON-LD schema into client websites
+ * Legacy compatibility loader for older Rankwell/BrandOS embeds.
  *
- * Usage:
- * <script src="https://cdn.brandos.com/pixel.js" data-key="bos_live_xxx" async></script>
- *
- * Options:
- * - data-key: Required. Your BrandOS API key
- * - data-location: Optional. Location UUID for multi-location companies
- * - data-debug: Optional. Set to "true" for console logging
- * - data-api: Optional. Override API base URL (for testing)
- *
- * Events:
- * - brandos:loaded - Fired when JSON-LD is successfully injected
- * - brandos:error - Fired on any error (page continues normally)
- *
- * @license MIT
- * @copyright BrandOS 2024
+ * Canonical runtime is served from /api/pixel/v1/script.
+ * This file forwards legacy data attributes to the canonical runtime.
  */
-(function() {
-  'use strict';
+(function () {
+  "use strict";
 
-  // 1. Find our script tag to extract configuration
-  // document.currentScript is the preferred method, fallback to querySelector
-  var script = document.currentScript ||
-    document.querySelector('script[data-key^="bos_"]');
+  try {
+    var current =
+      document.currentScript ||
+      document.querySelector('script[data-key],script[data-rankwell-key],script[data-brandos-key]');
 
-  // Silent fail if script tag not found
-  if (!script) return;
+    if (!current) return;
 
-  // 2. Extract configuration from data attributes
-  var config = {
-    key: script.getAttribute('data-key'),
-    location: script.getAttribute('data-location'),
-    debug: script.getAttribute('data-debug') === 'true',
-    apiBase: script.getAttribute('data-api') || 'https://app.brandos.com'
-  };
+    var key =
+      (current.getAttribute("data-key") ||
+        current.getAttribute("data-rankwell-key") ||
+        current.getAttribute("data-brandos-key") ||
+        "").trim();
+    if (!key) return;
 
-  // Silent fail if no API key provided
-  if (!config.key) return;
+    var location =
+      (current.getAttribute("data-location") ||
+        current.getAttribute("data-brandos-location") ||
+        "").trim();
 
-  // 3. Debug logger - silent unless explicitly enabled
-  var log = config.debug
-    ? function() {
-        var args = Array.prototype.slice.call(arguments);
-        args.unshift('[BrandOS]');
-        console.log.apply(console, args);
+    var configuredBase =
+      (current.getAttribute("data-api-base") ||
+        current.getAttribute("data-api") ||
+        current.getAttribute("data-brandos-api") ||
+        "").trim();
+
+    var origin = "";
+    try {
+      if (configuredBase) {
+        origin = new URL(configuredBase, document.baseURI || window.location.href).origin;
+      } else {
+        origin = new URL(current.src, document.baseURI || window.location.href).origin;
       }
-    : function() {};
+    } catch {
+      origin = window.location.origin;
+    }
 
-  // 4. Build API URL with query parameters
-  var url = config.apiBase + '/api/pixel/v1/facts?key=' +
-    encodeURIComponent(config.key);
+    var canonicalSrc = origin.replace(/\/$/, "") + "/api/pixel/v1/script";
 
-  if (config.location) {
-    url += '&location=' + encodeURIComponent(config.location);
+    var existing = document.querySelector('script[data-rankwell-runtime="v1"]');
+    if (existing) return;
+
+    var runtime = document.createElement("script");
+    runtime.src = canonicalSrc;
+    runtime.async = true;
+    runtime.setAttribute("data-rankwell-runtime", "v1");
+    runtime.setAttribute("data-key", key);
+    if (location) runtime.setAttribute("data-location", location);
+
+    var nonce = current.getAttribute("nonce");
+    if (nonce) runtime.setAttribute("nonce", nonce);
+
+    (document.head || document.documentElement).appendChild(runtime);
+  } catch {
+    // Fail silent by design.
   }
-
-  log('Fetching employer facts from:', url);
-
-  // 5. Fetch JSON-LD data (async, non-blocking)
-  fetch(url, {
-    method: 'GET',
-    mode: 'cors',
-    credentials: 'omit',
-    cache: 'default'
-  })
-  .then(function(response) {
-    if (!response.ok) {
-      // Extract error message from response if possible
-      return response.json().then(function(err) {
-        throw new Error(err.message || 'API error: ' + response.status);
-      }).catch(function() {
-        throw new Error('API error: ' + response.status);
-      });
-    }
-    return response.json();
-  })
-  .then(function(jsonLd) {
-    // 6. Create and inject JSON-LD script tag into <head>
-    var el = document.createElement('script');
-    el.type = 'application/ld+json';
-    el.id = 'brandos-jsonld';
-    el.textContent = JSON.stringify(jsonLd);
-
-    // Remove existing BrandOS JSON-LD if present (avoid duplicates on SPA navigation)
-    var existing = document.getElementById('brandos-jsonld');
-    if (existing) {
-      existing.parentNode.removeChild(existing);
-    }
-
-    document.head.appendChild(el);
-
-    log('JSON-LD injected successfully:', jsonLd.name || 'Organization');
-
-    // 7. Fire success event for client-side tracking
-    if (typeof CustomEvent === 'function') {
-      document.dispatchEvent(new CustomEvent('brandos:loaded', {
-        detail: {
-          organization: jsonLd.name,
-          type: jsonLd['@type']
-        }
-      }));
-    }
-  })
-  .catch(function(error) {
-    log('Error:', error.message);
-
-    // 8. Fire error event (page continues normally)
-    if (typeof CustomEvent === 'function') {
-      document.dispatchEvent(new CustomEvent('brandos:error', {
-        detail: {
-          error: error.message
-        }
-      }));
-    }
-    // Never throw - fail silently to avoid breaking client's site
-  });
 })();

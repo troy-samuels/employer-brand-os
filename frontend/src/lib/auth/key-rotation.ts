@@ -21,6 +21,23 @@ export type RotatedApiKey = {
   oldKeysExpireAt: string;
 };
 
+function deriveAllowedDomains(website: string | null | undefined): string[] {
+  if (!website) {
+    return [];
+  }
+
+  try {
+    const parsed = new URL(website);
+    const hostname = parsed.hostname.toLowerCase().replace(/\.$/, "");
+    if (!hostname) {
+      return [];
+    }
+    return [hostname, `*.${hostname}`];
+  } catch {
+    return [];
+  }
+}
+
 /**
  * Generates a secure API key, deterministic prefix, and persisted hash.
  * @returns Key material used for insert and caller response.
@@ -104,15 +121,22 @@ export async function rotateApiKey(params: {
   }
 
   const { raw, prefix, hash } = generateSecureKey();
+  const { data: orgData } = await admin
+    .from("organizations")
+    .select("website")
+    .eq("id", params.organizationId)
+    .maybeSingle();
+  const allowedDomains = deriveAllowedDomains(
+    (orgData as { website?: string | null } | null)?.website
+  );
 
-  const { data: newKey, error: insertError } = await admin
-    .from("api_keys")
-    .insert({
+  const insertPayload: Record<string, unknown> = {
       organization_id: params.organizationId,
       created_by: params.createdBy ?? null,
       name: params.name ?? "Production Key",
       key_prefix: prefix,
       key_hash: hash,
+      allowed_domains: allowedDomains,
       scopes: params.scopes ?? ["pixel:read", "facts:read"],
       key_version: nextVersion,
       is_active: true,
@@ -120,7 +144,11 @@ export async function rotateApiKey(params: {
       rate_limit_per_minute: params.rateLimitPerMinute ?? 100,
       created_at: now.toISOString(),
       updated_at: now.toISOString(),
-    })
+    };
+
+  const { data: newKey, error: insertError } = await admin
+    .from("api_keys")
+    .insert(insertPayload as never)
     .select("id")
     .single();
 

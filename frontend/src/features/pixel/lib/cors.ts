@@ -46,7 +46,7 @@ export function buildCorsHeaders(
   headers.set(
     'Access-Control-Allow-Headers',
     options?.allowHeaders ??
-      'Content-Type, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
+      'Content-Type, X-Rankwell-Key, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
   );
 
   // Cache preflight for 24 hours

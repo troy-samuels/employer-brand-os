@@ -48,24 +48,29 @@ export default function IntegrationPage() {
   };
 
   const handleCopySnippet = () => {
-    const key = newRawKey || keyData?.keyPrefix || '';
-    const snippet = generateSnippet(key);
+    if (!newRawKey) {
+      return;
+    }
+
+    const snippet = generateSnippet(newRawKey);
     navigator.clipboard.writeText(snippet);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const generateSnippet = (key: string) => {
+  const generateSnippet = (key: string | null) => {
+    const installKey = key?.trim() || 'REPLACE_WITH_FULL_BOS_KEY';
     return `<!-- Rankwell Smart Pixel -->
 <script
   src="${CDN_ENDPOINT}"
-  data-key="${key}"
+  data-key="${installKey}"
   async
 ></script>`;
   };
 
   const displayKey = newRawKey || keyData?.keyPrefix || '';
   const hasKey = keyData?.hasKey || newRawKey;
+  const canCopyInstallSnippet = Boolean(newRawKey);
 
   return (
     <div className="flex flex-col min-h-full bg-zinc-50">
@@ -169,22 +174,39 @@ export default function IntegrationPage() {
                   tag. For Google Tag Manager, create a Custom HTML tag.
                 </p>
 
+                {!canCopyInstallSnippet && (
+                  <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                    This account currently only has a stored key prefix. To install on a new site, rotate the key to reveal a full key once.
+                  </div>
+                )}
+
                 {/* Code Block */}
                 <div className="relative">
                   <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto">
                     <code className="text-sm font-mono text-zinc-100 whitespace-pre">
-                      {generateSnippet(displayKey)}
+                      {generateSnippet(newRawKey)}
                     </code>
                   </pre>
                   <Button
                     variant="secondary"
                     size="sm"
                     onClick={handleCopySnippet}
+                    disabled={!canCopyInstallSnippet}
                     className="absolute top-3 right-3 bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:text-white text-xs"
                   >
                     {copied ? 'Copied' : 'Copy'}
                   </Button>
                 </div>
+
+                {!newRawKey && (
+                  <Button
+                    onClick={handleGenerateKey}
+                    disabled={isPending}
+                    className="bg-zinc-900 text-white hover:bg-zinc-800"
+                  >
+                    {isPending ? 'Rotating...' : 'Rotate Key & Reveal Full Install Key'}
+                  </Button>
+                )}
 
                 {/* GTM Instructions */}
                 <div className="pt-4 border-t border-zinc-200">

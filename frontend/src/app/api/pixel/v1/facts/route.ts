@@ -47,26 +47,31 @@ export async function OPTIONS(request: NextRequest): Promise<Response> {
   try {
     if (origin) {
       const url = new URL(request.url);
-      const keyResult = await requireApiKey(
-        url.searchParams.get("key"),
-        request,
-        "pixel.v1.facts.preflight",
-        origin
-      );
-      if (!keyResult.ok) {
-        return keyResult.response;
+      const queryKey = url.searchParams.get("key");
+      if (queryKey) {
+        const keyResult = await requireApiKey(
+          queryKey,
+          request,
+          "pixel.v1.facts.preflight",
+          origin
+        );
+        if (!keyResult.ok) {
+          return keyResult.response;
+        }
+
+        const domainResult = requireDomain(
+          origin,
+          null,
+          keyResult.validatedKey.allowedDomains
+        );
+        if (!domainResult.ok) {
+          return domainResult.response;
+        }
+
+        return buildPreflightResponse(origin, keyResult.validatedKey.allowedDomains);
       }
 
-      const domainResult = requireDomain(
-        origin,
-        null,
-        keyResult.validatedKey.allowedDomains
-      );
-      if (!domainResult.ok) {
-        return domainResult.response;
-      }
-
-      return buildPreflightResponse(origin, keyResult.validatedKey.allowedDomains);
+      return buildPreflightResponse(origin);
     }
 
     return new Response(null, { status: 204 });
@@ -94,7 +99,9 @@ export async function GET(request: NextRequest): Promise<Response> {
 
   try {
     const url = new URL(request.url);
-    const rawKey = url.searchParams.get('key');
+    const rawKey =
+      request.headers.get("x-rankwell-key") ??
+      url.searchParams.get("key");
     const rawLocation = url.searchParams.get('location');
     const keyResult = await requireApiKey(
       rawKey,
