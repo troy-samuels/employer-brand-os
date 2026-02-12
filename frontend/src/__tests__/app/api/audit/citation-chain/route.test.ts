@@ -216,4 +216,133 @@ describe("POST /api/audit/citation-chain", () => {
     expect(data.entityConfusion.isConfused).toBe(false);
     expect(data.trustDelta.hallucinationRate).toBe(0);
   });
+
+  /* ---- CSRF rejection ---- */
+
+  it("returns 403 when CSRF validation fails", async () => {
+    mockValidateCsrf.mockReturnValue(false);
+
+    const request = createMockRequest({
+      companyName: "Acme",
+      companyDomain: "acme.com",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(data.code).toBe("invalid_origin");
+    expect(mockEngineRun).not.toHaveBeenCalled();
+  });
+
+  /* ---- Malformed JSON body ---- */
+
+  it("returns 400 for invalid JSON body", async () => {
+    const request = new NextRequest(
+      "http://localhost:3000/api/audit/citation-chain",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          origin: "http://localhost:3000",
+          host: "localhost:3000",
+          "x-real-ip": "203.0.113.42",
+        },
+        body: "{ this is not valid json",
+      },
+    );
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.code).toBe("invalid_json");
+    expect(mockEngineRun).not.toHaveBeenCalled();
+  });
+
+  /* ---- Engine hard failure ---- */
+
+  it("returns 500 when the citation engine throws", async () => {
+    mockEngineRun.mockRejectedValue(new Error("LLM provider unavailable"));
+
+    const request = createMockRequest({
+      companyName: "Acme",
+      companyDomain: "acme.com",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(500);
+    expect(data.code).toBe("internal_error");
+  });
+
+  /* ---- All downstream modules fail (partial result) ---- */
+
+  it("returns partial result when all downstream modules throw", async () => {
+    mockAnalyseGaps.mockImplementation(() => {
+      throw new Error("gap boom");
+    });
+    mockDetectEntityConfusion.mockImplementation(() => {
+      throw new Error("entity boom");
+    });
+    mockCalculateTrustDelta.mockImplementation(() => {
+      throw new Error("trust boom");
+    });
+
+    const request = createMockRequest({
+      companyName: "Acme",
+      companyDomain: "acme.com",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.meta.partial).toBe(true);
+    expect(data.meta.errorFlags.gapAnalysis.hasError).toBe(true);
+    expect(data.meta.errorFlags.entityConfusion.hasError).toBe(true);
+    expect(data.meta.errorFlags.trustDelta.hasError).toBe(true);
+    // Core citation chain should still be present
+    expect(data.citationChain.companyName).toBe("Acme");
+  });
+
+  /* ---- Domain normalisation ---- */
+
+  it("normalises domain with protocol prefix", async () => {
+    const request = createMockRequest({
+      companyName: "Acme",
+      companyDomain: "https://www.acme.com/careers",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.citationChain).toBeDefined();
+    // Engine should have been called — domain was valid after normalisation
+    expect(mockEngineRun).toHaveBeenCalled();
+  });
+
+  /* ---- Success response shape ---- */
+
+  it("returns full response with meta on success", async () => {
+    const request = createMockRequest({
+      companyName: "Acme",
+      companyDomain: "acme.com",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.citationChain).toBeDefined();
+    expect(data.gapAnalysis).toBeDefined();
+    expect(data.entityConfusion).toBeDefined();
+    expect(data.trustDelta).toBeDefined();
+    expect(data.meta).toBeDefined();
+    expect(data.meta.generatedAt).toBeTruthy();
+    expect(data.meta.auditVersion).toBe("1.0.0");
+    expect(data.meta.partial).toBe(false);
+  });
 });
