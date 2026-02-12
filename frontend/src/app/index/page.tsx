@@ -161,7 +161,7 @@ function checkCount(c: IndexCompany): number {
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
-export const revalidate = 3600; // Revalidate every hour
+export const dynamic = "force-dynamic";
 
 export default async function IndexPage() {
   const { companies, stats } = await getIndexData();
