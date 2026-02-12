@@ -1,18 +1,25 @@
 /**
  * @module app/api/companies/search/route
  * Returns debounced company autocomplete matches from Supabase.
+ *
+ * SECURITY: Uses anon key (respects RLS) — never service-role for public endpoints.
+ * Rate-limited to 30 requests per 60s per IP. CSRF-validated.
  */
+
+import { isIP } from "node:net";
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
-import { supabaseAdmin } from "@/lib/supabase/admin";
+import { supabaseAnon } from "@/lib/supabase/anon";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
   apiErrorResponse,
   apiSuccessResponse,
   type ApiErrorResponse,
 } from "@/lib/utils/api-response";
+import { validateCsrf } from "@/lib/utils/csrf";
+import { RateLimiter } from "@/lib/utils/rate-limiter";
 import type { Database } from "@/types/database.types";
 
 /**
@@ -21,6 +28,9 @@ import type { Database } from "@/types/database.types";
 export const runtime = "nodejs";
 
 const MAX_RESULTS = 8;
+const SEARCH_RATE_LIMIT_SCOPE = "company-search";
+const SEARCH_RATE_LIMIT_LIMIT = 30;
+const SEARCH_RATE_LIMIT_WINDOW_SECONDS = 60;
 const CONTROL_CHARACTER_REGEX = /[\u0000-\u001F\u007F]/g;
 const ANGLE_BRACKET_REGEX = /[<>]/g;
 const LIKE_SPECIAL_CHARACTER_REGEX = /[%_\\]/g;
@@ -28,6 +38,22 @@ const LIKE_SPECIAL_CHARACTER_REGEX = /[%_\\]/g;
 const companySearchQuerySchema = z.object({
   q: z.string().trim().min(2, "Search query must be at least 2 characters.").max(100),
 });
+
+const rateLimiter = new RateLimiter();
+
+function getClientIpAddress(request: NextRequest): string {
+  const realIp = request.headers.get("x-real-ip")?.trim();
+  if (realIp && isIP(realIp)) {
+    return realIp;
+  }
+
+  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+  if (forwarded && isIP(forwarded)) {
+    return forwarded;
+  }
+
+  return "anonymous";
+}
 
 /**
  * Defines the CompanySearchItem contract.
@@ -89,6 +115,32 @@ function mapCompany(row: Pick<CompanyRow, "id" | "name" | "domain" | "industry" 
 export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<CompanySearchResponse | ApiErrorResponse>> {
+  // CSRF validation — reject cross-origin requests.
+  if (!validateCsrf(request)) {
+    return apiErrorResponse({
+      error: API_ERROR_MESSAGE.invalidOrigin,
+      code: API_ERROR_CODE.invalidOrigin,
+      status: 403,
+    });
+  }
+
+  // Rate limiting — 30 requests per 60s per IP.
+  const clientIp = getClientIpAddress(request);
+  const allowed = await rateLimiter.check(
+    clientIp,
+    SEARCH_RATE_LIMIT_SCOPE,
+    SEARCH_RATE_LIMIT_LIMIT,
+    SEARCH_RATE_LIMIT_WINDOW_SECONDS,
+  );
+
+  if (!allowed) {
+    return apiErrorResponse({
+      error: "Rate limit exceeded. Please try again later.",
+      code: API_ERROR_CODE.rateLimited,
+      status: 429,
+    });
+  }
+
   const rawQuery = request.nextUrl.searchParams.get("q") ?? "";
   const sanitizedQuery = sanitizeSearchTerm(rawQuery);
 
@@ -103,7 +155,7 @@ export async function GET(
   }
 
   const ilikePattern = `%${escapeIlikePattern(parsedQuery.data.q)}%`;
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabaseAnon
     .from("companies")
     .select("id, name, domain, industry, employee_count")
     .ilike("name", ilikePattern)
