@@ -116,7 +116,8 @@ export async function GET(
   request: NextRequest,
 ): Promise<NextResponse<CompanySearchResponse | ApiErrorResponse>> {
   // CSRF validation — reject cross-origin requests.
-  if (!validateCsrf(request)) {
+  // Skip CSRF for GET (read-only, no side-effects; browsers omit Origin on same-origin GETs).
+  if (request.method !== "GET" && !validateCsrf(request)) {
     return apiErrorResponse({
       error: API_ERROR_MESSAGE.invalidOrigin,
       code: API_ERROR_CODE.invalidOrigin,
