@@ -1,127 +1,142 @@
 /**
  * @module components/landing/pricing
- * Simplified pricing teaser on the homepage — links through to /pricing.
+ * Ghost tiers with hero middle card.
  */
 
-import Link from "next/link";
-import { Check, ArrowRight } from "lucide-react";
+"use client";
 
-const highlights = [
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Check, ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const spring = { type: "spring" as const, stiffness: 200, damping: 20 };
+
+const plans = [
   {
     name: "Starter",
-    audience: "1–50 employees",
     price: "£49",
-    features: [
-      "3 LLM reputation checks",
-      "Pixel & verification page",
-      "Monthly reputation snapshot",
-    ],
+    features: ["3 AI model checks", "Verification page", "Monthly snapshot"],
   },
   {
     name: "Growth",
-    audience: "51–500 employees",
     price: "£149",
     highlighted: true,
-    features: [
-      "4 LLM reputation checks",
-      "Weekly Monday Report",
-      "Hallucination alerts",
-    ],
+    features: ["4 AI model checks", "Weekly Monday Report", "Hallucination alerts"],
   },
   {
     name: "Scale",
-    audience: "500+ employees",
     price: "£399",
-    features: [
-      "6 LLMs — full coverage",
-      "Competitor benchmarking",
-      "Unlimited locations",
-    ],
+    features: ["6 AI models", "Competitor benchmarks", "Unlimited locations"],
   },
 ];
 
 export default function Pricing() {
   return (
-    <section id="pricing" className="py-20 lg:py-28 bg-neutral-50">
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
-        <div className="mb-14 lg:mb-16 text-center">
-          <p className="overline mb-3">Pricing</p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
+    <section id="pricing" className="py-24 lg:py-32 bg-white">
+      <div className="max-w-[960px] mx-auto px-6 lg:px-12">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={spring}
+        >
+          <h2
+            className="text-3xl lg:text-4xl font-medium text-neutral-950"
+            style={{ letterSpacing: "-0.03em" }}
+          >
             Cheaper than one bad hire
           </h2>
-          <p className="text-neutral-500 mt-4 max-w-xl mx-auto">
-            Plans scale with your team. The free audit is always free —
-            no signup, no credit card.
+          <p className="text-neutral-400 mt-3 max-w-md mx-auto text-sm">
+            The free audit is always free. Plans start when you want weekly monitoring.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {highlights.map((plan) => (
-            <div
+        <div className="grid gap-8 md:grid-cols-3 items-center">
+          {plans.map((plan, i) => (
+            <motion.div
               key={plan.name}
-              className={`relative rounded-2xl bg-white p-7 lg:p-8 border transition-all duration-300 ${
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ ...spring, delay: i * 0.08 }}
+              className={cn(
+                "relative rounded-2xl p-7 transition-all duration-300",
                 plan.highlighted
-                  ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated scale-[1.02]"
-                  : "border-neutral-200 hover:shadow-card-hover hover:border-neutral-300"
-              }`}
+                  ? "bg-neutral-950 border border-white/10 shadow-2xl shadow-black/20 md:scale-105 md:py-10"
+                  : "bg-transparent"
+              )}
             >
               {plan.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-brand-accent px-3 py-1 text-[11px] font-semibold text-white">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-accent px-3 py-1 text-[10px] font-semibold text-white tracking-wide">
                   Most popular
                 </span>
               )}
-              <div className="mb-6">
-                <h3 className="text-base font-semibold text-neutral-950">
-                  {plan.name}
-                </h3>
-                <p className="text-xs font-medium text-neutral-400 mt-1">
-                  {plan.audience}
-                </p>
-                <div className="mt-4 flex items-baseline gap-1">
-                  <span className="text-4xl font-bold text-neutral-950 tracking-tight">
-                    {plan.price}
-                  </span>
-                  <span className="text-neutral-500 text-sm">/month</span>
-                </div>
+
+              <h3 className={cn(
+                "text-sm font-semibold",
+                plan.highlighted ? "text-white" : "text-neutral-950"
+              )}>
+                {plan.name}
+              </h3>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span
+                  className={cn(
+                    "text-3xl font-medium",
+                    plan.highlighted ? "text-white" : "text-neutral-950"
+                  )}
+                  style={{ letterSpacing: "-0.03em" }}
+                >
+                  {plan.price}
+                </span>
+                <span className={cn(
+                  "text-sm",
+                  plan.highlighted ? "text-neutral-400" : "text-neutral-400"
+                )}>
+                  /mo
+                </span>
               </div>
 
-              <ul className="space-y-3">
-                {plan.features.map((feature) => (
+              <ul className="mt-6 space-y-3">
+                {plan.features.map((f) => (
                   <li
-                    key={feature}
-                    className="flex items-start gap-2.5 text-sm text-neutral-600"
+                    key={f}
+                    className={cn(
+                      "flex items-center gap-2 text-sm",
+                      plan.highlighted ? "text-neutral-300" : "text-neutral-400"
+                    )}
                   >
                     <Check
-                      className="h-4 w-4 text-brand-accent mt-0.5 shrink-0"
+                      className={cn(
+                        "h-3.5 w-3.5 shrink-0",
+                        plan.highlighted ? "text-brand-accent" : "text-neutral-300"
+                      )}
                       strokeWidth={2.5}
                     />
-                    {feature}
+                    {f}
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           ))}
         </div>
 
-        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div
+          className="mt-10 text-center"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.3 }}
+        >
           <Link
             href="/pricing"
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-950 hover:text-neutral-700 transition-colors"
+            className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-950 transition-colors"
           >
-            See full pricing & FAQ
+            Full pricing & FAQ
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-          <span className="text-neutral-300 hidden sm:inline">·</span>
-          <p className="text-sm text-neutral-500">
-            Enterprise & agency pricing available.{" "}
-            <a
-              href="mailto:hello@rankwell.io"
-              className="text-brand-accent hover:underline"
-            >
-              Get in touch
-            </a>
-          </p>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

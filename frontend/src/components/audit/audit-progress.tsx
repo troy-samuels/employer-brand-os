@@ -68,7 +68,7 @@ export function AuditProgress({ result, isRunning }: AuditProgressProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.2 }}
-            className="text-sm text-neutral-400"
+            className="text-sm text-slate-400"
           >
             Checking {activeLabel}…
           </motion.p>
@@ -90,9 +90,9 @@ export function AuditProgress({ result, isRunning }: AuditProgressProps) {
       animate={{ opacity: 1 }}
       className="text-center"
     >
-      <p className="text-sm text-neutral-500">
-        <span className="font-semibold text-neutral-950">{passed}</span> of{" "}
-        <span className="font-semibold text-neutral-950">{total}</span> checks
+      <p className="text-sm text-slate-500">
+        <span className="font-semibold text-slate-900">{passed}</span> of{" "}
+        <span className="font-semibold text-slate-900">{total}</span> checks
         passed
       </p>
     </motion.div>

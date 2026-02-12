@@ -36,6 +36,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`min-h-screen bg-background font-sans antialiased ${jakarta.variable} ${jetbrains.variable} ${instrumentSerif.variable}`}>
+        {/* Grain texture overlay */}
+        <div
+          className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay"
+          style={{ backgroundImage: "url('/noise.svg')", backgroundRepeat: "repeat" }}
+        />
         {children}
         <Toaster position="bottom-right" />
       </body>

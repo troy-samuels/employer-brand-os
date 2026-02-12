@@ -29,13 +29,13 @@ export default function DpaPage() {
       <main>
       <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
         <p className="overline mb-4">Legal</p>
-        <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Data Processing Agreement
         </h1>
-        <p className="mt-4 text-sm text-neutral-500">
+        <p className="mt-4 text-sm text-slate-500">
           Last updated: {lastUpdated}
         </p>
-        <p className="mt-6 text-neutral-600 leading-relaxed">
+        <p className="mt-6 text-slate-600 leading-relaxed">
           This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the
           agreement between Rankwell (&ldquo;Processor&rdquo;) and the
           organisation using Rankwell services (&ldquo;Controller&rdquo;), in
@@ -45,7 +45,7 @@ export default function DpaPage() {
         <div className="mt-14 space-y-10 text-neutral-700 leading-relaxed">
           {/* 1 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               1. Scope &amp; purpose
             </h2>
             <p>
@@ -65,69 +65,69 @@ export default function DpaPage() {
 
           {/* 2 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               2. Categories of data
             </h2>
-            <div className="overflow-hidden rounded-xl border border-neutral-200 mt-4">
+            <div className="overflow-hidden rounded-xl border border-slate-200 mt-4">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-neutral-200 bg-neutral-50">
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                  <tr className="border-b border-slate-200 bg-slate-50">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Category
                     </th>
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Data subjects
                     </th>
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Retention
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100">
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">
+                    <td className="px-5 py-3 text-slate-900">
                       Work email addresses
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Controller employees
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Account lifetime
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">
+                    <td className="px-5 py-3 text-slate-900">
                       Company &amp; domain data
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Controller organisation
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Account lifetime
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">
+                    <td className="px-5 py-3 text-slate-900">
                       Audit results &amp; scores
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Controller organisation
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">12 months</td>
+                    <td className="px-5 py-3 text-slate-600">12 months</td>
                   </tr>
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">
+                    <td className="px-5 py-3 text-slate-900">
                       API access logs
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Controller systems
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">30 days</td>
+                    <td className="px-5 py-3 text-slate-600">30 days</td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <p className="mt-3 text-sm text-neutral-500">
+            <p className="mt-3 text-sm text-slate-500">
               No special category data (Article 9) is processed. The Rankwell
               pixel does not process any personal data of website visitors.
             </p>
@@ -135,7 +135,7 @@ export default function DpaPage() {
 
           {/* 3 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               3. Processor obligations
             </h2>
             <p>Rankwell shall:</p>
@@ -153,7 +153,7 @@ export default function DpaPage() {
                 measures (see{' '}
                 <a
                   href="/security"
-                  className="text-emerald-700 underline underline-offset-2"
+                  className="text-teal-700 underline underline-offset-2"
                 >
                   Security page
                 </a>
@@ -184,7 +184,7 @@ export default function DpaPage() {
 
           {/* 4 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               4. Security measures
             </h2>
             <p>
@@ -208,46 +208,46 @@ export default function DpaPage() {
 
           {/* 5 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               5. Sub-processors
             </h2>
             <p>
               The Controller authorises the following sub-processors at the date
               of this agreement:
             </p>
-            <div className="overflow-hidden rounded-xl border border-neutral-200 mt-4">
+            <div className="overflow-hidden rounded-xl border border-slate-200 mt-4">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-neutral-200 bg-neutral-50">
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                  <tr className="border-b border-slate-200 bg-slate-50">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Sub-processor
                     </th>
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Purpose
                     </th>
-                    <th className="px-5 py-3 text-left font-medium text-neutral-950">
+                    <th className="px-5 py-3 text-left font-medium text-slate-900">
                       Location
                     </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100">
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">
+                    <td className="px-5 py-3 text-slate-900">
                       Supabase Inc.
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       Database &amp; authentication
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-600">
                       EU (London)
                     </td>
                   </tr>
                   <tr>
-                    <td className="px-5 py-3 text-neutral-950">Vercel Inc.</td>
-                    <td className="px-5 py-3 text-neutral-600">
+                    <td className="px-5 py-3 text-slate-900">Vercel Inc.</td>
+                    <td className="px-5 py-3 text-slate-600">
                       Application hosting
                     </td>
-                    <td className="px-5 py-3 text-neutral-600">Global edge</td>
+                    <td className="px-5 py-3 text-slate-600">Global edge</td>
                   </tr>
                 </tbody>
               </table>
@@ -256,7 +256,7 @@ export default function DpaPage() {
 
           {/* 6 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               6. Data transfers
             </h2>
             <p>
@@ -269,7 +269,7 @@ export default function DpaPage() {
 
           {/* 7 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               7. Breach notification
             </h2>
             <p>
@@ -286,7 +286,7 @@ export default function DpaPage() {
 
           {/* 8 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               8. Termination
             </h2>
             <p>
@@ -299,7 +299,7 @@ export default function DpaPage() {
 
           {/* 9 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               9. Governing law
             </h2>
             <p>
@@ -310,16 +310,16 @@ export default function DpaPage() {
           </section>
 
           {/* Contact */}
-          <section className="rounded-xl border border-neutral-200 bg-neutral-50 p-6">
-            <h2 className="font-semibold text-neutral-950 mb-2">
+          <section className="rounded-xl border border-slate-200 bg-slate-50 p-6">
+            <h2 className="font-semibold text-slate-900 mb-2">
               Request a signed DPA
             </h2>
-            <p className="text-sm text-neutral-600">
+            <p className="text-sm text-slate-600">
               Enterprise customers requiring a signed copy of this DPA, or
               custom amendments, should contact{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>

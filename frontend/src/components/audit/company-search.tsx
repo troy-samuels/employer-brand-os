@@ -309,11 +309,11 @@ export function CompanySearch({
             aria-controls="company-search-results"
             aria-activedescendant={activeIndex >= 0 ? `company-result-${activeIndex}` : undefined}
             aria-label="Enter your company name"
-            className="w-full rounded-xl border border-neutral-200 bg-white px-5 py-3.5 pr-11 text-base text-neutral-950 placeholder:text-neutral-400 shadow-sm focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all duration-200"
+            className="w-full rounded-full border border-slate-200/60 bg-white h-14 px-6 pr-12 text-base text-center text-slate-900 placeholder:text-slate-400 shadow-[0_0_0_1px_rgba(0,0,0,0.04),0_8px_40px_rgba(0,0,0,0.06)] focus:border-brand-accent/40 focus:ring-2 focus:ring-brand-accent/15 focus:shadow-[0_0_0_1px_rgba(13,148,136,0.15),0_8px_40px_rgba(13,148,136,0.08)] focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all duration-300"
           />
           {isSearching && (
             <span
-              className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-neutral-200 border-t-brand-accent"
+              className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 animate-spin rounded-full border-2 border-slate-200 border-t-brand-accent"
               aria-hidden
             />
           )}
@@ -323,7 +323,7 @@ export function CompanySearch({
           <div
             id="company-search-results"
             role="listbox"
-            className="absolute left-1/2 z-20 mt-2 max-h-80 w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-y-auto rounded-xl border border-neutral-200 bg-white shadow-lg sm:left-0 sm:max-w-none sm:translate-x-0"
+            className="absolute left-1/2 z-20 mt-2 max-h-80 w-full max-w-[calc(100vw-2rem)] -translate-x-1/2 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-lg sm:left-0 sm:max-w-none sm:translate-x-0"
           >
             {results.map((company, index) => {
               const isActive = index === activeIndex;
@@ -342,11 +342,11 @@ export function CompanySearch({
                   onClick={() => handleSelectCompany(company)}
                   className={cn(
                     "flex w-full flex-col items-start gap-1 border-b border-neutral-100 px-4 py-3 text-left last:border-b-0",
-                    isActive ? "bg-brand-accent/10" : "hover:bg-neutral-50",
+                    isActive ? "bg-brand-accent/10" : "hover:bg-slate-50",
                   )}
                 >
-                  <span className="text-sm font-semibold text-neutral-900">{company.name}</span>
-                  {metadata && <span className="text-xs text-neutral-500">{metadata}</span>}
+                  <span className="text-sm font-semibold text-slate-800">{company.name}</span>
+                  {metadata && <span className="text-xs text-slate-500">{metadata}</span>}
                 </button>
               );
             })}
@@ -356,7 +356,7 @@ export function CompanySearch({
 
       {showFallback && (
         <div className="mt-4 space-y-3 rounded-xl border border-dashed border-neutral-300 bg-white/90 p-4 text-left">
-          <p className="text-sm text-neutral-600">
+          <p className="text-sm text-slate-600">
             Can&apos;t find your company? Enter your website URL instead
           </p>
           <input
@@ -366,7 +366,7 @@ export function CompanySearch({
             placeholder="https://your-company.com"
             disabled={isLoading}
             aria-label="Company website URL"
-            className="w-full rounded-lg border border-neutral-200 bg-white px-4 py-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-800 placeholder:text-slate-400 focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
           />
         </div>
       )}

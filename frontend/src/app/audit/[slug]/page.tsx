@@ -124,7 +124,7 @@ export default function AuditSlugPage() {
 
   if (pageState.status === "loading") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 py-10 sm:px-6">
+      <main className="flex min-h-screen items-center justify-center bg-slate-900 px-4 py-10 sm:px-6">
         <LoadingTheatre />
       </main>
     );
@@ -132,14 +132,14 @@ export default function AuditSlugPage() {
 
   if (pageState.status === "error") {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-neutral-950 px-4 py-10 sm:px-6">
-        <section className="w-full max-w-xl rounded-2xl border border-white/15 bg-neutral-900 p-6 text-white sm:p-8">
+      <main className="flex min-h-screen items-center justify-center bg-slate-900 px-4 py-10 sm:px-6">
+        <section className="w-full max-w-xl rounded-2xl border border-slate-700 bg-slate-800 p-6 text-white sm:p-8">
           <h1 className="text-2xl font-semibold tracking-tight">Audit report unavailable</h1>
-          <p className="mt-2 text-sm leading-relaxed text-neutral-300">{pageState.message}</p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-300">{pageState.message}</p>
           <button
             type="button"
             onClick={() => setRefreshCount((current) => current + 1)}
-            className="mt-5 rounded-xl bg-emerald-400 px-4 py-2.5 text-sm font-semibold text-neutral-950 transition-colors hover:bg-emerald-300"
+            className="mt-5 rounded-xl bg-teal-500 px-4 py-2.5 text-sm font-semibold text-slate-900 transition-colors hover:bg-teal-400"
           >
             Retry audit
           </button>

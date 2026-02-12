@@ -49,7 +49,7 @@ export function AuditInput({ onSubmit, isLoading = false }: AuditInputProps) {
           placeholder="Enter your company name or website"
           disabled={isLoading}
           aria-label="Company name or website"
-          className="flex-1 rounded-xl border border-neutral-200 bg-white px-5 py-3.5 text-base text-neutral-950 placeholder:text-neutral-400 shadow-sm focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all duration-200"
+          className="flex-1 rounded-xl border border-slate-200 bg-white px-5 py-3.5 text-base text-slate-900 placeholder:text-slate-400 shadow-sm focus:border-brand-accent focus:ring-2 focus:ring-brand-accent/20 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60 transition-all duration-200"
         />
         <Button
           type="submit"

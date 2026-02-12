@@ -26,14 +26,14 @@ export default function SecurityPage() {
       <Header />
       <main>
       {/* Header */}
-      <section className="border-b border-neutral-200 bg-neutral-50 relative overflow-hidden">
+      <section className="border-b border-slate-200 bg-slate-50 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-neutral-50 to-transparent" />
         <div className="relative mx-auto max-w-4xl px-6 py-20 sm:py-28">
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100">
               <svg
-                className="h-5 w-5 text-emerald-700"
+                className="h-5 w-5 text-teal-700"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
@@ -46,14 +46,14 @@ export default function SecurityPage() {
                 />
               </svg>
             </div>
-            <p className="text-sm font-medium text-emerald-700 tracking-wide uppercase">
+            <p className="text-sm font-medium text-teal-700 tracking-wide uppercase">
               Trust Centre
             </p>
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-neutral-950 sm:text-5xl">
+          <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
             Security at Rankwell
           </h1>
-          <p className="mt-6 text-lg leading-relaxed text-neutral-500 max-w-2xl">
+          <p className="mt-6 text-lg leading-relaxed text-slate-500 max-w-2xl">
             You&apos;re trusting us with your employer brand data. We take that
             seriously. Here&apos;s exactly how we protect it.
           </p>
@@ -63,60 +63,60 @@ export default function SecurityPage() {
       {/* Infrastructure */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Infrastructure
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             Built on providers with independently verified security
             certifications.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-xl border border-neutral-200 p-6">
-              <h3 className="font-semibold text-neutral-950 mb-1">Vercel</h3>
-              <p className="text-sm text-neutral-500 mb-3">
+            <div className="rounded-xl border border-slate-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-1">Vercel</h3>
+              <p className="text-sm text-slate-500 mb-3">
                 Application hosting &amp; edge network
               </p>
-              <ul className="space-y-2 text-sm text-neutral-600">
+              <ul className="space-y-2 text-sm text-slate-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   SOC 2 Type II certified
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   ISO 27001 certified
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   GDPR compliant
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   Automatic DDoS protection
                 </li>
               </ul>
             </div>
 
-            <div className="rounded-xl border border-neutral-200 p-6">
-              <h3 className="font-semibold text-neutral-950 mb-1">Supabase</h3>
-              <p className="text-sm text-neutral-500 mb-3">
+            <div className="rounded-xl border border-slate-200 p-6">
+              <h3 className="font-semibold text-slate-900 mb-1">Supabase</h3>
+              <p className="text-sm text-slate-500 mb-3">
                 Database &amp; authentication
               </p>
-              <ul className="space-y-2 text-sm text-neutral-600">
+              <ul className="space-y-2 text-sm text-slate-600">
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   SOC 2 Type II certified
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   HIPAA available
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   EU data residency (London region)
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-emerald-600 mt-0.5">✓</span>
+                  <span className="text-teal-600 mt-0.5">✓</span>
                   Row Level Security enforced
                 </li>
               </ul>
@@ -128,10 +128,10 @@ export default function SecurityPage() {
       {/* Encryption */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Encryption
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             Your data is encrypted everywhere — in transit and at rest.
           </p>
 
@@ -152,11 +152,11 @@ export default function SecurityPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="flex items-start gap-4 rounded-lg bg-neutral-50 p-5"
+                className="flex items-start gap-4 rounded-lg bg-slate-50 p-5"
               >
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-100">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-teal-100">
                   <svg
-                    className="h-4 w-4 text-emerald-700"
+                    className="h-4 w-4 text-teal-700"
                     fill="none"
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
@@ -170,8 +170,8 @@ export default function SecurityPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-medium text-neutral-950">{item.title}</h3>
-                  <p className="text-sm text-neutral-600 mt-1">{item.desc}</p>
+                  <h3 className="font-medium text-slate-900">{item.title}</h3>
+                  <p className="text-sm text-slate-600 mt-1">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -182,20 +182,20 @@ export default function SecurityPage() {
       {/* The Pixel */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             The Rankwell Pixel
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             When you add our pixel to your careers page, here&apos;s exactly
             what it does — and what it doesn&apos;t.
           </p>
 
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-6">
-              <h3 className="font-semibold text-emerald-900 mb-4">
+            <div className="rounded-xl border border-teal-200 bg-teal-50/50 p-6">
+              <h3 className="font-semibold text-teal-900 mb-4">
                 What the pixel does
               </h3>
-              <ul className="space-y-3 text-sm text-emerald-800">
+              <ul className="space-y-3 text-sm text-teal-700">
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5">✓</span>
                   Serves structured employer data (JSON-LD) to AI crawlers
@@ -248,15 +248,15 @@ export default function SecurityPage() {
             </div>
           </div>
 
-          <div className="mt-6 rounded-lg bg-neutral-50 border border-neutral-200 p-5">
-            <p className="text-sm text-neutral-600">
-              <strong className="text-neutral-950">Verify it yourself.</strong>{' '}
+          <div className="mt-6 rounded-lg bg-slate-50 border border-slate-200 p-5">
+            <p className="text-sm text-slate-600">
+              <strong className="text-slate-900">Verify it yourself.</strong>{' '}
               Every version of the pixel includes an SRI hash. You can verify the
               script hasn&apos;t been modified by checking the integrity attribute
               in your embed code against our{' '}
               <a
                 href="/api/pixel/v1/integrity"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 integrity endpoint
               </a>
@@ -269,10 +269,10 @@ export default function SecurityPage() {
       {/* Access Control */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Access Control
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             Strict boundaries on who can access what.
           </p>
 
@@ -297,7 +297,7 @@ export default function SecurityPage() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="flex items-start gap-4 rounded-lg bg-neutral-50 p-5"
+                className="flex items-start gap-4 rounded-lg bg-slate-50 p-5"
               >
                 <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-200">
                   <svg
@@ -315,8 +315,8 @@ export default function SecurityPage() {
                   </svg>
                 </div>
                 <div>
-                  <h3 className="font-medium text-neutral-950">{item.title}</h3>
-                  <p className="text-sm text-neutral-600 mt-1">{item.desc}</p>
+                  <h3 className="font-medium text-slate-900">{item.title}</h3>
+                  <p className="text-sm text-slate-600 mt-1">{item.desc}</p>
                 </div>
               </div>
             ))}
@@ -327,37 +327,37 @@ export default function SecurityPage() {
       {/* Compliance */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Compliance
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             Meeting the standards your legal and procurement teams require.
           </p>
 
           <div className="grid gap-4 sm:grid-cols-3">
-            <div className="rounded-xl border border-neutral-200 p-6 text-center">
-              <div className="text-3xl font-bold text-neutral-950 mb-1">
+            <div className="rounded-xl border border-slate-200 p-6 text-center">
+              <div className="text-3xl font-bold text-slate-900 mb-1">
                 GDPR
               </div>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-slate-500">
                 EU data protection compliant. Data Processing Agreement
                 available on request.
               </p>
             </div>
-            <div className="rounded-xl border border-neutral-200 p-6 text-center">
-              <div className="text-3xl font-bold text-neutral-950 mb-1">
+            <div className="rounded-xl border border-slate-200 p-6 text-center">
+              <div className="text-3xl font-bold text-slate-900 mb-1">
                 SOC 2
               </div>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-slate-500">
                 Built on SOC 2 Type II certified infrastructure. Own
                 certification in progress.
               </p>
             </div>
-            <div className="rounded-xl border border-neutral-200 p-6 text-center">
-              <div className="text-3xl font-bold text-neutral-950 mb-1">
+            <div className="rounded-xl border border-slate-200 p-6 text-center">
+              <div className="text-3xl font-bold text-slate-900 mb-1">
                 UK DPA
               </div>
-              <p className="text-sm text-neutral-500">
+              <p className="text-sm text-slate-500">
                 UK Data Protection Act 2018 compliant. EU-adequate data handling
                 standards.
               </p>
@@ -369,86 +369,86 @@ export default function SecurityPage() {
       {/* Data Handling */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Data Handling
           </h2>
-          <p className="text-neutral-600 mb-8">
+          <p className="text-slate-600 mb-8">
             Clear rules on what we collect, where it lives, and how long we keep
             it.
           </p>
 
-          <div className="overflow-hidden rounded-xl border border-neutral-200">
+          <div className="overflow-hidden rounded-xl border border-slate-200">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-neutral-200 bg-neutral-50">
-                  <th className="px-6 py-3 text-left font-medium text-neutral-950">
+                <tr className="border-b border-slate-200 bg-slate-50">
+                  <th className="px-6 py-3 text-left font-medium text-slate-900">
                     Data type
                   </th>
-                  <th className="px-6 py-3 text-left font-medium text-neutral-950">
+                  <th className="px-6 py-3 text-left font-medium text-slate-900">
                     Purpose
                   </th>
-                  <th className="px-6 py-3 text-left font-medium text-neutral-950">
+                  <th className="px-6 py-3 text-left font-medium text-slate-900">
                     Retention
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-neutral-100">
                 <tr>
-                  <td className="px-6 py-3 text-neutral-950">
+                  <td className="px-6 py-3 text-slate-900">
                     Company name &amp; domain
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     Audit identification
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     While account active
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-3 text-neutral-950">
+                  <td className="px-6 py-3 text-slate-900">
                     Audit results &amp; scores
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     Report generation
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     12 months from audit
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-3 text-neutral-950">
+                  <td className="px-6 py-3 text-slate-900">
                     Work email address
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     Audit delivery &amp; account
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     Until deletion requested
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-3 text-neutral-950">
+                  <td className="px-6 py-3 text-slate-900">
                     Pixel analytics
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     AI visibility metrics
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-600">
                     90-day rolling window
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-6 py-3 text-neutral-950">API logs</td>
-                  <td className="px-6 py-3 text-neutral-600">
+                  <td className="px-6 py-3 text-slate-900">API logs</td>
+                  <td className="px-6 py-3 text-slate-600">
                     Security &amp; debugging
                   </td>
-                  <td className="px-6 py-3 text-neutral-600">30 days</td>
+                  <td className="px-6 py-3 text-slate-600">30 days</td>
                 </tr>
               </tbody>
             </table>
           </div>
 
-          <p className="mt-4 text-sm text-neutral-500">
+          <p className="mt-4 text-sm text-slate-500">
             We never sell your data. We never share it with third parties for
             marketing. Full deletion available within 48 hours of request.
           </p>
@@ -458,19 +458,19 @@ export default function SecurityPage() {
       {/* Responsible Disclosure */}
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-2">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-2">
             Responsible Disclosure
           </h2>
-          <p className="text-neutral-600 mb-6">
+          <p className="text-slate-600 mb-6">
             Found a security issue? We want to hear about it.
           </p>
 
-          <div className="rounded-xl border border-neutral-200 bg-neutral-50 p-6">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-6">
             <p className="text-sm text-neutral-700 leading-relaxed">
               Email{' '}
               <a
                 href="mailto:security@rankwell.io"
-                className="font-medium text-emerald-700 underline underline-offset-2"
+                className="font-medium text-teal-700 underline underline-offset-2"
               >
                 security@rankwell.io
               </a>{' '}
@@ -487,16 +487,16 @@ export default function SecurityPage() {
       {/* CTA */}
       <section>
         <div className="mx-auto max-w-4xl px-6 py-16 text-center">
-          <h2 className="text-2xl font-semibold text-neutral-950 mb-3">
+          <h2 className="text-2xl font-semibold text-slate-900 mb-3">
             Questions about security?
           </h2>
-          <p className="text-neutral-600 mb-6">
+          <p className="text-slate-600 mb-6">
             We&apos;re happy to discuss our security practices, provide
             additional documentation, or arrange a call with our team.
           </p>
           <a
             href="mailto:hello@rankwell.io"
-            className="inline-flex items-center justify-center rounded-lg bg-neutral-950 px-6 py-3 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+            className="inline-flex items-center justify-center rounded-lg bg-teal-600 px-6 py-3 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
           >
             Get in touch
           </a>

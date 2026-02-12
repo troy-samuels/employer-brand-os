@@ -55,18 +55,18 @@ export function CitationChainVisual({ result, className }: CitationChainVisualPr
     <Card
       variant="bordered"
       padding="none"
-      className={cn("overflow-hidden rounded-2xl border-neutral-200", className)}
+      className={cn("overflow-hidden rounded-2xl border-slate-200", className)}
       data-testid="citation-chain-visual"
     >
-      <div className="border-b border-neutral-200 px-5 py-5 sm:px-6">
-        <h2 className="text-xl font-semibold text-neutral-950">Citation Chain Visual</h2>
-        <p className="mt-1 text-sm text-neutral-600">
+      <div className="border-b border-slate-200 px-5 py-5 sm:px-6">
+        <h2 className="text-xl font-semibold text-slate-900">Citation Chain Visual</h2>
+        <p className="mt-1 text-sm text-slate-600">
           How Google rankings flow into what ChatGPT, Claude, and Perplexity cite.
         </p>
 
         <div className="mt-3 flex flex-wrap gap-2 text-xs">
           <LegendPill
-            className="border-emerald-200 bg-emerald-50 text-emerald-700"
+            className="border-teal-200 bg-teal-50 text-teal-700"
             label="Employer domain"
           />
           <LegendPill
@@ -77,12 +77,12 @@ export function CitationChainVisual({ result, className }: CitationChainVisualPr
       </div>
 
       {rows.length === 0 ? (
-        <div className="px-5 py-10 text-center text-sm text-neutral-500 sm:px-6">
+        <div className="px-5 py-10 text-center text-sm text-slate-500 sm:px-6">
           No citation links were detected in this run.
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 p-4 sm:p-5">
-          <div className="hidden grid-cols-[1fr_auto_1fr] gap-4 px-2 text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500 md:grid">
+          <div className="hidden grid-cols-[1fr_auto_1fr] gap-4 px-2 text-xs font-semibold uppercase tracking-[0.08em] text-slate-500 md:grid">
             <p>Google organic results</p>
             <p className="text-center">Mapped</p>
             <p className="text-right">AI citations</p>
@@ -94,13 +94,13 @@ export function CitationChainVisual({ result, className }: CitationChainVisualPr
             return (
               <article key={row.key} className="grid grid-cols-1 items-stretch gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-4">
                 <div className={cn("rounded-xl border p-3", tone.googleCard)}>
-                  <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
                     {row.googlePosition !== null ? `Google #${row.googlePosition}` : "Google rank unavailable"}
                   </p>
                   <p className={cn("mt-1 text-sm font-semibold", tone.domainText)}>{row.domain}</p>
-                  <p className="mt-1 text-sm text-neutral-800">{row.title}</p>
+                  <p className="mt-1 text-sm text-slate-700">{row.title}</p>
                   {row.snippet && (
-                    <p className="mt-1 line-clamp-2 text-xs text-neutral-600">{row.snippet}</p>
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-600">{row.snippet}</p>
                   )}
                 </div>
 
@@ -115,7 +115,7 @@ export function CitationChainVisual({ result, className }: CitationChainVisualPr
                     <p className={cn("text-sm font-semibold", tone.domainText)}>{row.domain}</p>
                   </div>
 
-                  <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+                  <p className="mt-2 text-xs font-semibold uppercase tracking-wide text-slate-500">
                     Cited by AI models
                   </p>
                   <div className="mt-2 flex flex-wrap gap-1.5">
@@ -212,11 +212,11 @@ function getDomainTone(domainKey: string, companyKey: string): {
 } {
   if (domainKey === companyKey && companyKey) {
     return {
-      googleCard: "border-emerald-200 bg-emerald-50/70",
-      aiCard: "border-emerald-200 bg-emerald-50/70",
-      domainText: "text-emerald-700",
+      googleCard: "border-teal-200 bg-teal-50/70",
+      aiCard: "border-teal-200 bg-teal-50/70",
+      domainText: "text-teal-700",
       connectorLine: "bg-emerald-300",
-      connectorIcon: "text-emerald-500",
+      connectorIcon: "text-teal-500",
     };
   }
 
@@ -231,11 +231,11 @@ function getDomainTone(domainKey: string, companyKey: string): {
   }
 
   return {
-    googleCard: "border-neutral-200 bg-white",
-    aiCard: "border-neutral-200 bg-white",
-    domainText: "text-neutral-900",
+    googleCard: "border-slate-200 bg-white",
+    aiCard: "border-slate-200 bg-white",
+    domainText: "text-slate-800",
     connectorLine: "bg-neutral-300",
-    connectorIcon: "text-neutral-400",
+    connectorIcon: "text-slate-400",
   };
 }
 

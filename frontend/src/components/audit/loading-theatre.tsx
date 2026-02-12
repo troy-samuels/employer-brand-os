@@ -67,31 +67,31 @@ export function LoadingTheatre({
   return (
     <section
       className={cn(
-        "w-full max-w-3xl rounded-3xl border border-white/15 bg-neutral-900/70 p-6 text-white shadow-2xl backdrop-blur sm:p-8",
+        "w-full max-w-3xl rounded-3xl border border-slate-700 bg-slate-800/70 p-6 text-white shadow-2xl backdrop-blur sm:p-8",
         className
       )}
       aria-live="polite"
       data-testid="loading-theatre"
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-neutral-300">
+      <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-300">
         Running Audit
       </p>
       <h2 className="mt-2 text-2xl font-semibold tracking-tight sm:text-3xl">
         Building your citation-chain report
       </h2>
-      <p className="mt-2 text-sm text-neutral-300">
+      <p className="mt-2 text-sm text-slate-300">
         We are checking how major AI models source employer information.
       </p>
 
       <div className="mt-6 overflow-hidden rounded-full bg-white/10">
         <motion.div
-          className="h-2 rounded-full bg-emerald-400"
+          className="h-2 rounded-full bg-teal-500"
           initial={{ width: 0 }}
           animate={{ width: `${progress * 100}%` }}
           transition={{ duration: 0.4, ease: "easeOut" }}
         />
       </div>
-      <p className="mt-2 text-xs font-medium text-neutral-300">{Math.round(progress * 100)}% complete</p>
+      <p className="mt-2 text-xs font-medium text-slate-300">{Math.round(progress * 100)}% complete</p>
 
       <ol className="mt-6 space-y-2" aria-label="Audit progress steps">
         <AnimatePresence initial={false}>
@@ -102,7 +102,7 @@ export function LoadingTheatre({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-neutral-100"
+              className="rounded-xl border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-neutral-100"
             >
               <span className="mr-2" aria-hidden>
                 ✅

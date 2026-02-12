@@ -98,49 +98,50 @@
 }
 
 :root {
-  --radius: 12px;
+  --radius: 10px;
 
-  /* Brand Colours — Neutral (revisit accent later) */
-  --brand-deep: #18181B;
-  --brand-accent: #3F3F46;
-  --brand-accent-hover: #27272A;
-  --brand-accent-light: #F4F4F5;
-  --brand-accent-subtle: #FAFAFA;
+  /* ─── Brand Palette ─── */
+  /* Primary: Deep teal — trust, growth, verification */
+  --brand-deep: #0F172A;
+  --brand-accent: #0D9488;
+  --brand-accent-hover: #0F766E;
+  --brand-accent-light: #F0FDFA;
+  --brand-accent-subtle: #F7FFFE;
 
-  /* Warm Neutral Palette */
-  --neutral-950: #1C1917;
-  --neutral-800: #3D3833;
-  --neutral-600: #6B6560;
-  --neutral-500: #8A8480;
-  --neutral-300: #CCC7C1;
-  --neutral-200: #E8E4DF;
-  --neutral-100: #F4F2EF;
-  --neutral-50: #FAFAF8;
+  /* ─── Neutral Palette (warm slate) ─── */
+  --neutral-950: #0F172A;
+  --neutral-800: #1E293B;
+  --neutral-600: #475569;
+  --neutral-500: #64748B;
+  --neutral-300: #CBD5E1;
+  --neutral-200: #E2E8F0;
+  --neutral-100: #F1F5F9;
+  --neutral-50: #F8FAFC;
   --white: #FFFFFF;
 
-  /* Status Colours */
-  --status-verified: #16A34A;
-  --status-verified-light: #F0FDF4;
+  /* ─── Status Colours ─── */
+  --status-verified: #059669;
+  --status-verified-light: #ECFDF5;
   --status-warning: #D97706;
   --status-warning-light: #FFFBEB;
   --status-critical: #DC2626;
   --status-critical-light: #FEF2F2;
-  --status-info: #4F6BF6;
-  --status-info-light: #EEF1FE;
+  --status-info: #2563EB;
+  --status-info-light: #EFF6FF;
 
-  /* Semantic Mappings */
-  --background: var(--neutral-50);
+  /* ─── Semantic Mappings ─── */
+  --background: var(--white);
   --surface: var(--white);
   --border: var(--neutral-200);
   --border-focus: var(--brand-accent);
 
-  /* Text */
+  /* ─── Text ─── */
   --text-primary: var(--neutral-950);
   --text-secondary: var(--neutral-600);
   --text-muted: var(--neutral-500);
   --text-white: var(--white);
 
-  /* Legacy Aliases — keeps existing components working during migration */
+  /* ─── Legacy Aliases ─── */
   --brand-primary: var(--brand-accent);
   --brand-primary-hover: var(--brand-accent-hover);
   --brand-primary-light: var(--brand-accent-light);
@@ -172,27 +173,40 @@
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    color: var(--neutral-800);
+    line-height: 1.7;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold;
     color: var(--neutral-950);
     letter-spacing: -0.02em;
+    line-height: 1.2;
   }
 
   h1 {
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
+    font-weight: 700;
   }
 
   h2 {
-    letter-spacing: -0.02em;
+    letter-spacing: -0.025em;
+    font-weight: 700;
+  }
+
+  h3, h4 {
+    font-weight: 600;
+  }
+
+  p {
+    color: var(--neutral-600);
+    line-height: 1.7;
   }
 
   /* Overline utility — used for category labels */
   .overline {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--brand-accent);
     line-height: 1.3;

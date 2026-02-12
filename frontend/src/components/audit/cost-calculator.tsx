@@ -54,14 +54,14 @@ export function CostCalculator({ deltaItems, className }: CostCalculatorProps) {
   return (
     <section
       className={cn(
-        "rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm sm:p-6",
+        "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6",
         className
       )}
       data-testid="cost-calculator"
     >
       <div className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold text-neutral-950">Cost Of Misinformation</h2>
-        <p className="text-sm text-neutral-600">
+        <h2 className="text-lg font-semibold text-slate-900">Cost Of Misinformation</h2>
+        <p className="text-sm text-slate-600">
           Hallucination rate from this audit: {hallucinationRate.toFixed(1)}%
         </p>
       </div>
@@ -95,11 +95,11 @@ export function CostCalculator({ deltaItems, className }: CostCalculatorProps) {
         />
       </div>
 
-      <div className="mt-6 rounded-xl bg-neutral-950 px-5 py-6 text-white">
+      <div className="mt-6 rounded-xl bg-slate-900 px-5 py-6 text-white">
         <p className="text-3xl font-semibold tracking-tight sm:text-4xl">
           {formatGbpCurrency(costEstimate.monthlyWastedSpend)}
         </p>
-        <p className="mt-1 text-sm text-neutral-300">
+        <p className="mt-1 text-sm text-slate-300">
           / month in estimated wasted recruiting spend
         </p>
         <p className="mt-4 text-sm font-medium text-neutral-100">

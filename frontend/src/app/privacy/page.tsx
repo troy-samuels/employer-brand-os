@@ -29,17 +29,17 @@ export default function PrivacyPage() {
       <main>
       <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
         <p className="overline mb-4">Legal</p>
-        <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Privacy Policy
         </h1>
-        <p className="mt-4 text-sm text-neutral-500">
+        <p className="mt-4 text-sm text-slate-500">
           Last updated: {lastUpdated}
         </p>
 
         <div className="mt-14 space-y-10 text-neutral-700 leading-relaxed">
           {/* 1 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               1. Who we are
             </h2>
             <p>
@@ -52,7 +52,7 @@ export default function PrivacyPage() {
               Contact:{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>
@@ -61,11 +61,11 @@ export default function PrivacyPage() {
 
           {/* 2 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               2. Data we collect
             </h2>
 
-            <h3 className="font-medium text-neutral-950 mt-4 mb-2">
+            <h3 className="font-medium text-slate-900 mt-4 mb-2">
               2.1 When you run an audit
             </h3>
             <ul className="list-disc pl-5 space-y-1">
@@ -78,7 +78,7 @@ export default function PrivacyPage() {
               </li>
             </ul>
 
-            <h3 className="font-medium text-neutral-950 mt-4 mb-2">
+            <h3 className="font-medium text-slate-900 mt-4 mb-2">
               2.2 When you install the pixel
             </h3>
             <ul className="list-disc pl-5 space-y-1">
@@ -96,7 +96,7 @@ export default function PrivacyPage() {
               identifiable information from your website visitors.
             </p>
 
-            <h3 className="font-medium text-neutral-950 mt-4 mb-2">
+            <h3 className="font-medium text-slate-900 mt-4 mb-2">
               2.3 When you visit our website
             </h3>
             <ul className="list-disc pl-5 space-y-1">
@@ -113,7 +113,7 @@ export default function PrivacyPage() {
 
           {/* 3 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               3. How we use your data
             </h2>
             <ul className="list-disc pl-5 space-y-1">
@@ -138,7 +138,7 @@ export default function PrivacyPage() {
 
           {/* 4 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               4. Legal basis for processing
             </h2>
             <ul className="list-disc pl-5 space-y-2">
@@ -159,7 +159,7 @@ export default function PrivacyPage() {
 
           {/* 5 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               5. Data retention
             </h2>
             <ul className="list-disc pl-5 space-y-1">
@@ -183,7 +183,7 @@ export default function PrivacyPage() {
 
           {/* 6 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               6. Where your data is stored
             </h2>
             <p>
@@ -196,7 +196,7 @@ export default function PrivacyPage() {
               GDPR compliance. See our{' '}
               <a
                 href="/security"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 Security page
               </a>{' '}
@@ -206,7 +206,7 @@ export default function PrivacyPage() {
 
           {/* 7 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               7. Your rights
             </h2>
             <p>Under GDPR and the UK DPA 2018, you have the right to:</p>
@@ -238,7 +238,7 @@ export default function PrivacyPage() {
               To exercise any of these rights, email{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>
@@ -249,7 +249,7 @@ export default function PrivacyPage() {
 
           {/* 8 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               8. Sub-processors
             </h2>
             <p>We use the following sub-processors:</p>
@@ -272,7 +272,7 @@ export default function PrivacyPage() {
 
           {/* 9 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               9. Cookies
             </h2>
             <p>
@@ -285,7 +285,7 @@ export default function PrivacyPage() {
 
           {/* 10 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               10. Children&apos;s data
             </h2>
             <p>
@@ -294,7 +294,7 @@ export default function PrivacyPage() {
               has submitted data to us, contact{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>{' '}
@@ -304,7 +304,7 @@ export default function PrivacyPage() {
 
           {/* 11 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               11. Changes to this policy
             </h2>
             <p>
@@ -317,14 +317,14 @@ export default function PrivacyPage() {
 
           {/* 12 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               12. Contact &amp; complaints
             </h2>
             <p>
               For any privacy-related questions or concerns, contact us at{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>
@@ -336,7 +336,7 @@ export default function PrivacyPage() {
               (ICO) at{' '}
               <a
                 href="https://ico.org.uk/make-a-complaint/"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >

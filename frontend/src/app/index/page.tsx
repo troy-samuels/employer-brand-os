@@ -137,13 +137,13 @@ async function getIndexData(): Promise<{
 /* ------------------------------------------------------------------ */
 
 function scoreColor(score: number): string {
-  if (score >= 70) return "text-emerald-600";
+  if (score >= 70) return "text-teal-600";
   if (score >= 40) return "text-amber-600";
   return "text-red-600";
 }
 
 function scoreBadgeBg(score: number): string {
-  if (score >= 70) return "bg-emerald-50 border-emerald-200";
+  if (score >= 70) return "bg-teal-50 border-teal-200";
   if (score >= 40) return "bg-amber-50 border-amber-200";
   return "bg-red-50 border-red-200";
 }
@@ -177,12 +177,12 @@ export default async function IndexPage() {
   const hasData = companies.length > 0;
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main>
         {/* ── Hero ───────────────────────────────────── */}
-        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+        <section className="bg-white border-b border-slate-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
           <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-20 lg:py-24">
@@ -192,10 +192,10 @@ export default async function IndexPage() {
                 AI Employer Index
               </p>
             </div>
-            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight max-w-2xl">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight max-w-2xl">
               Which employers are visible to AI — and which are invisible?
             </h1>
-            <p className="mt-5 text-lg text-neutral-500 max-w-2xl leading-relaxed">
+            <p className="mt-5 text-lg text-slate-500 max-w-2xl leading-relaxed">
               The live ranking of how accurately AI models represent employers
               to job seekers. Based on real audits across ChatGPT, Google AI,
               Perplexity, and more.
@@ -205,21 +205,21 @@ export default async function IndexPage() {
             {hasData && (
               <div className="mt-8 flex flex-wrap gap-6">
                 <div className="flex items-center gap-2">
-                  <Building2 className="h-4 w-4 text-neutral-400" />
-                  <span className="text-sm text-neutral-600">
-                    <strong className="text-neutral-950">{stats.total}</strong> companies ranked
+                  <Building2 className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm text-slate-600">
+                    <strong className="text-slate-900">{stats.total}</strong> companies ranked
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <BarChart3 className="h-4 w-4 text-neutral-400" />
-                  <span className="text-sm text-neutral-600">
-                    Average score: <strong className="text-neutral-950">{stats.avgScore}/100</strong>
+                  <BarChart3 className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm text-slate-600">
+                    Average score: <strong className="text-slate-900">{stats.avgScore}/100</strong>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-neutral-400" />
-                  <span className="text-sm text-neutral-600">
-                    <strong className="text-neutral-950">{stats.pctNoLlmsTxt}%</strong> have no AI instructions
+                  <TrendingUp className="h-4 w-4 text-slate-400" />
+                  <span className="text-sm text-slate-600">
+                    <strong className="text-slate-900">{stats.pctNoLlmsTxt}%</strong> have no AI instructions
                   </span>
                 </div>
               </div>
@@ -229,16 +229,16 @@ export default async function IndexPage() {
 
         {/* ── Headline insight banner ────────────────── */}
         {hasData && (
-          <section className="border-b border-neutral-200 bg-neutral-950">
+          <section className="border-b border-slate-200 bg-slate-900">
             <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-              <p className="text-sm text-neutral-300">
+              <p className="text-sm text-slate-300">
                 <span className="text-white font-semibold">{stats.pctNoSalary}%</span> of
                 audited companies have no salary data visible to AI.
                 Candidates asking about pay get guesses, not facts.
               </p>
               <Link
                 href="/#audit"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-neutral-300 transition-colors shrink-0"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-slate-300 transition-colors shrink-0"
               >
                 Check your company
                 <ArrowRight className="h-3.5 w-3.5" />
@@ -253,17 +253,17 @@ export default async function IndexPage() {
             {!hasData ? (
               /* Empty state — pre-launch */
               <div className="text-center py-20">
-                <Search className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-neutral-950 mb-2">
+                <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-slate-900 mb-2">
                   The Index is building
                 </h2>
-                <p className="text-neutral-500 max-w-md mx-auto mb-8">
+                <p className="text-slate-500 max-w-md mx-auto mb-8">
                   Every free audit adds a company to the ranking. Be one of the first
                   to see where you stand.
                 </p>
                 <Link
                   href="/#audit"
-                  className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+                  className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
                 >
                   Run the first audit
                 </Link>
@@ -277,7 +277,7 @@ export default async function IndexPage() {
                       <Link
                         key={company.company_slug}
                         href={`/company/${company.company_slug}`}
-                        className="group rounded-2xl bg-white border border-neutral-200 p-6 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
+                        className="group rounded-2xl bg-white border border-slate-200 p-6 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                       >
                         <div className="flex items-center justify-between mb-3">
                           <span className="text-2xl">{rankMedal(i + 1)}</span>
@@ -287,10 +287,10 @@ export default async function IndexPage() {
                             {company.score}
                           </span>
                         </div>
-                        <h3 className="text-base font-semibold text-neutral-950 group-hover:text-brand-accent transition-colors">
+                        <h3 className="text-base font-semibold text-slate-900 group-hover:text-brand-accent transition-colors">
                           {company.company_name}
                         </h3>
-                        <p className="text-xs text-neutral-400 mt-1">
+                        <p className="text-xs text-slate-400 mt-1">
                           {company.company_domain} · {checkCount(company)}/5 checks
                         </p>
                       </Link>
@@ -299,9 +299,9 @@ export default async function IndexPage() {
                 )}
 
                 {/* Full table */}
-                <div className="rounded-2xl border border-neutral-200 bg-white overflow-hidden">
+                <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
                   {/* Table header */}
-                  <div className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3 border-b border-neutral-100 bg-neutral-50/80 text-xs font-semibold text-neutral-500">
+                  <div className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3 border-b border-neutral-100 bg-slate-50/80 text-xs font-semibold text-slate-500">
                     <span>#</span>
                     <span>Company</span>
                     <span className="text-center hidden sm:block">Careers</span>
@@ -317,50 +317,50 @@ export default async function IndexPage() {
                     <Link
                       key={company.company_slug}
                       href={`/company/${company.company_slug}`}
-                      className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3.5 border-b border-neutral-50 hover:bg-neutral-50/50 transition-colors items-center group"
+                      className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3.5 border-b border-neutral-50 hover:bg-slate-50/50 transition-colors items-center group"
                     >
-                      <span className="text-sm font-medium text-neutral-400 tabular-nums">
+                      <span className="text-sm font-medium text-slate-400 tabular-nums">
                         {i + 1}
                       </span>
                       <div className="min-w-0">
-                        <p className="text-sm font-semibold text-neutral-950 truncate group-hover:text-brand-accent transition-colors">
+                        <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-brand-accent transition-colors">
                           {company.company_name}
                         </p>
-                        <p className="text-xs text-neutral-400 truncate">
+                        <p className="text-xs text-slate-400 truncate">
                           {company.company_domain}
                         </p>
                       </div>
                       <span className="text-center hidden sm:block">
                         {company.careers_page_status === "full" ? (
-                          <span className="text-emerald-500 text-sm">✓</span>
+                          <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
                       <span className="text-center hidden sm:block">
                         {company.has_jsonld ? (
-                          <span className="text-emerald-500 text-sm">✓</span>
+                          <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
                       <span className="text-center hidden sm:block">
                         {company.has_salary_data ? (
-                          <span className="text-emerald-500 text-sm">✓</span>
+                          <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
                       <span className="text-center hidden sm:block">
                         {company.robots_txt_status === "allows" ? (
-                          <span className="text-emerald-500 text-sm">✓</span>
+                          <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
                       <span className="text-center hidden sm:block">
                         {company.has_llms_txt ? (
-                          <span className="text-emerald-500 text-sm">✓</span>
+                          <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
                         )}
@@ -376,12 +376,12 @@ export default async function IndexPage() {
 
                 {/* Table footer */}
                 <div className="mt-4 text-center">
-                  <p className="text-xs text-neutral-400">
+                  <p className="text-xs text-slate-400">
                     Rankings update hourly based on the latest audit data.
                     Scores calculated using the{" "}
                     <Link
                       href="/how-we-score"
-                      className="underline hover:text-neutral-600"
+                      className="underline hover:text-slate-600"
                     >
                       Rankwell methodology
                     </Link>
@@ -394,18 +394,18 @@ export default async function IndexPage() {
         </section>
 
         {/* ── Not listed CTA ─────────────────────────── */}
-        <section className="py-12 lg:py-16 border-t border-neutral-200 bg-white">
+        <section className="py-12 lg:py-16 border-t border-slate-200 bg-white">
           <div className="mx-auto max-w-2xl px-6 text-center">
-            <h2 className="text-xl lg:text-2xl font-bold text-neutral-950 mb-3">
+            <h2 className="text-xl lg:text-2xl font-bold text-slate-900 mb-3">
               Don&apos;t see your company?
             </h2>
-            <p className="text-sm text-neutral-500 mb-6 max-w-md mx-auto">
+            <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
               Run a free audit and your company joins the index automatically.
               30 seconds, no signup required.
             </p>
             <Link
               href="/#audit"
-              className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
             >
               Audit your company
             </Link>

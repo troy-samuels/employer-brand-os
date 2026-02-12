@@ -67,7 +67,7 @@ function CopyButton({ text }: { text: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="inline-flex items-center gap-1.5 rounded-lg bg-neutral-950 px-3 py-2 text-xs font-medium text-white hover:bg-neutral-800 transition-colors"
+      className="inline-flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-2 text-xs font-medium text-white hover:bg-teal-700 transition-colors"
     >
       {copied ? (
         <>
@@ -93,7 +93,7 @@ function PriorityBadge({ priority }: { priority: FixItem["priority"] }) {
     critical: "bg-red-50 text-red-700 border-red-200",
     high: "bg-amber-50 text-amber-700 border-amber-200",
     medium: "bg-blue-50 text-blue-700 border-blue-200",
-    low: "bg-neutral-50 text-neutral-500 border-neutral-200",
+    low: "bg-slate-50 text-slate-500 border-slate-200",
   };
 
   return (
@@ -658,10 +658,10 @@ function DownloadGate() {
     return (
       <div className="rounded-2xl border border-status-verified/20 bg-status-verified-light p-6 text-center">
         <Check className="h-8 w-8 text-status-verified mx-auto mb-3" />
-        <h3 className="text-[15px] font-semibold text-neutral-950 mb-1">
+        <h3 className="text-[15px] font-semibold text-slate-900 mb-1">
           Check your inbox!
         </h3>
-        <p className="text-sm text-neutral-500">
+        <p className="text-sm text-slate-500">
           We&apos;ve sent all fixes as a single file to {email}
         </p>
       </div>
@@ -669,14 +669,14 @@ function DownloadGate() {
   }
 
   return (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-6">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6">
       <div className="flex items-start gap-3 mb-4">
         <Mail className="h-5 w-5 text-brand-accent mt-0.5 shrink-0" />
         <div>
-          <h3 className="text-[15px] font-semibold text-neutral-950 mb-1">
+          <h3 className="text-[15px] font-semibold text-slate-900 mb-1">
             Download all fixes as one file
           </h3>
-          <p className="text-sm text-neutral-500">
+          <p className="text-sm text-slate-500">
             Get every fix in a single document — ready to hand to your dev team.
           </p>
         </div>
@@ -688,11 +688,11 @@ function DownloadGate() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@company.com"
-          className="flex-1 rounded-lg border border-neutral-200 px-3 py-2 text-sm text-neutral-950 placeholder:text-neutral-400 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
+          className="flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:border-brand-accent focus:outline-none focus:ring-1 focus:ring-brand-accent"
         />
         <button
           type="submit"
-          className="rounded-lg bg-neutral-950 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+          className="rounded-lg bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
         >
           Send fixes
         </button>
@@ -712,12 +712,12 @@ export function FixSections({ audit }: { audit: StoredAuditResult }) {
   return (
     <div className="max-w-3xl mx-auto px-6 py-10 space-y-6">
       {/* Summary */}
-      <div className="flex items-center gap-3 rounded-xl bg-white border border-neutral-200 px-5 py-4">
+      <div className="flex items-center gap-3 rounded-xl bg-white border border-slate-200 px-5 py-4">
         <Sparkles className="h-5 w-5 text-brand-accent shrink-0" />
-        <p className="text-sm text-neutral-600">
-          <span className="font-semibold text-neutral-950">{actionableCount}</span> fix{actionableCount !== 1 ? "es" : ""} needed
+        <p className="text-sm text-slate-600">
+          <span className="font-semibold text-slate-900">{actionableCount}</span> fix{actionableCount !== 1 ? "es" : ""} needed
           {" · "}
-          <span className="font-semibold text-neutral-950">{fixes.length - actionableCount}</span> already passing
+          <span className="font-semibold text-slate-900">{fixes.length - actionableCount}</span> already passing
         </p>
       </div>
 
@@ -733,16 +733,16 @@ export function FixSections({ audit }: { audit: StoredAuditResult }) {
             className={`rounded-2xl border bg-white overflow-hidden ${
               fix.alreadyDone
                 ? "border-status-verified/30 opacity-75"
-                : "border-neutral-200"
+                : "border-slate-200"
             }`}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-100">
               <div className="flex items-center gap-3">
-                <div className={fix.alreadyDone ? "text-status-verified" : "text-neutral-400"}>
+                <div className={fix.alreadyDone ? "text-status-verified" : "text-slate-400"}>
                   {fix.alreadyDone ? <Check className="h-5 w-5" /> : fix.icon}
                 </div>
-                <h3 className="text-[15px] font-semibold text-neutral-950">{fix.title}</h3>
+                <h3 className="text-[15px] font-semibold text-slate-900">{fix.title}</h3>
               </div>
               <PriorityBadge priority={fix.priority} />
             </div>
@@ -763,19 +763,19 @@ export function FixSections({ audit }: { audit: StoredAuditResult }) {
 
                   {/* Why it matters */}
                   <div className="flex items-start gap-2 mb-5">
-                    <ArrowRight className="h-4 w-4 text-neutral-400 mt-0.5 shrink-0" />
-                    <p className="text-sm text-neutral-500">{fix.why}</p>
+                    <ArrowRight className="h-4 w-4 text-slate-400 mt-0.5 shrink-0" />
+                    <p className="text-sm text-slate-500">{fix.why}</p>
                   </div>
                 </>
               )}
 
               {/* Code block */}
-              <div className="relative rounded-lg bg-neutral-950 overflow-hidden">
-                <div className="flex items-center justify-between px-4 py-2 border-b border-white/10">
-                  <span className="text-xs text-neutral-400">{fix.language}</span>
+              <div className="relative rounded-lg bg-slate-900 overflow-hidden">
+                <div className="flex items-center justify-between px-4 py-2 border-b border-slate-700">
+                  <span className="text-xs text-slate-400">{fix.language}</span>
                   <CopyButton text={fix.code} />
                 </div>
-                <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed text-neutral-300 max-h-80 overflow-y-auto">
+                <pre className="p-4 overflow-x-auto text-[13px] leading-relaxed text-slate-300 max-h-80 overflow-y-auto">
                   <code>{fix.code}</code>
                 </pre>
               </div>

@@ -1,0 +1,29 @@
+DONE
+
+Phase 3 — 5 additional UK tech companies added to ai-snapshots.ts
+Completed: 2026-02-12 05:55 UTC
+
+Companies added:
+1. Arm (arm.com) — Semiconductor, Cambridge — Score: 78/100
+   - Glassdoor 4.4/5, 91% recommend. Excellent culture, collaborative, good WLB.
+   - Key issue: Pay good for UK but AI notes it's below US tech/FAANG levels.
+
+2. Starling Bank (starlingbank.com) — Fintech, London — Score: 34/100
+   - Glassdoor 3.4/5, only 60% recommend. Highly polarised reviews.
+   - Key issue: Founder CEO criticism dominates; below-market pay narrative.
+
+3. Ocado Technology (ocadogroup.com) — E-commerce/Robotics, Hatfield — Score: 58/100
+   - Glassdoor 3.9/5, 71% recommend. Good tech challenges, nice people.
+   - Key issue: AI confuses Ocado Tech with Ocado Group (warehouse ops).
+
+4. Checkout.com (checkout.com) — Payments, London — Score: 55/100
+   - Glassdoor comp rated 4.4/5. High pay, good perks, but post-redundancy shift.
+   - Key issue: RTO controversy and restructuring dominate recent discussion.
+
+5. Sky Betting & Gaming (flutter.com) — Gaming Tech, Leeds — Score: 46/100
+   - Glassdoor 3.8/5, 72% recommend. Historically great culture now shifting.
+   - Key issue: Flutter acquisition cultural dilution + gambling sector framing.
+
+Research method: Google search + Glassdoor snippets + Reddit/Blind forums
+Build verification: ✅ npx next build passed
+Total companies in dataset: 10 (5 original + 5 new)

@@ -1,0 +1,1 @@
+DONE — Full next build passes with zero errors. All pages compile: /index, /blog, /blog/[slug], /company/[slug], /dashboard, /how-we-score, /pricing, /faq, and 15+ API routes.

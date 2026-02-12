@@ -426,13 +426,13 @@ export default async function TruthPage({ params }: PageProps) {
         />
       ))}
 
-      <div className="min-h-screen bg-neutral-50">
+      <div className="min-h-screen bg-slate-50">
         {/* Header */}
-        <header className="border-b border-neutral-200 bg-white">
+        <header className="border-b border-slate-200 bg-white">
           <div className="mx-auto max-w-3xl px-6 py-4">
             <Link
               href="/"
-              className="text-xs font-medium text-neutral-400 hover:text-neutral-600 transition-colors"
+              className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
             >
               Powered by Rankwell
             </Link>
@@ -455,21 +455,21 @@ export default async function TruthPage({ params }: PageProps) {
             )}
 
             {/* Company Name */}
-            <h1 className="text-3xl font-semibold tracking-tight text-neutral-950 mb-3">
+            <h1 className="text-3xl font-semibold tracking-tight text-slate-900 mb-3">
               {organization.name}
             </h1>
 
             {/* Verified Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full" />
-              <span className="text-xs font-medium text-emerald-700 uppercase tracking-wide">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-teal-50 border border-teal-200 rounded-full">
+              <span className="w-2 h-2 bg-teal-600 rounded-full" />
+              <span className="text-xs font-medium text-teal-700 uppercase tracking-wide">
                 Verified Employer
               </span>
             </div>
 
             {/* Industry & Size */}
             {(organization.industry || organization.employeeCount) && (
-              <p className="mt-4 text-sm text-neutral-500">
+              <p className="mt-4 text-sm text-slate-500">
                 {organization.industry}
                 {organization.industry && organization.employeeCount && ' · '}
                 {organization.employeeCount && `${organization.employeeCount.toLocaleString()} employees`}
@@ -478,7 +478,7 @@ export default async function TruthPage({ params }: PageProps) {
 
             {/* Description */}
             {description && (
-              <p className="mt-6 text-base text-neutral-600 leading-relaxed max-w-xl mx-auto">
+              <p className="mt-6 text-base text-slate-600 leading-relaxed max-w-xl mx-auto">
                 {description}
               </p>
             )}
@@ -488,24 +488,24 @@ export default async function TruthPage({ params }: PageProps) {
           <div className="space-y-8">
             {/* Compensation */}
             {salary && (salary.min || salary.max) && (
-              <div className="bg-white border border-neutral-200 rounded-xl p-6">
-                <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium mb-2">
+              <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-medium mb-2">
                   Compensation
                 </p>
-                <p className="text-2xl font-semibold text-neutral-950">
+                <p className="text-2xl font-semibold text-slate-900">
                   {formatSalary(salary.min, salary.max, salary.currency)}
                 </p>
-                <p className="text-sm text-neutral-500 mt-1">Annual base salary range</p>
+                <p className="text-sm text-slate-500 mt-1">Annual base salary range</p>
               </div>
             )}
 
             {/* Work Style */}
             {remoteDisplay && (
-              <div className="bg-white border border-neutral-200 rounded-xl p-6">
-                <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium mb-2">
+              <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-medium mb-2">
                   Work Style
                 </p>
-                <p className="text-2xl font-semibold text-neutral-950">
+                <p className="text-2xl font-semibold text-slate-900">
                   {remoteDisplay}
                 </p>
               </div>
@@ -513,15 +513,15 @@ export default async function TruthPage({ params }: PageProps) {
 
             {/* Benefits */}
             {benefits && benefits.length > 0 && (
-              <div className="bg-white border border-neutral-200 rounded-xl p-6">
-                <p className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium mb-4">
+              <div className="bg-white border border-slate-200 rounded-xl p-6">
+                <p className="text-[10px] uppercase tracking-widest text-slate-400 font-medium mb-4">
                   Benefits
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {benefits.map((benefit, i) => (
                     <span
                       key={i}
-                      className="px-3 py-1.5 bg-neutral-100 text-neutral-700 text-sm rounded-lg"
+                      className="px-3 py-1.5 bg-slate-100 text-neutral-700 text-sm rounded-lg"
                     >
                       {benefit}
                     </span>
@@ -538,12 +538,12 @@ export default async function TruthPage({ params }: PageProps) {
                 href={websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-6 py-3 bg-neutral-900 text-white font-medium rounded-lg hover:bg-neutral-800 transition-colors"
+                className="inline-flex items-center justify-center px-6 py-3 bg-slate-800 text-white font-medium rounded-lg hover:bg-slate-800 transition-colors"
               >
                 View Open Positions
               </a>
               {websiteHost && (
-                <p className="mt-3 text-xs text-neutral-400">
+                <p className="mt-3 text-xs text-slate-400">
                   Opens {websiteHost}
                 </p>
               )}
@@ -552,16 +552,16 @@ export default async function TruthPage({ params }: PageProps) {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-neutral-200 bg-white">
+        <footer className="border-t border-slate-200 bg-white">
           <div className="mx-auto max-w-3xl px-6 py-8 text-center">
-            <p className="text-xs text-neutral-400">
+            <p className="text-xs text-slate-400">
               This information has been verified by the employer.
               <br />
               Last updated {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}.
             </p>
             <div className="mt-4 flex items-center justify-center gap-1">
-              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-              <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-medium">
+              <span className="w-1.5 h-1.5 bg-teal-600 rounded-full" />
+              <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">
                 Rankwell Verified
               </span>
             </div>

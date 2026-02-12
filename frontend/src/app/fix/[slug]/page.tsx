@@ -100,20 +100,20 @@ export default async function FixPage({ params }: PageProps) {
 
   if (!audit) {
     return (
-      <div className="min-h-screen bg-neutral-50">
+      <div className="min-h-screen bg-slate-50">
         <Header />
         <main className="flex items-center justify-center px-6 py-32">
           <div className="max-w-md text-center">
-            <Search className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-neutral-950 mb-2">
+            <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+            <h1 className="text-2xl font-bold text-slate-900 mb-2">
               Company not found
             </h1>
-            <p className="text-neutral-500 mb-6">
+            <p className="text-slate-500 mb-6">
               We haven&apos;t audited this company yet. Run a free audit first.
             </p>
             <Link
               href="/#audit"
-              className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
             >
               Run a free audit
             </Link>
@@ -131,12 +131,12 @@ export default async function FixPage({ params }: PageProps) {
   });
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main>
         {/* ── Hero ──────────────────────────────────── */}
-        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+        <section className="bg-white border-b border-slate-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
           <div className="relative max-w-3xl mx-auto px-6 py-14 lg:py-20">
@@ -144,14 +144,14 @@ export default async function FixPage({ params }: PageProps) {
               <span className="inline-flex items-center rounded-full bg-brand-accent-light px-3 py-1 text-xs font-semibold text-brand-accent">
                 Fix It
               </span>
-              <span className="text-xs text-neutral-400">
+              <span className="text-xs text-slate-400">
                 Score: {audit.score}/100
               </span>
             </div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-neutral-950 tracking-tight mb-2">
+            <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight mb-2">
               Copy-paste fixes for {audit.company_name}
             </h1>
-            <p className="text-neutral-500 max-w-xl">
+            <p className="text-slate-500 max-w-xl">
               Based on your audit from {auditDate}. Each fix is prioritised by impact —
               start at the top for the biggest score improvement.
             </p>
@@ -170,18 +170,18 @@ export default async function FixPage({ params }: PageProps) {
         <FixSections audit={audit} />
 
         {/* ── CTA ───────────────────────────────────── */}
-        <section className="bg-white border-t border-neutral-200">
+        <section className="bg-white border-t border-slate-200">
           <div className="max-w-3xl mx-auto px-6 py-16 text-center">
-            <h2 className="text-xl font-bold text-neutral-950 mb-2">
+            <h2 className="text-xl font-bold text-slate-900 mb-2">
               Want us to handle this?
             </h2>
-            <p className="text-sm text-neutral-500 mb-6 max-w-md mx-auto">
+            <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
               Our paid plans include automatic fix implementation, weekly monitoring,
               and AI response correction across 6 models.
             </p>
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
             >
               See pricing →
             </Link>

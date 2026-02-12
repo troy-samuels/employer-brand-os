@@ -101,7 +101,7 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
       className={`rounded-2xl bg-white p-5 border transition-all duration-300 ${
         isFail
           ? "border-status-critical/15 shadow-[0_2px_12px_rgba(220,38,38,0.08),0_1px_3px_rgba(28,25,23,0.06)]"
-          : "border-neutral-100 shadow-card hover:shadow-card-hover hover:border-neutral-200"
+          : "border-neutral-100 shadow-card hover:shadow-card-hover hover:border-slate-200"
       }`}
     >
       <div className="flex items-start gap-4">
@@ -113,7 +113,7 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-4 mb-1.5">
-            <h3 className="text-[15px] font-semibold text-neutral-950">{name}</h3>
+            <h3 className="text-[15px] font-semibold text-slate-900">{name}</h3>
             <span
               className={`text-sm font-semibold tabular-nums shrink-0 ${
                 status === "pass"
@@ -126,7 +126,7 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
               {earned}/{max}
             </span>
           </div>
-          <p className="text-[13px] leading-relaxed text-neutral-500">{detail}</p>
+          <p className="text-[13px] leading-relaxed text-slate-500">{detail}</p>
         </div>
       </div>
     </motion.div>
@@ -200,13 +200,13 @@ function LlmTeaser({ companyName }: { companyName: string }) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.8 }}
-      className="rounded-2xl border border-neutral-200 bg-gradient-to-b from-white to-neutral-50/50 p-6 shadow-card"
+      className="rounded-2xl border border-slate-200 bg-gradient-to-b from-white to-neutral-50/50 p-6 shadow-card"
     >
       <div className="mb-5">
-        <h3 className="text-[15px] font-semibold text-neutral-950 mb-1.5">
+        <h3 className="text-[15px] font-semibold text-slate-900 mb-1.5">
           What AI tells candidates about {companyName}
         </h3>
-        <p className="text-[13px] text-neutral-500 leading-relaxed">
+        <p className="text-[13px] text-slate-500 leading-relaxed">
           See exactly what each AI model says when candidates ask about working here.
         </p>
       </div>
@@ -215,7 +215,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
         {LLM_MODELS.slice(0, 3).map((model) => (
           <div
             key={model.name}
-            className="flex items-center gap-3 rounded-lg bg-neutral-50 px-4 py-3"
+            className="flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3"
           >
             <Image src={model.logo} alt={model.name} width={24} height={24} className="shrink-0 rounded" />
             <div className="flex-1 min-w-0">
@@ -223,7 +223,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
               <div className="mt-1 h-3 rounded-full bg-gradient-to-r from-neutral-200 to-neutral-100 w-full" />
               <div className="mt-1 h-3 rounded-full bg-gradient-to-r from-neutral-200 to-neutral-100 w-4/5" />
             </div>
-            <span className="text-[11px] font-medium text-neutral-400 shrink-0">🔒</span>
+            <span className="text-[11px] font-medium text-slate-400 shrink-0">🔒</span>
           </div>
         ))}
       </div>
@@ -235,7 +235,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
         See what AI says about you
       </a>
 
-      <p className="text-[11px] text-neutral-400 text-center mt-2.5">
+      <p className="text-[11px] text-slate-400 text-center mt-2.5">
         Full reports check {LLM_MODELS.length} AI models. Plans start at £49/mo.
       </p>
     </motion.div>
@@ -259,10 +259,10 @@ function BotProtectCard({ blockedUrl }: BotProtectCardProps) {
       <div className="flex items-start gap-3 mb-4">
         <ShieldWarning size={20} weight="duotone" className="text-amber-600 mt-0.5 shrink-0" />
         <div>
-          <h4 className="text-[14px] font-semibold text-neutral-950">
+          <h4 className="text-[14px] font-semibold text-slate-900">
             Bot protection detected
           </h4>
-          <p className="text-[13px] text-neutral-500 mt-1 leading-relaxed">
+          <p className="text-[13px] text-slate-500 mt-1 leading-relaxed">
             Your careers page at{" "}
             <a
               href={blockedUrl}
@@ -281,13 +281,13 @@ function BotProtectCard({ blockedUrl }: BotProtectCardProps) {
 
       <a
         href="/pricing"
-        className="flex items-center justify-center gap-2 rounded-lg bg-neutral-950 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+        className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
       >
         Fix this with the Rankwell pixel
         <ArrowSquareOut size={15} weight="bold" />
       </a>
 
-      <p className="text-[11px] text-neutral-400 text-center mt-2.5 leading-relaxed">
+      <p className="text-[11px] text-slate-400 text-center mt-2.5 leading-relaxed">
         The pixel runs from your domain, so bot protection doesn&apos;t apply.
         Your careers page becomes visible to every AI model.
       </p>
@@ -360,9 +360,9 @@ export function AuditResults({ result }: AuditResultsProps) {
         transition={{ delay: 0.6 }}
         className="mx-auto w-fit rounded-2xl bg-white px-6 py-3 shadow-[0_1px_6px_rgba(28,25,23,0.06),0_1px_2px_rgba(28,25,23,0.04)]"
       >
-        <p className="text-sm text-neutral-600 text-center">
-          <span className="font-semibold text-neutral-950">{passed}</span> of{" "}
-          <span className="font-semibold text-neutral-950">6</span> checks
+        <p className="text-sm text-slate-600 text-center">
+          <span className="font-semibold text-slate-900">{passed}</span> of{" "}
+          <span className="font-semibold text-slate-900">6</span> checks
           passed
         </p>
       </motion.div>
@@ -433,21 +433,21 @@ export function AuditResults({ result }: AuditResultsProps) {
         transition={{ delay: 0.8 }}
         className="space-y-3 pt-2"
       >
-        <p className="text-center text-sm text-neutral-500" data-testid="score-summary">
+        <p className="text-center text-sm text-slate-500" data-testid="score-summary">
           {getScoreSummary(score)}
         </p>
 
         <div className="flex items-center justify-center">
           <a
             href="/how-we-score"
-            className="group inline-flex items-center gap-1.5 text-sm font-medium text-neutral-500 hover:text-neutral-950 transition-colors"
+            className="group inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
           >
             How is this score calculated?
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
           </a>
         </div>
 
-        <p className="text-center text-xs text-neutral-400">
+        <p className="text-center text-xs text-slate-400">
           Scanned on {scanDate}
         </p>
       </motion.div>

@@ -20,7 +20,7 @@ interface PageProps {
 }
 
 function scoreColor(score: number): string {
-  if (score >= 70) return "#059669"; // emerald-600
+  if (score >= 70) return "#0D9488"; // teal-600
   if (score >= 40) return "#d97706"; // amber-600
   return "#dc2626"; // red-600
 }
@@ -34,7 +34,7 @@ function scoreLabel(score: number): string {
 }
 
 function scoreBg(score: number): string {
-  if (score >= 70) return "#ecfdf5"; // emerald-50
+  if (score >= 70) return "#F0FDFA"; // teal-50
   if (score >= 40) return "#fffbeb"; // amber-50
   return "#fef2f2"; // red-50
 }

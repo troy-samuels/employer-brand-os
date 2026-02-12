@@ -111,13 +111,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 /* ------------------------------------------------------------------ */
 
 function scoreColor(score: number): string {
-  if (score >= 70) return "text-emerald-600";
+  if (score >= 70) return "text-teal-600";
   if (score >= 40) return "text-amber-600";
   return "text-red-600";
 }
 
 function scoreBg(score: number): string {
-  if (score >= 70) return "bg-emerald-50 border-emerald-200";
+  if (score >= 70) return "bg-teal-50 border-teal-200";
   if (score >= 40) return "bg-amber-50 border-amber-200";
   return "bg-red-50 border-red-200";
 }
@@ -221,7 +221,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
 function StatusIcon({ status }: { status: CheckStatus }) {
   switch (status) {
     case "pass":
-      return <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" strokeWidth={2} />;
+      return <CheckCircle2 className="h-5 w-5 text-teal-500 shrink-0" strokeWidth={2} />;
     case "partial":
       return <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" strokeWidth={2} />;
     case "fail":
@@ -239,18 +239,18 @@ export default async function CompanyPage({ params }: PageProps) {
 
   if (!audit) {
     return (
-      <main className="min-h-screen bg-neutral-50 flex items-center justify-center px-6">
+      <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
         <div className="max-w-md text-center">
-          <Search className="h-12 w-12 text-neutral-300 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-neutral-950 mb-2">
+          <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">
             Company not found
           </h1>
-          <p className="text-neutral-500 mb-6">
+          <p className="text-slate-500 mb-6">
             We haven&apos;t audited this company yet. Run a free audit to generate their report.
           </p>
           <Link
             href="/#audit"
-            className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+            className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
           >
             Run a free audit
           </Link>
@@ -268,16 +268,16 @@ export default async function CompanyPage({ params }: PageProps) {
   });
 
   return (
-    <main className="min-h-screen bg-neutral-50">
+    <main className="min-h-screen bg-slate-50">
       {/* ── Header bar ──────────────────────────────── */}
-      <div className="bg-white border-b border-neutral-200">
+      <div className="bg-white border-b border-slate-200">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold text-neutral-950 tracking-tight">
+          <Link href="/" className="text-lg font-bold text-slate-900 tracking-tight">
             Rankwell
           </Link>
           <Link
             href="/#audit"
-            className="rounded-xl bg-neutral-950 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+            className="rounded-xl bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
           >
             Audit your company
           </Link>
@@ -285,15 +285,15 @@ export default async function CompanyPage({ params }: PageProps) {
       </div>
 
       {/* ── Score hero ──────────────────────────────── */}
-      <div className="bg-white border-b border-neutral-200 relative overflow-hidden">
+      <div className="bg-white border-b border-slate-200 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-20" />
         <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
         <div className="relative max-w-3xl mx-auto px-6 py-14 lg:py-20">
           <p className="overline mb-3">AI Visibility Report</p>
-          <h1 className="text-2xl lg:text-3xl font-bold text-neutral-950 tracking-tight mb-1">
+          <h1 className="text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight mb-1">
             {audit.company_name}
           </h1>
-          <p className="text-sm text-neutral-400 mb-8">
+          <p className="text-sm text-slate-400 mb-8">
             {audit.company_domain} · Last checked {auditDate}
           </p>
 
@@ -306,7 +306,7 @@ export default async function CompanyPage({ params }: PageProps) {
                 <span className={`text-3xl font-bold tabular-nums ${scoreColor(audit.score)}`}>
                   {audit.score}
                 </span>
-                <p className="text-xs text-neutral-500">/100</p>
+                <p className="text-xs text-slate-500">/100</p>
               </div>
             </div>
 
@@ -317,11 +317,11 @@ export default async function CompanyPage({ params }: PageProps) {
                 >
                   {scoreLabel(audit.score)}
                 </span>
-                <span className="text-xs text-neutral-400">
+                <span className="text-xs text-slate-400">
                   {passCount}/{checks.length} checks passed
                 </span>
               </div>
-              <p className="text-sm text-neutral-600 leading-relaxed max-w-lg">
+              <p className="text-sm text-slate-600 leading-relaxed max-w-lg">
                 {scoreMessage(audit.score, audit.company_name)}
               </p>
             </div>
@@ -331,7 +331,7 @@ export default async function CompanyPage({ params }: PageProps) {
 
       {/* ── Checks breakdown ────────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h2 className="text-lg font-semibold text-neutral-950 mb-6">
+        <h2 className="text-lg font-semibold text-slate-900 mb-6">
           What we checked
         </h2>
 
@@ -339,20 +339,20 @@ export default async function CompanyPage({ params }: PageProps) {
           {checks.map((check) => (
             <div
               key={check.name}
-              className="rounded-xl bg-white border border-neutral-200 p-5 hover:shadow-card transition-shadow duration-300"
+              className="rounded-xl bg-white border border-slate-200 p-5 hover:shadow-card transition-shadow duration-300"
             >
               <div className="flex items-start gap-3">
                 <StatusIcon status={check.status} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline justify-between gap-2 mb-1">
-                    <h3 className="text-[15px] font-semibold text-neutral-950">
+                    <h3 className="text-[15px] font-semibold text-slate-900">
                       {check.name}
                     </h3>
-                    <span className="text-sm font-semibold tabular-nums text-neutral-400 shrink-0">
+                    <span className="text-sm font-semibold tabular-nums text-slate-400 shrink-0">
                       {check.points}/{check.maxPoints}
                     </span>
                   </div>
-                  <p className="text-sm text-neutral-500 leading-relaxed">
+                  <p className="text-sm text-slate-500 leading-relaxed">
                     {check.description}
                   </p>
                 </div>
@@ -364,14 +364,14 @@ export default async function CompanyPage({ params }: PageProps) {
 
       {/* ── LLM teaser (locked) ─────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 pb-10">
-        <div className="rounded-xl border border-neutral-200 bg-neutral-950 p-6 lg:p-8">
+        <div className="rounded-xl border border-slate-200 bg-slate-900 p-6 lg:p-8">
           <div className="flex items-start gap-3 mb-4">
-            <Shield className="h-5 w-5 text-neutral-400 mt-0.5 shrink-0" />
+            <Shield className="h-5 w-5 text-slate-400 mt-0.5 shrink-0" />
             <div>
               <h3 className="text-[15px] font-semibold text-white mb-1">
                 What does AI actually say about {audit.company_name}?
               </h3>
-              <p className="text-sm text-neutral-400 leading-relaxed">
+              <p className="text-sm text-slate-400 leading-relaxed">
                 We checked ChatGPT, Google AI, Perplexity, and 3 other models.
                 Claim this profile to see what each one says — and fix what they get wrong.
               </p>
@@ -387,7 +387,7 @@ export default async function CompanyPage({ params }: PageProps) {
             ].map((model) => (
               <div
                 key={model.name}
-                className="rounded-lg bg-white/5 border border-white/10 p-4 backdrop-blur"
+                className="rounded-lg bg-slate-800 border border-slate-700 p-4 backdrop-blur"
               >
                 <div className="flex items-center gap-2 mb-2">
                   <Image
@@ -397,7 +397,7 @@ export default async function CompanyPage({ params }: PageProps) {
                     height={16}
                     className="brightness-0 invert opacity-70"
                   />
-                  <p className="text-xs font-medium text-neutral-300">{model.name}</p>
+                  <p className="text-xs font-medium text-slate-300">{model.name}</p>
                 </div>
                 <div className="space-y-1.5">
                   <div className="h-2.5 w-full rounded bg-white/10" />
@@ -410,7 +410,7 @@ export default async function CompanyPage({ params }: PageProps) {
 
           <Link
             href="/signup?ref=company-page"
-            className="inline-flex items-center gap-1.5 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
           >
             Claim this profile
             <ArrowRight className="h-3.5 w-3.5" />
@@ -420,19 +420,19 @@ export default async function CompanyPage({ params }: PageProps) {
 
       {/* ── Claim banner ────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 pb-10">
-        <div className="rounded-xl bg-white border border-neutral-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <div className="rounded-xl bg-white border border-slate-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <div className="flex-1">
-            <h3 className="text-[15px] font-semibold text-neutral-950 mb-1">
+            <h3 className="text-[15px] font-semibold text-slate-900 mb-1">
               Is this your company?
             </h3>
-            <p className="text-sm text-neutral-500">
+            <p className="text-sm text-slate-500">
               Claim your profile to update your information, install the Rankwell pixel,
               and control how AI represents your employer brand.
             </p>
           </div>
           <Link
             href={`/signup?ref=claim&company=${audit.company_slug}`}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-neutral-950 px-5 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors shrink-0"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors shrink-0"
           >
             Claim profile
             <ExternalLink className="h-3.5 w-3.5" />
@@ -442,10 +442,10 @@ export default async function CompanyPage({ params }: PageProps) {
 
       {/* ── Methodology link ────────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 pb-10">
-        <p className="text-xs text-neutral-400 text-center">
+        <p className="text-xs text-slate-400 text-center">
           This report is based on publicly available data from {audit.company_domain}.
           Scores are calculated using the{" "}
-          <Link href="/how-we-score" className="underline hover:text-neutral-600">
+          <Link href="/how-we-score" className="underline hover:text-slate-600">
             Rankwell AI Visibility methodology
           </Link>
           . Last updated {auditDate}.
@@ -453,17 +453,17 @@ export default async function CompanyPage({ params }: PageProps) {
       </div>
 
       {/* ── Audit another company ───────────────────── */}
-      <div className="border-t border-neutral-200 bg-white">
+      <div className="border-t border-slate-200 bg-white">
         <div className="max-w-3xl mx-auto px-6 py-12 text-center">
-          <h2 className="text-xl font-bold text-neutral-950 mb-2">
+          <h2 className="text-xl font-bold text-slate-900 mb-2">
             How does your company score?
           </h2>
-          <p className="text-sm text-neutral-500 mb-6">
+          <p className="text-sm text-slate-500 mb-6">
             Run a free AI visibility audit — takes 30 seconds, no signup required.
           </p>
           <Link
             href="/#audit"
-            className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+            className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
           >
             Run your free audit
           </Link>

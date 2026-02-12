@@ -11,7 +11,7 @@ import Link from "next/link";
  */
 export function Footer() {
   return (
-    <footer className="border-t border-neutral-200 bg-neutral-950">
+    <footer className="border-t border-slate-200 bg-slate-900">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 lg:py-16 text-sm">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           {/* Left */}
@@ -19,13 +19,13 @@ export function Footer() {
             <Link href="/" className="font-bold text-white text-lg tracking-tight">
               Rankwell
             </Link>
-            <span className="text-neutral-400 max-w-xs leading-relaxed">
+            <span className="text-slate-400 max-w-xs leading-relaxed">
               Verified employer data for the AI age. Control what AI tells candidates about your company.
             </span>
           </div>
 
           {/* Right — nav links */}
-          <nav className="flex flex-wrap gap-x-6 gap-y-3 text-neutral-400">
+          <nav className="flex flex-wrap gap-x-6 gap-y-3 text-slate-400">
             <Link
               href="/how-we-score"
               className="hover:text-white transition-colors duration-200"
@@ -72,7 +72,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-10 pt-6 border-t border-white/10 text-neutral-500 text-xs">
+        <div className="mt-10 pt-6 border-t border-slate-700 text-slate-500 text-xs">
           © 2026 Rankwell. All rights reserved.
         </div>
       </div>

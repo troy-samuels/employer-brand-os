@@ -1,6 +1,6 @@
 /**
  * @module app/page
- * Module implementation for page.tsx.
+ * Rankwell landing page — premium, minimalist design.
  */
 
 "use client";
@@ -15,17 +15,22 @@ import Features from "@/components/landing/features";
 import BeforeAfter from "@/components/landing/testimonials";
 import PromptIntelligence from "@/components/landing/prompt-intelligence";
 import MonitorPreview from "@/components/landing/monitor-preview";
-import CrawlerIntelligence from "@/components/landing/crawler-intelligence";
 import Pricing from "@/components/landing/pricing";
 import CTA from "@/components/landing/cta";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { useAudit } from "@/lib/hooks/use-audit";
 
-/**
- * Executes Home.
- * @returns The resulting value.
- */
+/** Shared scroll-reveal animation for all sections. */
+const reveal = {
+  hidden: { opacity: 0, y: 32 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
 export default function Home() {
   const { state, isLoading, result, error, runAudit, reset } = useAudit();
 
@@ -34,36 +39,34 @@ export default function Home() {
       <Header />
 
       <main>
+        {/* ── Hero ─────────────────────────────────────── */}
         <section id="audit" className="scroll-mt-28 relative overflow-hidden">
-          {/* Subtle background pattern */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-40" />
-          <div className="absolute inset-0 bg-gradient-to-b from-white via-transparent to-neutral-50/80" />
-          <div className="relative mx-auto flex max-w-[1200px] flex-col items-center px-6 py-24 lg:px-12 lg:py-40">
-            {/* ── Headline ───────────────────────────────── */}
+          <div className="absolute inset-0 bg-gradient-to-b from-neutral-50/60 via-white to-white" />
+          <div className="relative mx-auto flex max-w-[1200px] flex-col items-center px-6 py-24 lg:px-12 lg:py-32">
+            {/* Headline */}
             <AnimatePresence mode="wait">
               {state !== "complete" && (
                 <motion.div
                   key="hero"
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.35 }}
-                  className="mb-14 max-w-2xl text-center"
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="mb-12 max-w-3xl text-center"
                 >
-                  <p className="overline mb-5">AI Employer Visibility</p>
-                  <h1 className="mb-4 text-4xl font-bold leading-[1.08] tracking-tight text-neutral-950 sm:text-5xl lg:text-6xl">
+                  <h1 className="mb-5 text-5xl font-medium leading-[1.04] text-neutral-950 sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.04em' }}>
                     Is AI telling the truth
                     <br />
                     <span className="text-brand-accent">about your company?</span>
                   </h1>
-                  <p className="text-lg text-neutral-500 max-w-lg mx-auto">
+                  <p className="text-lg text-neutral-400 max-w-md mx-auto">
                     Find out in 30 seconds. Completely free.
                   </p>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* ── Input ──────────────────────────────────── */}
+            {/* Input */}
             <AnimatePresence mode="wait">
               {state === "idle" && (
                 <motion.div
@@ -71,6 +74,7 @@ export default function Home() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5, delay: 0.15 }}
                   className="w-full max-w-lg"
                 >
                   <CompanySearch onSubmit={runAudit} isLoading={isLoading} />
@@ -87,7 +91,7 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* ── Scanning ───────────────────────────────── */}
+            {/* Scanning */}
             <AnimatePresence mode="wait">
               {state === "running" && (
                 <motion.div
@@ -101,7 +105,7 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* ── Results ────────────────────────────────── */}
+            {/* Results */}
             <AnimatePresence mode="wait">
               {state === "complete" && result && result.status === "success" && (
                 <motion.div
@@ -111,13 +115,8 @@ export default function Home() {
                   transition={{ duration: 0.4 }}
                   className="mx-auto w-full max-w-lg space-y-10"
                 >
-                  {/* Score + cards */}
                   <AuditResults result={result} />
-
-                  {/* Email capture */}
                   <AuditGate score={result.score} companySlug={result.companySlug} />
-
-                  {/* Reset */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -135,7 +134,7 @@ export default function Home() {
               )}
             </AnimatePresence>
 
-            {/* ── Error states ───────────────────────────── */}
+            {/* Error states */}
             <AnimatePresence mode="wait">
               {state === "complete" && result && result.status !== "success" && (
                 <motion.div
@@ -154,7 +153,6 @@ export default function Home() {
                         </h2>
                         <p className="text-sm leading-relaxed text-neutral-500">
                           This means AI has zero verified data about you as an employer.
-                          The good news: you can fix that by creating a verified AI profile.
                         </p>
                       </>
                     )}
@@ -165,7 +163,6 @@ export default function Home() {
                         </h2>
                         <p className="text-sm leading-relaxed text-neutral-500">
                           Your site may be blocking external access, or it could be temporarily down.
-                          Try entering the full URL directly.
                         </p>
                       </>
                     )}
@@ -181,11 +178,7 @@ export default function Home() {
                       </>
                     )}
                   </div>
-
-                  {/* CTA */}
                   <AuditGate score={0} />
-
-                  {/* Reset */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -205,11 +198,11 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ── Sections ────────────────────────────────── */}
         <Features />
         <BeforeAfter />
         <PromptIntelligence />
         <MonitorPreview />
-        <CrawlerIntelligence />
         <Pricing />
         <CTA />
       </main>

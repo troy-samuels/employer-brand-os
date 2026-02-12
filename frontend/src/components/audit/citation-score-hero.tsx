@@ -47,7 +47,7 @@ const SCORE_BAND_STYLES: Record<CitationScoreBand, ScoreBandStyle> = {
     badge: "border-amber-300/35 bg-amber-300/10 text-amber-100",
   },
   green: {
-    ring: "stroke-emerald-500/20",
+    ring: "stroke-teal-500/20",
     meter: "stroke-emerald-400",
     value: "text-emerald-300",
     badge: "border-emerald-300/35 bg-emerald-300/10 text-emerald-100",
@@ -91,7 +91,7 @@ export function CitationScoreHero({
   return (
     <section
       className={cn(
-        "rounded-3xl border border-white/10 bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-800 p-6 text-white shadow-2xl sm:p-10",
+        "rounded-3xl border border-slate-700 bg-gradient-to-br from-neutral-900 via-neutral-900 to-neutral-800 p-6 text-white shadow-2xl sm:p-10",
         className
       )}
       data-score-band={scoreBand}
@@ -152,7 +152,7 @@ export function CitationScoreHero({
           </svg>
           <div className="pointer-events-none absolute text-center">
             <p className={cn("text-5xl font-bold tracking-tight", bandStyle.value)}>{resolvedScore}</p>
-            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-neutral-300">
+            <p className="mt-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-300">
               out of 100
             </p>
           </div>

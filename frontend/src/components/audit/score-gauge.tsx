@@ -58,7 +58,7 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
       className="text-center space-y-4"
     >
       {/* Company */}
-      <p className="text-xs font-bold tracking-[0.15em] text-neutral-400 uppercase">
+      <p className="text-xs font-bold tracking-[0.15em] text-slate-400 uppercase">
         {companyName}
       </p>
 
@@ -74,7 +74,7 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
           {count}
         </span>
         <span
-          className="absolute -right-12 top-8 text-xl font-normal text-neutral-300"
+          className="absolute -right-12 top-8 text-xl font-normal text-slate-300"
           style={{ fontFamily: "var(--font-display)" }}
         >
           /100
@@ -86,7 +86,7 @@ export function ScoreGauge({ score, companyName }: ScoreGaugeProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8 }}
-        className="text-base font-medium text-neutral-600"
+        className="text-base font-medium text-slate-600"
       >
         {getVerdict(score)}
       </motion.p>

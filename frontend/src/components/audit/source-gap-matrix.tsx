@@ -130,8 +130,8 @@ export function SourceGapMatrix({ analysis, className }: SourceGapMatrixProps) {
     <Card variant="bordered" padding="none" className={cn("overflow-hidden", className)}>
       <div className="flex flex-col gap-4 border-b border-gray-200 px-5 py-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h3 className="text-lg font-semibold text-neutral-950">Source Gap Matrix</h3>
-          <p className="mt-1 text-sm text-neutral-500">
+          <h3 className="text-lg font-semibold text-slate-900">Source Gap Matrix</h3>
+          <p className="mt-1 text-sm text-slate-500">
             Where AI sources employer information for each category.
           </p>
         </div>
@@ -142,7 +142,7 @@ export function SourceGapMatrix({ analysis, className }: SourceGapMatrixProps) {
       </div>
 
       <div className="hidden md:block">
-        <div className="grid grid-cols-[1.8fr_0.8fr_1.4fr_1.4fr_1fr_0.45fr] border-b border-gray-200 bg-neutral-50/80 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <div className="grid grid-cols-[1.8fr_0.8fr_1.4fr_1.4fr_1fr_0.45fr] border-b border-gray-200 bg-slate-50/80 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500">
           <span>Category</span>
           <span>Status</span>
           <span>Top Google Domains</span>
@@ -173,7 +173,7 @@ export function SourceGapMatrix({ analysis, className }: SourceGapMatrixProps) {
                 <div className="flex justify-end">
                   <ChevronDown
                     className={cn(
-                      "h-4 w-4 text-neutral-500 transition-transform",
+                      "h-4 w-4 text-slate-500 transition-transform",
                       isExpanded && "rotate-180"
                     )}
                     aria-hidden
@@ -222,7 +222,7 @@ export function SourceGapMatrix({ analysis, className }: SourceGapMatrixProps) {
                   <CategoryCell category={row.category} impact={row.impactLevel} />
                   <ChevronDown
                     className={cn(
-                      "mt-0.5 h-4 w-4 text-neutral-500 transition-transform",
+                      "mt-0.5 h-4 w-4 text-slate-500 transition-transform",
                       isExpanded && "rotate-180"
                     )}
                     aria-hidden
@@ -236,14 +236,14 @@ export function SourceGapMatrix({ analysis, className }: SourceGapMatrixProps) {
 
                 <div className="mt-3 space-y-2">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                       Top Google Domains
                     </p>
                     <DomainPills domains={row.googleTopDomains} emptyText="No Google data" />
                   </div>
 
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500">
+                    <p className="text-[11px] font-semibold uppercase tracking-wide text-slate-500">
                       AI-Cited Domains
                     </p>
                     <DomainPills domains={row.aiCitedDomains} emptyText="No AI citations" />
@@ -288,10 +288,10 @@ function CategoryCell({
         <Icon className="h-4 w-4" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="truncate text-sm font-semibold text-neutral-950">
+        <p className="truncate text-sm font-semibold text-slate-900">
           {CATEGORY_LABELS[category]}
         </p>
-        <p className="text-xs capitalize text-neutral-500">{impact} impact</p>
+        <p className="text-xs capitalize text-slate-500">{impact} impact</p>
       </div>
     </div>
   );
@@ -316,7 +316,7 @@ function DomainPills({
   emptyText: string;
 }) {
   if (domains.length === 0) {
-    return <span className="text-xs text-neutral-500">{emptyText}</span>;
+    return <span className="text-xs text-slate-500">{emptyText}</span>;
   }
 
   return (
@@ -364,11 +364,11 @@ function RowDetails({ row }: { row: GapAnalysisRow }) {
   return (
     <div className="grid gap-5 bg-white/80 px-4 py-4 md:grid-cols-2 md:px-5">
       <div>
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           Google Results
         </h4>
         {row.googleResults.length === 0 ? (
-          <p className="mt-2 text-sm text-neutral-500">No Google result snapshot available for this category.</p>
+          <p className="mt-2 text-sm text-slate-500">No Google result snapshot available for this category.</p>
         ) : (
           <ul className="mt-2 space-y-2.5">
             {row.googleResults.map((result) => (
@@ -376,9 +376,9 @@ function RowDetails({ row }: { row: GapAnalysisRow }) {
                 <p className="text-xs font-semibold text-neutral-700">
                   #{result.position} · {result.domain || extractDomain(result.url)}
                 </p>
-                <p className="mt-1 text-sm font-medium text-neutral-900">{result.title}</p>
+                <p className="mt-1 text-sm font-medium text-slate-800">{result.title}</p>
                 {result.snippet && (
-                  <p className="mt-1 text-xs text-neutral-600">{result.snippet}</p>
+                  <p className="mt-1 text-xs text-slate-600">{result.snippet}</p>
                 )}
               </li>
             ))}
@@ -387,20 +387,20 @@ function RowDetails({ row }: { row: GapAnalysisRow }) {
       </div>
 
       <div>
-        <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+        <h4 className="text-xs font-semibold uppercase tracking-wide text-slate-500">
           AI Citations
         </h4>
         {row.aiCitationDetails.length === 0 ? (
-          <p className="mt-2 text-sm text-neutral-500">No model responses were captured for this category.</p>
+          <p className="mt-2 text-sm text-slate-500">No model responses were captured for this category.</p>
         ) : (
           <ul className="mt-2 space-y-2.5">
             {row.aiCitationDetails.map((detail) => (
               <li key={detail.modelId} className="rounded-lg border border-gray-200 bg-white px-3 py-2.5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-neutral-600">
+                <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">
                   {detail.modelId}
                 </p>
                 {detail.citations.length === 0 ? (
-                  <p className="mt-1 text-xs text-neutral-500">No citations returned.</p>
+                  <p className="mt-1 text-xs text-slate-500">No citations returned.</p>
                 ) : (
                   <ul className="mt-1 space-y-1">
                     {detail.citations.map((citation) => (
@@ -418,9 +418,9 @@ function RowDetails({ row }: { row: GapAnalysisRow }) {
 
       <div className="rounded-lg border border-gray-200 bg-white p-3 md:col-span-2">
         <div className="flex items-start gap-2">
-          <AlertTriangle className="mt-0.5 h-4 w-4 text-neutral-500" aria-hidden />
+          <AlertTriangle className="mt-0.5 h-4 w-4 text-slate-500" aria-hidden />
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Recommended Action
             </p>
             <p className="mt-1 text-sm text-neutral-700">{row.recommendedAction}</p>

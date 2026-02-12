@@ -41,7 +41,7 @@ const blogContent: Record<string, BlogContent> = {
     category: "Research",
     ogTitle: "What AI tells candidates about your company | Rankwell",
     content: `
-      <p class="text-lg text-neutral-600 leading-relaxed mb-8">
+      <p class="text-lg text-slate-600 leading-relaxed mb-8">
         800 million people use ChatGPT every week. 13.5% of those conversations are
         information-seeking queries — the kind that used to go to Google. When a candidate
         types "What's it like to work at [your company]?", the AI answers instantly.
@@ -54,8 +54,8 @@ const blogContent: Record<string, BlogContent> = {
         are being told. The results are concerning.
       </p>
 
-      <h2 class="text-2xl font-bold text-neutral-950 mt-12 mb-4">The headline numbers</h2>
-      <div class="rounded-xl bg-neutral-100 p-6 mb-8 space-y-3">
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The headline numbers</h2>
+      <div class="rounded-xl bg-slate-100 p-6 mb-8 space-y-3">
         <p><strong>78%</strong> of salary estimates were inaccurate — most underestimated by £15-25K</p>
         <p><strong>91%</strong> of companies had no llms.txt file (AI has no official instructions)</p>
         <p><strong>67%</strong> had no structured data on their homepage (AI guesses basic details)</p>
@@ -67,7 +67,7 @@ const blogContent: Record<string, BlogContent> = {
         are being represented with outdated or fabricated information.
       </p>
 
-      <h2 class="text-2xl font-bold text-neutral-950 mt-12 mb-4">Where AI gets its information</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">Where AI gets its information</h2>
       <p class="mb-6">
         You might assume AI pulls from Glassdoor, Indeed, or your careers page. It doesn't.
       </p>
@@ -86,7 +86,7 @@ const blogContent: Record<string, BlogContent> = {
         anything the employer controls.
       </p>
 
-      <h2 class="text-2xl font-bold text-neutral-950 mt-12 mb-4">The zero-click problem</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The zero-click problem</h2>
       <p class="mb-6">
         Even if your careers page is world-class, fewer candidates will ever see it.
         SparkToro's research shows <strong>60% of Google searches are zero-click</strong> —
@@ -101,8 +101,8 @@ const blogContent: Record<string, BlogContent> = {
           <strong>Old:</strong> Google → Glassdoor → Careers page → Apply
         </p>
       </div>
-      <div class="rounded-xl bg-emerald-50 border border-emerald-200 p-6 mb-8">
-        <p class="text-sm text-emerald-800">
+      <div class="rounded-xl bg-teal-50 border border-teal-200 p-6 mb-8">
+        <p class="text-sm text-teal-700">
           <strong>New:</strong> Ask AI → Get answer → Apply (or move on)
         </p>
       </div>
@@ -111,52 +111,52 @@ const blogContent: Record<string, BlogContent> = {
         benefits — the candidate moves on. You'll never know they were interested.
       </p>
 
-      <h2 class="text-2xl font-bold text-neutral-950 mt-12 mb-4">What you can do about it</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">What you can do about it</h2>
       <p class="mb-6">
         The good news: AI visibility is fixable. Unlike Glassdoor reviews (which you can't
         control) or Reddit threads (which you can't edit), the inputs to AI are technical
         and within your control.
       </p>
       <div class="space-y-4 mb-8">
-        <div class="rounded-xl bg-white border border-neutral-200 p-5">
-          <h3 class="font-semibold text-neutral-950 mb-1">1. Create an llms.txt file</h3>
-          <p class="text-sm text-neutral-600">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">1. Create an llms.txt file</h3>
+          <p class="text-sm text-slate-600">
             This is a structured file that tells AI models who you are, what you offer,
             and how to represent you. Think of it as robots.txt for your reputation.
             <a href="/blog/llms-txt-guide" class="text-brand-accent ml-1 hover:underline">Read our guide →</a>
           </p>
         </div>
-        <div class="rounded-xl bg-white border border-neutral-200 p-5">
-          <h3 class="font-semibold text-neutral-950 mb-1">2. Add structured data (JSON-LD)</h3>
-          <p class="text-sm text-neutral-600">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">2. Add structured data (JSON-LD)</h3>
+          <p class="text-sm text-slate-600">
             Machine-readable organisation data on your website. AI models use this to
             verify basic facts — name, location, industry, size. Without it, they guess.
           </p>
         </div>
-        <div class="rounded-xl bg-white border border-neutral-200 p-5">
-          <h3 class="font-semibold text-neutral-950 mb-1">3. Publish salary data</h3>
-          <p class="text-sm text-neutral-600">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">3. Publish salary data</h3>
+          <p class="text-sm text-slate-600">
             If AI is guessing your salaries (and getting them wrong), the fix is to publish
             real ranges on your job listings in a machine-readable format.
           </p>
         </div>
-        <div class="rounded-xl bg-white border border-neutral-200 p-5">
-          <h3 class="font-semibold text-neutral-950 mb-1">4. Check your robots.txt</h3>
-          <p class="text-sm text-neutral-600">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">4. Check your robots.txt</h3>
+          <p class="text-sm text-slate-600">
             43% of companies we audited block AI crawlers. If your site is invisible to
             ChatGPT's crawler, it relies entirely on third-party sources to describe you.
           </p>
         </div>
-        <div class="rounded-xl bg-white border border-neutral-200 p-5">
-          <h3 class="font-semibold text-neutral-950 mb-1">5. Monitor continuously</h3>
-          <p class="text-sm text-neutral-600">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">5. Monitor continuously</h3>
+          <p class="text-sm text-slate-600">
             AI models retrain regularly. What they say about you today may change tomorrow.
             Weekly monitoring ensures you catch inaccuracies before candidates do.
           </p>
         </div>
       </div>
 
-      <h2 class="text-2xl font-bold text-neutral-950 mt-12 mb-4">The window is now</h2>
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The window is now</h2>
       <p class="mb-6">
         Gartner predicts a <strong>25% drop in traditional search volume by 2026</strong>.
         Semrush projects AI search visitors will surpass traditional organic search by 2028.
@@ -167,20 +167,20 @@ const blogContent: Record<string, BlogContent> = {
         is ready for it.
       </p>
 
-      <div class="rounded-xl bg-neutral-950 p-8 text-center mt-12">
+      <div class="rounded-xl bg-slate-900 p-8 text-center mt-12">
         <h3 class="text-xl font-bold text-white mb-2">See what AI says about your company</h3>
-        <p class="text-sm text-neutral-400 mb-6">Free audit — 30 seconds, no signup required.</p>
+        <p class="text-sm text-slate-400 mb-6">Free audit — 30 seconds, no signup required.</p>
         <a
           href="/#audit"
-          class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors"
+          class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
         >
           Run your free audit
         </a>
       </div>
 
-      <div class="mt-12 pt-8 border-t border-neutral-200">
-        <h3 class="text-sm font-semibold text-neutral-950 mb-3">Sources</h3>
-        <ul class="text-xs text-neutral-500 space-y-1">
+      <div class="mt-12 pt-8 border-t border-slate-200">
+        <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
+        <ul class="text-xs text-slate-500 space-y-1">
           <li>OpenAI — 800M weekly active users (Oct 2025)</li>
           <li>NBER Working Paper 34255 — ChatGPT usage categorisation (Sep 2025)</li>
           <li>Profound — 680M LLM citation analysis (Aug 2024–Jun 2025)</li>
@@ -227,16 +227,16 @@ export default async function BlogPost({ params }: PageProps) {
   if (!post) notFound();
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main>
-        <article className="bg-white border-b border-neutral-200">
+        <article className="bg-white border-b border-slate-200">
           <div className="mx-auto max-w-2xl px-6 py-16 lg:py-20">
             {/* Back link */}
             <Link
               href="/blog"
-              className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-600 transition-colors mb-8"
+              className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors mb-8"
             >
               <ArrowLeft className="h-3.5 w-3.5" />
               All posts
@@ -247,19 +247,19 @@ export default async function BlogPost({ params }: PageProps) {
               <span className="inline-flex items-center rounded-full bg-brand-accent/10 px-3 py-1 text-xs font-semibold text-brand-accent">
                 {post.category}
               </span>
-              <span className="text-xs text-neutral-400">{post.date}</span>
-              <span className="text-xs text-neutral-400">·</span>
-              <span className="text-xs text-neutral-400">{post.readTime}</span>
+              <span className="text-xs text-slate-400">{post.date}</span>
+              <span className="text-xs text-slate-400">·</span>
+              <span className="text-xs text-slate-400">{post.readTime}</span>
             </div>
 
             {/* Title */}
-            <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight leading-[1.1] mb-10">
+            <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-10">
               {post.title}
             </h1>
 
             {/* Body */}
             <div
-              className="prose prose-neutral prose-p:text-neutral-600 prose-p:leading-relaxed prose-headings:text-neutral-950 prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline max-w-none"
+              className="prose prose-neutral prose-p:text-slate-600 prose-p:leading-relaxed prose-headings:text-slate-900 prose-a:text-brand-accent prose-a:no-underline hover:prose-a:underline max-w-none"
               dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content) }}
             />
           </div>

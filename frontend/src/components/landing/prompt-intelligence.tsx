@@ -1,196 +1,80 @@
 /**
  * @module components/landing/prompt-intelligence
- * Landing page section showing candidate prompt categories — what job seekers
- * ask AI about employers, with mock AI response previews.
+ * Infinite marquee of candidate prompt categories.
  */
 
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Lock, Sparkles } from "lucide-react";
+import { motion } from "framer-motion";
 
-/* ------------------------------------------------------------------ */
-/* Data                                                                */
-/* ------------------------------------------------------------------ */
-
-interface PromptCategory {
-  id: string;
-  label: string;
-  emoji: string;
-  query: string;
-  mockResponse: string;
-}
-
-const PROMPT_CATEGORIES: PromptCategory[] = [
-  {
-    id: "salary",
-    label: "Salary & Pay",
-    emoji: "💰",
-    query: '"What is the salary at [Company]?"',
-    mockResponse:
-      "Based on available data, [Company] typically pays software engineers between £45,000–£70,000, though this may not reflect current ranges. I wasn't able to find published salary bands on their website...",
-  },
-  {
-    id: "culture",
-    label: "Culture & Values",
-    emoji: "🏢",
-    query: '"What\'s it like to work at [Company]?"',
-    mockResponse:
-      "According to Glassdoor reviews from 2022, employees describe the culture as fast-paced but sometimes disorganised. The company doesn't have a public culture page, so I'm relying on third-party...",
-  },
-  {
-    id: "benefits",
-    label: "Benefits",
-    emoji: "🎁",
-    query: '"[Company] employee benefits"',
-    mockResponse:
-      "I found limited information about [Company]'s benefits package. Based on similar companies in their industry, they likely offer standard benefits including pension and holiday...",
-  },
-  {
-    id: "remote",
-    label: "Remote Policy",
-    emoji: "🏠",
-    query: '"Does [Company] allow remote work?"',
-    mockResponse:
-      "I don't have specific information about [Company]'s remote work policy. Their job listings don't specify a work location policy. Based on industry trends...",
-  },
-  {
-    id: "interview",
-    label: "Interview Process",
-    emoji: "🎯",
-    query: '"[Company] interview process"',
-    mockResponse:
-      "Based on a few Glassdoor reports, the interview process at [Company] appears to involve 2-3 rounds. However, this information may be outdated as the most recent review is from...",
-  },
-  {
-    id: "competitors",
-    label: "Competitors",
-    emoji: "⚔️",
-    query: '"[Company] vs [Competitor] jobs"',
-    mockResponse:
-      "[Competitor] has more visible employer branding online, including published salary ranges and a comprehensive careers page. [Company]'s online presence is more limited, making direct comparison...",
-  },
-  {
-    id: "reviews",
-    label: "Reviews",
-    emoji: "⭐",
-    query: '"[Company] employee reviews"',
-    mockResponse:
-      "[Company] has a 3.2/5 rating on Glassdoor based on 47 reviews. Common themes include good work-life balance but limited career progression. Note: these reviews may not reflect current conditions...",
-  },
-  {
-    id: "growth",
-    label: "Growth",
-    emoji: "📈",
-    query: '"Career growth at [Company]"',
-    mockResponse:
-      "I don't have specific information about career development programmes at [Company]. Their website doesn't mention progression frameworks or learning budgets...",
-  },
+const PROMPTS = [
+  { emoji: "💰", query: "What's the salary at [Company]?" },
+  { emoji: "🏢", query: "What's it like to work at [Company]?" },
+  { emoji: "🎁", query: "What benefits does [Company] offer?" },
+  { emoji: "🏠", query: "Does [Company] allow remote work?" },
+  { emoji: "🎯", query: "What's the interview process at [Company]?" },
+  { emoji: "📈", query: "Is there career growth at [Company]?" },
+  { emoji: "⭐", query: "What do employees say about [Company]?" },
+  { emoji: "⚔️", query: "[Company] vs [Competitor] — who's better?" },
 ];
 
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
-
-export default function PromptIntelligence() {
-  const [activeId, setActiveId] = useState<string>("salary");
-  const active = PROMPT_CATEGORIES.find((c) => c.id === activeId) ?? PROMPT_CATEGORIES[0];
+function MarqueeRow({ reverse = false }: { reverse?: boolean }) {
+  const items = [...PROMPTS, ...PROMPTS]; // duplicate for seamless loop
 
   return (
-    <section className="py-20 lg:py-28 bg-gradient-to-b from-neutral-50 to-white">
+    <div className="relative overflow-hidden" style={{
+      maskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+      WebkitMaskImage: "linear-gradient(to right, transparent, black 15%, black 85%, transparent)",
+    }}>
+      <motion.div
+        className="flex gap-3 w-max"
+        animate={{ x: reverse ? ["0%", "-50%"] : ["-50%", "0%"] }}
+        transition={{
+          x: { repeat: Infinity, repeatType: "loop", duration: 30, ease: "linear" },
+        }}
+      >
+        {items.map((p, i) => (
+          <div
+            key={`${p.query}-${i}`}
+            className="shrink-0 flex items-center gap-2.5 rounded-full border border-neutral-100 bg-white px-5 py-2.5 text-sm text-neutral-500 opacity-60 hover:opacity-100 transition-opacity duration-200"
+          >
+            <span className="text-base">{p.emoji}</span>
+            <span>&ldquo;{p.query}&rdquo;</span>
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+export default function PromptIntelligence() {
+  return (
+    <section className="py-20 lg:py-24 bg-neutral-50/40 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
-        {/* ── Header ─────────────────────────────────── */}
-        <div className="mb-14 lg:mb-16">
-          <div className="mb-3 flex items-center gap-2">
-            <MessageSquare className="h-4 w-4 text-brand-accent" />
-            <p className="overline">Prompt intelligence</p>
-          </div>
-          <h2 className="max-w-xl text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
-            What candidates ask AI about you
-          </h2>
-          <p className="mt-4 max-w-xl text-neutral-500 leading-relaxed">
-            These are the 8 prompt categories that drive employer research in AI models.
-            Every week, candidates ask millions of these queries — is AI getting your answers right?
-          </p>
-        </div>
+        <motion.h2
+          className="text-2xl lg:text-3xl font-medium text-neutral-950 text-center mb-3"
+          style={{ letterSpacing: "-0.03em" }}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        >
+          What candidates ask AI about you
+        </motion.h2>
+        <motion.p
+          className="text-sm text-neutral-400 text-center mb-10"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.1 }}
+        >
+          Millions of prompts every week. Is AI getting yours right?
+        </motion.p>
+      </div>
 
-        {/* ── Interactive prompt grid ─────────────────── */}
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.2fr]">
-          {/* Left: category pills */}
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 content-start">
-            {PROMPT_CATEGORIES.map((cat) => {
-              const isActive = cat.id === activeId;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveId(cat.id)}
-                  className={`group relative flex items-center gap-2.5 rounded-xl px-4 py-3.5 text-left text-sm font-medium transition-all ${
-                    isActive
-                      ? "bg-neutral-950 text-white shadow-card"
-                      : "bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"
-                  }`}
-                >
-                  <span className="text-base">{cat.emoji}</span>
-                  <span className="truncate">{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right: mock AI response */}
-          <div className="relative">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={active.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-                className="rounded-2xl border border-neutral-200 bg-white overflow-hidden shadow-card"
-              >
-                {/* Query bar */}
-                <div className="flex items-center gap-3 border-b border-neutral-100 bg-neutral-50/80 px-5 py-3.5">
-                  <Sparkles className="h-4 w-4 text-brand-accent shrink-0" />
-                  <p className="text-sm font-medium text-neutral-950 truncate">
-                    {active.query}
-                  </p>
-                </div>
-
-                {/* Response preview (blurred) */}
-                <div className="relative p-5">
-                  <p className="text-sm leading-relaxed text-neutral-600 blur-[3px] select-none">
-                    {active.mockResponse}
-                  </p>
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/80 backdrop-blur-[1px]">
-                    <Lock className="h-6 w-6 text-neutral-400 mb-3" />
-                    <p className="text-sm font-semibold text-neutral-950 mb-1 text-center px-4">
-                      What is AI actually saying?
-                    </p>
-                    <p className="text-xs text-neutral-500 text-center max-w-xs px-4">
-                      Rankwell monitors these prompts weekly and shows you exactly what AI responds.
-                    </p>
-                  </div>
-                </div>
-
-                {/* Bottom bar */}
-                <div className="border-t border-neutral-100 bg-neutral-50/50 px-5 py-3 flex items-center justify-between">
-                  <span className="text-[11px] text-neutral-400">
-                    Checked across 6 AI models
-                  </span>
-                  <a
-                    href="/#audit"
-                    className="inline-flex items-center gap-1 text-xs font-semibold text-brand-accent hover:underline"
-                  >
-                    Check your company free →
-                  </a>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
+      <div className="space-y-3">
+        <MarqueeRow />
+        <MarqueeRow reverse />
       </div>
     </section>
   );

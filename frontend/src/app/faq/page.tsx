@@ -114,12 +114,12 @@ export default function FaqPage() {
   const categories = Array.from(new Set(faqs.map((f) => f.category)));
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-slate-50">
       <Header />
 
       <main>
         {/* Hero */}
-        <section className="bg-white border-b border-neutral-200 relative overflow-hidden">
+        <section className="bg-white border-b border-slate-200 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
           <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24">
@@ -129,10 +129,10 @@ export default function FaqPage() {
                 FAQ
               </p>
             </div>
-            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-neutral-950 tracking-tight">
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
               Questions about AI employer visibility
             </h1>
-            <p className="mt-5 text-lg text-neutral-500 leading-relaxed">
+            <p className="mt-5 text-lg text-slate-500 leading-relaxed">
               Deep-dive answers, not one-liners. Click through for the full
               explanation with examples and evidence.
             </p>
@@ -144,7 +144,7 @@ export default function FaqPage() {
           <div className="mx-auto max-w-3xl px-6">
             {categories.map((category) => (
               <div key={category} className="mb-12 last:mb-0">
-                <h2 className="text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-4">
+                <h2 className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-4">
                   {category}
                 </h2>
                 <div className="space-y-3">
@@ -154,18 +154,18 @@ export default function FaqPage() {
                       <Link
                         key={faq.slug}
                         href={`/faq/${faq.slug}`}
-                        className="group block rounded-xl bg-white border border-neutral-200 p-5 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
+                        className="group block rounded-xl bg-white border border-slate-200 p-5 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                       >
                         <div className="flex items-start justify-between gap-4">
                           <div className="flex-1 min-w-0">
-                            <h3 className="text-[15px] font-semibold text-neutral-950 group-hover:text-brand-accent transition-colors">
+                            <h3 className="text-[15px] font-semibold text-slate-900 group-hover:text-brand-accent transition-colors">
                               {faq.question}
                             </h3>
-                            <p className="mt-1.5 text-[13px] text-neutral-500 leading-relaxed">
+                            <p className="mt-1.5 text-[13px] text-slate-500 leading-relaxed">
                               {faq.summary}
                             </p>
                           </div>
-                          <ArrowRight className="h-4 w-4 text-neutral-300 group-hover:text-brand-accent transition-colors mt-1 shrink-0" />
+                          <ArrowRight className="h-4 w-4 text-slate-300 group-hover:text-brand-accent transition-colors mt-1 shrink-0" />
                         </div>
                       </Link>
                     ))}
@@ -176,24 +176,24 @@ export default function FaqPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-12 lg:py-16 border-t border-neutral-200 bg-white">
+        <section className="py-12 lg:py-16 border-t border-slate-200 bg-white">
           <div className="mx-auto max-w-2xl px-6 text-center">
-            <h2 className="text-xl font-bold text-neutral-950 mb-3">
+            <h2 className="text-xl font-bold text-slate-900 mb-3">
               Still have questions?
             </h2>
-            <p className="text-sm text-neutral-500 mb-6">
+            <p className="text-sm text-slate-500 mb-6">
               Run a free audit to see exactly what AI says about your company, or get in touch.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
                 href="/#audit"
-                className="inline-flex items-center justify-center rounded-xl bg-neutral-950 px-6 py-3 text-sm font-semibold text-white hover:bg-neutral-800 transition-colors"
+                className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
               >
                 Free audit
               </Link>
               <a
                 href="mailto:hello@rankwell.io"
-                className="inline-flex items-center justify-center rounded-xl bg-neutral-100 px-6 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-200 transition-colors"
+                className="inline-flex items-center justify-center rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-neutral-200 transition-colors"
               >
                 Contact us
               </a>

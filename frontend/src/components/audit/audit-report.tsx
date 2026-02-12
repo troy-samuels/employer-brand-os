@@ -109,7 +109,7 @@ export function AuditReport({ slug, data, className }: AuditReportProps) {
   );
 
   return (
-    <article className={cn("bg-neutral-950", className)} data-testid="audit-report">
+    <article className={cn("bg-slate-900", className)} data-testid="audit-report">
       <RevealSection className="bg-gradient-to-b from-neutral-950 to-neutral-900 py-14 sm:py-16">
         <CitationScoreHero
           companyName={data.citationChain.companyName}
@@ -117,27 +117,27 @@ export function AuditReport({ slug, data, className }: AuditReportProps) {
         />
       </RevealSection>
 
-      <RevealSection className="bg-neutral-100 py-14 text-neutral-950 sm:py-16">
+      <RevealSection className="bg-slate-100 py-14 text-slate-900 sm:py-16">
         <CitationChainVisual result={data.citationChain} />
       </RevealSection>
 
-      <RevealSection className="bg-neutral-900 py-14 sm:py-16">
+      <RevealSection className="bg-slate-800 py-14 sm:py-16">
         <SourceGapMatrix analysis={data.gapAnalysis} />
       </RevealSection>
 
       {data.entityConfusion.isConfused && (
-        <RevealSection className="bg-neutral-50 py-14 text-neutral-950 sm:py-16">
+        <RevealSection className="bg-slate-50 py-14 text-slate-900 sm:py-16">
           <EntityConfusionAlert result={data.entityConfusion} />
         </RevealSection>
       )}
 
-      <RevealSection className="bg-neutral-900 py-14 sm:py-16">
+      <RevealSection className="bg-slate-800 py-14 sm:py-16">
         <div className="overflow-x-auto">
           <TrustDeltaTable items={data.trustDelta.items} />
         </div>
       </RevealSection>
 
-      <RevealSection className="bg-neutral-100 py-14 text-neutral-950 sm:py-16">
+      <RevealSection className="bg-slate-100 py-14 text-slate-900 sm:py-16">
         <CostCalculator deltaItems={data.trustDelta.items} />
       </RevealSection>
 
@@ -145,9 +145,9 @@ export function AuditReport({ slug, data, className }: AuditReportProps) {
         <div className="space-y-8">
           <EmailGateCta companySlug={slug} score={data.citationChain.citationScore} />
 
-          <div className="rounded-2xl border border-white/15 bg-white/5 p-5 sm:p-6">
+          <div className="rounded-2xl border border-slate-700 bg-slate-800 p-5 sm:p-6">
             <h3 className="text-base font-semibold text-white sm:text-lg">Run another audit</h3>
-            <p className="mt-1 text-sm text-neutral-300">
+            <p className="mt-1 text-sm text-slate-300">
               Search for another employer to compare how AI sources its data.
             </p>
             <div className="mt-4">
@@ -227,11 +227,11 @@ function EmailGateCta({ companySlug, score }: { companySlug: string; score: numb
   };
 
   return (
-    <div className="rounded-2xl border border-white/15 bg-white/10 p-5 text-white shadow-xl sm:p-6">
+    <div className="rounded-2xl border border-slate-700 bg-white/10 p-5 text-white shadow-xl sm:p-6">
       <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">
         Want the full fix playbook? Enter your work email
       </h2>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-300">
+      <p className="mt-2 text-sm leading-relaxed text-slate-300">
         Receive a practical, prioritised plan to shift AI citations towards your owned employer
         sources.
       </p>
@@ -253,7 +253,7 @@ function EmailGateCta({ companySlug, score }: { companySlug: string; score: numb
             }}
             placeholder="you@company.com"
             autoComplete="email"
-            className="w-full rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-sm text-neutral-950 placeholder:text-neutral-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50"
+            className="w-full rounded-xl border border-white/20 bg-white/95 px-4 py-3 text-sm text-slate-900 placeholder:text-slate-500 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300/50"
             aria-label="Work email"
             required
           />
@@ -261,7 +261,7 @@ function EmailGateCta({ companySlug, score }: { companySlug: string; score: numb
           <button
             type="submit"
             disabled={isSubmitting}
-            className="inline-flex items-center justify-center rounded-xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-neutral-950 transition-colors hover:bg-emerald-300 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex items-center justify-center rounded-xl bg-teal-500 px-5 py-3 text-sm font-semibold text-slate-900 transition-colors hover:bg-teal-400 disabled:cursor-not-allowed disabled:opacity-70"
           >
             {isSubmitting ? "Sending..." : "Send playbook"}
           </button>
@@ -270,7 +270,7 @@ function EmailGateCta({ companySlug, score }: { companySlug: string; score: numb
 
       {error && <p className="mt-3 text-sm text-red-300">{error}</p>}
 
-      <p className="mt-3 text-xs text-neutral-400">We only use your email for this report follow-up.</p>
+      <p className="mt-3 text-xs text-slate-400">We only use your email for this report follow-up.</p>
     </div>
   );
 }

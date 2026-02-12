@@ -1,104 +1,205 @@
 /**
  * @module components/landing/testimonials
- * Before/After comparison — simulated LLM chat interfaces showing
- * what candidates see when they ask AI about a company, with and
- * without Rankwell active. Closely mimics real ChatGPT 5.2 UI.
+ * Before/After comparison — a single ChatGPT-style chat interface that
+ * streams responses word-by-word, toggling between Without / With Rankwell.
  */
 
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Plus, Pencil, EllipsisVertical, Mic, AudioLines, ChevronDown } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Plus,
+  Pencil,
+  EllipsisVertical,
+  Mic,
+  AudioLines,
+  ChevronDown,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
-// Animation variants
+// Types & constants
 // ---------------------------------------------------------------------------
 
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.15 },
-  },
-};
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.46, 0.45, 0.94] as [number, number, number, number],
-    },
-  },
-};
-
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.5, ease: "easeOut" as const },
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Shared user question
-// ---------------------------------------------------------------------------
+type Mode = "without" | "with";
 
 const USER_QUESTION =
-  "What's it like to work at Meridian Tech? What's the salary for a senior engineer?";
+  "What's it like to work for Meridian Tech? What's the salary for a senior engineer?";
+
+/** Average ms per word when streaming. */
+const STREAM_SPEED_MS = 40;
+
+/** Pause (ms) before streaming starts (simulates "thinking"). */
+const THINKING_DELAY_MS = 1800;
 
 // ---------------------------------------------------------------------------
-// Source pill component (mimics ChatGPT inline citations)
+// Response tokens — each token is a "word" or inline element
 // ---------------------------------------------------------------------------
 
-function SourcePill({ label, extra }: { label: string; extra?: string }) {
+interface Token {
+  text: string;
+  className?: string;
+}
+
+const WITHOUT_TOKENS: Token[] = tokensFrom([
+  { text: "Here's a general picture of " },
+  { text: "Meridian Tech", className: "font-semibold text-white" },
+  { text: " based on employee reviews:\n\n" },
+  { text: "👩‍💼 Culture\n", className: "font-semibold text-white" },
+  { text: "• Described as " },
+  { text: "\"decent work culture\"", className: "italic" },
+  { text: " with mixed management experiences. " },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "\n" },
+  { text: "• Compensation described as " },
+  { text: "\"average\"", className: "italic" },
+  { text: " — not exceptional. " },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "\n\n" },
+  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-white" },
+  { text: "• Estimated: " },
+  { text: "£55,000 – £68,000", className: "font-semibold text-white" },
+  { text: " based on aggregated data. " },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: " " },
+  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "\n\n" },
+  { text: "❌ £20K below actual range", className: "text-[11px] px-2 py-1 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 font-medium inline-block" },
+  { text: "  " },
+  { text: "❌ No verified sources", className: "text-[11px] px-2 py-1 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 font-medium inline-block" },
+]);
+
+const WITH_TOKENS: Token[] = tokensFrom([
+  { text: "Here's a detailed overview of " },
+  { text: "Meridian Tech", className: "font-semibold text-white" },
+  { text: " based on verified employer data:\n\n" },
+  { text: "👩‍💼 Culture\n", className: "font-semibold text-white" },
+  { text: "• " },
+  { text: "Remote-first", className: "font-semibold text-white" },
+  { text: " with optional London office. Strong autonomy, transparent leadership. " },
+  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "\n" },
+  { text: "• Benefits: " },
+  { text: "private healthcare, £2K learning budget, 30 days holiday", className: "font-semibold text-white" },
+  { text: ". " },
+  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "\n\n" },
+  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-white" },
+  { text: "• Published range: " },
+  { text: "£75,000 – £95,000", className: "font-semibold text-white" },
+  { text: " base + equity + bonus. " },
+  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "\n\n" },
+  { text: "✓ Verified 2 days ago", className: "text-[11px] px-2 py-1 bg-emerald-500/15 border border-emerald-500/25 rounded-lg text-emerald-400 font-medium inline-block" },
+  { text: "  " },
+  { text: "✓ Employer confirmed", className: "text-[11px] px-2 py-1 bg-emerald-500/15 border border-emerald-500/25 rounded-lg text-emerald-400 font-medium inline-block" },
+]);
+
+/** Split compound tokens into individual words for streaming. */
+function tokensFrom(raw: Token[]): Token[] {
+  const result: Token[] = [];
+  for (const t of raw) {
+    // If token has special className (badge/pill), keep it atomic
+    if (t.className && t.className.length > 30) {
+      result.push(t);
+      continue;
+    }
+    // Otherwise split by spaces to stream word-by-word
+    const words = t.text.split(/( )/);
+    for (const w of words) {
+      if (w === "") continue;
+      result.push({ text: w, className: t.className });
+    }
+  }
+  return result;
+}
+
+// ---------------------------------------------------------------------------
+// Thinking dots animation
+// ---------------------------------------------------------------------------
+
+function ThinkingDots() {
   return (
-    <span className="inline-flex items-center gap-1 ml-1.5 px-2 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-400 font-medium whitespace-nowrap align-middle">
-      {label}
-      {extra && <span className="text-neutral-500">{extra}</span>}
-    </span>
+    <div className="flex items-center gap-1 px-4 py-4">
+      <div className="flex gap-1">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="w-2 h-2 rounded-full bg-neutral-500"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              delay: i * 0.2,
+              ease: "easeInOut",
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Verified source pill (green tint for "with Rankwell")
+// Streaming response component
 // ---------------------------------------------------------------------------
 
-function VerifiedSourcePill({ label }: { label: string }) {
+function StreamingResponse({
+  tokens,
+  onComplete,
+}: {
+  tokens: Token[];
+  onComplete?: () => void;
+}) {
+  const [visibleCount, setVisibleCount] = useState(0);
+  const completedRef = useRef(false);
+
+  useEffect(() => {
+    setVisibleCount(0);
+    completedRef.current = false;
+  }, [tokens]);
+
+  useEffect(() => {
+    if (visibleCount >= tokens.length) {
+      if (!completedRef.current) {
+        completedRef.current = true;
+        onComplete?.();
+      }
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      // Stream 1-3 tokens at a time for natural feel
+      const step = Math.random() > 0.7 ? 2 : 1;
+      setVisibleCount((c) => Math.min(c + step, tokens.length));
+    }, STREAM_SPEED_MS + Math.random() * 30);
+
+    return () => clearTimeout(timer);
+  }, [visibleCount, tokens, onComplete]);
+
   return (
-    <span className="inline-flex items-center gap-1 ml-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium whitespace-nowrap align-middle">
-      <span>✓</span>
-      {label}
-    </span>
+    <div className="px-4 pb-4">
+      <p className="text-[13.5px] text-neutral-300 leading-relaxed whitespace-pre-wrap">
+        {tokens.slice(0, visibleCount).map((t, i) => (
+          <span key={i} className={t.className}>
+            {t.text}
+          </span>
+        ))}
+        {visibleCount < tokens.length && (
+          <motion.span
+            className="inline-block w-[2px] h-[14px] bg-neutral-400 ml-0.5 align-middle"
+            animate={{ opacity: [1, 0] }}
+            transition={{ duration: 0.5, repeat: Infinity }}
+          />
+        )}
+      </p>
+    </div>
   );
 }
 
 // ---------------------------------------------------------------------------
-// Error / Verified inline badges
-// ---------------------------------------------------------------------------
-
-function ErrorBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-500/15 border border-red-500/25 rounded-full text-[10px] font-semibold text-red-400 whitespace-nowrap">
-      <span>❌</span>
-      {children}
-    </span>
-  );
-}
-
-function VerifiedBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-500/15 border border-emerald-500/25 rounded-full text-[10px] font-semibold text-emerald-400 whitespace-nowrap">
-      <span>✓</span>
-      {children}
-    </span>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// ChatGPT 5.2 header (matches real UI)
+// ChatGPT chrome
 // ---------------------------------------------------------------------------
 
 function ChatGPTHeader() {
@@ -123,10 +224,6 @@ function ChatGPTHeader() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// User message bubble (right-aligned, ChatGPT style)
-// ---------------------------------------------------------------------------
-
 function UserMessage({ text }: { text: string }) {
   return (
     <div className="flex justify-end px-4 py-3">
@@ -137,16 +234,14 @@ function UserMessage({ text }: { text: string }) {
   );
 }
 
-// ---------------------------------------------------------------------------
-// ChatGPT bottom input bar
-// ---------------------------------------------------------------------------
-
 function ChatGPTInputBar() {
   return (
     <div className="px-3 py-3 border-t border-white/[0.04]">
       <div className="flex items-center gap-2 bg-[#303030] rounded-full px-4 py-2.5">
         <Plus className="w-5 h-5 text-neutral-400 shrink-0" />
-        <span className="flex-1 text-[14px] text-neutral-500">Ask anything</span>
+        <span className="flex-1 text-[14px] text-neutral-500">
+          Ask anything
+        </span>
         <Mic className="w-5 h-5 text-neutral-400 shrink-0" />
         <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
           <AudioLines className="w-4 h-4 text-neutral-300" />
@@ -157,366 +252,78 @@ function ChatGPTInputBar() {
 }
 
 // ---------------------------------------------------------------------------
-// WITHOUT Rankwell — ChatGPT panel
-// ---------------------------------------------------------------------------
-
-function ChatGPTWithout() {
-  return (
-    <div className="rounded-2xl bg-[#212121] border border-white/[0.06] overflow-hidden shadow-2xl shadow-black/40 flex flex-col">
-      <ChatGPTHeader />
-      <UserMessage text={USER_QUESTION} />
-
-      {/* AI response — plain text, no avatar, matches real ChatGPT 5.2 */}
-      <div className="px-4 pb-4 flex-1">
-        <div className="space-y-4">
-          <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-            Here&apos;s a general picture of what it&apos;s like working at{" "}
-            <strong className="text-white">Meridian Tech</strong> — plus typical
-            engineer salaries — based on employee reviews and salary data
-            (mostly from anonymous sites like Glassdoor and Indeed):
-          </p>
-
-          {/* Section heading — emoji + bold, matches real GPT output */}
-          <div>
-            <p className="text-[14px] font-semibold text-white mb-2.5">
-              👩‍💼 What employees say about working there
-            </p>
-            <ul className="space-y-3">
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Many employees describe <strong className="text-white">Meridian Tech</strong> as
-                  having a <em>decent work culture with good colleagues and knowledgeable
-                  peers</em>. Some reviews mention supportive management and a positive team
-                  atmosphere.
-                  <SourcePill label="Glassdoor" />
-                  <span className="ml-2"><ErrorBadge>Unverified</ErrorBadge></span>
-                </p>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Compensation and benefits generally get <em>mixed reviews</em> — often
-                  described as <em>average or decent</em>, but not exceptional.
-                  <SourcePill label="Glassdoor" />
-                  <span className="ml-2"><ErrorBadge>Vague</ErrorBadge></span>
-                </p>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  A few reviews mention more <em>chaotic work environments or weaker
-                  management structures</em>, so experiences appear to vary a lot by
-                  team or location.
-                  <SourcePill label="Indeed" />
-                  <span className="ml-2"><ErrorBadge>Damaging</ErrorBadge></span>
-                </p>
-              </li>
-            </ul>
-          </div>
-
-          {/* Salary section */}
-          <div>
-            <p className="text-[14px] font-semibold text-white mb-2.5">
-              💰 Senior Engineer salary
-            </p>
-            <ul className="space-y-3">
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Estimated range: <strong className="text-white">£55,000 – £68,000</strong> based
-                  on aggregated data from job boards and anonymous submissions.
-                  <SourcePill label="Glassdoor" />
-                  <SourcePill label="Indeed" />
-                  <span className="ml-2"><ErrorBadge>Wrong — actual: £75-95K</ErrorBadge></span>
-                </p>
-              </li>
-            </ul>
-          </div>
-
-          <div className="flex items-center gap-2 pt-1">
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
-            <span className="text-[11px] text-neutral-500">Show more</span>
-          </div>
-        </div>
-      </div>
-
-      <ChatGPTInputBar />
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// WITH Rankwell — ChatGPT panel
-// ---------------------------------------------------------------------------
-
-function ChatGPTWith() {
-  return (
-    <div className="rounded-2xl bg-[#212121] border border-emerald-500/10 overflow-hidden shadow-2xl shadow-emerald-900/10 flex flex-col">
-      <ChatGPTHeader />
-      <UserMessage text={USER_QUESTION} />
-
-      {/* AI response — same structure, verified data */}
-      <div className="px-4 pb-4 flex-1">
-        <div className="space-y-4">
-          <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-            Here&apos;s a detailed overview of working at{" "}
-            <strong className="text-white">Meridian Tech</strong>, based on
-            verified employer data and recent employee insights:
-          </p>
-
-          {/* Section heading */}
-          <div>
-            <p className="text-[14px] font-semibold text-white mb-2.5">
-              👩‍💼 What employees say about working there
-            </p>
-            <ul className="space-y-3">
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Meridian Tech operates a <strong className="text-white">remote-first culture</strong> with
-                  optional London office 2 days/week. Employees highlight strong autonomy,
-                  transparent leadership, and a collaborative engineering culture.
-                  <VerifiedSourcePill label="meridiantech.com" />
-                </p>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  The company offers a comprehensive benefits package including{" "}
-                  <strong className="text-white">private healthcare, £2,000 annual learning budget,
-                  30 days holiday</strong>, and enhanced parental leave.
-                  <VerifiedSourcePill label="meridiantech.com" />
-                </p>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Recent Glassdoor reviews (2024-25) rate the company{" "}
-                  <strong className="text-white">4.2/5</strong> with particular praise for
-                  engineering leadership and career progression pathways.
-                  <VerifiedSourcePill label="meridiantech.com" />
-                  <SourcePill label="Glassdoor" />
-                </p>
-              </li>
-            </ul>
-          </div>
-
-          {/* Salary section */}
-          <div>
-            <p className="text-[14px] font-semibold text-white mb-2.5">
-              💰 Senior Engineer salary
-            </p>
-            <ul className="space-y-3">
-              <li className="flex gap-2">
-                <span className="text-neutral-500 mt-0.5 shrink-0">•</span>
-                <p className="text-[13.5px] text-neutral-300 leading-relaxed">
-                  Published salary range: <strong className="text-white">£75,000 – £95,000</strong> base,
-                  plus equity and annual bonus. The company publishes transparent salary
-                  bands on their careers page.
-                  <VerifiedSourcePill label="meridiantech.com/careers" />
-                  <span className="ml-2"><VerifiedBadge>Verified 2 days ago</VerifiedBadge></span>
-                </p>
-              </li>
-            </ul>
-          </div>
-
-          <div className="flex items-center gap-2 pt-1">
-            <ChevronDown className="w-3.5 h-3.5 text-neutral-500" />
-            <span className="text-[11px] text-neutral-500">Show more</span>
-          </div>
-        </div>
-      </div>
-
-      <ChatGPTInputBar />
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Mini LLM cards (Perplexity, Google AI Overview, Claude)
-// ---------------------------------------------------------------------------
-
-interface MiniCardProps {
-  logo: string;
-  name: string;
-  withoutContent: React.ReactNode;
-  withContent: React.ReactNode;
-  bgClass?: string;
-}
-
-function MiniCard({
-  logo,
-  name,
-  withoutContent,
-  withContent,
-  bgClass = "bg-[#1a1a1a]",
-}: MiniCardProps) {
-  return (
-    <div
-      className={`rounded-2xl ${bgClass} border border-white/[0.06] overflow-hidden shadow-xl shadow-black/30 flex flex-col`}
-    >
-      {/* Header */}
-      <div className="flex items-center gap-2 px-4 pt-3 pb-2">
-        <Image src={logo} alt={name} width={16} height={16} />
-        <span className="text-[12px] font-semibold text-neutral-400">
-          {name}
-        </span>
-      </div>
-
-      {/* Two halves */}
-      <div className="grid grid-cols-2 divide-x divide-white/[0.06] flex-1">
-        {/* Without */}
-        <div className="px-3 py-3 space-y-1.5">
-          <span className="text-[9px] font-bold text-red-400/80 uppercase tracking-wider">
-            Without
-          </span>
-          {withoutContent}
-        </div>
-        {/* With */}
-        <div className="px-3 py-3 space-y-1.5">
-          <span className="text-[9px] font-bold text-emerald-400/80 uppercase tracking-wider">
-            With Rankwell
-          </span>
-          {withContent}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function PerplexityCard() {
-  return (
-    <MiniCard
-      logo="/logos/perplexity.svg"
-      name="Perplexity"
-      withoutContent={
-        <>
-          <p className="text-[11px] text-neutral-400 leading-snug">
-            Senior Engineer salary at Meridian Tech:
-          </p>
-          <p className="text-[12px] text-neutral-200 font-semibold">
-            £55K – £68K
-          </p>
-          <p className="text-[9px] text-neutral-500">
-            📎 reddit.com/r/ukjobs
-          </p>
-          <ErrorBadge>Wrong</ErrorBadge>
-        </>
-      }
-      withContent={
-        <>
-          <p className="text-[11px] text-neutral-400 leading-snug">
-            Senior Engineer salary at Meridian Tech:
-          </p>
-          <p className="text-[12px] text-neutral-200 font-semibold">
-            £75K – £95K
-          </p>
-          <p className="text-[9px] text-neutral-500">
-            📎 meridiantech.com
-          </p>
-          <VerifiedBadge>Verified</VerifiedBadge>
-        </>
-      }
-    />
-  );
-}
-
-function GoogleAICard() {
-  return (
-    <MiniCard
-      logo="/logos/google-ai.svg"
-      name="Google AI Overview"
-      bgClass="bg-[#1a1a1a]"
-      withoutContent={
-        <>
-          <div className="bg-[#252525] rounded-lg px-2 py-1.5">
-            <p className="text-[11px] text-neutral-400 leading-snug">
-              Meridian Tech is a technology company with mixed reviews on
-              work-life balance…
-            </p>
-          </div>
-          <ErrorBadge>Outdated</ErrorBadge>
-        </>
-      }
-      withContent={
-        <>
-          <div className="bg-[#252525] rounded-lg px-2 py-1.5">
-            <p className="text-[11px] text-neutral-300 leading-snug">
-              Meridian Tech is a remote-first company offering £75-95K for
-              senior engineers…
-            </p>
-          </div>
-          <VerifiedBadge>Employer confirmed</VerifiedBadge>
-        </>
-      }
-    />
-  );
-}
-
-function ClaudeCard() {
-  return (
-    <MiniCard
-      logo="/logos/claude.svg"
-      name="Claude"
-      withoutContent={
-        <>
-          <p className="text-[11px] text-neutral-400 leading-snug italic">
-            I don&apos;t have specific information about Meridian Tech&apos;s
-            benefits package…
-          </p>
-          <ErrorBadge>No data</ErrorBadge>
-        </>
-      }
-      withContent={
-        <>
-          <div className="flex flex-wrap gap-1">
-            {["Healthcare", "£2K L&D", "30 days PTO", "Parental leave"].map(
-              (b) => (
-                <span
-                  key={b}
-                  className="px-1.5 py-0.5 bg-white/[0.06] text-neutral-300 text-[9px] rounded"
-                >
-                  {b}
-                </span>
-              )
-            )}
-          </div>
-          <VerifiedBadge>Verified</VerifiedBadge>
-        </>
-      }
-    />
-  );
-}
-
-// ---------------------------------------------------------------------------
 // Main export
 // ---------------------------------------------------------------------------
 
 export default function BeforeAfter() {
+  const [mode, setMode] = useState<Mode>("without");
+  const [phase, setPhase] = useState<"idle" | "thinking" | "streaming" | "done">("idle");
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const tokens = mode === "without" ? WITHOUT_TOKENS : WITH_TOKENS;
+
+  // Start animation when section enters viewport
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasBeenVisible) {
+          setHasBeenVisible(true);
+          setPhase("thinking");
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [hasBeenVisible]);
+
+  // Thinking → streaming transition
+  useEffect(() => {
+    if (phase !== "thinking") return;
+    const timer = setTimeout(() => setPhase("streaming"), THINKING_DELAY_MS);
+    return () => clearTimeout(timer);
+  }, [phase]);
+
+  const handleToggle = useCallback(
+    (next: Mode) => {
+      if (next === mode) return;
+      setMode(next);
+      setPhase("thinking");
+    },
+    [mode]
+  );
+
+  const handleStreamComplete = useCallback(() => {
+    setPhase("done");
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="testimonials"
-      className="py-24 lg:py-32 bg-neutral-950 relative overflow-hidden"
+      className="py-24 lg:py-32 bg-slate-900 relative overflow-hidden"
     >
-      {/* Subtle glow effects */}
+      {/* Ambient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-accent/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-20 right-0 w-[300px] h-[300px] bg-emerald-500/[0.03] rounded-full blur-3xl" />
-      <div className="absolute top-40 left-0 w-[300px] h-[300px] bg-red-500/[0.03] rounded-full blur-3xl" />
 
-      <motion.div
-        className="relative max-w-[1200px] mx-auto px-6 lg:px-12"
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-      >
+      <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12">
         {/* Section header */}
-        <motion.div className="mb-14 lg:mb-16" variants={fadeUp}>
+        <motion.div
+          className="mb-14 lg:mb-16"
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        >
           <p className="overline text-brand-accent-light mb-3">
             The difference
           </p>
-          <h2 className="text-3xl lg:text-4xl font-bold text-white max-w-2xl tracking-tight">
+          <h2 className="text-3xl lg:text-4xl font-medium text-white max-w-2xl" style={{ letterSpacing: "-0.03em" }}>
             What candidates see when they ask AI about you
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
@@ -525,49 +332,132 @@ export default function BeforeAfter() {
           </p>
         </motion.div>
 
-        {/* Main comparison — two ChatGPT 5.2 interfaces side by side */}
-        <div className="grid gap-6 lg:gap-8 md:grid-cols-2 mb-8">
-          {/* Without Rankwell */}
-          <motion.div variants={fadeUp}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-2 bg-red-500 rounded-full" />
-              <span className="text-xs font-semibold text-red-400 uppercase tracking-wide">
-                Without Rankwell
-              </span>
-            </div>
-            <ChatGPTWithout />
-          </motion.div>
-
-          {/* With Rankwell */}
-          <motion.div variants={fadeUp}>
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2 h-2 bg-emerald-500 rounded-full" />
-              <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wide">
-                With Rankwell
-              </span>
-            </div>
-            <ChatGPTWith />
-          </motion.div>
+        {/* Toggle tabs */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          <button
+            onClick={() => handleToggle("without")}
+            className={cn(
+              "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200",
+              mode === "without"
+                ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                : "bg-white/5 text-neutral-500 border border-white/10 hover:text-neutral-300"
+            )}
+          >
+            <span
+              className={cn(
+                "w-2 h-2 rounded-full",
+                mode === "without" ? "bg-red-500" : "bg-neutral-600"
+              )}
+            />
+            Without Rankwell
+          </button>
+          <button
+            onClick={() => handleToggle("with")}
+            className={cn(
+              "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200",
+              mode === "with"
+                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+                : "bg-white/5 text-neutral-500 border border-white/10 hover:text-neutral-300"
+            )}
+          >
+            <span
+              className={cn(
+                "w-2 h-2 rounded-full",
+                mode === "with" ? "bg-emerald-500" : "bg-neutral-600"
+              )}
+            />
+            With Rankwell
+          </button>
         </div>
 
-        {/* Mini LLM cards row */}
-        <motion.div variants={fadeIn}>
-          <p className="text-[11px] font-semibold text-neutral-500 uppercase tracking-wider mb-4 text-center">
-            Same story across every AI platform
-          </p>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <motion.div variants={fadeUp}>
-              <PerplexityCard />
-            </motion.div>
-            <motion.div variants={fadeUp}>
-              <GoogleAICard />
-            </motion.div>
-            <motion.div variants={fadeUp}>
-              <ClaudeCard />
-            </motion.div>
+        {/* ChatGPT interface — single panel */}
+        <motion.div
+          className="max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          <div
+            className={cn(
+              "rounded-2xl bg-[#212121] overflow-hidden shadow-2xl transition-all duration-500",
+              mode === "with"
+                ? "border border-emerald-500/15 shadow-emerald-900/10"
+                : "border border-white/[0.06] shadow-black/40"
+            )}
+          >
+            <ChatGPTHeader />
+            <UserMessage text={USER_QUESTION} />
+
+            {/* Response area */}
+            <AnimatePresence mode="wait">
+              {phase === "idle" && (
+                <div key="idle" className="h-10" />
+              )}
+              {phase === "thinking" && (
+                <motion.div
+                  key="thinking"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <ThinkingDots />
+                </motion.div>
+              )}
+              {(phase === "streaming" || phase === "done") && (
+                <motion.div
+                  key={`stream-${mode}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <StreamingResponse
+                    tokens={tokens}
+                    onComplete={handleStreamComplete}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            <ChatGPTInputBar />
           </div>
         </motion.div>
-      </motion.div>
+
+        {/* Hint text after streaming completes */}
+        <AnimatePresence>
+          {phase === "done" && mode === "without" && (
+            <motion.p
+              className="text-center text-sm text-neutral-500 mt-6"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              Now tap{" "}
+              <button
+                onClick={() => handleToggle("with")}
+                className="text-emerald-400 font-semibold hover:underline"
+              >
+                With Rankwell
+              </button>{" "}
+              to see the difference →
+            </motion.p>
+          )}
+          {phase === "done" && mode === "with" && (
+            <motion.p
+              className="text-center text-sm text-emerald-400/70 mt-6"
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4, delay: 0.3 }}
+            >
+              Verified data. Correct salary. Your story — told by AI. ✓
+            </motion.p>
+          )}
+        </AnimatePresence>
+      </div>
     </section>
   );
 }

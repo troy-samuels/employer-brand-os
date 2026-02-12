@@ -29,17 +29,17 @@ export default function TermsPage() {
       <main>
       <div className="mx-auto max-w-3xl px-6 py-20 sm:py-28">
         <p className="overline mb-4">Legal</p>
-        <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
           Terms of Service
         </h1>
-        <p className="mt-4 text-sm text-neutral-500">
+        <p className="mt-4 text-sm text-slate-500">
           Last updated: {lastUpdated}
         </p>
 
         <div className="mt-14 space-y-10 text-neutral-700 leading-relaxed">
           {/* 1 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               1. Agreement
             </h2>
             <p>
@@ -58,7 +58,7 @@ export default function TermsPage() {
 
           {/* 2 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               2. The Service
             </h2>
             <p>Rankwell provides:</p>
@@ -82,7 +82,7 @@ export default function TermsPage() {
 
           {/* 3 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               3. Accounts &amp; access
             </h2>
             <p>
@@ -90,7 +90,7 @@ export default function TermsPage() {
               keys and account credentials. You must notify us immediately at{' '}
               <a
                 href="mailto:security@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 security@rankwell.io
               </a>{' '}
@@ -105,7 +105,7 @@ export default function TermsPage() {
 
           {/* 4 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               4. The Rankwell pixel
             </h2>
             <p>By installing the Rankwell pixel on your website, you:</p>
@@ -133,7 +133,7 @@ export default function TermsPage() {
               content. See our{' '}
               <a
                 href="/security"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 Security page
               </a>{' '}
@@ -143,7 +143,7 @@ export default function TermsPage() {
 
           {/* 5 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               5. Audit methodology
             </h2>
             <p>
@@ -153,7 +153,7 @@ export default function TermsPage() {
               described on the{' '}
               <a
                 href="/how-we-score"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 How we score
               </a>{' '}
@@ -169,7 +169,7 @@ export default function TermsPage() {
 
           {/* 6 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               6. Acceptable use
             </h2>
             <p>You agree not to:</p>
@@ -202,7 +202,7 @@ export default function TermsPage() {
 
           {/* 7 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               7. Intellectual property
             </h2>
             <p>
@@ -219,7 +219,7 @@ export default function TermsPage() {
 
           {/* 8 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               8. Pricing &amp; payment
             </h2>
             <p>
@@ -235,14 +235,14 @@ export default function TermsPage() {
 
           {/* 9 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               9. Data processing
             </h2>
             <p>
               We process data in accordance with our{' '}
               <a
                 href="/privacy"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 Privacy Policy
               </a>
@@ -250,7 +250,7 @@ export default function TermsPage() {
               can request one at{' '}
               <a
                 href="mailto:privacy@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 privacy@rankwell.io
               </a>
@@ -260,7 +260,7 @@ export default function TermsPage() {
 
           {/* 10 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               10. Availability &amp; support
             </h2>
             <p>
@@ -274,7 +274,7 @@ export default function TermsPage() {
 
           {/* 11 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               11. Limitation of liability
             </h2>
             <p>
@@ -291,7 +291,7 @@ export default function TermsPage() {
 
           {/* 12 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               12. Indemnification
             </h2>
             <p>
@@ -304,7 +304,7 @@ export default function TermsPage() {
 
           {/* 13 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               13. Changes to these terms
             </h2>
             <p>
@@ -317,7 +317,7 @@ export default function TermsPage() {
 
           {/* 14 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               14. Governing law
             </h2>
             <p>
@@ -330,14 +330,14 @@ export default function TermsPage() {
 
           {/* 15 */}
           <section>
-            <h2 className="text-xl font-semibold text-neutral-950 mb-3">
+            <h2 className="text-xl font-semibold text-slate-900 mb-3">
               15. Contact
             </h2>
             <p>
               For questions about these terms, contact us at{' '}
               <a
                 href="mailto:hello@rankwell.io"
-                className="text-emerald-700 underline underline-offset-2"
+                className="text-teal-700 underline underline-offset-2"
               >
                 hello@rankwell.io
               </a>

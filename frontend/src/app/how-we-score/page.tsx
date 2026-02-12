@@ -60,22 +60,22 @@ const CHECKS = [
  */
 export default function HowWeScorePage() {
   return (
-    <main className="min-h-screen bg-neutral-50">
+    <main className="min-h-screen bg-slate-50">
       {/* Header */}
-      <div className="bg-white border-b border-neutral-200 relative overflow-hidden">
+      <div className="bg-white border-b border-slate-200 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />
         <div className="absolute inset-0 bg-gradient-to-b from-white to-transparent" />
         <div className="relative max-w-2xl mx-auto px-6 py-20 lg:py-24 text-center">
           <Link
             href="/"
-            className="inline-block text-sm font-medium text-neutral-400 hover:text-neutral-600 transition-colors duration-200 mb-8"
+            className="inline-block text-sm font-medium text-slate-400 hover:text-slate-600 transition-colors duration-200 mb-8"
           >
             ← Back to audit
           </Link>
-          <h1 className="text-3xl lg:text-4xl font-bold text-neutral-950 tracking-tight">
+          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
             How we calculate your score
           </h1>
-          <p className="mt-5 text-lg text-neutral-500 max-w-xl mx-auto leading-relaxed">
+          <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
             Your AI Visibility Score is based on six checks that measure how
             well AI models can find, read, and accurately describe your employer
             brand.
@@ -91,18 +91,18 @@ export default function HowWeScorePage() {
             className="rounded-2xl bg-white p-6 lg:p-7 border border-neutral-100 shadow-card hover:shadow-card-hover transition-shadow duration-300"
           >
             <div className="flex items-center justify-between gap-4 mb-3">
-              <h2 className="text-[15px] font-semibold text-neutral-950">
+              <h2 className="text-[15px] font-semibold text-slate-900">
                 {check.name}
               </h2>
               <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-accent-light px-2.5 py-0.5 text-xs font-bold tabular-nums text-brand-accent shrink-0">
                 {check.weight} pts
               </span>
             </div>
-            <p className="text-[13px] leading-relaxed text-neutral-600 mb-2">
-              <span className="font-medium text-neutral-800">What we check: </span>
+            <p className="text-[13px] leading-relaxed text-slate-600 mb-2">
+              <span className="font-medium text-slate-700">What we check: </span>
               {check.what}
             </p>
-            <p className="text-[13px] leading-relaxed text-neutral-500">
+            <p className="text-[13px] leading-relaxed text-slate-500">
               <span className="font-medium text-neutral-700">Why it matters: </span>
               {check.why}
             </p>
@@ -112,24 +112,24 @@ export default function HowWeScorePage() {
 
       {/* CTA */}
       <div className="max-w-2xl mx-auto px-6 pb-20">
-        <div className="rounded-2xl bg-neutral-950 p-8 text-center">
+        <div className="rounded-2xl bg-slate-900 p-8 text-center">
           <h2 className="text-xl font-bold text-white mb-2">
             Ready to fix your score?
           </h2>
-          <p className="text-sm text-neutral-400 mb-6 max-w-md mx-auto">
+          <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
             Rankwell automatically optimises your employer brand for AI — so when
             candidates ask about you, the answers are yours.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
             >
               Run your free audit
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex items-center justify-center rounded-xl border border-neutral-700 px-6 py-3 text-sm font-semibold text-neutral-300 hover:text-white hover:border-neutral-500 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl border border-neutral-700 px-6 py-3 text-sm font-semibold text-slate-300 hover:text-white hover:border-neutral-500 transition-colors"
             >
               See pricing
             </Link>
