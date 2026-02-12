@@ -21,6 +21,12 @@ import type {
 } from "@/lib/citation-chain/types";
 import { CITATION_CHAIN_MODEL_IDS } from "@/lib/citation-chain/types";
 
+/**
+ * Maximum concurrent LLM requests to prevent burst throttling.
+ * Google tasks are lightweight and run separately.
+ */
+const MAX_CONCURRENT_LLM = 4;
+
 interface EngineOptions {
   role?: string;
   googleTimeoutMs?: number;
@@ -81,8 +87,8 @@ export class CitationChainEngine {
       }
     });
 
-    const llmTasks = categories.flatMap((category) =>
-      CITATION_CHAIN_MODEL_IDS.map(async (modelId) => {
+    const llmTaskFns = categories.flatMap((category) =>
+      CITATION_CHAIN_MODEL_IDS.map((modelId) => async (): Promise<LlmResponse> => {
         const prompt = buildLlmPrompt(category, companyName, role);
 
         try {
@@ -104,7 +110,7 @@ export class CitationChainEngine {
 
     const [googleResultGroups, llmResponses] = await Promise.all([
       Promise.all(googleTasks),
-      Promise.all(llmTasks),
+      runWithConcurrencyLimit(llmTaskFns, MAX_CONCURRENT_LLM),
     ]);
 
     const googleResults = googleResultGroups.flat();
@@ -171,4 +177,32 @@ function getErrorMessage(error: unknown): string {
   }
 
   return "Unknown citation-chain error";
+}
+
+/**
+ * Execute async tasks with a concurrency cap.
+ * Prevents burst-throttling when fanning out to multiple LLM providers.
+ */
+async function runWithConcurrencyLimit<T>(
+  taskFns: Array<() => Promise<T>>,
+  limit: number,
+): Promise<T[]> {
+  const results: T[] = new Array(taskFns.length);
+  let nextIndex = 0;
+
+  async function worker(): Promise<void> {
+    while (nextIndex < taskFns.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await taskFns[index]!();
+    }
+  }
+
+  const workers = Array.from(
+    { length: Math.min(limit, taskFns.length) },
+    () => worker(),
+  );
+  await Promise.all(workers);
+
+  return results;
 }

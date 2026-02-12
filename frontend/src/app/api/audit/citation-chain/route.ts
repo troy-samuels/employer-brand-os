@@ -25,6 +25,20 @@ import { RateLimiter } from "@/lib/utils/rate-limiter";
 /**
  * API response shape returned by the citation-chain audit endpoint.
  */
+/**
+ * Metadata envelope returned alongside audit results.
+ */
+export interface CitationChainAuditMeta {
+  /** ISO timestamp of when the audit was generated. */
+  generatedAt: string;
+  /** Audit engine version. */
+  auditVersion: string;
+  /** True when one or more downstream analyses failed gracefully. */
+  partial: boolean;
+  /** Per-section error flags for partial results. */
+  errorFlags: Record<string, { hasError: boolean; message: string }>;
+}
+
 export interface CitationChainAuditResponse {
   /** Core citation-chain output from the engine. */
   citationChain: CitationChainResult;
@@ -34,6 +48,8 @@ export interface CitationChainAuditResponse {
   entityConfusion: EntityConfusionResult;
   /** Trust-delta rows and hallucination rate. */
   trustDelta: TrustDeltaResult;
+  /** Audit metadata (always present). */
+  meta: CitationChainAuditMeta;
 }
 
 /**

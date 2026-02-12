@@ -142,15 +142,19 @@ export function detectEntityConfusion(
   companyName: string,
   companyDomain: string
 ): EntityConfusionResult {
+  // Filter out failed/timeout responses — infra failures should not count
+  // as entity confusion or deflate the correct identification rate.
+  const validResponses = llmResponses.filter((response) => !response.failed);
+
   const targetTokens = normaliseEntityTokens(companyName);
   const targetNormalizedName = targetTokens.join(" ");
   const targetDomainKey = getCanonicalDomainKey(companyDomain);
 
-  const modelIds = Array.from(new Set(llmResponses.map((response) => response.modelId)));
+  const modelIds = Array.from(new Set(validResponses.map((response) => response.modelId)));
   const modelsIdentifyingTarget = new Set<CitationChainModelId>();
   const confusedEntities = new Map<string, ConfusedEntityAccumulator>();
 
-  for (const response of llmResponses) {
+  for (const response of validResponses) {
     const mentions = extractEntityMentions(response.response);
     const modelId = response.modelId;
     let hasTargetMention = false;

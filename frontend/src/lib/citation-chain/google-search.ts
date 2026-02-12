@@ -58,11 +58,11 @@ export async function fetchGoogleResults(
     return getMockGoogleResults(trimmedQuery, category);
   }
 
-  try {
-    const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  const timeoutMs = options.timeoutMs ?? DEFAULT_TIMEOUT_MS;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
+  try {
     const response = await fetch(SERPER_ENDPOINT, {
       method: "POST",
       headers: {
@@ -79,8 +79,6 @@ export async function fetchGoogleResults(
       signal: controller.signal,
       cache: "no-store",
     });
-
-    clearTimeout(timeoutId);
 
     if (!response.ok) {
       return getMockGoogleResults(trimmedQuery, category);
@@ -110,6 +108,8 @@ export async function fetchGoogleResults(
     });
   } catch {
     return getMockGoogleResults(trimmedQuery, category);
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 

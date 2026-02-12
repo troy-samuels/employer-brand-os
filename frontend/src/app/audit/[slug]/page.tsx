@@ -11,7 +11,12 @@ import { useEffect, useMemo, useState } from "react";
 import { AuditReport, type AuditReportData } from "@/components/audit/audit-report";
 import { LoadingTheatre } from "@/components/audit/loading-theatre";
 
-const MIN_LOADING_TIME_MS = 15_000;
+/**
+ * Minimum time to show loading theatre. Ensures the animation plays long enough
+ * to feel intentional, but doesn't artificially delay fast or failed responses.
+ * Applied only on success; errors surface immediately.
+ */
+const MIN_LOADING_TIME_MS = 4_000;
 
 interface AuditApiError {
   error?: string;
@@ -76,11 +81,6 @@ export default function AuditSlugPage() {
         });
 
         const payload = await safeReadJson<AuditReportData & AuditApiError>(response);
-        const elapsedMs = Date.now() - startedAt;
-
-        if (elapsedMs < MIN_LOADING_TIME_MS) {
-          await sleep(MIN_LOADING_TIME_MS - elapsedMs);
-        }
 
         if (!response.ok) {
           throw new Error(payload.error ?? "Unable to load this audit report.");
@@ -90,17 +90,18 @@ export default function AuditSlugPage() {
           throw new Error("Received an incomplete audit response.");
         }
 
+        // Only pad loading time on success so the animation feels intentional.
+        const elapsedMs = Date.now() - startedAt;
+        if (elapsedMs < MIN_LOADING_TIME_MS) {
+          await sleep(MIN_LOADING_TIME_MS - elapsedMs);
+        }
+
         if (isMounted) {
           setPageState({ status: "success", data: payload });
         }
       } catch (error) {
         if (isAbortError(error)) {
           return;
-        }
-
-        const elapsedMs = Date.now() - startedAt;
-        if (elapsedMs < MIN_LOADING_TIME_MS) {
-          await sleep(MIN_LOADING_TIME_MS - elapsedMs);
         }
 
         const message = error instanceof Error
