@@ -71,8 +71,8 @@ interface WeeklyMonitorResponse {
  */
 function validateCronSecret(provided: string | undefined): boolean {
   const expected = process.env.CRON_SECRET;
-  // When no secret is configured, allow all (dev / first-run friendly).
-  if (!expected) return true;
+  // Allow open access only in non-production environments.
+  if (!expected) return process.env.NODE_ENV !== "production";
   return provided === expected;
 }
 
@@ -181,7 +181,13 @@ export async function POST(
     const { companySlug, companyName, cronSecret } = parsed.data;
 
     // ── Auth ──────────────────────────────────────────────────────────
-    if (!validateCronSecret(cronSecret)) {
+    const headerSecret =
+      request.headers.get("x-rankwell-cron-secret")
+      ?? request.headers.get("x-cron-secret")
+      ?? undefined;
+    const providedSecret = headerSecret ?? cronSecret;
+
+    if (!validateCronSecret(providedSecret)) {
       return apiErrorResponse({
         error: "Invalid cron secret.",
         code: API_ERROR_CODE.unauthorized,

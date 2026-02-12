@@ -24,19 +24,29 @@ import { validateDomain } from './validate-domain';
  * @param origin - The validated origin to allow
  * @returns Headers object with CORS configuration
  */
-export function buildCorsHeaders(origin: string): Headers {
+export function buildCorsHeaders(
+  origin: string,
+  options?: {
+    allowMethods?: string;
+    allowHeaders?: string;
+  }
+): Headers {
   const headers = new Headers();
 
   // Dynamic origin - reflects the requesting origin if validated
   headers.set('Access-Control-Allow-Origin', origin);
 
   // Only GET is needed for reading facts
-  headers.set('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  headers.set(
+    'Access-Control-Allow-Methods',
+    options?.allowMethods ?? 'GET, OPTIONS'
+  );
 
   // Signature headers are required for pixel request authentication.
   headers.set(
     'Access-Control-Allow-Headers',
-    'Content-Type, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
+    options?.allowHeaders ??
+      'Content-Type, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
   );
 
   // Cache preflight for 24 hours
@@ -102,7 +112,11 @@ export function buildErrorHeaders(origin?: string | null): Headers {
  */
 export function buildPreflightResponse(
   origin: string,
-  allowedDomains?: string[]
+  allowedDomains?: string[],
+  options?: {
+    allowMethods?: string;
+    allowHeaders?: string;
+  }
 ): Response {
   if (allowedDomains) {
     const domainResult = validateDomain(origin, null, allowedDomains);
@@ -117,7 +131,7 @@ export function buildPreflightResponse(
     }
   }
 
-  const headers = buildCorsHeaders(origin);
+  const headers = buildCorsHeaders(origin, options);
 
   return new Response(null, {
     status: 204,

@@ -14,6 +14,7 @@ import {
 } from "@/lib/utils/api-response";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import { analyzeClientSubmittedHtml } from "@/lib/audit/client-crawl";
+import { normalizeDomain } from "@/lib/utils/validation";
 
 export const runtime = "nodejs";
 
@@ -30,8 +31,11 @@ const clientCrawlSchema = z.object({
     .max(2048),
   domain: z
     .string()
+    .trim()
     .min(1, "Domain is required.")
-    .max(255),
+    .max(255)
+    .transform((value) => normalizeDomain(value))
+    .refine((value) => value.length > 0, "A valid domain is required."),
 });
 
 export async function POST(request: NextRequest) {
@@ -44,25 +48,42 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const body: unknown = await request.json();
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return apiErrorResponse({
+        error: API_ERROR_MESSAGE.invalidJson,
+        code: API_ERROR_CODE.invalidJson,
+        status: 400,
+      });
+    }
     const parsed = clientCrawlSchema.safeParse(body);
 
     if (!parsed.success) {
       return apiErrorResponse({
         error: parsed.error.issues[0]?.message ?? "Invalid request.",
-        code: "invalid_payload",
+        code: API_ERROR_CODE.invalidPayload,
         status: 400,
       });
     }
 
     const { html, url, domain } = parsed.data;
+    if (Buffer.byteLength(html, "utf8") > MAX_HTML_BYTES) {
+      return apiErrorResponse({
+        error: "HTML content is too large.",
+        code: API_ERROR_CODE.invalidPayload,
+        status: 400,
+      });
+    }
+
     const result = analyzeClientSubmittedHtml(html, url, domain);
 
     return apiSuccessResponse(result);
   } catch {
     return apiErrorResponse({
-      error: "Failed to process submitted HTML.",
-      code: "internal_error",
+      error: API_ERROR_MESSAGE.internal,
+      code: API_ERROR_CODE.internal,
       status: 500,
     });
   }

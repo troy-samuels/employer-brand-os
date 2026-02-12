@@ -3,7 +3,7 @@
  * Module implementation for csrf.ts.
  */
 
-import { type NextRequest } from 'next/server';
+import { type NextRequest } from "next/server";
 
 /**
  * Executes validateCsrf.
@@ -11,11 +11,16 @@ import { type NextRequest } from 'next/server';
  * @returns The resulting value.
  */
 export function validateCsrf(request: NextRequest): boolean {
-  const origin = request.headers.get('origin');
-  if (!origin) return false;
-
-  const host = request.headers.get('host');
+  const host = request.headers.get("host");
   if (!host) return false;
+
+  const origin = request.headers.get("origin");
+  if (!origin) {
+    // Some same-origin browser requests (notably GET) may omit `Origin`.
+    // In that case, only trust explicit same-site/same-origin fetch metadata.
+    const fetchSite = request.headers.get("sec-fetch-site");
+    return fetchSite === "same-origin" || fetchSite === "same-site";
+  }
 
   try {
     const originUrl = new URL(origin);

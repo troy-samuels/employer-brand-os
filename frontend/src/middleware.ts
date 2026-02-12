@@ -26,6 +26,10 @@ const apiPublicRoutes = [
 ];
 
 const mutatingMethods = new Set(["POST", "PUT", "DELETE"]);
+const csrfExemptApiRoutes = [
+  "/api/monitor/weekly", // Cron/scheduler trigger (server-to-server)
+  "/api/pixel/v1/crawl-log", // Authenticated via key + signature
+];
 const API_LIMIT_PER_MINUTE = 60;
 const AUDIT_LIMIT_PER_MINUTE = 10;
 const RATE_WINDOW_MS = 60_000;
@@ -66,6 +70,12 @@ function getRateLimitForPath(pathname: string): number {
   }
 
   return API_LIMIT_PER_MINUTE;
+}
+
+function isCsrfExempt(pathname: string): boolean {
+  return csrfExemptApiRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
 }
 
 function buildRateLimitKey(pathname: string, ip: string): string {
@@ -210,7 +220,11 @@ export async function middleware(request: NextRequest) {
       return withSecurityHeaders(response, pathname, nonce);
     }
 
-    if (mutatingMethods.has(request.method) && !validateCsrf(request)) {
+    if (
+      mutatingMethods.has(request.method) &&
+      !isCsrfExempt(pathname) &&
+      !validateCsrf(request)
+    ) {
       const response = NextResponse.json(
         { error: "Invalid request origin" },
         { status: 403 }
