@@ -14,7 +14,7 @@ import type {
   ComprehensiveLlmAudit,
   ConsensusItem,
 } from "@/types/llm-audit";
-import { LLM_MODELS, getModelsForTier, isModelAvailable } from "@/types/llm-audit";
+import { LLM_MODELS, isModelAvailable } from "@/types/llm-audit";
 
 /* ------------------------------------------------------------------ */
 /* Standard prompts (used when querying each LLM)                      */

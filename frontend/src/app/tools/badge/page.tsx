@@ -14,7 +14,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Copy, Check, Code2, ExternalLink } from "lucide-react";
+import { ArrowRight, Copy, Check, Code2 } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";

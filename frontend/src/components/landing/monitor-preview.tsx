@@ -127,6 +127,7 @@ export default function MonitorPreview() {
                 { src: "/logos/gemini-mono.svg", name: "Gemini" },
               ].map((model) => (
                 <div key={model.name} className="flex items-center gap-1.5">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={model.src}
                     alt={model.name}

@@ -156,11 +156,6 @@ function StreamingResponse({
   const completedRef = useRef(false);
 
   useEffect(() => {
-    setVisibleCount(0);
-    completedRef.current = false;
-  }, [tokens]);
-
-  useEffect(() => {
     if (visibleCount >= tokens.length) {
       if (!completedRef.current) {
         completedRef.current = true;
@@ -262,6 +257,7 @@ export default function BeforeAfter() {
   const sectionRef = useRef<HTMLElement>(null);
 
   const tokens = mode === "without" ? WITHOUT_TOKENS : WITH_TOKENS;
+  const tokensKey = tokens.map((token) => token.text).join("|");
 
   // Start animation when section enters viewport
   useEffect(() => {
@@ -414,6 +410,7 @@ export default function BeforeAfter() {
                   transition={{ duration: 0.15 }}
                 >
                   <StreamingResponse
+                    key={tokensKey}
                     tokens={tokens}
                     onComplete={handleStreamComplete}
                   />

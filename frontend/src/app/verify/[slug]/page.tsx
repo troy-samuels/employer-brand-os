@@ -7,7 +7,6 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabase/admin';
-import { sanitizeHtml } from '@/lib/utils/sanitize-html';
 
 /**
  * Hosted Truth Page
@@ -446,6 +445,7 @@ export default async function TruthPage({ params }: PageProps) {
             {/* Logo */}
             {organization.logoUrl && (
               <div className="mb-6">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={organization.logoUrl}
                   alt={organization.name}

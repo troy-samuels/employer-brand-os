@@ -105,10 +105,12 @@ export interface ClientCrawlResult {
 export function analyzeClientSubmittedHtml(
   html: string,
   url: string,
-  _domain: string,
+  domain: string,
 ): ClientCrawlResult {
   const textContent = stripHtmlTags(html);
   const textLength = textContent.length;
+  const fallbackUrl = domain ? `https://${domain}` : "";
+  const careersPageUrl = url || fallbackUrl;
 
   // Careers page status based on content richness
   let careersPageStatus: "full" | "partial" | "none";
@@ -141,7 +143,7 @@ export function analyzeClientSubmittedHtml(
 
   return {
     careersPageStatus,
-    careersPageUrl: url,
+    careersPageUrl,
     hasSalaryData: salary.hasSalaryData,
     salaryConfidence: salary.confidence,
     detectedCurrency: salary.currency,

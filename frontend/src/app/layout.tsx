@@ -1,26 +1,6 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
-
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  variable: "--font-family-sans",
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-family-mono",
-  display: "swap",
-});
-
-const instrumentSerif = Instrument_Serif({
-  weight: "400",
-  subsets: ["latin"],
-  variable: "--font-family-display",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rankwell.io"),
@@ -35,7 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`min-h-screen bg-background font-sans antialiased ${jakarta.variable} ${jetbrains.variable} ${instrumentSerif.variable}`}>
+      <body className="min-h-screen bg-background font-sans antialiased">
         {/* Grain texture overlay */}
         <div
           className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay"

@@ -4,7 +4,7 @@
  * Runs careers-page analysis on the submitted content and returns updated check results.
  */
 
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { z } from "zod";
 
 import { validateCsrf } from "@/lib/utils/csrf";

@@ -77,19 +77,6 @@ function validateCronSecret(provided: string | undefined): boolean {
 }
 
 /**
- * Shape of a row read from the `monitor_checks` table.
- * Defined locally because the generated Supabase types are not yet
- * regenerated to include this migration.
- */
-interface MonitorCheckRow {
-  check_data: unknown;
-  score: number;
-  previous_score: number | null;
-  changes: unknown;
-  created_at: string;
-}
-
-/**
  * Attempts to load the previous check for a company from Supabase.
  * Gracefully returns `null` when the table doesn't exist yet or the query
  * fails (first-run tolerance).

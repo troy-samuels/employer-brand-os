@@ -147,13 +147,6 @@ function extractDateFromUrl(url: string): { date: string; confidence: DateConfid
 const WAYBACK_CDX_ENDPOINT = "https://web.archive.org/cdx/search/cdx";
 const WAYBACK_TIMEOUT_MS = 8_000;
 
-interface WaybackCapture {
-  /** YYYYMMDDHHMMSS format timestamp. */
-  timestamp: string;
-  /** HTTP status code of the capture. */
-  statusCode: string;
-}
-
 /**
  * Query the Wayback Machine CDX API for capture timestamps of a URL.
  * Returns the most recent successful capture date.

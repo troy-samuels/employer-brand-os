@@ -21,16 +21,6 @@ import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { useAudit } from "@/lib/hooks/use-audit";
 
-/** Shared scroll-reveal animation for all sections. */
-const reveal = {
-  hidden: { opacity: 0, y: 32 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-  },
-};
-
 export default function Home() {
   const { state, isLoading, result, error, runAudit, reset } = useAudit();
 
