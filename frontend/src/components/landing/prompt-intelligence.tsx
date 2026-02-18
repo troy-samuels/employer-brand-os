@@ -6,7 +6,7 @@
 
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Plus, Mic, AudioLines } from "lucide-react";
 import Image from "next/image";
@@ -36,56 +36,57 @@ export default function PromptIntelligence() {
   const phaseRef = useRef<"typing" | "pausing" | "erasing" | "waiting">("typing");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const tick = useCallback(() => {
-    const prompt = PROMPTS[indexRef.current] ?? "";
-
-    if (phaseRef.current === "typing") {
-      if (charRef.current < prompt.length) {
-        charRef.current += 1;
-        setDisplayed(prompt.slice(0, charRef.current));
-        setIsTyping(true);
-        timerRef.current = setTimeout(tick, TYPE_SPEED + Math.random() * 30);
-      } else {
-        phaseRef.current = "pausing";
-        setIsTyping(false);
-        timerRef.current = setTimeout(tick, PAUSE_AFTER_TYPE);
-      }
-    } else if (phaseRef.current === "pausing") {
-      phaseRef.current = "erasing";
-      setIsTyping(true);
-      timerRef.current = setTimeout(tick, ERASE_SPEED);
-    } else if (phaseRef.current === "erasing") {
-      if (charRef.current > 0) {
-        charRef.current -= 1;
-        setDisplayed(prompt.slice(0, charRef.current));
-        timerRef.current = setTimeout(tick, ERASE_SPEED);
-      } else {
-        phaseRef.current = "waiting";
-        setIsTyping(false);
-        timerRef.current = setTimeout(tick, PAUSE_AFTER_ERASE);
-      }
-    } else if (phaseRef.current === "waiting") {
-      indexRef.current = (indexRef.current + 1) % PROMPTS.length;
-      charRef.current = 0;
-      phaseRef.current = "typing";
-      setIsTyping(true);
-      timerRef.current = setTimeout(tick, TYPE_SPEED);
-    }
-  }, []);
-
   useEffect(() => {
     if (reducedMotion) {
-      setDisplayed(PROMPTS[0]);
-      setIsTyping(false);
       return;
     }
+
+    const tick = () => {
+      const prompt = PROMPTS[indexRef.current] ?? "";
+
+      if (phaseRef.current === "typing") {
+        if (charRef.current < prompt.length) {
+          charRef.current += 1;
+          setDisplayed(prompt.slice(0, charRef.current));
+          setIsTyping(true);
+          timerRef.current = setTimeout(tick, TYPE_SPEED + Math.random() * 30);
+        } else {
+          phaseRef.current = "pausing";
+          setIsTyping(false);
+          timerRef.current = setTimeout(tick, PAUSE_AFTER_TYPE);
+        }
+      } else if (phaseRef.current === "pausing") {
+        phaseRef.current = "erasing";
+        setIsTyping(true);
+        timerRef.current = setTimeout(tick, ERASE_SPEED);
+      } else if (phaseRef.current === "erasing") {
+        if (charRef.current > 0) {
+          charRef.current -= 1;
+          setDisplayed(prompt.slice(0, charRef.current));
+          timerRef.current = setTimeout(tick, ERASE_SPEED);
+        } else {
+          phaseRef.current = "waiting";
+          setIsTyping(false);
+          timerRef.current = setTimeout(tick, PAUSE_AFTER_ERASE);
+        }
+      } else if (phaseRef.current === "waiting") {
+        indexRef.current = (indexRef.current + 1) % PROMPTS.length;
+        charRef.current = 0;
+        phaseRef.current = "typing";
+        setIsTyping(true);
+        timerRef.current = setTimeout(tick, TYPE_SPEED);
+      }
+    };
+
     timerRef.current = setTimeout(tick, 800);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [tick, reducedMotion]);
+  }, [reducedMotion]);
 
-  const showCursor = isTyping || (!isTyping && displayed.length > 0);
+  const visiblePrompt = reducedMotion ? (PROMPTS[0] ?? "") : displayed;
+  const isActivelyTyping = reducedMotion ? false : isTyping;
+  const showCursor = isActivelyTyping || (!isActivelyTyping && visiblePrompt.length > 0);
 
   return (
     <section className="py-20 lg:py-24 bg-neutral-50/40">
@@ -93,7 +94,6 @@ export default function PromptIntelligence() {
         <motion.h2
           className="text-2xl lg:text-3xl font-medium text-neutral-950 text-center mb-3"
           style={{ letterSpacing: "-0.03em" }}
-          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -102,7 +102,6 @@ export default function PromptIntelligence() {
         </motion.h2>
         <motion.p
           className="text-sm text-neutral-400 text-center mb-12"
-          initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
@@ -113,7 +112,6 @@ export default function PromptIntelligence() {
         {/* Mock AI chat — Claude style */}
         <motion.div
           className="mx-auto max-w-md"
-          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 20 }}
@@ -168,7 +166,7 @@ export default function PromptIntelligence() {
             <div className="px-4 pb-4">
               <div className="rounded-2xl border border-neutral-200 bg-white px-4 py-3">
                 <div className="min-h-[1.5rem] text-[15px] text-neutral-900 mb-3">
-                  {displayed}
+                  {visiblePrompt}
                   {showCursor && (
                     <motion.span
                       className="inline-block w-[2px] h-[17px] bg-neutral-900 ml-0.5 align-middle"
@@ -176,7 +174,7 @@ export default function PromptIntelligence() {
                       transition={{ duration: 0.5, repeat: Infinity }}
                     />
                   )}
-                  {!displayed && !isTyping && (
+                  {!visiblePrompt && !isActivelyTyping && (
                     <span className="text-neutral-400">Ask about any employer...</span>
                   )}
                 </div>

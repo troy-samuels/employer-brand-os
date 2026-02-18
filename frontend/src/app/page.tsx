@@ -38,7 +38,6 @@ export default function Home() {
               {state !== "complete" && (
                 <motion.div
                   key="hero"
-                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
@@ -61,7 +60,6 @@ export default function Home() {
               {state === "idle" && (
                 <motion.div
                   key="input"
-                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5, delay: 0.15 }}

@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import { headers } from "next/headers";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
@@ -14,14 +15,19 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const nonce = (await headers()).get("x-rankwell-csp-nonce") ?? "";
+
   return (
     <html lang="en">
-      <body className="min-h-screen bg-background font-sans antialiased">
+      <head>
+        <meta name="csp-nonce" content={nonce} />
+      </head>
+      <body className="min-h-screen bg-background font-sans antialiased" nonce={nonce}>
         {/* Grain texture overlay */}
         <div
           className="pointer-events-none fixed inset-0 z-[9999] opacity-[0.03] mix-blend-overlay"
