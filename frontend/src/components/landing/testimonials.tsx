@@ -302,7 +302,7 @@ export default function BeforeAfter() {
     <section
       ref={sectionRef}
       id="testimonials"
-      className="py-24 lg:py-32 bg-white relative overflow-hidden border-t border-neutral-100"
+      className="py-24 lg:py-32 bg-slate-50 relative overflow-hidden"
     >
       <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12">
         {/* Section header */}

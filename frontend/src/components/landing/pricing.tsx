@@ -65,7 +65,7 @@ export default function Pricing() {
                 "relative rounded-2xl p-7 transition-all duration-300",
                 plan.highlighted
                   ? "bg-neutral-950 border border-white/10 shadow-2xl shadow-black/20 md:scale-105 md:py-10"
-                  : "bg-transparent"
+                  : "bg-transparent border border-neutral-200"
               )}
             >
               {plan.highlighted && (

@@ -119,7 +119,7 @@ export default function MonitorPreview() {
               and exactly what to fix next.
             </p>
 
-            <div className="mt-8 flex items-center gap-5">
+            <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
               {[
                 { src: "/logos/chatgpt-mono.svg", name: "ChatGPT" },
                 { src: "/logos/perplexity-mono.svg", name: "Perplexity" },

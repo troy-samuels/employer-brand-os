@@ -7,7 +7,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { Plus, Mic, AudioLines } from "lucide-react";
 import Image from "next/image";
 
@@ -28,6 +28,7 @@ const PAUSE_AFTER_TYPE = 2200;
 const PAUSE_AFTER_ERASE = 400;
 
 export default function PromptIntelligence() {
+  const reducedMotion = useReducedMotion();
   const [displayed, setDisplayed] = useState("");
   const [isTyping, setIsTyping] = useState(true);
   const indexRef = useRef(0);
@@ -73,11 +74,16 @@ export default function PromptIntelligence() {
   }, []);
 
   useEffect(() => {
+    if (reducedMotion) {
+      setDisplayed(PROMPTS[0]);
+      setIsTyping(false);
+      return;
+    }
     timerRef.current = setTimeout(tick, 800);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [tick]);
+  }, [tick, reducedMotion]);
 
   const showCursor = isTyping || (!isTyping && displayed.length > 0);
 

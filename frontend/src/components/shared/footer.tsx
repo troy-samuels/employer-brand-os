@@ -12,7 +12,7 @@ import Link from "next/link";
 export function Footer() {
   return (
     <footer className="border-t border-slate-200 bg-slate-900">
-      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 lg:py-16 text-sm">
+      <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-12 pb-28 sm:pb-12 lg:pb-16 text-sm">
         <div className="flex flex-col gap-8 sm:flex-row sm:items-start sm:justify-between">
           {/* Left */}
           <div className="flex flex-col gap-3">

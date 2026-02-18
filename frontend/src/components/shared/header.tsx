@@ -21,7 +21,7 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60 pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 lg:px-12 py-3.5">
         <Link href="/" className="text-lg font-bold text-slate-900 tracking-tight">
           Rankwell
