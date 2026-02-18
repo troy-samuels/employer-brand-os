@@ -101,6 +101,7 @@ export default function MonitorPreview() {
         <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
           {/* Left — text */}
           <motion.div
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -141,6 +142,7 @@ export default function MonitorPreview() {
 
           {/* Right — 3D tilt score card */}
           <motion.div
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}

@@ -94,6 +94,7 @@ export default function PromptIntelligence() {
         <motion.h2
           className="text-2xl lg:text-3xl font-medium text-neutral-950 text-center mb-3"
           style={{ letterSpacing: "-0.03em" }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -102,6 +103,7 @@ export default function PromptIntelligence() {
         </motion.h2>
         <motion.p
           className="text-sm text-neutral-400 text-center mb-12"
+          initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
@@ -112,6 +114,7 @@ export default function PromptIntelligence() {
         {/* Mock AI chat — Claude style */}
         <motion.div
           className="mx-auto max-w-md"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 20 }}

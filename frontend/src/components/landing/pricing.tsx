@@ -37,6 +37,7 @@ export default function Pricing() {
       <div className="max-w-[960px] mx-auto px-6 lg:px-12">
         <motion.div
           className="text-center mb-16"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={spring}
@@ -56,6 +57,7 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ ...spring, delay: i * 0.08 }}
@@ -122,6 +124,7 @@ export default function Pricing() {
 
         <motion.div
           className="mt-10 text-center"
+          initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3 }}

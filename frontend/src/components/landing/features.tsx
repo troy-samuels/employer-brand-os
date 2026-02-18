@@ -53,6 +53,7 @@ function SpotlightCard({
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ ...spring, delay: index * 0.1 }}
@@ -86,6 +87,7 @@ export default function Features() {
         <motion.h2
           className="text-3xl lg:text-4xl font-medium text-neutral-950 text-center mb-16 lg:mb-20"
           style={{ letterSpacing: "-0.03em" }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-50px" }}
           transition={spring}

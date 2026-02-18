@@ -308,6 +308,7 @@ export default function BeforeAfter() {
         {/* Section header */}
         <motion.div
           className="mb-14 lg:mb-16"
+          initial={{ opacity: 0, y: 32 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
@@ -365,6 +366,7 @@ export default function BeforeAfter() {
         {/* ChatGPT interface — single panel */}
         <motion.div
           className="max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
