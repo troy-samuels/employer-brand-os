@@ -30,16 +30,16 @@ export default function CTA() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ type: "spring", stiffness: 200, damping: 25 }}
-          className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50"
+          className="fixed left-1/2 z-50 w-[calc(100%-2rem)] -translate-x-1/2 bottom-[calc(1.5rem+env(safe-area-inset-bottom))] sm:w-auto"
         >
           <Link
             href="/#audit"
-            className="flex items-center gap-3 rounded-full bg-neutral-950/90 backdrop-blur-2xl border border-white/10 px-6 py-3 shadow-2xl shadow-black/30 hover:bg-neutral-950 transition-colors duration-200"
+            className="flex w-full flex-col items-center gap-3 rounded-2xl bg-neutral-950/90 backdrop-blur-2xl border border-white/10 px-4 py-3 text-center shadow-2xl shadow-black/30 transition-colors duration-200 hover:bg-neutral-950 sm:w-auto sm:flex-row sm:rounded-full sm:px-6 sm:text-left"
           >
-            <span className="text-sm text-neutral-300">
+            <span className="text-sm text-neutral-300 leading-snug">
               See what AI says about your company
             </span>
-            <span className="rounded-full bg-brand-accent px-4 py-1.5 text-xs font-semibold text-white">
+            <span className="w-full rounded-full bg-brand-accent px-4 py-1.5 text-xs font-semibold text-white sm:w-auto">
               Free audit
             </span>
           </Link>

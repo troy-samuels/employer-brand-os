@@ -44,56 +44,56 @@ interface Token {
 
 const WITHOUT_TOKENS: Token[] = tokensFrom([
   { text: "Here's a general picture of " },
-  { text: "Meridian Tech", className: "font-semibold text-white" },
+  { text: "Meridian Tech", className: "font-semibold text-neutral-900" },
   { text: " based on employee reviews:\n\n" },
-  { text: "👩‍💼 Culture\n", className: "font-semibold text-white" },
+  { text: "👩‍💼 Culture\n", className: "font-semibold text-neutral-900" },
   { text: "• Described as " },
   { text: "\"decent work culture\"", className: "italic" },
   { text: " with mixed management experiences. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n" },
   { text: "• Compensation described as " },
   { text: "\"average\"", className: "italic" },
   { text: " — not exceptional. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
-  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-white" },
+  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
   { text: "• Estimated: " },
-  { text: "£55,000 – £68,000", className: "font-semibold text-white" },
+  { text: "£55,000 – £68,000", className: "font-semibold text-neutral-900" },
   { text: " based on aggregated data. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: " " },
-  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-[#2f2f2f] rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
-  { text: "❌ £20K below actual range", className: "text-[11px] px-2 py-1 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 font-medium inline-block" },
+  { text: "❌ £20K below actual range", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
   { text: "  " },
-  { text: "❌ No verified sources", className: "text-[11px] px-2 py-1 bg-red-500/15 border border-red-500/25 rounded-lg text-red-400 font-medium inline-block" },
+  { text: "❌ No verified sources", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
 ]);
 
 const WITH_TOKENS: Token[] = tokensFrom([
   { text: "Here's a detailed overview of " },
-  { text: "Meridian Tech", className: "font-semibold text-white" },
+  { text: "Meridian Tech", className: "font-semibold text-neutral-900" },
   { text: " based on verified employer data:\n\n" },
-  { text: "👩‍💼 Culture\n", className: "font-semibold text-white" },
+  { text: "👩‍💼 Culture\n", className: "font-semibold text-neutral-900" },
   { text: "• " },
-  { text: "Remote-first", className: "font-semibold text-white" },
+  { text: "Remote-first", className: "font-semibold text-neutral-900" },
   { text: " with optional London office. Strong autonomy, transparent leadership. " },
-  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
   { text: "\n" },
   { text: "• Benefits: " },
-  { text: "private healthcare, £2K learning budget, 30 days holiday", className: "font-semibold text-white" },
+  { text: "private healthcare, £2K learning budget, 30 days holiday", className: "font-semibold text-neutral-900" },
   { text: ". " },
-  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
   { text: "\n\n" },
-  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-white" },
+  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
   { text: "• Published range: " },
-  { text: "£75,000 – £95,000", className: "font-semibold text-white" },
+  { text: "£75,000 – £95,000", className: "font-semibold text-neutral-900" },
   { text: " base + equity + bonus. " },
-  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-500/10 border border-emerald-500/20 rounded-full text-[10px] text-emerald-400 font-medium" },
+  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
   { text: "\n\n" },
-  { text: "✓ Verified 2 days ago", className: "text-[11px] px-2 py-1 bg-emerald-500/15 border border-emerald-500/25 rounded-lg text-emerald-400 font-medium inline-block" },
+  { text: "✓ Verified 2 days ago", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
   { text: "  " },
-  { text: "✓ Employer confirmed", className: "text-[11px] px-2 py-1 bg-emerald-500/15 border border-emerald-500/25 rounded-lg text-emerald-400 font-medium inline-block" },
+  { text: "✓ Employer confirmed", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
 ]);
 
 /** Split compound tokens into individual words for streaming. */
@@ -126,7 +126,7 @@ function ThinkingDots() {
         {[0, 1, 2].map((i) => (
           <motion.span
             key={i}
-            className="w-2 h-2 rounded-full bg-neutral-500"
+            className="w-2 h-2 rounded-full bg-neutral-400"
             animate={{ opacity: [0.3, 1, 0.3] }}
             transition={{
               duration: 1,
@@ -175,7 +175,7 @@ function StreamingResponse({
 
   return (
     <div className="px-4 pb-4">
-      <p className="text-[13.5px] text-neutral-300 leading-relaxed whitespace-pre-wrap">
+      <p className="text-[13.5px] text-neutral-700 leading-relaxed whitespace-pre-wrap">
         {tokens.slice(0, visibleCount).map((t, i) => (
           <span key={i} className={t.className}>
             {t.text}
@@ -183,7 +183,7 @@ function StreamingResponse({
         ))}
         {visibleCount < tokens.length && (
           <motion.span
-            className="inline-block w-[2px] h-[14px] bg-neutral-400 ml-0.5 align-middle"
+            className="inline-block w-[2px] h-[14px] bg-neutral-900 ml-0.5 align-middle"
             animate={{ opacity: [1, 0] }}
             transition={{ duration: 0.5, repeat: Infinity }}
           />
@@ -199,16 +199,16 @@ function StreamingResponse({
 
 function ChatGPTHeader() {
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-b border-white/[0.04]">
+    <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100">
       <div className="flex items-center gap-3">
         <div className="flex flex-col gap-[3px] w-5 h-5 justify-center">
           <span className="w-4 h-[1.5px] bg-neutral-400 rounded-full" />
           <span className="w-3 h-[1.5px] bg-neutral-400 rounded-full" />
         </div>
         <div className="flex items-center gap-1">
-          <span className="text-[14px] font-semibold text-white">ChatGPT</span>
-          <span className="text-[14px] text-neutral-500">5.2</span>
-          <ChevronDown className="w-3 h-3 text-neutral-500 ml-0.5" />
+          <span className="text-[14px] font-semibold text-neutral-900">ChatGPT</span>
+          <span className="text-[14px] text-neutral-400">5.2</span>
+          <ChevronDown className="w-3 h-3 text-neutral-400 ml-0.5" />
         </div>
       </div>
       <div className="flex items-center gap-3">
@@ -222,8 +222,8 @@ function ChatGPTHeader() {
 function UserMessage({ text }: { text: string }) {
   return (
     <div className="flex justify-end px-4 py-3">
-      <div className="max-w-[80%] bg-[#303030] rounded-[20px] px-4 py-2.5">
-        <p className="text-[14px] text-neutral-100 leading-relaxed">{text}</p>
+      <div className="max-w-[80%] bg-neutral-100 rounded-[20px] px-4 py-2.5">
+        <p className="text-[14px] text-neutral-900 leading-relaxed">{text}</p>
       </div>
     </div>
   );
@@ -231,15 +231,15 @@ function UserMessage({ text }: { text: string }) {
 
 function ChatGPTInputBar() {
   return (
-    <div className="px-3 py-3 border-t border-white/[0.04]">
-      <div className="flex items-center gap-2 bg-[#303030] rounded-full px-4 py-2.5">
+    <div className="px-3 py-3 border-t border-neutral-100">
+      <div className="flex items-center gap-2 bg-neutral-100 rounded-full px-4 py-2.5">
         <Plus className="w-5 h-5 text-neutral-400 shrink-0" />
-        <span className="flex-1 text-[14px] text-neutral-500">
+        <span className="flex-1 text-[14px] text-neutral-400">
           Ask anything
         </span>
         <Mic className="w-5 h-5 text-neutral-400 shrink-0" />
-        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center shrink-0">
-          <AudioLines className="w-4 h-4 text-neutral-300" />
+        <div className="w-8 h-8 rounded-full bg-neutral-900 flex items-center justify-center shrink-0">
+          <AudioLines className="w-4 h-4 text-white" />
         </div>
       </div>
     </div>
@@ -302,11 +302,8 @@ export default function BeforeAfter() {
     <section
       ref={sectionRef}
       id="testimonials"
-      className="py-24 lg:py-32 bg-slate-900 relative overflow-hidden"
+      className="py-24 lg:py-32 bg-white relative overflow-hidden border-t border-neutral-100"
     >
-      {/* Ambient glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-brand-accent/5 rounded-full blur-3xl" />
-
       <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12">
         {/* Section header */}
         <motion.div
@@ -316,10 +313,10 @@ export default function BeforeAfter() {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
-          <p className="overline text-brand-accent-light mb-3">
+          <p className="overline text-brand-accent mb-3">
             The difference
           </p>
-          <h2 className="text-3xl lg:text-4xl font-medium text-white max-w-2xl" style={{ letterSpacing: "-0.03em" }}>
+          <h2 className="text-3xl lg:text-4xl font-medium text-neutral-950 max-w-2xl" style={{ letterSpacing: "-0.03em" }}>
             What candidates see when they ask AI about you
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
@@ -335,14 +332,14 @@ export default function BeforeAfter() {
             className={cn(
               "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200",
               mode === "without"
-                ? "bg-red-500/15 text-red-400 border border-red-500/30"
-                : "bg-white/5 text-neutral-500 border border-white/10 hover:text-neutral-300"
+                ? "bg-red-50 text-red-600 border border-red-200"
+                : "bg-neutral-50 text-neutral-400 border border-neutral-200 hover:text-neutral-600"
             )}
           >
             <span
               className={cn(
                 "w-2 h-2 rounded-full",
-                mode === "without" ? "bg-red-500" : "bg-neutral-600"
+                mode === "without" ? "bg-red-500" : "bg-neutral-300"
               )}
             />
             Without Rankwell
@@ -352,14 +349,14 @@ export default function BeforeAfter() {
             className={cn(
               "flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-200",
               mode === "with"
-                ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
-                : "bg-white/5 text-neutral-500 border border-white/10 hover:text-neutral-300"
+                ? "bg-emerald-50 text-emerald-600 border border-emerald-200"
+                : "bg-neutral-50 text-neutral-400 border border-neutral-200 hover:text-neutral-600"
             )}
           >
             <span
               className={cn(
                 "w-2 h-2 rounded-full",
-                mode === "with" ? "bg-emerald-500" : "bg-neutral-600"
+                mode === "with" ? "bg-emerald-500" : "bg-neutral-300"
               )}
             />
             With Rankwell
@@ -376,10 +373,10 @@ export default function BeforeAfter() {
         >
           <div
             className={cn(
-              "rounded-2xl bg-[#212121] overflow-hidden shadow-2xl transition-all duration-500",
+              "rounded-2xl bg-white overflow-hidden transition-all duration-500",
               mode === "with"
-                ? "border border-emerald-500/15 shadow-emerald-900/10"
-                : "border border-white/[0.06] shadow-black/40"
+                ? "border border-emerald-200"
+                : "border border-neutral-200"
             )}
           >
             <ChatGPTHeader />
@@ -435,7 +432,7 @@ export default function BeforeAfter() {
               Now tap{" "}
               <button
                 onClick={() => handleToggle("with")}
-                className="text-emerald-400 font-semibold hover:underline"
+                className="text-emerald-600 font-semibold hover:underline"
               >
                 With Rankwell
               </button>{" "}
@@ -444,7 +441,7 @@ export default function BeforeAfter() {
           )}
           {phase === "done" && mode === "with" && (
             <motion.p
-              className="text-center text-sm text-emerald-400/70 mt-6"
+              className="text-center text-sm text-emerald-600/70 mt-6"
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}

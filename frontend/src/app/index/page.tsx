@@ -293,7 +293,7 @@ export default async function IndexPage() {
                 {/* Full table */}
                 <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
                   {/* Table header */}
-                  <div className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3 border-b border-neutral-100 bg-slate-50/80 text-xs font-semibold text-slate-500">
+                  <div className="grid grid-cols-[3rem_1fr_4rem] gap-2 px-4 py-3 border-b border-neutral-100 bg-slate-50/80 text-xs font-semibold text-slate-500 sm:grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] sm:px-5">
                     <span>#</span>
                     <span>Company</span>
                     <span className="text-center hidden sm:block">Careers</span>
@@ -309,7 +309,7 @@ export default async function IndexPage() {
                     <Link
                       key={company.company_slug}
                       href={`/company/${company.company_slug}`}
-                      className="grid grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] gap-2 px-5 py-3.5 border-b border-neutral-50 hover:bg-slate-50/50 transition-colors items-center group"
+                      className="grid grid-cols-[3rem_1fr_4rem] gap-2 px-4 py-3.5 border-b border-neutral-50 transition-colors items-center group hover:bg-slate-50/50 sm:grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] sm:px-5"
                     >
                       <span className="text-sm font-medium text-slate-400 tabular-nums">
                         {i + 1}
