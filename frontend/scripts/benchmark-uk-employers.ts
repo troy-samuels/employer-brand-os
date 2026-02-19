@@ -20,7 +20,9 @@ import { existsSync, readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// ---------- Bootstrap env before any @/ imports ----------
+// ---------- Bootstrap env BEFORE any @/ imports ----------
+// admin.ts throws at module-load time if env is missing,
+// so we must populate process.env first, then dynamic-import.
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url));
 const PROJECT_ROOT = resolve(SCRIPT_DIR, "..");
 const ENV_PATH = resolve(PROJECT_ROOT, ".env.local");
@@ -49,11 +51,8 @@ function loadEnvFile(path: string): void {
 
 loadEnvFile(ENV_PATH);
 
-// ---------- Imports that depend on env ----------
-// These use @/ path aliases resolved via tsx
-import { runWebsiteChecks, type WebsiteCheckResult } from "@/lib/audit/website-checks";
-import { persistAuditResult } from "@/lib/audit/audit-persistence";
-import { untypedTable } from "@/lib/supabase/untyped-table";
+// ---------- Module-level types (no env dependency) ----------
+// Actual imports happen inside bootstrap() to guarantee env is loaded first.
 
 // ---------- Config ----------
 const DELAY_BETWEEN_AUDITS_MS = 3_000;
@@ -199,11 +198,25 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// Lazily resolved after env is loaded
+let _untypedTable: (name: string) => ReturnType<typeof import("@/lib/supabase/untyped-table")["untypedTable"]>;
+let _runWebsiteChecks: typeof import("@/lib/audit/website-checks")["runWebsiteChecks"];
+let _persistAuditResult: typeof import("@/lib/audit/audit-persistence")["persistAuditResult"];
+
+async function loadModules(): Promise<void> {
+  const { untypedTable } = await import("@/lib/supabase/untyped-table");
+  const { runWebsiteChecks } = await import("@/lib/audit/website-checks");
+  const { persistAuditResult } = await import("@/lib/audit/audit-persistence");
+  _untypedTable = untypedTable;
+  _runWebsiteChecks = runWebsiteChecks;
+  _persistAuditResult = persistAuditResult;
+}
+
 async function wasRecentlyAudited(companySlug: string): Promise<boolean> {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - SKIP_IF_AUDITED_WITHIN_DAYS);
 
-  const { data, error } = await untypedTable("audit_website_checks")
+  const { data, error } = await _untypedTable("audit_website_checks")
     .select("id")
     .eq("company_slug", companySlug)
     .gte("created_at", cutoff.toISOString())
@@ -245,6 +258,8 @@ interface BenchmarkResult {
 }
 
 async function main() {
+  await loadModules();
+
   console.log("╔══════════════════════════════════════════════════════════╗");
   console.log("║   Rankwell UK Employer Benchmark                       ║");
   console.log("╚══════════════════════════════════════════════════════════╝");
@@ -279,13 +294,13 @@ async function main() {
     process.stdout.write(`${progress} 🔍 ${employer.name} (${employer.domain})... `);
 
     try {
-      const result: WebsiteCheckResult = await runWebsiteChecks(
+      const result = await _runWebsiteChecks(
         employer.domain,
         employer.name,
       );
 
       // Persist to Supabase (fire-and-forget)
-      void persistAuditResult(result, "benchmark-script");
+      void _persistAuditResult(result, "benchmark-script");
 
       results.push({
         name: employer.name,
