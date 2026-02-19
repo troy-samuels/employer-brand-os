@@ -88,6 +88,10 @@ vi.mock("@/lib/audit/audit-logger", () => ({
   logAuditEvent: vi.fn(() => Promise.resolve()),
 }));
 
+vi.mock("@/lib/audit/audit-persistence", () => ({
+  persistAuditResult: vi.fn(() => Promise.resolve()),
+}));
+
 vi.mock("@/lib/utils/rate-limiter", () => ({
   RateLimiter: class {
     async check() {

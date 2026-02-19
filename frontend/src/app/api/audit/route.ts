@@ -9,6 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 import { logAuditRequest } from "@/lib/audit/audit-logger";
+import { persistAuditResult } from "@/lib/audit/audit-persistence";
 import { resolveCompanyUrl } from "@/lib/audit/company-resolver";
 import { isLikelyDomainOrUrl, validateUrl } from "@/lib/audit/url-validator";
 import { runWebsiteChecks, type WebsiteCheckResult } from "@/lib/audit/website-checks";
@@ -204,6 +205,9 @@ export async function POST(
         score: result.score,
       },
     });
+
+    // Fire-and-forget: persist to audit_website_checks + public_audits
+    void persistAuditResult(result, clientIp);
 
     return apiSuccessResponse<WebsiteCheckResult>(result);
   } catch (error) {
