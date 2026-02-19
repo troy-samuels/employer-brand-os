@@ -253,6 +253,7 @@ interface BenchmarkResult {
   careersPageStatus: string;
   robotsTxtStatus: string;
   atsDetected: string | null;
+  contentFormatScore: number;
   auditedAt: string;
   error?: string;
 }
@@ -314,6 +315,7 @@ async function main() {
         careersPageStatus: result.careersPageStatus,
         robotsTxtStatus: result.robotsTxtStatus,
         atsDetected: result.atsDetected,
+        contentFormatScore: result.scoreBreakdown.contentFormat,
         auditedAt: new Date().toISOString(),
       });
 
@@ -336,6 +338,7 @@ async function main() {
         careersPageStatus: "not_found",
         robotsTxtStatus: "not_found",
         atsDetected: null,
+        contentFormatScore: 0,
         auditedAt: new Date().toISOString(),
         error: message,
       });
@@ -367,7 +370,7 @@ async function main() {
   console.log(`\n📄 JSON: ${jsonPath}`);
 
   // Write CSV
-  const csvHeader = "Company,Domain,Sector,Score,llms.txt,JSON-LD,Salary Data,Careers Page,robots.txt,ATS,Audited At";
+  const csvHeader = "Company,Domain,Sector,Score,llms.txt,JSON-LD,Salary Data,Careers Page,robots.txt,ATS,Content Format Score,Audited At";
   const csvRows = results.map((r) =>
     [
       `"${r.name}"`,
@@ -380,6 +383,7 @@ async function main() {
       r.careersPageStatus,
       r.robotsTxtStatus,
       r.atsDetected || "None",
+      r.contentFormatScore ?? 0,
       r.auditedAt,
     ].join(","),
   );

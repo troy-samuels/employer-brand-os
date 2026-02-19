@@ -1480,24 +1480,18 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
  * Evidence-based model (Feb 2026) — aligned with Princeton GEO study,
  * Digital Bloom 7K-citation analysis, and Senthor/SE Ranking llms.txt studies.
  *
- *   Structured data ........ 27  (JSON-LD: proven 30-40% citation boost)
+ *   Structured data ........ 28  (JSON-LD: proven 30-40% citation boost)
  *   Bot access ............. 17  (foundational: AI crawlers must reach your content)
  *   Careers page ........... 17  (content quality + format for AI citation)
  *   Brand reputation ....... 17  (multi-platform presence: 4+ platforms = 2.8x citations)
  *   Salary transparency .... 12  (key candidate query; machine-readable ranges matter)
- *   Content format ......... 7   (FAQ schema, semantic HTML, answer-first structure)
- *   llms.txt ............... 3   (minor signal — limited evidence of AI bot adoption)
+ *   Content format ......... 9   (FAQ schema, semantic HTML, answer-first structure)
+ *   llms.txt ............... 0   (proven zero impact — Senthor 10M+ requests, SE Ranking 300K domains)
  */
 
-function scoreLlmsCheck(hasLlmsTxt: boolean, llmsTxtHasEmployment: boolean): number {
-  // Downgraded: Senthor (10M+ requests) and SE Ranking (300K domains) studies
-  // found zero measurable impact on AI citations. Kept as minor signal only.
-  if (hasLlmsTxt && llmsTxtHasEmployment) {
-    return 3;
-  }
-  if (hasLlmsTxt) {
-    return 1;
-  }
+function scoreLlmsCheck(_hasLlmsTxt: boolean, _llmsTxtHasEmployment: boolean): number {
+  // Zeroed: Senthor (10M+ requests) and SE Ranking (300K domains) studies
+  // found zero measurable impact on AI citations. Kept for backward compatibility.
   return 0;
 }
 
@@ -1506,15 +1500,15 @@ function scoreJsonLdCheck(schemas: string[]): number {
   // (Princeton GEO study, Digital Bloom report). Most impactful technical signal.
   const hasJobSchema = schemas.includes("JobPosting") || schemas.includes("EmployerAggregateRating");
   if (hasJobSchema) {
-    return 27;
+    return 28;
   }
 
   if (schemas.includes("Organization")) {
-    return 15;
+    return 16;
   }
 
   if (schemas.length > 0) {
-    return 6;
+    return 7;
   }
 
   return 0;
@@ -1552,37 +1546,51 @@ function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number): nu
  * Score content format signals that AI models prefer to cite.
  * Based on Princeton GEO study: content with citations, statistics, quotations,
  * and structured Q&A format sees up to 40% visibility boost.
+ *
+ * Max: 9 points.
  */
-function scoreContentFormat(careersHtml: string | null, hasJsonld: boolean, hasSitemap: boolean): number {
+function scoreContentFormat(careersHtml: string | null): number {
   if (!careersHtml) return 0;
 
   let score = 0;
   const html = careersHtml.toLowerCase();
 
-  // FAQ schema or FAQ-like structure (AI prefers Q&A format)
+  // FAQ schema or FAQ-like structure (AI prefers Q&A format) — 2 pts
   if (html.includes('"faqpage"') || html.includes('"question"') ||
       (html.includes('<details') && html.includes('<summary'))) {
     score += 2;
   }
 
-  // Semantic heading structure (proper h1-h3 hierarchy helps AI parse)
+  // Semantic heading structure (proper h1→h2→h3 hierarchy helps AI parse) — 2 pts
   const hasH1 = /<h1[\s>]/i.test(careersHtml);
   const hasH2 = /<h2[\s>]/i.test(careersHtml);
   if (hasH1 && hasH2) {
     score += 2;
   }
 
-  // Tables or structured lists (AI prefers tabular/list data)
+  // Tables or definition lists (AI prefers tabular/structured data) — 1 pt
   if (html.includes('<table') || html.includes('<dl')) {
     score += 1;
   }
 
-  // Sitemap present (helps AI crawlers discover content)
-  if (hasSitemap) {
+  // Answer-first paragraph structure: short opening paragraphs <60 words — 2 pts
+  // Checks the first <p> tag after the first <h1> or <h2>
+  const firstParaMatch = careersHtml.match(/<(?:h[12])[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
+  if (firstParaMatch?.[1]) {
+    const plainText = firstParaMatch[1].replace(/<[^>]+>/g, ' ').trim();
+    const wordCount = plainText.split(/\s+/).filter(Boolean).length;
+    if (wordCount > 0 && wordCount < 60) {
+      score += 2;
+    }
+  }
+
+  // ARIA/role attributes on key sections (accessibility = AI parsability) — 2 pts
+  if (/\brole\s*=\s*["'](?:main|navigation|region|complementary|banner)/i.test(careersHtml) ||
+      /\baria-label(?:ledby)?\s*=/i.test(careersHtml)) {
     score += 2;
   }
 
-  return Math.min(score, 7);
+  return Math.min(score, 9);
 }
 
 /**
@@ -1747,7 +1755,7 @@ export async function runWebsiteChecks(
     careersPage: scoreCareersCheck(careersPageStatus),
     brandReputation: scoreBrandReputation(brandReputation),
     salaryData: salaryScore,
-    contentFormat: scoreContentFormat(careersHtml, hasJsonld, hasSitemap),
+    contentFormat: scoreContentFormat(careersHtml),
     llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
   };
 

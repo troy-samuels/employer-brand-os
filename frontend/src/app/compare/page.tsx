@@ -232,8 +232,8 @@ export default function ComparePage() {
                 },
                 {
                   icon: <XCircle className="h-5 w-5 text-red-500" />,
-                  stat: "0%",
-                  label: "of companies had an llms.txt file",
+                  stat: "85%+",
+                  label: "of companies had no JSON-LD schema",
                 },
                 {
                   icon: <Shield className="h-5 w-5 text-amber-500" />,

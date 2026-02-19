@@ -135,12 +135,14 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
 
 /* ── Detail copy ───────────────────────────────────── */
 
-function getLlmsDetail(r: WebsiteCheckResult): string {
-  if (r.hasLlmsTxt && r.llmsTxtHasEmployment)
-    return "You have an llms.txt with hiring content — a minor positive signal for AI models.";
-  if (r.hasLlmsTxt)
-    return "You have an llms.txt file, though it doesn't mention hiring or culture yet.";
-  return "No llms.txt file found. This is a minor signal — structured data (JSON-LD) has far more impact on AI visibility.";
+function getContentFormatDetail(r: WebsiteCheckResult): string {
+  if (r.scoreBreakdown.contentFormat >= 7)
+    return "Your content uses structured formats AI prefers — FAQ patterns, semantic headings, and answer-first paragraphs help AI cite you accurately.";
+  if (r.scoreBreakdown.contentFormat >= 4)
+    return "Your content has some good structure but could improve. Add FAQ schema, definition lists, and shorter opening paragraphs for better AI citation.";
+  if (r.scoreBreakdown.contentFormat > 0)
+    return "Limited content structure detected. Add semantic heading hierarchy (h1→h2→h3), FAQ schema, and tables to help AI parse your content.";
+  return "No structured content format found. Adding FAQ schema, semantic headings, answer-first paragraphs, and tables would significantly improve AI citation likelihood.";
 }
 
 function getJsonldDetail(r: WebsiteCheckResult): string {
@@ -374,7 +376,7 @@ export function AuditResults({ result }: AuditResultsProps) {
           icon={<TreeStructure size={22} weight="duotone" />}
           name="Structured Data"
           earned={scoreBreakdown.jsonld}
-          max={27}
+          max={28}
           detail={getJsonldDetail(result)}
           index={0}
         />
@@ -421,16 +423,16 @@ export function AuditResults({ result }: AuditResultsProps) {
           icon={<ChatCircleText size={22} weight="duotone" />}
           name="Content Format"
           earned={scoreBreakdown.contentFormat}
-          max={7}
-          detail={result.hasSitemap ? "Your content includes structured formats AI prefers to cite." : "Adding FAQ schema, semantic headings, and a sitemap helps AI parse your content."}
+          max={9}
+          detail={getContentFormatDetail(result)}
           index={5}
         />
         <CheckCard
           icon={<ChatCircleText size={22} weight="duotone" />}
-          name="AI Instructions"
-          earned={scoreBreakdown.llmsTxt}
-          max={3}
-          detail={getLlmsDetail(result)}
+          name="AI Instructions (llms.txt)"
+          earned={0}
+          max={0}
+          detail="Research shows llms.txt has zero impact on AI citations (Senthor 10M+ requests, SE Ranking 300K domains). Focus on structured data and content format instead."
           index={6}
         />
       </div>

@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
 
 const CHECK_LABELS = [
-  { key: "llmsTxt" as const, label: "AI instructions" },
+  { key: "contentFormat" as const, label: "Content structure" },
   { key: "jsonld" as const, label: "Structured data" },
   { key: "salaryData" as const, label: "Salary info" },
   { key: "careersPage" as const, label: "Careers page" },

@@ -70,6 +70,7 @@ async function getIndexData(): Promise<{
     total: number;
     avgScore: number;
     pctNoLlmsTxt: number;
+    pctNoJsonld: number;
     pctNoSalary: number;
     topScore: number;
     bottomScore: number;
@@ -90,6 +91,7 @@ async function getIndexData(): Promise<{
         total: 0,
         avgScore: 0,
         pctNoLlmsTxt: 0,
+        pctNoJsonld: 0,
         pctNoSalary: 0,
         topScore: 0,
         bottomScore: 0,
@@ -113,6 +115,9 @@ async function getIndexData(): Promise<{
   const pctNoLlmsTxt = Math.round(
     (deduped.filter((c) => !c.has_llms_txt).length / total) * 100
   );
+  const pctNoJsonld = Math.round(
+    (deduped.filter((c) => !c.has_jsonld).length / total) * 100
+  );
   const pctNoSalary = Math.round(
     (deduped.filter((c) => !c.has_salary_data).length / total) * 100
   );
@@ -123,6 +128,7 @@ async function getIndexData(): Promise<{
       total,
       avgScore,
       pctNoLlmsTxt,
+      pctNoJsonld,
       pctNoSalary,
       topScore: scores[0] ?? 0,
       bottomScore: scores[scores.length - 1] ?? 0,
@@ -149,11 +155,12 @@ function rankMedal(rank: number): string | null {
 
 function checkCount(c: IndexCompany): number {
   let count = 0;
-  if (c.has_llms_txt) count++;
   if (c.has_jsonld) count++;
   if (c.has_salary_data) count++;
   if (c.careers_page_status === "full") count++;
   if (c.robots_txt_status === "allows") count++;
+  // Content format: proxy using careers + jsonld presence
+  if (c.has_jsonld && c.careers_page_status === "full") count++;
   return count;
 }
 
@@ -211,7 +218,7 @@ export default async function IndexPage() {
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-slate-400" />
                   <span className="text-sm text-slate-600">
-                    <strong className="text-slate-900">{stats.pctNoLlmsTxt}%</strong> have no AI instructions
+                    <strong className="text-slate-900">{stats.pctNoJsonld}%</strong> have no structured data
                   </span>
                 </div>
               </div>
@@ -300,7 +307,7 @@ export default async function IndexPage() {
                     <span className="text-center hidden sm:block">Data</span>
                     <span className="text-center hidden sm:block">Salary</span>
                     <span className="text-center hidden sm:block">Bots</span>
-                    <span className="text-center hidden sm:block">llms.txt</span>
+                    <span className="text-center hidden sm:block">Format</span>
                     <span className="text-right">Score</span>
                   </div>
 
@@ -351,7 +358,7 @@ export default async function IndexPage() {
                         )}
                       </span>
                       <span className="text-center hidden sm:block">
-                        {company.has_llms_txt ? (
+                        {company.has_jsonld && company.careers_page_status === "full" ? (
                           <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>

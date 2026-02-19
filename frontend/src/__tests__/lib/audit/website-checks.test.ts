@@ -420,6 +420,102 @@ Disallow: /jobs
       expect(result.detectedCurrency).toBe("JPY");
     });
 
+    it("scores content format for FAQ schema, heading hierarchy, and answer-first paragraphs", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          `<html><head><script type="application/ld+json">{"@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Q1"}]}</script></head>
+           <body role="main">
+           <h1>Careers</h1>
+           <p>We offer competitive salaries from £50k.</p>
+           <h2>Benefits</h2>
+           <dl><dt>Holiday</dt><dd>25 days</dd></dl>
+           <table><thead><tr><th>Role</th></tr></thead></table>
+           </body></html>`,
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      // FAQ schema (2) + headings h1+h2 (2) + table/dl (1) + answer-first short para (2) + ARIA role (2) = 9, capped at 9
+      expect(result.scoreBreakdown.contentFormat).toBe(9);
+    });
+
+    it("scores content format at 0 when careers page has no structural signals", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><div>We are hiring. Come join us and build great products.</div></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      expect(result.scoreBreakdown.contentFormat).toBe(0);
+    });
+
+    it("scores content format partially when only heading hierarchy is present", async () => {
+      // Paragraph after heading is >60 words so answer-first bonus should NOT apply
+      const longPara = "We have many exciting opportunities available for talented individuals who want to join our growing team across multiple locations and diverse departments. " +
+        "Our company offers a wide range of career paths spanning engineering, marketing, sales, operations, finance, human resources, and various other functional areas. " +
+        "We believe in fostering a collaborative environment where every team member can contribute meaningfully to our shared mission of building innovative products.";
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          `<html><body><h1>Careers at Example</h1><p>${longPara}</p><h2>Open Roles</h2></body></html>`,
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      // Only h1+h2 = 2 points (paragraph is >60 words, no answer-first bonus)
+      expect(result.scoreBreakdown.contentFormat).toBe(2);
+    });
+
+    it("always returns 0 for llmsTxt score regardless of file presence", async () => {
+      vi.stubGlobal(
+        "fetch",
+        vi.fn().mockImplementation((url: string) => {
+          if (url.endsWith("/llms.txt")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve("Careers and hiring information."),
+            });
+          }
+
+          if (url.endsWith("/robots.txt") || url.endsWith("/sitemap.xml")) {
+            return Promise.resolve({
+              ok: false,
+              status: 404,
+              text: () => Promise.resolve(""),
+            });
+          }
+
+          if (url.endsWith("/")) {
+            return Promise.resolve({
+              ok: true,
+              status: 200,
+              text: () => Promise.resolve("<html><body>Home</body></html>"),
+            });
+          }
+
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }),
+      );
+
+      const result = await runWebsiteChecks("example.com", "Example");
+
+      // llms.txt file exists and has employment keywords, but score should be 0
+      expect(result.hasLlmsTxt).toBe(true);
+      expect(result.llmsTxtHasEmployment).toBe(true);
+      expect(result.scoreBreakdown.llmsTxt).toBe(0);
+    });
+
     it("detects sitemap.xml when present", async () => {
       vi.stubGlobal(
         "fetch",

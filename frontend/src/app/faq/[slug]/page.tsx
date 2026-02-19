@@ -156,70 +156,66 @@ const faqContent: Record<string, FaqContent> = {
       <div class="space-y-4 mb-8">
         <div class="rounded-xl bg-white border border-slate-200 p-5">
           <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-semibold text-slate-900">Careers Page</h3>
-            <span class="text-sm font-semibold text-slate-400">30 points</span>
+            <h3 class="font-semibold text-slate-900">Structured Data (JSON-LD)</h3>
+            <span class="text-sm font-semibold text-slate-400">28 points</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            JSON-LD is machine-readable metadata embedded in your website. It tells AI models
+            your company name, industry, location, job postings, and salary data without ambiguity.
+            Research shows structured data improves AI citation accuracy by 30–40%.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <div class="flex items-baseline justify-between mb-2">
+            <h3 class="font-semibold text-slate-900">AI Crawler Access (robots.txt)</h3>
+            <span class="text-sm font-semibold text-slate-400">17 points</span>
+          </div>
+          <p class="text-sm text-slate-600">
+            Does your robots.txt allow AI crawlers to read your website? 87% of ChatGPT
+            citations correlate with Bing indexation. If AI crawlers can't reach your content,
+            everything else becomes irrelevant.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <div class="flex items-baseline justify-between mb-2">
+            <h3 class="font-semibold text-slate-900">Careers Page Quality</h3>
+            <span class="text-sm font-semibold text-slate-400">17 points</span>
           </div>
           <p class="text-sm text-slate-600">
             Does your website have a substantive careers page? We check for job listings,
             company culture content, and whether it's accessible to AI crawlers (not behind
-            bot protection). A careers page that redirects to an external ATS scores lower
-            because most AI crawlers can't read ATS content.
+            bot protection).
           </p>
         </div>
         <div class="rounded-xl bg-white border border-slate-200 p-5">
           <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-semibold text-slate-900">Structured Data (JSON-LD)</h3>
-            <span class="text-sm font-semibold text-slate-400">20 points</span>
-          </div>
-          <p class="text-sm text-slate-600">
-            JSON-LD is machine-readable metadata embedded in your website. It tells AI models
-            your company name, industry, location, and other facts without ambiguity. Without
-            it, AI has to infer these details — and often gets them wrong.
-          </p>
-        </div>
-        <div class="rounded-xl bg-white border border-slate-200 p-5">
-          <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-semibold text-slate-900">Brand Reputation</h3>
-            <span class="text-sm font-semibold text-slate-400">15 points</span>
+            <h3 class="font-semibold text-slate-900">Brand Reputation & Presence</h3>
+            <span class="text-sm font-semibold text-slate-400">17 points</span>
           </div>
           <p class="text-sm text-slate-600">
             We check for your presence on employer review platforms and the sentiment signals
-            available to AI. Companies with no review presence get zero — AI has nothing to
-            reference when candidates ask what it's like to work there.
+            available to AI. Brands on 4+ platforms get 2.8x more AI citations.
           </p>
         </div>
         <div class="rounded-xl bg-white border border-slate-200 p-5">
           <div class="flex items-baseline justify-between mb-2">
             <h3 class="font-semibold text-slate-900">Salary Transparency</h3>
-            <span class="text-sm font-semibold text-slate-400">15 points</span>
+            <span class="text-sm font-semibold text-slate-400">12 points</span>
           </div>
           <p class="text-sm text-slate-600">
             Is salary information visible and machine-readable on your job listings? Without
-            it, AI guesses — and our data shows those guesses are wrong 78% of the time,
-            usually underestimating by £15-25K.
+            it, AI guesses — and our data shows those guesses are wrong 78% of the time.
           </p>
         </div>
         <div class="rounded-xl bg-white border border-slate-200 p-5">
           <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-semibold text-slate-900">Bot Access (robots.txt)</h3>
-            <span class="text-sm font-semibold text-slate-400">10 points</span>
+            <h3 class="font-semibold text-slate-900">Content Format & Structure</h3>
+            <span class="text-sm font-semibold text-slate-400">9 points</span>
           </div>
           <p class="text-sm text-slate-600">
-            Does your robots.txt allow AI crawlers to read your website? 43% of companies
-            we've audited block them entirely — meaning the AI is building your employer
-            brand from third-party sources only.
-          </p>
-        </div>
-        <div class="rounded-xl bg-white border border-slate-200 p-5">
-          <div class="flex items-baseline justify-between mb-2">
-            <h3 class="font-semibold text-slate-900">AI Instructions (llms.txt)</h3>
-            <span class="text-sm font-semibold text-slate-400">10 points</span>
-          </div>
-          <p class="text-sm text-slate-600">
-            An llms.txt file gives AI models explicit instructions about how to describe
-            your company. It's the most direct way to influence what AI says. Currently,
-            over 90% of companies don't have one.
-            <a href="/faq/what-is-llms-txt" class="text-brand-accent ml-1 hover:underline">Learn more →</a>
+            Does your content use formats AI prefers to cite? FAQ schema, semantic heading
+            hierarchy (h1→h2→h3), answer-first paragraphs, tables, and definition lists all
+            improve AI citation rates by up to 39%.
           </p>
         </div>
       </div>
@@ -350,7 +346,7 @@ const allFaqTitles: Record<string, string> = {
   "what-do-llms-say-about-employers": "What do AI models actually say about employers?",
   "which-ai-models-matter": "Which AI models matter for employer brand?",
   "how-scoring-works": "How does the AI Visibility Score work?",
-  "what-is-llms-txt": "What is llms.txt and how do I create one?",
+  "what-is-llms-txt": "Does llms.txt help with AI visibility?",
   "what-is-the-pixel": "What does the Rankwell pixel do?",
   "how-often-are-audits-updated": "How often is AI monitoring updated?",
   "pixel-security": "Is the pixel safe to install?",

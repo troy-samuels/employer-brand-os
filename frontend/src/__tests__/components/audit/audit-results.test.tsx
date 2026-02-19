@@ -74,7 +74,7 @@ describe("AuditResults", () => {
       const result = createMockResult();
       render(<AuditResults result={result} />);
 
-      expect(screen.getAllByText("AI Instructions").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText(/AI Instructions/).length).toBeGreaterThanOrEqual(1);
       expect(screen.getAllByText("Structured Data").length).toBeGreaterThanOrEqual(1);
       expect(screen.getAllByText("Salary Transparency").length).toBeGreaterThanOrEqual(1);
       expect(screen.getAllByText("Careers Page").length).toBeGreaterThanOrEqual(1);
@@ -86,24 +86,25 @@ describe("AuditResults", () => {
     it("should display score contribution (earned/max)", () => {
       const result = createMockResult({
         scoreBreakdown: {
-          jsonld: 27,
+          jsonld: 28,
           robotsTxt: 12,
           careersPage: 17,
           brandReputation: 10,
           salaryData: 0,
           contentFormat: 4,
-          llmsTxt: 1,
+          llmsTxt: 0,
         },
       });
       render(<AuditResults result={result} />);
 
-      expect(screen.getByText("27/27")).toBeInTheDocument();
+      expect(screen.getByText("28/28")).toBeInTheDocument();
       expect(screen.getByText("12/17")).toBeInTheDocument();
       expect(screen.getByText("17/17")).toBeInTheDocument();
       expect(screen.getByText("10/17")).toBeInTheDocument();
       expect(screen.getByText("0/12")).toBeInTheDocument();
-      expect(screen.getByText("4/7")).toBeInTheDocument();
-      expect(screen.getByText("1/3")).toBeInTheDocument();
+      expect(screen.getByText("4/9")).toBeInTheDocument();
+      // AI Instructions card shows 0/0 (deprecated)
+      expect(screen.getByText("0/0")).toBeInTheDocument();
     });
   });
 
@@ -223,7 +224,7 @@ describe("AuditResults", () => {
     it("should show positive message when salary data is found", () => {
       const result = createMockResult({
         hasSalaryData: true,
-        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 20, careersPage: 0, robotsTxt: 0, brandReputation: 0 },
+        scoreBreakdown: { jsonld: 0, robotsTxt: 0, careersPage: 0, brandReputation: 0, salaryData: 12, contentFormat: 0, llmsTxt: 0 },
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/Salary information is visible to AI crawlers/)).toBeInTheDocument();
@@ -232,7 +233,7 @@ describe("AuditResults", () => {
     it("should show negative message when no salary data found", () => {
       const result = createMockResult({
         hasSalaryData: false,
-        scoreBreakdown: { llmsTxt: 0, jsonld: 0, salaryData: 0, careersPage: 0, robotsTxt: 0, brandReputation: 0 },
+        scoreBreakdown: { jsonld: 0, robotsTxt: 0, careersPage: 0, brandReputation: 0, salaryData: 0, contentFormat: 0, llmsTxt: 0 },
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/No salary data found/)).toBeInTheDocument();
@@ -299,32 +300,23 @@ describe("AuditResults", () => {
     });
   });
 
-  describe("llms.txt details", () => {
-    it("should show positive message when llms.txt has employment data", () => {
+  describe("llms.txt deprecation notice", () => {
+    it("should show deprecation message explaining llms.txt has zero impact", () => {
       const result = createMockResult({
         hasLlmsTxt: true,
         llmsTxtHasEmployment: true,
       });
       render(<AuditResults result={result} />);
-      expect(screen.getByText(/llms.txt with hiring content/)).toBeInTheDocument();
+      expect(screen.getByText(/llms.txt has zero impact on AI citations/)).toBeInTheDocument();
     });
 
-    it("should show partial message when llms.txt exists but has no employment data", () => {
-      const result = createMockResult({
-        hasLlmsTxt: true,
-        llmsTxtHasEmployment: false,
-      });
-      render(<AuditResults result={result} />);
-      expect(screen.getByText(/llms.txt.*doesn't mention hiring/)).toBeInTheDocument();
-    });
-
-    it("should show negative message when llms.txt is missing", () => {
+    it("should show deprecation message even when llms.txt is missing", () => {
       const result = createMockResult({
         hasLlmsTxt: false,
         llmsTxtHasEmployment: false,
       });
       render(<AuditResults result={result} />);
-      expect(screen.getByText(/No llms.txt file found/)).toBeInTheDocument();
+      expect(screen.getByText(/llms.txt has zero impact on AI citations/)).toBeInTheDocument();
     });
   });
 });

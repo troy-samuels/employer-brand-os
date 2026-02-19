@@ -35,11 +35,13 @@ export interface StoredAuditResult {
   company_slug: string;
   score: number;
   score_breakdown: {
-    llmsTxt: number;
     jsonld: number;
-    salaryData: number;
-    careersPage: number;
     robotsTxt: number;
+    careersPage: number;
+    brandReputation: number;
+    salaryData: number;
+    contentFormat: number;
+    llmsTxt: number;
   };
   has_llms_txt: boolean;
   has_jsonld: boolean;
@@ -84,7 +86,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: `Fix Your AI Visibility — ${audit.company_name} | Rankwell`,
-    description: `Copy-paste fixes to improve ${audit.company_name}'s AI visibility score from ${audit.score}/100. Fix llms.txt, JSON-LD, careers page, and robots.txt issues.`,
+    description: `Copy-paste fixes to improve ${audit.company_name}'s AI visibility score from ${audit.score}/100. Fix JSON-LD structured data, content format, careers page, and robots.txt issues.`,
     robots: { index: false, follow: true },
   };
 }

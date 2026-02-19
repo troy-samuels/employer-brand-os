@@ -231,16 +231,67 @@ function generateJsonLd(audit: StoredAuditResult): string {
     jobLocationType: "TELECOMMUTE",
   };
 
+  const employerRating = {
+    "@context": "https://schema.org",
+    "@type": "EmployerAggregateRating",
+    itemReviewed: {
+      "@type": "Organization",
+      name: audit.company_name,
+      sameAs: `https://${audit.company_domain}`,
+    },
+    ratingValue: "[YOUR_RATING — e.g., 4.2]",
+    bestRating: 5,
+    worstRating: 1,
+    ratingCount: "[NUMBER_OF_REVIEWS]",
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: `What is it like to work at ${audit.company_name}?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "[YOUR ANSWER]",
+        },
+      },
+      {
+        "@type": "Question",
+        name: `What benefits does ${audit.company_name} offer?`,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "[YOUR ANSWER]",
+        },
+      },
+    ],
+  };
+
   return `<!-- Organization Schema — add to your homepage <head> -->
 <script type="application/ld+json">
 ${JSON.stringify(org, null, 2)}
+</script>
+
+<!-- EmployerAggregateRating Schema — add to your homepage or careers page -->
+<!-- Only include if you have genuine review data -->
+<script type="application/ld+json">
+${JSON.stringify(employerRating, null, 2)}
+</script>
+
+<!-- FAQPage Schema — add to your careers page -->
+<!-- Answers common candidate questions in a format AI can directly extract -->
+<script type="application/ld+json">
+${JSON.stringify(faqSchema, null, 2)}
 </script>
 
 <!-- JobPosting Schema — add to each job listing page -->
 <!-- Duplicate this block for every open role -->
 <script type="application/ld+json">
 ${JSON.stringify(jobPosting, null, 2)}
-</script>`;
+</script>
+
+<!-- Generate all schemas automatically: https://rankwell.io/tools/employer-schema -->`;
 }
 
 function generateCareersRecommendation(audit: StoredAuditResult): string {
@@ -536,6 +587,95 @@ Disallow: /dashboard/
 Sitemap: https://${audit.company_domain}/sitemap.xml`;
 }
 
+function generateContentFormatRecommendation(audit: StoredAuditResult): string {
+  return `<!-- Content Format & Structure Recommendations for ${audit.company_name} -->
+<!-- Apply these patterns to your careers page for better AI citation -->
+
+<!-- 1. Add FAQ Schema to your careers page <head> -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is it like to work at ${audit.company_name}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[YOUR ANSWER — describe culture, values, and what makes working here unique]"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What benefits does ${audit.company_name} offer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[LIST BENEFITS — healthcare, holiday, learning budget, parental leave, etc.]"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is the salary range at ${audit.company_name}?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "[SALARY RANGES — e.g., 'Software Engineers earn £55,000–£85,000 depending on experience']"
+      }
+    }
+  ]
+}
+</script>
+
+<!-- 2. Use answer-first paragraph structure -->
+<!-- BAD: "At ${audit.company_name}, we believe in creating an environment where..." -->
+<!-- GOOD: -->
+<h1>Work at ${audit.company_name}</h1>
+<p>${audit.company_name} offers [KEY BENEFIT] with salaries from [RANGE]. We're hiring for [N] roles across [LOCATIONS].</p>
+<!-- Lead with the answer, then elaborate. AI extracts the first paragraph most often. -->
+
+<!-- 3. Use proper semantic heading hierarchy -->
+<h1>Careers at ${audit.company_name}</h1>           <!-- One h1 per page -->
+  <h2>Why join us?</h2>                               <!-- Major sections -->
+    <h3>Our culture</h3>                               <!-- Subsections -->
+    <h3>Our values</h3>
+  <h2>Benefits & compensation</h2>
+    <h3>Salary bands</h3>
+    <h3>Health & wellbeing</h3>
+  <h2>Open roles</h2>
+
+<!-- 4. Use tables and definition lists for structured data -->
+<h2>Salary Bands</h2>
+<table>
+  <thead>
+    <tr><th>Role</th><th>Level</th><th>Salary Range</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Software Engineer</td><td>Mid</td><td>£55,000–£70,000</td></tr>
+    <tr><td>Software Engineer</td><td>Senior</td><td>£70,000–£90,000</td></tr>
+    <tr><td>Product Manager</td><td>Senior</td><td>£75,000–£95,000</td></tr>
+  </tbody>
+</table>
+
+<h2>Benefits</h2>
+<dl>
+  <dt>Annual leave</dt>
+  <dd>25 days + bank holidays</dd>
+  <dt>Healthcare</dt>
+  <dd>Private medical insurance (Bupa) for you and your family</dd>
+  <dt>Learning budget</dt>
+  <dd>£1,500/year for courses, conferences, and books</dd>
+  <dt>Parental leave</dt>
+  <dd>26 weeks full pay (all parents)</dd>
+</dl>
+
+<!-- KEY POINTS:
+  1. FAQ schema tells AI exactly what questions your page answers
+  2. Short first paragraphs (<60 words) get extracted by AI most often
+  3. Tables with <thead> get 47% higher AI citation rates
+  4. Definition lists (<dl>) make benefits machine-readable
+  5. Heading hierarchy helps AI understand content structure
+-->`;
+}
+
 function buildFixItems(audit: StoredAuditResult): FixItem[] {
   const items: FixItem[] = [];
 
@@ -570,7 +710,7 @@ function buildFixItems(audit: StoredAuditResult): FixItem[] {
     });
   }
 
-  // Priority 2: JSON-LD (25 points)
+  // Priority 2: JSON-LD (28 points)
   items.push({
     id: "jsonld",
     icon: <Code2 className="h-5 w-5" />,
@@ -579,25 +719,22 @@ function buildFixItems(audit: StoredAuditResult): FixItem[] {
     problem: audit.has_jsonld
       ? ""
       : "No machine-readable schema markup found on your site.",
-    why: "JSON-LD helps AI models understand your company structure, roles, and salary data with certainty rather than inference.",
+    why: "JSON-LD helps AI models understand your company structure, roles, and salary data with certainty rather than inference. Use our schema generator at /tools/employer-schema to create yours.",
     code: generateJsonLd(audit),
     language: "html",
     alreadyDone: audit.has_jsonld,
   });
 
-  // Priority 3: llms.txt (25 points)
+  // Priority 3: Content Format & Structure
   items.push({
-    id: "llmstxt",
+    id: "content-format",
     icon: <FileText className="h-5 w-5" />,
-    title: "AI Instructions (llms.txt)",
-    priority: audit.has_llms_txt ? "low" : "high",
-    problem: audit.has_llms_txt
-      ? ""
-      : "No llms.txt file found — AI models have no official instructions from you.",
-    why: "llms.txt is like robots.txt for AI language models. It tells ChatGPT, Claude, and others exactly how to describe your company.",
-    code: generateLlmsTxt(audit),
-    language: "text",
-    alreadyDone: audit.has_llms_txt,
+    title: "Content Format & Structure",
+    priority: "high",
+    problem: "Your careers content may not be structured in a way AI models prefer to cite.",
+    why: "AI models disproportionately cite FAQ-style content, answer-first paragraphs, and structured tables. Content format can boost AI visibility by up to 40% (Princeton GEO study).",
+    code: generateContentFormatRecommendation(audit),
+    language: "html",
   });
 
   // Priority 4: robots.txt (15 points)

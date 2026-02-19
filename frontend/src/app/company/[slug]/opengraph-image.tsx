@@ -85,11 +85,11 @@ export default async function Image({ params }: PageProps) {
 
   // Build check summary
   const checks = [
-    { name: "Careers Page", pass: data.careers_page_status === "full" },
     { name: "Structured Data", pass: !!data.has_jsonld },
-    { name: "Salary Data", pass: !!data.has_salary_data },
-    { name: "AI Instructions", pass: !!data.has_llms_txt },
     { name: "Bot Access", pass: data.robots_txt_status === "allows" },
+    { name: "Careers Page", pass: data.careers_page_status === "full" },
+    { name: "Salary Data", pass: !!data.has_salary_data },
+    { name: "Content Format", pass: ((data.score_breakdown as Record<string, number>)?.contentFormat ?? 0) > 0 },
   ];
   const passCount = checks.filter((c) => c.pass).length;
 

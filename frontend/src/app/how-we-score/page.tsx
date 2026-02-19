@@ -12,15 +12,15 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How We Score Your AI Visibility | Rankwell",
   description:
-    "Understand the seven checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+    "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
 };
 
 const CHECKS = [
   {
     name: "Structured Data (JSON-LD)",
-    weight: 27,
-    what: "We scan your website for schema.org markup — machine-readable facts about your organisation, job listings, and salary ranges.",
-    why: "Research shows structured data improves AI citation accuracy by 30–40% (Princeton GEO Study, 2024). It's the single most impactful technical signal for AI visibility.",
+    weight: 28,
+    what: "We scan your website for schema.org markup — machine-readable facts about your organisation, job listings, salary ranges, and employer ratings.",
+    why: "Research shows structured data improves AI citation accuracy by 30–40% (Princeton GEO Study, 2024). It's the single most impactful technical signal for AI visibility. We look for Organization, JobPosting, EmployerAggregateRating, and FAQPage schemas.",
   },
   {
     name: "AI Crawler Access",
@@ -48,15 +48,9 @@ const CHECKS = [
   },
   {
     name: "Content Format & Structure",
-    weight: 7,
-    what: "We assess whether your content uses formats AI prefers: FAQ schema, semantic heading hierarchy, structured tables, and clear Q&A patterns.",
-    why: "AI models disproportionately cite content in FAQ, comparative, and tabular formats. Proper semantic HTML helps AI parse and extract your information accurately.",
-  },
-  {
-    name: "AI Instructions (llms.txt)",
-    weight: 3,
-    what: "We check for an llms.txt file — a structured file that tells AI models how to describe your organisation.",
-    why: "While llms.txt adoption is growing, current evidence shows limited AI bot engagement with this format. It's a minor positive signal but not a primary driver of AI visibility.",
+    weight: 9,
+    what: "We assess whether your content uses formats AI prefers to cite: FAQ schema, semantic heading hierarchy (h1→h2→h3), answer-first paragraph structure, structured tables, definition lists, and ARIA/role attributes.",
+    why: "AI models disproportionately cite content in FAQ, comparative, and tabular formats. Answer-first structures increase AI citation by up to 39% (Princeton GEO study). Proper semantic HTML helps AI parse and extract your information accurately.",
   },
 ];
 
@@ -82,7 +76,7 @@ export default function HowWeScorePage() {
             How we calculate your score
           </h1>
           <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-            Your AI Visibility Score is based on seven checks — each weighted
+            Your AI Visibility Score is based on six evidence-based checks — each weighted
             according to peer-reviewed research on what actually drives AI
             citations across ChatGPT, Claude, Perplexity, and Google AI.
           </p>

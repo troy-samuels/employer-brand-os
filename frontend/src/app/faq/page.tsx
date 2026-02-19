@@ -14,7 +14,7 @@ import { Footer } from "@/components/shared/footer";
 export const metadata: Metadata = {
   title: "FAQ — AI Visibility Questions Answered | Rankwell",
   description:
-    "Everything employers need to know about AI visibility, employer brand in LLMs, llms.txt, the Rankwell pixel, and how scoring works.",
+    "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
   alternates: { canonical: "https://rankwell.io/faq" },
 };
 
@@ -53,14 +53,14 @@ const faqs: FaqEntry[] = [
     slug: "how-scoring-works",
     question: "How does the AI Visibility Score work?",
     summary:
-      "Your score (0-100) measures how accurately AI can represent your company. We check 6 dimensions: careers page, structured data, salary transparency, brand reputation, bot access, and AI instructions.",
+      "Your score (0-100) measures how accurately AI can represent your company. We check 6 dimensions: structured data (JSON-LD), bot access, careers page, brand reputation, salary transparency, and content format.",
     category: "How Rankwell Works",
   },
   {
     slug: "what-is-llms-txt",
-    question: "What is llms.txt and how do I create one?",
+    question: "Does llms.txt help with AI visibility?",
     summary:
-      "llms.txt is a file on your website that tells AI models how to describe your company — like robots.txt for your reputation. We explain the format and provide templates.",
+      "Research shows llms.txt has zero measurable impact on AI citations. Senthor analysed 10M+ AI requests and found 0 major bots reading it. Structured data (JSON-LD) is what actually works — proven to boost AI visibility by 30–40%.",
     category: "How Rankwell Works",
   },
   {

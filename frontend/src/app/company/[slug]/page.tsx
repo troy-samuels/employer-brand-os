@@ -41,11 +41,13 @@ interface StoredAuditResult {
   company_slug: string;
   score: number;
   score_breakdown: {
-    llmsTxt: number;
     jsonld: number;
-    salaryData: number;
-    careersPage: number;
     robotsTxt: number;
+    careersPage: number;
+    brandReputation: number;
+    salaryData: number;
+    contentFormat: number;
+    llmsTxt: number;
   };
   has_llms_txt: boolean;
   has_jsonld: boolean;
@@ -150,37 +152,32 @@ interface CheckItem {
 }
 
 function buildChecks(audit: StoredAuditResult): CheckItem[] {
+  const contentFormatScore = audit.score_breakdown.contentFormat ?? 0;
   return [
-    {
-      name: "AI Instructions (llms.txt)",
-      status: audit.has_llms_txt ? "pass" : "fail",
-      points: audit.score_breakdown.llmsTxt,
-      maxPoints: 25,
-      description: audit.has_llms_txt
-        ? "This company provides explicit instructions for AI models."
-        : "No llms.txt file found — AI models have no official guidance on how to describe this employer.",
-    },
     {
       name: "Structured Data (JSON-LD)",
       status: audit.has_jsonld ? "pass" : "fail",
-      points: audit.score_breakdown.jsonld,
-      maxPoints: 25,
+      points: audit.score_breakdown.jsonld ?? 0,
+      maxPoints: 28,
       description: audit.has_jsonld
         ? "Machine-readable organisation data is present on the website."
         : "No JSON-LD schema markup found — AI has to guess basic company details.",
     },
     {
-      name: "Salary Transparency",
-      status: audit.has_salary_data
+      name: "AI Crawler Access (robots.txt)",
+      status: audit.robots_txt_status === "allows"
         ? "pass"
-        : audit.careers_page_status !== "none"
+        : audit.robots_txt_status === "partial"
           ? "partial"
           : "fail",
-      points: audit.score_breakdown.salaryData,
-      maxPoints: 20,
-      description: audit.has_salary_data
-        ? "Salary information is visible and machine-readable on job listings."
-        : "No machine-readable salary data found — AI will guess or refuse to answer salary questions.",
+      points: audit.score_breakdown.robotsTxt ?? 0,
+      maxPoints: 17,
+      description:
+        audit.robots_txt_status === "allows"
+          ? "AI crawlers are allowed to read this website."
+          : audit.robots_txt_status === "partial"
+            ? "Some AI crawlers are blocked — not all models can see this site."
+            : "AI crawlers are blocked or no robots.txt found — most AI models can't read this site.",
     },
     {
       name: "Careers Page",
@@ -189,8 +186,8 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
         : audit.careers_page_status === "partial"
           ? "partial"
           : "fail",
-      points: audit.score_breakdown.careersPage,
-      maxPoints: 15,
+      points: audit.score_breakdown.careersPage ?? 0,
+      maxPoints: 17,
       description:
         audit.careers_page_status === "full"
           ? "A comprehensive careers page was found with sufficient content for AI."
@@ -199,20 +196,37 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
             : "No careers page found — AI has very little employer brand information.",
     },
     {
-      name: "Bot Access (robots.txt)",
-      status: audit.robots_txt_status === "allows"
+      name: "Brand Reputation & Presence",
+      status: (audit.score_breakdown.brandReputation ?? 0) > 0 ? "pass" : "fail",
+      points: audit.score_breakdown.brandReputation ?? 0,
+      maxPoints: 17,
+      description: (audit.score_breakdown.brandReputation ?? 0) > 0
+        ? "Employer review and reputation data is available for AI to reference."
+        : "No employer review data found online — AI has nothing to reference about your workplace.",
+    },
+    {
+      name: "Salary Transparency",
+      status: audit.has_salary_data
         ? "pass"
-        : audit.robots_txt_status === "partial"
+        : audit.careers_page_status !== "none"
           ? "partial"
           : "fail",
-      points: audit.score_breakdown.robotsTxt,
-      maxPoints: 15,
-      description:
-        audit.robots_txt_status === "allows"
-          ? "AI crawlers are allowed to read this website."
-          : audit.robots_txt_status === "partial"
-            ? "Some AI crawlers are blocked — not all models can see this site."
-            : "AI crawlers are blocked or no robots.txt found — most AI models can't read this site.",
+      points: audit.score_breakdown.salaryData ?? 0,
+      maxPoints: 12,
+      description: audit.has_salary_data
+        ? "Salary information is visible and machine-readable on job listings."
+        : "No machine-readable salary data found — AI will guess or refuse to answer salary questions.",
+    },
+    {
+      name: "Content Format",
+      status: contentFormatScore >= 7 ? "pass" : contentFormatScore > 0 ? "partial" : "fail",
+      points: contentFormatScore,
+      maxPoints: 9,
+      description: contentFormatScore >= 7
+        ? "Content uses structured formats AI prefers — FAQ patterns, semantic headings, and answer-first structure."
+        : contentFormatScore > 0
+          ? "Some content structure detected, but adding FAQ schema, tables, and better heading hierarchy would improve AI citation."
+          : "No structured content format found — adding FAQ schema, semantic headings, and tables would help AI cite your content.",
     },
   ];
 }
@@ -490,6 +504,23 @@ export default async function CompanyPage({ params }: PageProps) {
               name: audit.company_name,
               url: `https://${audit.company_domain}`,
             },
+          }),
+        }}
+      />
+      {/* ── Organization + ProfilePage JSON-LD for the audited company ── */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            mainEntity: {
+              "@type": "Organization",
+              name: audit.company_name,
+              url: `https://${audit.company_domain}`,
+              sameAs: `https://${audit.company_domain}`,
+            },
+            dateModified: audit.updated_at,
           }),
         }}
       />
