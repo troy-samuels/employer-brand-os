@@ -88,6 +88,24 @@ const posts: BlogPost[] = [
     readTime: "6 min",
     date: "2026-02-16",
   },
+  {
+    slug: "geo-for-employer-branding",
+    title: "GEO for employer branding: the complete guide",
+    description:
+      "Generative Engine Optimisation is changing how candidates find employers. This guide covers what GEO is, why it matters for talent acquisition, and how to implement it — even if your team has zero SEO experience.",
+    category: "Guide",
+    readTime: "10 min",
+    date: "2026-02-19",
+  },
+  {
+    slug: "ai-employer-brand-score",
+    title: "The AI Employer Brand Score: why every HR leader needs one in 2026",
+    description:
+      "Glassdoor ratings measured human perception. The AI Employer Brand Score measures machine perception — and it's becoming the metric that decides whether candidates ever see your careers page.",
+    category: "Analysis",
+    readTime: "7 min",
+    date: "2026-02-19",
+  },
 ];
 
 /* ------------------------------------------------------------------ */

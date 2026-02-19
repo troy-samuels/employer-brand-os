@@ -919,6 +919,434 @@ Industry: [industry].
       </div>
     `,
   },
+
+  "geo-for-employer-branding": {
+    title: "GEO for employer branding: the complete guide",
+    description:
+      "Generative Engine Optimisation is changing how candidates find employers. This guide covers what GEO is, why it matters for TA, and how to implement it.",
+    date: "19 February 2026",
+    readTime: "10 min read",
+    category: "Guide",
+    ogTitle: "GEO for Employer Branding: The Complete Guide | Rankwell",
+    content: `
+      <p class="text-lg text-slate-600 leading-relaxed mb-8">
+        GEO — Generative Engine Optimisation — is the practice of optimising your brand's
+        visibility in AI-generated responses. If SEO is about ranking on Google, GEO is
+        about being cited by ChatGPT, Claude, Perplexity, and Google AI Overviews.
+      </p>
+      <p class="mb-6">
+        For employer brands, GEO isn't optional anymore. It's the difference between
+        candidates hearing your story and hearing a hallucinated version of it.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">Why GEO matters for talent acquisition</h2>
+      <p class="mb-6">
+        The numbers tell the story. AI-driven traffic to career sites surged
+        <strong>1,300%</strong> in the last six months (PerceptionX, 2025). <strong>80% of
+        job seekers</strong> now use ChatGPT, Claude, or Gemini to research companies before
+        applying. <strong>35% of Gen Z</strong> prefer AI chatbots over traditional search
+        engines entirely.
+      </p>
+      <p class="mb-6">
+        Meanwhile, the GEO services market is growing at <strong>34% CAGR</strong> — one of
+        the fastest-growing B2B software categories (MktClarity, 2025). <strong>75% of
+        agencies</strong> now offer GEO services. Yet only <strong>19% of SEO
+        professionals</strong> actively practise GEO (Semrush, 2025).
+      </p>
+      <p class="mb-6">
+        For TA teams, this creates a massive opportunity. Your competitors aren't doing
+        this yet. The employers who start now will own the AI narrative before the market
+        catches up.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">GEO vs SEO: what's different</h2>
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-200">
+              <th class="text-left py-3 pr-4 font-semibold text-slate-900">Dimension</th>
+              <th class="text-left py-3 pr-4 font-semibold text-slate-900">Traditional SEO</th>
+              <th class="text-left py-3 font-semibold text-slate-900">GEO</th>
+            </tr>
+          </thead>
+          <tbody class="text-slate-600">
+            <tr class="border-b border-slate-100">
+              <td class="py-3 pr-4 font-medium">Goal</td>
+              <td class="py-3 pr-4">Rank on search result pages</td>
+              <td class="py-3">Be cited in AI-generated answers</td>
+            </tr>
+            <tr class="border-b border-slate-100">
+              <td class="py-3 pr-4 font-medium">Signal</td>
+              <td class="py-3 pr-4">Backlinks, keywords, page speed</td>
+              <td class="py-3">Structured data, authority, machine-readability</td>
+            </tr>
+            <tr class="border-b border-slate-100">
+              <td class="py-3 pr-4 font-medium">Measurement</td>
+              <td class="py-3 pr-4">Rankings, CTR, organic traffic</td>
+              <td class="py-3">AI citation rate, accuracy, sentiment</td>
+            </tr>
+            <tr class="border-b border-slate-100">
+              <td class="py-3 pr-4 font-medium">Content format</td>
+              <td class="py-3 pr-4">Long-form articles, landing pages</td>
+              <td class="py-3">Structured data, llms.txt, concise factual statements</td>
+            </tr>
+            <tr>
+              <td class="py-3 pr-4 font-medium">User journey</td>
+              <td class="py-3 pr-4">Click → visit → engage</td>
+              <td class="py-3">Ask AI → get answer → decide (zero-click)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="mb-6">
+        The critical difference: with SEO, you need people to click through to your site.
+        With GEO, the AI delivers your message directly. There's no click. The candidate
+        never visits your careers page — they just hear what AI says about you.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The 7-step GEO implementation for employer brands</h2>
+
+      <div class="space-y-6 mb-8">
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">1. Audit your AI presence</h3>
+          <p class="text-sm text-slate-600 mb-3">
+            Before optimising, you need to know where you stand. Ask ChatGPT, Claude,
+            Perplexity, and Google AI what they say about your company. Focus on:
+          </p>
+          <ul class="text-sm text-slate-600 space-y-1 pl-4">
+            <li>• Salary estimates (are they accurate?)</li>
+            <li>• Culture description (does it match reality?)</li>
+            <li>• Benefits listed (current or outdated?)</li>
+            <li>• Remote policy (correct?)</li>
+            <li>• Overall sentiment (positive, neutral, negative?)</li>
+          </ul>
+          <p class="text-sm text-slate-500 mt-3">
+            Or use <a href="/#audit" class="text-brand-accent hover:underline">Rankwell's free audit</a>
+            to get this in 30 seconds.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">2. Create your llms.txt file</h3>
+          <p class="text-sm text-slate-600">
+            This is the single highest-impact action. An
+            <a href="/blog/llms-txt-guide" class="text-brand-accent hover:underline">llms.txt file</a>
+            tells AI models exactly how to describe your organisation — culture, benefits,
+            salary ranges, remote policy, in your words. Place it at
+            <code>yourcompany.com/llms.txt</code>. 91% of UK employers don't have one.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">3. Add structured data (JSON-LD)</h3>
+          <p class="text-sm text-slate-600">
+            Schema.org markup on your careers page and job listings tells AI models
+            verifiable facts — organisation name, location, industry, employee count, salary
+            ranges. Research shows structured data improves AI citation accuracy by
+            <strong>30–40%</strong>. Use <code>Organization</code>,
+            <code>JobPosting</code>, and <code>EmployerAggregateRating</code> schemas.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">4. Unblock AI crawlers</h3>
+          <p class="text-sm text-slate-600">
+            Check your <code>robots.txt</code> file. 43% of UK employers block GPTBot,
+            ClaudeBot, and other AI crawlers. If they can't crawl your site, they rely
+            entirely on third-party sources (Reddit, Wikipedia) to describe you. Allow
+            at minimum: GPTBot, ClaudeBot, Google-Extended, and PerplexityBot.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">5. Publish salary data openly</h3>
+          <p class="text-sm text-slate-600">
+            "How much does [company] pay?" is the
+            <a href="/blog/ai-hallucinating-salary-data" class="text-brand-accent hover:underline">most common candidate query to AI</a>.
+            If you don't publish salary ranges, AI guesses — and gets it wrong 78% of the
+            time. Add salary ranges to job listings in a machine-readable format. This
+            single change reduces AI salary deviation from £18,400 to £3,200 on average.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">6. Build topical authority</h3>
+          <p class="text-sm text-slate-600">
+            AI models cite authoritative sources. Publish thought leadership content on
+            your blog about your industry, your approach to engineering, your D&I
+            initiatives, your workplace philosophy. Each piece of quality content becomes
+            a potential citation source for AI. Focus on original data and unique
+            perspectives — AI deprioritises generic content.
+          </p>
+        </div>
+
+        <div class="rounded-xl bg-white border border-slate-200 p-6">
+          <h3 class="font-semibold text-slate-900 mb-2">7. Monitor weekly</h3>
+          <p class="text-sm text-slate-600">
+            AI models retrain regularly. What they say about you changes over time — sometimes
+            for the better, sometimes not. Weekly monitoring catches hallucinations, tracks
+            the impact of your optimisation efforts, and alerts you when AI narratives shift.
+            There's only a <strong>25% content overlap</strong> between different AI
+            platforms, so monitor each one individually.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">How AI sources employer information</h2>
+      <p class="mb-6">
+        Understanding where AI gets its data helps you optimise effectively. The
+        source mix varies significantly by platform:
+      </p>
+      <div class="rounded-xl bg-slate-100 p-6 mb-8 space-y-3">
+        <p><strong>ChatGPT:</strong> Wikipedia (7.8%), Reddit (1.8%), YouTube (1.2%), training data (pre-cutoff)</p>
+        <p><strong>Google AI:</strong> Reddit (2.2%), LinkedIn (1.3%), Wikipedia (1.1%), your website (if crawlable)</p>
+        <p><strong>Perplexity:</strong> Reddit (6.6%), YouTube (2.0%), Wikipedia (1.8%), real-time web search</p>
+        <p><strong>Claude:</strong> Training data, cited web pages, structured data on your domain</p>
+      </div>
+      <p class="mb-6">
+        Notice the pattern: <strong>Reddit dominates across all platforms</strong>. Anonymous
+        Reddit threads have more influence on your AI employer brand than your official
+        careers page. This is why active employer data management matters — you need to
+        provide better sources for AI to cite.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The ROI of GEO for employer brands</h2>
+      <p class="mb-6">
+        Semrush's research shows that AI search visitors are <strong>4.4x more
+        valuable</strong> than traditional organic visitors. They spend more time on site,
+        engage more deeply, and convert at higher rates. For employer brands, this
+        translates to:
+      </p>
+      <div class="space-y-3 mb-8">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <p class="text-sm text-slate-600"><strong>Higher application quality:</strong> Candidates who arrive via AI have already been pre-qualified by the AI's contextual answer</p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <p class="text-sm text-slate-600"><strong>Lower cost-per-application:</strong> AI visibility is organic — no per-click cost like job boards</p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <p class="text-sm text-slate-600"><strong>Accurate first impressions:</strong> When AI gets your data right, candidates arrive with correct expectations — reducing offer-stage friction</p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The 12–18 month window</h2>
+      <p class="mb-6">
+        Right now, GEO for employer branding is a genuine competitive advantage. Only
+        19% of SEO professionals practise GEO at all, and virtually none focus on the
+        employer brand angle specifically.
+      </p>
+      <p class="mb-6">
+        That will change. General-purpose AI SEO platforms like Profound ($9M Series A),
+        Otterly, and Semrush are all expanding their AI visibility features. Within
+        12–18 months, expect employer-brand-specific GEO tools to become mainstream.
+      </p>
+      <p class="mb-6">
+        The companies that start now will have 12–18 months of optimised AI presence,
+        accumulated structured data, and established authority before their competitors
+        even begin.
+      </p>
+
+      <div class="rounded-xl bg-slate-900 p-8 text-center mt-12">
+        <h3 class="text-xl font-bold text-white mb-2">Start your GEO audit</h3>
+        <p class="text-sm text-slate-400 mb-6">See how AI-ready your employer brand is. Free, 30 seconds.</p>
+        <a
+          href="/#audit"
+          class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
+        >
+          Run your free audit
+        </a>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-slate-200">
+        <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
+        <ul class="text-xs text-slate-500 space-y-1">
+          <li>PerceptionX — AI-driven career site traffic data (2025)</li>
+          <li>PerceptionX — 80% of job seekers using AI for employer research (2025)</li>
+          <li>MktClarity — GEO market growing at 34% CAGR (Nov 2025)</li>
+          <li>Semrush — 19% of SEOs practise GEO; AI visitors 4.4x more valuable (2025)</li>
+          <li>Profound — 680M LLM citation analysis (Aug 2024–Jun 2025)</li>
+          <li>Rankwell audit data — 500 UK employers (Feb 2026)</li>
+          <li>Rally Recruitment Marketing — "AI Changing Employer Brand" (Jan 2026)</li>
+          <li>Employer Branding News — "GEO for Employer Branding" (Jul 2025)</li>
+        </ul>
+      </div>
+    `,
+  },
+
+  "ai-employer-brand-score": {
+    title: "The AI Employer Brand Score: why every HR leader needs one in 2026",
+    description:
+      "Glassdoor ratings measured human perception. The AI Employer Brand Score measures machine perception — and it's becoming the metric that matters most.",
+    date: "19 February 2026",
+    readTime: "7 min read",
+    category: "Analysis",
+    ogTitle: "The AI Employer Brand Score | Rankwell",
+    content: `
+      <p class="text-lg text-slate-600 leading-relaxed mb-8">
+        For years, employer brand was measured by proxy: Glassdoor stars, LinkedIn follower
+        count, Great Place to Work certifications. These metrics measured what humans thought
+        about your company. They told you nothing about what AI thinks.
+      </p>
+      <p class="mb-6">
+        In 2026, that's a problem. Because increasingly, <strong>AI forms the first
+        impression</strong> — and candidates never look further.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">What is an AI Employer Brand Score?</h2>
+      <p class="mb-6">
+        An AI Employer Brand Score measures how accurately, completely, and favourably
+        AI models represent your company to candidates. It answers a simple question:
+        <strong>if someone asks AI about your company, will they get the right answer?</strong>
+      </p>
+      <p class="mb-6">
+        The score encompasses five dimensions:
+      </p>
+      <div class="space-y-4 mb-8">
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">1. Discoverability</h3>
+          <p class="text-sm text-slate-600">
+            Can AI find your company at all? Do you have an llms.txt file, structured data,
+            and an accessible careers page? 91% of UK employers score poorly here.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">2. Accuracy</h3>
+          <p class="text-sm text-slate-600">
+            Does AI get the facts right? Salary ranges, office locations, remote policy,
+            employee count. Our audits show 78% of salary data is wrong — the largest
+            source of employer AI inaccuracy.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">3. Completeness</h3>
+          <p class="text-sm text-slate-600">
+            How much does AI know? Some companies get a paragraph; others get a sentence.
+            Completeness measures whether AI can answer follow-up questions — benefits,
+            culture, tech stack, growth opportunities.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">4. Sentiment</h3>
+          <p class="text-sm text-slate-600">
+            Is the AI's description positive, neutral, or negative? If AI cites a 2022
+            Reddit thread about layoffs but ignores your 2026 growth story, the sentiment
+            is skewed. This measures the emotional impression candidates receive.
+          </p>
+        </div>
+        <div class="rounded-xl bg-white border border-slate-200 p-5">
+          <h3 class="font-semibold text-slate-900 mb-1">5. Consistency</h3>
+          <p class="text-sm text-slate-600">
+            Do all AI models tell the same story? Research shows only <strong>25% content
+            overlap</strong> between platforms. A candidate asking ChatGPT and Perplexity
+            might get contradictory information. Consistency measures cross-platform alignment.
+          </p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">Why traditional metrics aren't enough</h2>
+      <p class="mb-6">
+        Glassdoor ratings, LinkedIn followers, and employer brand surveys measure
+        <em>human</em> perception. They assume candidates will visit those platforms,
+        read those reviews, and form their own conclusions.
+      </p>
+      <p class="mb-6">
+        But the candidate journey is changing. <strong>60% of searches are now zero-click</strong>.
+        When AI Overviews appear, <strong>only 8% of users click any link</strong>.
+        800 million people use ChatGPT weekly. A growing share of candidates never visit
+        Glassdoor, never see your careers page, never read a single review.
+      </p>
+      <p class="mb-6">
+        They ask AI. AI answers. They decide.
+      </p>
+      <div class="rounded-xl bg-slate-100 p-6 mb-8">
+        <p class="text-sm text-slate-700">
+          <strong>Think of it this way:</strong> Glassdoor measures what people say about you
+          in a room you can enter. The AI Employer Brand Score measures what a machine says
+          about you in a room you can't see — but your candidates are listening in.
+        </p>
+      </div>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">What a good score looks like</h2>
+      <p class="mb-6">
+        Based on our audit of 500 UK employers, here's how scores break down:
+      </p>
+      <div class="rounded-xl bg-slate-100 p-6 mb-8 space-y-3">
+        <p><strong>0–30 (Critical):</strong> AI knows almost nothing about you, or what it knows is wrong. Candidates asking AI get vague, inaccurate, or negative information. <em>This is where 46% of UK employers sit.</em></p>
+        <p><strong>31–60 (Needs Work):</strong> AI has partial information. Some facts are correct, others are outdated or hallucinated. Salary data is likely wrong. <em>38% of employers.</em></p>
+        <p><strong>61–80 (Competitive):</strong> AI has a reasonably accurate picture. You have some structured data, your careers page is crawlable, and salary estimates are in the right range. <em>12% of employers.</em></p>
+        <p><strong>81–100 (Leading):</strong> AI accurately represents your company across all major platforms. You have llms.txt, structured data, published salary ranges, and consistent cross-platform narratives. <em>4% of employers.</em></p>
+      </div>
+      <p class="mb-6">
+        The average score across 500 UK employers: <strong>34/100</strong>. The bar is on the floor.
+        Even modest improvements put you ahead of the vast majority.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">How to improve your score</h2>
+      <p class="mb-6">
+        The fastest wins come from the discoverability dimension — the technical
+        foundations that let AI find and understand your employer data:
+      </p>
+      <div class="rounded-xl bg-teal-50 border border-teal-200 p-6 mb-8 space-y-3">
+        <p class="text-sm text-teal-800"><strong>+15–20 points:</strong> Add an <a href="/blog/llms-txt-guide" class="text-teal-700 underline">llms.txt file</a> with complete employer information</p>
+        <p class="text-sm text-teal-800"><strong>+10–15 points:</strong> Add JSON-LD structured data (Organization, JobPosting schemas) to your careers page</p>
+        <p class="text-sm text-teal-800"><strong>+10–15 points:</strong> Publish salary ranges on job listings in machine-readable format</p>
+        <p class="text-sm text-teal-800"><strong>+5–10 points:</strong> Unblock AI crawlers in your robots.txt</p>
+        <p class="text-sm text-teal-800"><strong>+5–10 points:</strong> Ensure your careers page loads without JavaScript (AI crawlers often can't execute JS)</p>
+      </div>
+      <p class="mb-6">
+        A company scoring 34 can realistically reach 75+ within a month by implementing
+        these technical foundations. No content strategy required. No brand overhaul.
+        Just making your existing data machine-readable.
+      </p>
+
+      <h2 class="text-2xl font-bold text-slate-900 mt-12 mb-4">The metric that matters for TA</h2>
+      <p class="mb-6">
+        Here's the uncomfortable truth: most TA teams are spending budget on channels
+        that AI is making irrelevant. Job board posts, Glassdoor management, careers page
+        redesigns — all valuable, but increasingly secondary to the AI layer sitting above them.
+      </p>
+      <p class="mb-6">
+        The AI Employer Brand Score gives TA leaders a single number to track, report to
+        the C-suite, and improve over time. It's the employer brand equivalent of Domain
+        Authority — not perfect, but directionally useful and actionable.
+      </p>
+      <p class="mb-6">
+        When your CHRO asks "how's our employer brand?", you need a better answer than
+        "our Glassdoor is 3.8 stars." You need: "Our AI Employer Brand Score is 72, up
+        from 34 last quarter. AI now accurately represents our salaries, benefits, and
+        culture across all major platforms."
+      </p>
+      <p class="mb-6">
+        That's a metric that connects to outcomes — candidate quality, application
+        volume, and the invisible pipeline of people who researched you via AI and
+        decided to apply (or didn't).
+      </p>
+
+      <div class="rounded-xl bg-slate-900 p-8 text-center mt-12">
+        <h3 class="text-xl font-bold text-white mb-2">Get your AI Employer Brand Score</h3>
+        <p class="text-sm text-slate-400 mb-6">Free audit — 30 seconds, no signup. See where you stand.</p>
+        <a
+          href="/#audit"
+          class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-slate-100 transition-colors"
+        >
+          Run your free audit
+        </a>
+      </div>
+
+      <div class="mt-12 pt-8 border-t border-slate-200">
+        <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
+        <ul class="text-xs text-slate-500 space-y-1">
+          <li>Rankwell audit data — 500 UK employers (Feb 2026)</li>
+          <li>OpenAI — 800M weekly active users (Oct 2025)</li>
+          <li>SparkToro — 60% zero-click search rate (2024)</li>
+          <li>Pew Research — 8% CTR when AI Overviews appear (Jul 2025)</li>
+          <li>Profound — 25% cross-platform content overlap (2025)</li>
+          <li>PerceptionX — 80% of job seekers using AI for research (2025)</li>
+          <li>Semrush — AI visitors 4.4x more valuable (2025)</li>
+        </ul>
+      </div>
+    `,
+  },
 };
 
 /* ------------------------------------------------------------------ */
