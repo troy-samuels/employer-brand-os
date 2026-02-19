@@ -16,9 +16,9 @@ import { validateDomain } from "@/features/pixel/lib/validate-domain";
 import type { ValidatedPixelKey } from "@/features/pixel/types/pixel.types";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import type { ApiErrorResponse } from "@/lib/utils/api-response";
-import { RateLimiter } from "@/lib/utils/rate-limiter";
+import { pixelRateLimiter } from "@/lib/utils/distributed-rate-limiter";
+import { recordAuthFailure, isIpBlocked, resetAuthFailures } from "@/lib/security/auth-monitor";
 
-const rateLimiter = new RateLimiter();
 const RATE_LIMIT_WINDOW_SECONDS = 60;
 
 type PixelRouteErrorResponseOptions = {
@@ -150,8 +150,30 @@ export async function requireApiKey(
       response: Response;
     }
 > {
+  const ip = extractClientIp(request);
+
+  // SECURITY: Check if IP is blocked due to repeated failures
+  if (isIpBlocked(ip)) {
+    return {
+      ok: false,
+      response: pixelErrorResponse({
+        code: API_ERROR_CODE.rateLimited,
+        message: "Too many failed authentication attempts. Please try again later.",
+        status: 429,
+        origin,
+        retryAfterSeconds: 1800, // 30 minutes
+      }),
+    };
+  }
+
   const normalizedKey = key?.trim() ?? "";
   if (!normalizedKey) {
+    void recordAuthFailure(ip, 'invalid_key', {
+      origin: origin ?? undefined,
+      userAgent: request.headers.get("user-agent") ?? undefined,
+      resource,
+    });
+
     return {
       ok: false,
       response: pixelErrorResponse({
@@ -164,6 +186,12 @@ export async function requireApiKey(
   }
 
   if (!isValidPixelApiKeyFormat(normalizedKey)) {
+    void recordAuthFailure(ip, 'invalid_key', {
+      origin: origin ?? undefined,
+      userAgent: request.headers.get("user-agent") ?? undefined,
+      resource,
+    });
+
     return {
       ok: false,
       response: pixelErrorResponse({
@@ -176,13 +204,27 @@ export async function requireApiKey(
   }
 
   const validated = await validateApiKeyWithStatus(normalizedKey, {
-    ipAddress: extractClientIp(request),
+    ipAddress: ip,
     userAgent: request.headers.get("user-agent"),
     resource,
   });
 
   if (!validated.ok) {
     const failure = mapApiKeyValidationFailure(validated.reason);
+    
+    // Record auth failure
+    const failureType =
+      validated.reason === 'expired'
+        ? 'key_expired'
+        : 'invalid_key';
+    
+    void recordAuthFailure(ip, failureType, {
+      apiKeyPrefix: normalizedKey.substring(0, 16),
+      origin: origin ?? undefined,
+      userAgent: request.headers.get("user-agent") ?? undefined,
+      resource,
+    });
+
     return {
       ok: false,
       response: pixelErrorResponse({
@@ -193,6 +235,9 @@ export async function requireApiKey(
       }),
     };
   }
+
+  // Success - reset failure counter for this IP
+  resetAuthFailures(ip);
 
   return {
     ok: true,
@@ -230,22 +275,42 @@ export async function requireRateLimit(
   limit: number,
   origin: string | null
 ): Promise<{ ok: true } | { ok: false; response: Response }> {
-  const allowed = await rateLimiter.check(
+  if (!key) {
+    // No key means no rate limiting (handled by requireApiKey)
+    return { ok: true };
+  }
+
+  const result = await pixelRateLimiter.check(
     key,
     scope,
     Math.max(1, limit),
     RATE_LIMIT_WINDOW_SECONDS
   );
 
-  if (!allowed) {
+  if (!result.allowed) {
+    const retryAfter = Math.max(
+      1,
+      Math.ceil((result.resetAt - Date.now()) / 1000)
+    );
+
+    const headers = buildErrorHeaders(origin);
+    headers.set('X-RateLimit-Limit', String(limit));
+    headers.set('X-RateLimit-Remaining', String(result.remaining));
+    headers.set('X-RateLimit-Reset', String(Math.floor(result.resetAt / 1000)));
+    headers.set('Retry-After', String(retryAfter));
+
+    const body: ApiErrorResponse = {
+      error: 'Rate limit exceeded',
+      code: API_ERROR_CODE.rateLimited,
+      status: 429,
+      retryAfter,
+    };
+
     return {
       ok: false,
-      response: pixelErrorResponse({
-        code: API_ERROR_CODE.rateLimited,
-        message: "Rate limit exceeded",
+      response: new Response(JSON.stringify(body), {
         status: 429,
-        origin,
-        retryAfterSeconds: RATE_LIMIT_WINDOW_SECONDS,
+        headers,
       }),
     };
   }

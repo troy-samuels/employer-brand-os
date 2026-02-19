@@ -29,11 +29,13 @@ import {
   requireDomain,
   requireRateLimit,
   zodValidationDetails,
+  extractClientIp,
 } from "@/features/pixel/lib/pixel-api";
 import { pixelFactsQuerySchema } from '@/features/pixel/schemas/pixel.schema';
 import { markPixelServiceRequest } from "@/lib/pixel/health";
 import { verifyPixelRequestSignature } from "@/lib/pixel/request-signing";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
+import { recordAuthFailure } from "@/lib/security/auth-monitor";
 
 /**
  * Handles CORS preflight checks for the facts endpoint.
@@ -140,6 +142,19 @@ export async function GET(request: NextRequest): Promise<Response> {
           ? API_ERROR_CODE.replayDetected
           : API_ERROR_CODE.invalidSignature;
 
+      // SECURITY: Record signature failures for monitoring
+      const failureType =
+        signatureResult.error === 'replay_detected'
+          ? 'replay_detected'
+          : 'invalid_signature';
+      
+      void recordAuthFailure(extractClientIp(request), failureType, {
+        apiKeyPrefix: key.substring(0, 16),
+        origin: origin ?? undefined,
+        userAgent: request.headers.get("user-agent") ?? undefined,
+        resource: 'pixel.v1.facts',
+      });
+
       return pixelErrorResponse({
         code: errorCode,
         message: signatureResult.message,
@@ -154,6 +169,14 @@ export async function GET(request: NextRequest): Promise<Response> {
       keyResult.validatedKey.allowedDomains
     );
     if (!domainResult.ok) {
+      // SECURITY: Record domain validation failures
+      void recordAuthFailure(extractClientIp(request), 'domain_not_allowed', {
+        apiKeyPrefix: key.substring(0, 16),
+        origin: origin ?? undefined,
+        userAgent: request.headers.get("user-agent") ?? undefined,
+        resource: 'pixel.v1.facts',
+      });
+
       return domainResult.response;
     }
 
