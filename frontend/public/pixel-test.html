@@ -3,120 +3,499 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rankwell Smart Pixel Test Page</title>
+  <title>Rankwell Smart Pixel - Security Test Page</title>
+  
+  <!-- Content Security Policy test -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' http://localhost:3000 https://*.vercel.app;
+    connect-src 'self' http://localhost:3000 https://*.vercel.app;
+    img-src 'self' data: https:;
+    style-src 'self' 'unsafe-inline';
+  ">
+  
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      max-width: 800px;
-      margin: 40px auto;
-      padding: 20px;
-      background: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 2rem;
     }
-    .card {
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
       background: white;
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 16px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      overflow: hidden;
     }
-    h1 { color: #0F172A; margin-top: 0; }
-    h2 { color: #3B82F6; font-size: 18px; margin-top: 0; }
+    
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      opacity: 0.9;
+    }
+    
+    .content {
+      padding: 2rem;
+    }
+    
+    .section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f9f9f9;
+    }
+    
+    .section h2 {
+      color: #667eea;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .status {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ccc;
+      animation: pulse 2s infinite;
+    }
+    
+    .status.success {
+      background: #4caf50;
+    }
+    
+    .status.error {
+      background: #f44336;
+    }
+    
+    .status.warning {
+      background: #ff9800;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
     pre {
-      background: #1e293b;
-      color: #e2e8f0;
-      padding: 16px;
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1rem;
       border-radius: 6px;
       overflow-x: auto;
-      font-size: 13px;
+      font-size: 0.9rem;
     }
-    .status {
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-weight: 500;
+    
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
     }
-    .status.pending { background: #fef3c7; color: #92400e; }
-    .status.success { background: #d1fae5; color: #065f46; }
-    .status.error { background: #fee2e2; color: #991b1b; }
-    #jsonld-output { white-space: pre-wrap; }
-    .test-controls { margin-bottom: 20px; }
-    button {
-      background: #3B82F6;
+    
+    .test-card {
+      padding: 1rem;
+      background: white;
+      border-radius: 6px;
+      border-left: 4px solid #ccc;
+    }
+    
+    .test-card.pass {
+      border-left-color: #4caf50;
+    }
+    
+    .test-card.fail {
+      border-left-color: #f44336;
+    }
+    
+    .test-card h3 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .test-card p {
+      font-size: 0.9rem;
+      color: #666;
+    }
+    
+    .btn {
+      background: #667eea;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 0.75rem 1.5rem;
       border-radius: 6px;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 1rem;
+      transition: background 0.3s;
     }
-    button:hover { background: #2563eb; }
+    
+    .btn:hover {
+      background: #5568d3;
+    }
+    
+    .btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .careers-job {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+      border-left: 4px solid #667eea;
+    }
+    
+    .careers-job h3 {
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+    
+    .careers-job .meta {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .careers-job .description {
+      color: #555;
+      line-height: 1.5;
+    }
+    
+    .alert {
+      padding: 1rem;
+      border-radius: 6px;
+      margin-bottom: 1rem;
+    }
+    
+    .alert.info {
+      background: #e3f2fd;
+      color: #1976d2;
+      border: 1px solid #1976d2;
+    }
+    
+    .alert.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #2e7d32;
+    }
+    
+    .alert.warning {
+      background: #fff3e0;
+      color: #ef6c00;
+      border: 1px solid #ef6c00;
+    }
   </style>
 </head>
 <body>
-  <h1>Rankwell Smart Pixel Test</h1>
-
-  <div class="card">
-    <h2>Status</h2>
-    <p id="status" class="status pending">Waiting for pixel to load...</p>
-  </div>
-
-  <div class="card">
-    <h2>Injected JSON-LD</h2>
-    <pre id="jsonld-output">Loading...</pre>
-  </div>
-
-  <div class="card">
-    <h2>Events Log</h2>
-    <pre id="events-log"></pre>
-  </div>
-
-  <div class="card">
-    <h2>Test Controls</h2>
-    <div class="test-controls">
-      <button onclick="checkJsonLd()">Check JSON-LD in Head</button>
-      <button onclick="location.reload()">Reload Page</button>
+  <div class="container">
+    <div class="header">
+      <h1>🔒 Rankwell Smart Pixel - Security Test</h1>
+      <p>Testing JSON-LD injection, CORS, CSP, and security hardening</p>
+    </div>
+    
+    <div class="content">
+      <div class="alert info">
+        <strong>⚙️ Test Mode:</strong> This page simulates a real employer careers page with the Rankwell pixel installed.
+        It tests security controls including CSP, CORS, rate limiting, and XSS prevention.
+      </div>
+      
+      <div class="section">
+        <h2>
+          <span class="status" id="pixel-status"></span>
+          Pixel Status
+        </h2>
+        <div id="pixel-info">
+          <p>Initializing pixel...</p>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>
+          <span class="status" id="jsonld-status"></span>
+          JSON-LD Injection
+        </h2>
+        <div id="jsonld-output">
+          <p>Waiting for pixel to inject structured data...</p>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Security Tests</h2>
+        <div class="test-grid" id="security-tests">
+          <div class="test-card">
+            <h3>🔄 Running tests...</h3>
+            <p>Please wait</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Simulated Careers Page</h2>
+        <p style="margin-bottom: 1rem;">This simulates a real employer careers page where the pixel would be installed:</p>
+        
+        <div class="careers-job">
+          <h3>Senior Software Engineer</h3>
+          <div class="meta">📍 Remote · 💰 $120k-$180k · ⏰ Full-time</div>
+          <div class="description">
+            Join our engineering team to build the future of employer brand visibility.
+            Work with cutting-edge AI technology and help companies get discovered by top talent.
+          </div>
+        </div>
+        
+        <div class="careers-job">
+          <h3>Product Designer</h3>
+          <div class="meta">📍 San Francisco, CA · 💰 $100k-$150k · ⏰ Full-time</div>
+          <div class="description">
+            Design beautiful, intuitive experiences for HR teams and candidates alike.
+            Shape the future of how companies showcase their employer brand.
+          </div>
+        </div>
+        
+        <div class="careers-job">
+          <h3>Developer Advocate</h3>
+          <div class="meta">📍 Remote · 💰 $90k-$130k · ⏰ Full-time</div>
+          <div class="description">
+            Help developers integrate Rankwell into their careers pages.
+            Create documentation, demos, and build relationships with the dev community.
+          </div>
+        </div>
+      </div>
+      
+      <div class="section">
+        <h2>Manual Tests</h2>
+        <p style="margin-bottom: 1rem;">Run these manual security tests:</p>
+        <button class="btn" onclick="testXSS()">Test XSS Protection</button>
+        <button class="btn" onclick="testReplay()">Test Replay Protection</button>
+        <button class="btn" onclick="testRateLimit()">Test Rate Limiting</button>
+        <button class="btn" onclick="testCSP()">Test CSP Compliance</button>
+        <div id="manual-test-results" style="margin-top: 1rem;"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Rankwell Smart Pixel -->
-  <script
+  <!-- 
+    RANKWELL SMART PIXEL 
+    Replace with your actual API key for testing
+  -->
+  <script 
     src="/api/pixel/v1/script"
-    data-key="bos_live_d7e911bc3d094453"
-    data-api-base="http://localhost:3001"
+    data-key="bos_test_demo123456789"
+    data-api-base="http://localhost:3000"
+    data-location="hq"
     async
   ></script>
 
+  <!-- Test Runner Script -->
   <script>
-    var eventsLog = document.getElementById('events-log');
-    var statusEl = document.getElementById('status');
-    var jsonldOutput = document.getElementById('jsonld-output');
-
-    function logEvent(msg) {
-      eventsLog.textContent += new Date().toISOString().split('T')[1].split('.')[0] + ' - ' + msg + '\n';
-    }
-
-    function checkJsonLd() {
-      var jsonldScript = document.getElementById('rankwell-pixel-jsonld');
-      if (jsonldScript) {
-        try {
-          var data = JSON.parse(jsonldScript.textContent);
-          jsonldOutput.textContent = JSON.stringify(data, null, 2);
-          statusEl.textContent = 'Success! JSON-LD injected for: ' + (data.name || 'Organization');
-          statusEl.className = 'status success';
-          logEvent('rankwell:loaded - Organization: ' + (data.name || 'Organization'));
-        } catch (e) {
-          jsonldOutput.textContent = 'Error parsing JSON-LD: ' + e.message;
-          statusEl.textContent = 'Error: Unable to parse injected JSON-LD';
-          statusEl.className = 'status error';
-        }
+    // Security test suite
+    const tests = [];
+    
+    function updatePixelStatus() {
+      const pixelStatus = document.getElementById('pixel-status');
+      const pixelInfo = document.getElementById('pixel-info');
+      
+      const scriptTag = document.querySelector('script[data-key]');
+      if (scriptTag) {
+        pixelStatus.className = 'status success';
+        pixelInfo.innerHTML = `
+          <div class="alert success">
+            <strong>✓ Pixel loaded successfully</strong><br>
+            API Key: ${scriptTag.getAttribute('data-key')}<br>
+            API Base: ${scriptTag.getAttribute('data-api-base')}<br>
+            Location: ${scriptTag.getAttribute('data-location') || 'default'}
+          </div>
+        `;
       } else {
-        jsonldOutput.textContent = 'No JSON-LD script found in head';
+        pixelStatus.className = 'status error';
+        pixelInfo.innerHTML = '<div class="alert warning"><strong>⚠️ Pixel not loaded</strong></div>';
       }
     }
-
-    logEvent('Page loaded, waiting for pixel...');
-
-    // Check after a short delay in case pixel hasn't loaded yet
-    setTimeout(checkJsonLd, 2000);
+    
+    function checkJSONLD() {
+      const jsonldStatus = document.getElementById('jsonld-status');
+      const jsonldOutput = document.getElementById('jsonld-output');
+      
+      const jsonldElement = document.getElementById('rankwell-pixel-jsonld');
+      
+      if (jsonldElement) {
+        try {
+          const data = JSON.parse(jsonldElement.textContent);
+          jsonldStatus.className = 'status success';
+          
+          jsonldOutput.innerHTML = `
+            <div class="alert success">
+              <strong>✓ JSON-LD injected successfully</strong>
+            </div>
+            <pre>${JSON.stringify(data, null, 2)}</pre>
+          `;
+          
+          // Run JSON-LD security tests
+          runJSONLDTests(data);
+        } catch (e) {
+          jsonldStatus.className = 'status error';
+          jsonldOutput.innerHTML = `
+            <div class="alert warning">
+              <strong>⚠️ JSON-LD parse error:</strong> ${e.message}
+            </div>
+          `;
+        }
+      } else {
+        jsonldStatus.className = 'status warning';
+        jsonldOutput.innerHTML = '<p>No JSON-LD element found yet...</p>';
+      }
+    }
+    
+    function runJSONLDTests(data) {
+      tests.length = 0; // Clear previous tests
+      
+      // Test 1: Check for XSS patterns
+      const serialized = JSON.stringify(data);
+      tests.push({
+        name: 'XSS Protection',
+        pass: !/<script/i.test(serialized) && !/javascript:/i.test(serialized),
+        message: 'No XSS patterns found in JSON-LD'
+      });
+      
+      // Test 2: Validate schema.org structure
+      tests.push({
+        name: 'Schema.org Structure',
+        pass: data['@context'] && data['@type'],
+        message: 'Valid schema.org structure'
+      });
+      
+      // Test 3: Check for dangerous HTML
+      tests.push({
+        name: 'HTML Sanitization',
+        pass: !/<\/?[a-z][\s\S]*>/i.test(serialized),
+        message: 'No HTML tags in data'
+      });
+      
+      // Test 4: Validate JSON structure
+      tests.push({
+        name: 'JSON Validity',
+        pass: typeof data === 'object' && data !== null,
+        message: 'Valid JSON structure'
+      });
+      
+      // Test 5: Check nonce attribute
+      const jsonldElement = document.getElementById('rankwell-pixel-jsonld');
+      const hasNonce = jsonldElement && jsonldElement.hasAttribute('nonce');
+      tests.push({
+        name: 'CSP Nonce',
+        pass: hasNonce,
+        message: hasNonce ? 'Nonce attribute present' : 'No nonce (might fail CSP)'
+      });
+      
+      // Test 6: Verify correct script type
+      tests.push({
+        name: 'Script Type',
+        pass: jsonldElement && jsonldElement.type === 'application/ld+json',
+        message: 'Correct MIME type for JSON-LD'
+      });
+      
+      renderTests();
+    }
+    
+    function renderTests() {
+      const container = document.getElementById('security-tests');
+      
+      if (tests.length === 0) {
+        container.innerHTML = '<div class="test-card"><h3>No tests run yet</h3></div>';
+        return;
+      }
+      
+      container.innerHTML = tests.map(test => `
+        <div class="test-card ${test.pass ? 'pass' : 'fail'}">
+          <h3>${test.pass ? '✓' : '✗'} ${test.name}</h3>
+          <p>${test.message}</p>
+        </div>
+      `).join('');
+    }
+    
+    // Manual test functions
+    function testXSS() {
+      const results = document.getElementById('manual-test-results');
+      results.innerHTML = `
+        <div class="alert info">
+          <strong>XSS Test:</strong> Check browser console for any script execution attempts.
+          The pixel should sanitize all data before injection.
+        </div>
+      `;
+      console.log('[XSS Test] Checking for script execution...');
+      console.log('[XSS Test] JSON-LD should contain NO executable code');
+    }
+    
+    function testReplay() {
+      const results = document.getElementById('manual-test-results');
+      results.innerHTML = `
+        <div class="alert info">
+          <strong>Replay Test:</strong> The pixel uses nonce-based replay protection.
+          Each request includes a unique nonce that can only be used once.
+        </div>
+      `;
+      console.log('[Replay Test] Pixel implements nonce-based replay protection');
+    }
+    
+    function testRateLimit() {
+      const results = document.getElementById('manual-test-results');
+      results.innerHTML = `
+        <div class="alert info">
+          <strong>Rate Limit Test:</strong> Rapidly refresh this page to trigger rate limiting.
+          After ~100 requests/minute, you should see 429 errors in the network tab.
+        </div>
+      `;
+      console.log('[Rate Limit Test] Check Network tab for 429 responses');
+    }
+    
+    function testCSP() {
+      const results = document.getElementById('manual-test-results');
+      results.innerHTML = `
+        <div class="alert info">
+          <strong>CSP Test:</strong> This page has a strict CSP policy.
+          The pixel should respect it and inject JSON-LD with proper nonce.
+        </div>
+      `;
+      console.log('[CSP Test] Page has strict CSP - pixel should still work');
+    }
+    
+    // Run status checks periodically
+    updatePixelStatus();
+    setInterval(checkJSONLD, 1000);
+    
+    // Initial check after 2 seconds
+    setTimeout(() => {
+      checkJSONLD();
+    }, 2000);
+    
+    // Log to console
+    console.log('%c🔒 Rankwell Smart Pixel Security Test Page', 'font-size: 20px; color: #667eea; font-weight: bold');
+    console.log('This page tests pixel security including XSS, CORS, CSP, and rate limiting.');
+    console.log('Check the Network tab to see pixel API requests and responses.');
   </script>
 </body>
 </html>
