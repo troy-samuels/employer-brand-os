@@ -13,6 +13,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { sanitizeOrganizationJsonLd } from '@/lib/utils/sanitize-jsonld';
 import type {
   JsonLdOptions,
   JsonLdOrganization,
@@ -72,7 +73,11 @@ export async function generateJsonLd(
   // Map facts to JSON-LD properties
   mapFactsToJsonLd(facts, jsonLd);
 
-  return jsonLd;
+  // SECURITY: Sanitize all values before injection into customer domains
+  // This prevents XSS even if malicious data gets into the database
+  const sanitized = sanitizeOrganizationJsonLd(jsonLd as Record<string, unknown>);
+
+  return sanitized as JsonLdOrganization;
 }
 
 /**
