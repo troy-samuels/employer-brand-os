@@ -13,6 +13,15 @@ import type { NextConfig } from "next";
  * that lack CORS headers. The middleware sets COEP only where needed.
  */
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      {
+        source: "/tools/llms-txt",
+        destination: "/tools/employer-schema",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       {
