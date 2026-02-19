@@ -15,6 +15,7 @@
  */
 
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { untypedTable } from '@/lib/supabase/untyped-table';
 
 type FailureType =
   | 'invalid_signature'
@@ -186,7 +187,7 @@ async function logSecurityEvent(event: {
   metadata?: Record<string, unknown>;
 }): Promise<void> {
   try {
-    await supabaseAdmin.from('security_events').insert({
+    await untypedTable('security_events').insert({
       event_type: event.eventType,
       severity: event.severity,
       ip_address: event.ip,
