@@ -200,10 +200,14 @@ export async function checkBrandReputation(
 export function scoreBrandReputation(reputation: BrandReputation): number {
   const { sourceCount, sentiment } = reputation;
 
-  // Base score from platform presence (more platforms = more visible to AI)
+  // Evidence: Brands present on 4+ platforms get 2.8x more AI citations
+  // (Digital Bloom 2025 AI Citation Report). Multi-platform presence is
+  // among the strongest predictors of LLM citation alongside brand search volume.
   let score = 0;
 
-  if (sourceCount >= 4) {
+  if (sourceCount >= 5) {
+    score = 12;
+  } else if (sourceCount >= 4) {
     score = 10;
   } else if (sourceCount >= 2) {
     score = 7;
@@ -214,7 +218,7 @@ export function scoreBrandReputation(reputation: BrandReputation): number {
 
   // Sentiment modifier
   if (sentiment === "positive" && score > 0) {
-    score = Math.min(score + 5, 15);
+    score = Math.min(score + 5, 17);
   } else if (sentiment === "negative" && score > 0) {
     score = Math.max(score - 3, 0);
   }

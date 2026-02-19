@@ -37,12 +37,13 @@ const createMockResult = (
   },
   score: 0,
   scoreBreakdown: {
-    llmsTxt: 0,
     jsonld: 0,
-    salaryData: 0,
-    careersPage: 0,
     robotsTxt: 0,
+    careersPage: 0,
     brandReputation: 0,
+    salaryData: 0,
+    contentFormat: 0,
+    llmsTxt: 0,
   },
   ...overrides,
 });
@@ -69,7 +70,7 @@ describe("AuditResults", () => {
   });
 
   describe("check cards", () => {
-    it("should render all 5 check cards", () => {
+    it("should render all 7 check cards", () => {
       const result = createMockResult();
       render(<AuditResults result={result} />);
 
@@ -77,28 +78,32 @@ describe("AuditResults", () => {
       expect(screen.getAllByText("Structured Data").length).toBeGreaterThanOrEqual(1);
       expect(screen.getAllByText("Salary Transparency").length).toBeGreaterThanOrEqual(1);
       expect(screen.getAllByText("Careers Page").length).toBeGreaterThanOrEqual(1);
-      expect(screen.getAllByText("Bot Access").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("AI Crawler Access").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("Content Format").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("Brand Presence").length).toBeGreaterThanOrEqual(1);
     });
 
     it("should display score contribution (earned/max)", () => {
       const result = createMockResult({
         scoreBreakdown: {
-          llmsTxt: 5,
-          jsonld: 20,
-          salaryData: 0,
-          careersPage: 30,
-          robotsTxt: 8,
+          jsonld: 27,
+          robotsTxt: 12,
+          careersPage: 17,
           brandReputation: 10,
+          salaryData: 0,
+          contentFormat: 4,
+          llmsTxt: 1,
         },
       });
       render(<AuditResults result={result} />);
 
-      expect(screen.getByText("5/10")).toBeInTheDocument();
-      expect(screen.getByText("20/20")).toBeInTheDocument();
-      expect(screen.getByText("0/15")).toBeInTheDocument();
-      expect(screen.getByText("30/30")).toBeInTheDocument();
-      expect(screen.getByText("8/10")).toBeInTheDocument();
-      expect(screen.getByText("10/15")).toBeInTheDocument();
+      expect(screen.getByText("27/27")).toBeInTheDocument();
+      expect(screen.getByText("12/17")).toBeInTheDocument();
+      expect(screen.getByText("17/17")).toBeInTheDocument();
+      expect(screen.getByText("10/17")).toBeInTheDocument();
+      expect(screen.getByText("0/12")).toBeInTheDocument();
+      expect(screen.getByText("4/7")).toBeInTheDocument();
+      expect(screen.getByText("1/3")).toBeInTheDocument();
     });
   });
 
@@ -319,7 +324,7 @@ describe("AuditResults", () => {
         llmsTxtHasEmployment: false,
       });
       render(<AuditResults result={result} />);
-      expect(screen.getByText(/No llms.txt found/)).toBeInTheDocument();
+      expect(screen.getByText(/No llms.txt file found/)).toBeInTheDocument();
     });
   });
 });

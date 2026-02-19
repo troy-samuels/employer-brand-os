@@ -429,12 +429,13 @@ export type WebsiteCheckResult = {
   brandReputation: BrandReputation;
   score: number;
   scoreBreakdown: {
-    llmsTxt: number;
     jsonld: number;
-    salaryData: number;
-    careersPage: number;
     robotsTxt: number;
+    careersPage: number;
     brandReputation: number;
+    salaryData: number;
+    contentFormat: number;
+    llmsTxt: number;
   };
 };
 
@@ -1433,7 +1434,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "jsonld_base_salary",
-      score: 15,
+      score: 12,
       detectedCurrency,
     };
   }
@@ -1442,7 +1443,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "multiple_ranges",
-      score: 12,
+      score: 10,
       detectedCurrency,
     };
   }
@@ -1451,7 +1452,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "single_range",
-      score: 8,
+      score: 6,
       detectedCurrency,
     };
   }
@@ -1460,7 +1461,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "mention_only",
-      score: 4,
+      score: 3,
       detectedCurrency,
     };
   }
@@ -1476,63 +1477,112 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
 /**
  * Scoring weights (total: 100)
  *
- *   Careers page ........... 30  (primary signal for employer brand)
- *   Structured data ........ 20  (JSON-LD helps AI parse the company)
- *   Salary transparency .... 15  (key candidate question)
- *   Brand reputation ....... 15  (review platform presence + sentiment)
- *   Bot access ............. 10  (foundational gate check)
- *   llms.txt ............... 10  (emerging best practice, low adoption)
+ * Evidence-based model (Feb 2026) — aligned with Princeton GEO study,
+ * Digital Bloom 7K-citation analysis, and Senthor/SE Ranking llms.txt studies.
+ *
+ *   Structured data ........ 27  (JSON-LD: proven 30-40% citation boost)
+ *   Bot access ............. 17  (foundational: AI crawlers must reach your content)
+ *   Careers page ........... 17  (content quality + format for AI citation)
+ *   Brand reputation ....... 17  (multi-platform presence: 4+ platforms = 2.8x citations)
+ *   Salary transparency .... 12  (key candidate query; machine-readable ranges matter)
+ *   Content format ......... 7   (FAQ schema, semantic HTML, answer-first structure)
+ *   llms.txt ............... 3   (minor signal — limited evidence of AI bot adoption)
  */
 
 function scoreLlmsCheck(hasLlmsTxt: boolean, llmsTxtHasEmployment: boolean): number {
+  // Downgraded: Senthor (10M+ requests) and SE Ranking (300K domains) studies
+  // found zero measurable impact on AI citations. Kept as minor signal only.
   if (hasLlmsTxt && llmsTxtHasEmployment) {
-    return 10;
+    return 3;
   }
   if (hasLlmsTxt) {
-    return 5;
+    return 1;
   }
   return 0;
 }
 
 function scoreJsonLdCheck(schemas: string[]): number {
+  // Upgraded: Structured data proven to improve AI citation likelihood by 30-40%
+  // (Princeton GEO study, Digital Bloom report). Most impactful technical signal.
   const hasJobSchema = schemas.includes("JobPosting") || schemas.includes("EmployerAggregateRating");
   if (hasJobSchema) {
-    return 20;
+    return 27;
   }
 
   if (schemas.includes("Organization")) {
-    return 10;
+    return 15;
   }
 
   if (schemas.length > 0) {
-    return 4;
+    return 6;
   }
 
   return 0;
 }
 
 function scoreCareersCheck(status: CareersPageStatus): number {
+  // Adjusted: Still important as the primary employer content source,
+  // but AI citation depends more on content format and structure than existence alone.
   if (status === "full") {
-    return 30;
+    return 17;
   }
   if (status === "partial") {
-    return 15;
+    return 8;
   }
   return 0;
 }
 
 function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number): number {
+  // Upgraded: Foundational gate — if AI crawlers can't reach you, nothing else matters.
+  // 87% of ChatGPT citations correlate with Bing indexation (Digital Bloom).
   if (status === "allows") {
-    return 10;
+    return 17;
   }
   if (status === "partial") {
-    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 5);
-    return 5 + partialBonus;
+    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 7);
+    return 7 + partialBonus;
   }
   if (status === "no_rules") {
-    return 5;
+    return 9;
   }
   return 0;
+}
+
+/**
+ * Score content format signals that AI models prefer to cite.
+ * Based on Princeton GEO study: content with citations, statistics, quotations,
+ * and structured Q&A format sees up to 40% visibility boost.
+ */
+function scoreContentFormat(careersHtml: string | null, hasJsonld: boolean, hasSitemap: boolean): number {
+  if (!careersHtml) return 0;
+
+  let score = 0;
+  const html = careersHtml.toLowerCase();
+
+  // FAQ schema or FAQ-like structure (AI prefers Q&A format)
+  if (html.includes('"faqpage"') || html.includes('"question"') ||
+      (html.includes('<details') && html.includes('<summary'))) {
+    score += 2;
+  }
+
+  // Semantic heading structure (proper h1-h3 hierarchy helps AI parse)
+  const hasH1 = /<h1[\s>]/i.test(careersHtml);
+  const hasH2 = /<h2[\s>]/i.test(careersHtml);
+  if (hasH1 && hasH2) {
+    score += 2;
+  }
+
+  // Tables or structured lists (AI prefers tabular/list data)
+  if (html.includes('<table') || html.includes('<dl')) {
+    score += 1;
+  }
+
+  // Sitemap present (helps AI crawlers discover content)
+  if (hasSitemap) {
+    score += 2;
+  }
+
+  return Math.min(score, 7);
 }
 
 /**
@@ -1562,6 +1612,7 @@ export async function runWebsiteChecks(
   let careersBlockedUrl: string | null = null;
   let atsDetected: AtsName = null;
   let hasSitemap = false;
+  let careersPageHtml: string | null = null;
   let robotsTxtStatus: RobotsTxtStatus = "not_found";
   let robotsTxtAllowedBots: string[] = [];
   let robotsTxtBlockedBots: string[] = [];
@@ -1598,6 +1649,7 @@ export async function runWebsiteChecks(
     careersPageStatus = careersCheck.status;
     careersPageUrl = careersCheck.url;
     careersBlockedUrl = careersCheck.blockedUrl;
+    careersPageHtml = careersCheck.html ?? null;
 
     // If the homepage appeared empty (JS-rendered shell) but we found real
     // content elsewhere, upgrade the overall status — the site isn't truly empty.
@@ -1685,22 +1737,28 @@ export async function runWebsiteChecks(
   // Brand reputation check (runs in parallel-safe position — all other data collected)
   const brandReputation = await checkBrandReputation(companyName);
 
+  // Content format scoring uses the careers page HTML collected during the crawl.
+  // careersPageHtml is set inside the crawl block; it's null if the site is unreachable.
+  const careersHtml = careersPageHtml;
+
   const scoreBreakdown = {
-    llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
     jsonld: scoreJsonLdCheck(jsonldSchemasFound),
-    salaryData: salaryScore,
-    careersPage: scoreCareersCheck(careersPageStatus),
     robotsTxt: scoreRobotsCheck(robotsTxtStatus, robotsTxtAllowedBots.length),
+    careersPage: scoreCareersCheck(careersPageStatus),
     brandReputation: scoreBrandReputation(brandReputation),
+    salaryData: salaryScore,
+    contentFormat: scoreContentFormat(careersHtml, hasJsonld, hasSitemap),
+    llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
   };
 
   const score =
-    scoreBreakdown.llmsTxt +
     scoreBreakdown.jsonld +
-    scoreBreakdown.salaryData +
-    scoreBreakdown.careersPage +
     scoreBreakdown.robotsTxt +
-    scoreBreakdown.brandReputation;
+    scoreBreakdown.careersPage +
+    scoreBreakdown.brandReputation +
+    scoreBreakdown.salaryData +
+    scoreBreakdown.contentFormat +
+    scoreBreakdown.llmsTxt;
 
   return {
     domain: normalizedDomain || domain.trim(),

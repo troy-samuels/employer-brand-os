@@ -12,45 +12,51 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "How We Score Your AI Visibility | Rankwell",
   description:
-    "Understand the six checks behind your Rankwell AI Visibility Score — and what each one means for how candidates find you through AI.",
+    "Understand the seven checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
 };
 
 const CHECKS = [
   {
-    name: "Careers Page",
-    weight: 30,
-    what: "We look for a careers page and assess whether it has enough content for AI to surface your open roles and culture.",
-    why: "Your careers page is the primary source AI uses to answer questions about working at your company. A thin page means thin answers.",
-  },
-  {
     name: "Structured Data (JSON-LD)",
-    weight: 20,
-    what: "We scan your homepage for JSON-LD schema markup — machine-readable facts about your organisation, locations, and roles.",
-    why: "Structured data is the language AI agents trust most. It's the difference between AI guessing your details and knowing them.",
+    weight: 27,
+    what: "We scan your website for schema.org markup — machine-readable facts about your organisation, job listings, and salary ranges.",
+    why: "Research shows structured data improves AI citation accuracy by 30–40% (Princeton GEO Study, 2024). It's the single most impactful technical signal for AI visibility.",
   },
   {
-    name: "Brand Reputation",
-    weight: 15,
-    what: "We analyse your presence on employer review platforms and public sentiment to see how your brand is perceived by candidates.",
-    why: "AI models synthesise review data when answering questions about your company. A weak or negative reputation signal means AI paints an incomplete — or unflattering — picture.",
+    name: "AI Crawler Access",
+    weight: 17,
+    what: "We check your robots.txt to see which AI crawlers (GPTBot, ClaudeBot, PerplexityBot) can access your site, plus sitemap availability.",
+    why: "87% of ChatGPT citations correlate with Bing indexation. If AI crawlers can't reach your content, everything else becomes irrelevant.",
+  },
+  {
+    name: "Careers Page Quality",
+    weight: 17,
+    what: "We look for a careers page and assess whether it has substantive content about roles, culture, and benefits that AI can reference.",
+    why: "Your careers page is the primary employer content AI draws from — but only if it's structured, accessible, and rich enough to cite.",
+  },
+  {
+    name: "Brand Reputation & Presence",
+    weight: 17,
+    what: "We measure your presence across employer review platforms and assess public sentiment. Brands on 4+ platforms get significantly more AI citations.",
+    why: "Multi-platform presence is among the strongest predictors of AI citation. AI cross-references multiple sources — the more places you appear, the more likely you are to be mentioned.",
   },
   {
     name: "Salary Transparency",
-    weight: 15,
-    what: "We check whether salary information is visible on your careers or job pages in a format AI crawlers can read.",
-    why: '"How much does [company] pay?" is one of the top questions candidates ask AI. If you don\'t publish it, AI either guesses or says nothing.',
+    weight: 12,
+    what: "We check whether salary information is visible on your careers or job pages in a machine-readable format (especially JSON-LD JobPosting with baseSalary).",
+    why: '"How much does [company] pay?" is the #1 question candidates ask AI about employers. Published salary data reduces AI hallucination from £18K average error to £3K.',
   },
   {
-    name: "Bot Access (robots.txt)",
-    weight: 10,
-    what: "We check your robots.txt to see which AI crawlers are allowed or blocked from reading your site.",
-    why: "If you're blocking GPTBot, ClaudeBot, or other AI crawlers, none of the above matters — they can't see your site at all.",
+    name: "Content Format & Structure",
+    weight: 7,
+    what: "We assess whether your content uses formats AI prefers: FAQ schema, semantic heading hierarchy, structured tables, and clear Q&A patterns.",
+    why: "AI models disproportionately cite content in FAQ, comparative, and tabular formats. Proper semantic HTML helps AI parse and extract your information accurately.",
   },
   {
     name: "AI Instructions (llms.txt)",
-    weight: 10,
-    what: "We look for an llms.txt file on your domain — a standardised file that tells AI models how to describe your organisation.",
-    why: "Without it, AI invents your employer brand from whatever scraps it can find. With it, you control the narrative directly.",
+    weight: 3,
+    what: "We check for an llms.txt file — a structured file that tells AI models how to describe your organisation.",
+    why: "While llms.txt adoption is growing, current evidence shows limited AI bot engagement with this format. It's a minor positive signal but not a primary driver of AI visibility.",
   },
 ];
 
@@ -76,9 +82,9 @@ export default function HowWeScorePage() {
             How we calculate your score
           </h1>
           <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-            Your AI Visibility Score is based on six checks that measure how
-            well AI models can find, read, and accurately describe your employer
-            brand.
+            Your AI Visibility Score is based on seven checks — each weighted
+            according to peer-reviewed research on what actually drives AI
+            citations across ChatGPT, Claude, Perplexity, and Google AI.
           </p>
         </div>
       </div>

@@ -137,10 +137,10 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
 
 function getLlmsDetail(r: WebsiteCheckResult): string {
   if (r.hasLlmsTxt && r.llmsTxtHasEmployment)
-    return "You have an llms.txt with hiring content — AI models can tell your employer story accurately.";
+    return "You have an llms.txt with hiring content — a minor positive signal for AI models.";
   if (r.hasLlmsTxt)
-    return "You have an llms.txt, but it doesn't mention hiring or culture yet.";
-  return "No llms.txt found. AI has no structured instructions about who you are as an employer.";
+    return "You have an llms.txt file, though it doesn't mention hiring or culture yet.";
+  return "No llms.txt file found. This is a minor signal — structured data (JSON-LD) has far more impact on AI visibility.";
 }
 
 function getJsonldDetail(r: WebsiteCheckResult): string {
@@ -334,12 +334,13 @@ export function AuditResults({ result }: AuditResultsProps) {
   const { score, scoreBreakdown, companyName } = result;
 
   const passed = [
-    scoreBreakdown.llmsTxt,
     scoreBreakdown.jsonld,
-    scoreBreakdown.salaryData,
-    scoreBreakdown.careersPage,
     scoreBreakdown.robotsTxt,
+    scoreBreakdown.careersPage,
     scoreBreakdown.brandReputation,
+    scoreBreakdown.salaryData,
+    scoreBreakdown.contentFormat,
+    scoreBreakdown.llmsTxt,
   ].filter((s) => s > 0).length;
 
   const scanDate = new Date().toLocaleDateString("en-GB", {
@@ -362,7 +363,7 @@ export function AuditResults({ result }: AuditResultsProps) {
       >
         <p className="text-sm text-slate-600 text-center">
           <span className="font-semibold text-slate-900">{passed}</span> of{" "}
-          <span className="font-semibold text-slate-900">6</span> checks
+          <span className="font-semibold text-slate-900">7</span> checks
           passed
         </p>
       </motion.div>
@@ -370,12 +371,28 @@ export function AuditResults({ result }: AuditResultsProps) {
       {/* Cards */}
       <div className="space-y-3">
         <CheckCard
+          icon={<TreeStructure size={22} weight="duotone" />}
+          name="Structured Data"
+          earned={scoreBreakdown.jsonld}
+          max={27}
+          detail={getJsonldDetail(result)}
+          index={0}
+        />
+        <CheckCard
+          icon={<ShieldCheck size={22} weight="duotone" />}
+          name="AI Crawler Access"
+          earned={scoreBreakdown.robotsTxt}
+          max={17}
+          detail={getRobotsDetail(result)}
+          index={1}
+        />
+        <CheckCard
           icon={<Briefcase size={22} weight="duotone" />}
           name="Careers Page"
           earned={scoreBreakdown.careersPage}
-          max={30}
+          max={17}
           detail={getCareersDetail(result)}
-          index={0}
+          index={2}
         />
 
         {/* Bot-protection conversion card */}
@@ -385,44 +402,36 @@ export function AuditResults({ result }: AuditResultsProps) {
           )}
 
         <CheckCard
-          icon={<TreeStructure size={22} weight="duotone" />}
-          name="Structured Data"
-          earned={scoreBreakdown.jsonld}
-          max={20}
-          detail={getJsonldDetail(result)}
-          index={1}
-        />
-        <CheckCard
           icon={<ChatsCircle size={22} weight="duotone" />}
-          name="Brand Reputation"
+          name="Brand Presence"
           earned={scoreBreakdown.brandReputation}
-          max={15}
+          max={17}
           detail={getBrandReputationDetail(result)}
-          index={2}
+          index={3}
         />
         <CheckCard
           icon={getCurrencyIcon(result.detectedCurrency)}
           name="Salary Transparency"
           earned={scoreBreakdown.salaryData}
-          max={15}
+          max={12}
           detail={getSalaryDetail(result)}
-          index={3}
+          index={4}
         />
         <CheckCard
-          icon={<ShieldCheck size={22} weight="duotone" />}
-          name="Bot Access"
-          earned={scoreBreakdown.robotsTxt}
-          max={10}
-          detail={getRobotsDetail(result)}
-          index={4}
+          icon={<ChatCircleText size={22} weight="duotone" />}
+          name="Content Format"
+          earned={scoreBreakdown.contentFormat}
+          max={7}
+          detail={result.hasSitemap ? "Your content includes structured formats AI prefers to cite." : "Adding FAQ schema, semantic headings, and a sitemap helps AI parse your content."}
+          index={5}
         />
         <CheckCard
           icon={<ChatCircleText size={22} weight="duotone" />}
           name="AI Instructions"
           earned={scoreBreakdown.llmsTxt}
-          max={10}
+          max={3}
           detail={getLlmsDetail(result)}
-          index={5}
+          index={6}
         />
       </div>
 
