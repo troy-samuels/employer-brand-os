@@ -22,8 +22,9 @@ import {
   ShieldWarning,
   ArrowSquareOut,
   ChatsCircle,
+  CircleNotch,
 } from "@phosphor-icons/react";
-import type { ReactNode } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import Image from "next/image";
 
 import type { WebsiteCheckResult, CurrencyCode } from "@/lib/audit/website-checks";
@@ -31,6 +32,8 @@ import { ScoreGauge } from "./score-gauge";
 
 interface AuditResultsProps {
   result: WebsiteCheckResult;
+  onRerunWithCareersUrl?: (careersUrl: string) => Promise<void> | void;
+  isRerunning?: boolean;
 }
 
 /* ── Helpers ───────────────────────────────────────── */
@@ -80,9 +83,10 @@ interface CheckCardProps {
   max: number;
   detail: string;
   index: number;
+  isLoading?: boolean;
 }
 
-function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
+function CheckCard({ icon, name, earned, max, detail, index, isLoading = false }: CheckCardProps) {
   const status = checkStatus(earned, max);
   const isFail = status === "fail";
 
@@ -114,17 +118,20 @@ function CheckCard({ icon, name, earned, max, detail, index }: CheckCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-baseline justify-between gap-4 mb-1.5">
             <h3 className="text-[15px] font-semibold text-slate-900">{name}</h3>
-            <span
-              className={`text-sm font-semibold tabular-nums shrink-0 ${
-                status === "pass"
-                  ? "text-status-verified"
-                  : status === "partial"
-                    ? "text-status-warning"
-                    : "text-status-critical"
-              }`}
-            >
-              {earned}/{max}
-            </span>
+            <div className="flex items-center gap-2 shrink-0">
+              {isLoading && <CircleNotch size={14} weight="bold" className="text-slate-400 animate-spin" />}
+              <span
+                className={`text-sm font-semibold tabular-nums shrink-0 ${
+                  status === "pass"
+                    ? "text-status-verified"
+                    : status === "partial"
+                      ? "text-status-warning"
+                      : "text-status-critical"
+                }`}
+              >
+                {earned}/{max}
+              </span>
+            </div>
           </div>
           <p className="text-[13px] leading-relaxed text-slate-500">{detail}</p>
         </div>
@@ -297,6 +304,104 @@ function BotProtectCard({ blockedUrl }: BotProtectCardProps) {
   );
 }
 
+function looksLikeUrl(value: string): boolean {
+  const trimmed = value.trim();
+  if (!trimmed) {
+    return false;
+  }
+
+  const candidate = /^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+
+  try {
+    const parsed = new URL(candidate);
+    return (
+      (parsed.protocol === "http:" || parsed.protocol === "https:") &&
+      Boolean(parsed.hostname) &&
+      parsed.hostname.includes(".")
+    );
+  } catch {
+    return false;
+  }
+}
+
+interface CareersUrlPromptCardProps {
+  onRerunWithCareersUrl?: (careersUrl: string) => Promise<void> | void;
+  isRerunning: boolean;
+}
+
+function CareersUrlPromptCard({
+  onRerunWithCareersUrl,
+  isRerunning,
+}: CareersUrlPromptCardProps) {
+  const [careersUrl, setCareersUrl] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!onRerunWithCareersUrl || isRerunning) {
+      return;
+    }
+
+    const trimmed = careersUrl.trim();
+    if (!looksLikeUrl(trimmed)) {
+      setSubmitError("Please enter a valid URL.");
+      return;
+    }
+
+    setSubmitError(null);
+    try {
+      await onRerunWithCareersUrl(trimmed);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Re-scan failed. Please check the URL and try again.";
+      setSubmitError(message);
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: 0.2 }}
+      className="rounded-2xl border border-amber-200 bg-amber-50/60 p-5 shadow-card"
+      data-testid="careers-url-prompt"
+    >
+      <p className="text-[13px] leading-relaxed text-slate-600 mb-4">
+        We couldn&apos;t find your careers page. If it&apos;s on a different domain, paste the link
+        below.
+      </p>
+
+      <form className="space-y-3" onSubmit={handleSubmit}>
+        <input
+          type="text"
+          inputMode="url"
+          autoComplete="url"
+          value={careersUrl}
+          onChange={(event) => {
+            setCareersUrl(event.target.value);
+            if (submitError) {
+              setSubmitError(null);
+            }
+          }}
+          placeholder="e.g. jobs.yourcompany.com/careers"
+          disabled={isRerunning}
+          className="w-full rounded-xl border border-amber-200 bg-white px-3.5 py-2.5 text-[13px] text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-amber-200 focus:border-amber-300 disabled:cursor-not-allowed disabled:bg-amber-50/50"
+          aria-label="Careers page URL"
+        />
+        {submitError && <p className="text-[12px] text-status-critical">{submitError}</p>}
+        <button
+          type="submit"
+          disabled={isRerunning || !onRerunWithCareersUrl}
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2.5 text-[13px] font-medium text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-500"
+        >
+          {isRerunning && <CircleNotch size={14} weight="bold" className="animate-spin" />}
+          {isRerunning ? "Re-scanning..." : "Re-scan with careers page"}
+        </button>
+      </form>
+    </motion.div>
+  );
+}
+
 function getRobotsDetail(r: WebsiteCheckResult): string {
   if (r.robotsTxtStatus === "partial") {
     const parts: string[] = ["Some AI crawlers are blocked, others can access your site."];
@@ -332,7 +437,11 @@ function getScoreSummary(score: number): string {
  * @param props - Component props containing the finalized audit result.
  * @returns The composed audit results layout.
  */
-export function AuditResults({ result }: AuditResultsProps) {
+export function AuditResults({
+  result,
+  onRerunWithCareersUrl,
+  isRerunning = false,
+}: AuditResultsProps) {
   const { score, scoreBreakdown, companyName } = result;
 
   const passed = [
@@ -395,7 +504,15 @@ export function AuditResults({ result }: AuditResultsProps) {
           max={17}
           detail={getCareersDetail(result)}
           index={2}
+          isLoading={result.careersPageStatus === "not_found" && isRerunning}
         />
+
+        {result.careersPageStatus === "not_found" && (
+          <CareersUrlPromptCard
+            onRerunWithCareersUrl={onRerunWithCareersUrl}
+            isRerunning={isRerunning}
+          />
+        )}
 
         {/* Bot-protection conversion card */}
         {result.careersPageStatus === "bot_protected" &&

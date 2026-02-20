@@ -29,7 +29,8 @@ import {
 } from "@/lib/seo";
 
 export default function Home() {
-  const { state, isLoading, result, error, runAudit, reset } = useAudit();
+  const { state, isLoading, isRerunning, result, error, runAudit, rerunWithCareersUrl, reset } =
+    useAudit();
 
   const organizationSchema = generateOrganizationSchema({
     name: SITE_NAME,
@@ -127,7 +128,11 @@ export default function Home() {
                   transition={{ duration: 0.4 }}
                   className="mx-auto w-full max-w-lg space-y-10"
                 >
-                  <AuditResults result={result} />
+                  <AuditResults
+                    result={result}
+                    onRerunWithCareersUrl={rerunWithCareersUrl}
+                    isRerunning={isRerunning}
+                  />
                   <AuditGate score={result.score} companySlug={result.companySlug} />
                   <motion.div
                     initial={{ opacity: 0 }}

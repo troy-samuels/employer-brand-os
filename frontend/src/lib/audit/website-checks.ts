@@ -1176,6 +1176,49 @@ async function runCrossDomainCareersCheck(
   return bestResult;
 }
 
+async function runCareersOverrideCheck(
+  careersUrlOverride: string,
+  domain: string,
+): Promise<CareersCheckResult> {
+  let careersDomain = domain;
+
+  try {
+    careersDomain = new URL(careersUrlOverride).hostname.toLowerCase();
+  } catch {
+    careersDomain = domain;
+  }
+
+  const response = await fetchCareersPage(careersUrlOverride, careersDomain);
+
+  if (response.isBotProtected) {
+    const blockedUrl = response.url || careersUrlOverride;
+    const rendered = await renderBotProtectedPage(blockedUrl);
+    if (rendered.html && stripHtmlTags(rendered.html).length > 0) {
+      const resolvedUrl = rendered.url || blockedUrl;
+      return classifyCareersResponse(rendered.html, resolvedUrl);
+    }
+
+    return {
+      status: "bot_protected",
+      url: null,
+      blockedUrl,
+      html: "",
+    };
+  }
+
+  if (!response.ok || response.status !== 200) {
+    return {
+      status: "not_found",
+      url: null,
+      blockedUrl: null,
+      html: "",
+    };
+  }
+
+  const resolvedUrl = response.url || careersUrlOverride;
+  return classifyCareersResponse(response.text, resolvedUrl);
+}
+
 function selectHighestConfidenceSalaryDetection(
   detections: SalaryDetectionResult[],
 ): SalaryDetectionResult {
@@ -1807,7 +1850,8 @@ function scoreContentFormat(careersHtml: string | null): number {
  */
 export async function runWebsiteChecks(
   domain: string,
-  companyName: string
+  companyName: string,
+  careersUrlOverride?: string,
 ): Promise<WebsiteCheckResult> {
   const normalizedDomain = normalizeDomain(domain);
   const companySlug = createCompanySlug(companyName);
@@ -1835,10 +1879,13 @@ export async function runWebsiteChecks(
     auditStatus = "no_website";
   } else {
     const homepageUrl = `https://${normalizedDomain}/`;
+    const careersCheckPromise = careersUrlOverride
+      ? runCareersOverrideCheck(careersUrlOverride, normalizedDomain)
+      : runCareersCheck(normalizedDomain);
     const [llmsResponse, homepageResponse, careersCheck, robotsResponse, sitemapResponse] = await Promise.all([
       fetchSafe(`https://${normalizedDomain}/llms.txt`),
       fetchSafe(homepageUrl, true),
-      runCareersCheck(normalizedDomain),
+      careersCheckPromise,
       fetchSafe(`https://${normalizedDomain}/robots.txt`),
       fetchSafe(`https://${normalizedDomain}/sitemap.xml`),
     ]);
@@ -1861,7 +1908,7 @@ export async function runWebsiteChecks(
     const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
     let bestCareersCheck = careersCheck;
 
-    if (homepageHtml) {
+    if (homepageHtml && !careersUrlOverride) {
       const crossDomainCareersCheck = await runCrossDomainCareersCheck(
         homepageHtml,
         homepageUrl,

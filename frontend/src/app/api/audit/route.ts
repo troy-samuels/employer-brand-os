@@ -34,15 +34,27 @@ const AUDIT_RATE_LIMIT_WINDOW_SECONDS = 3600;
 
 const rateLimiter = new RateLimiter();
 
+const urlFieldSchema = z
+  .string({ error: "Missing or invalid 'url' field." })
+  .trim()
+  .min(1, "Missing or invalid 'url' field.")
+  .max(2048, "'url' is too long.")
+  .refine(isLikelyDomainOrUrl, {
+    message: "'url' must be a valid domain or HTTP(S) URL.",
+  });
+
+const careersUrlFieldSchema = z
+  .string({ error: "Missing or invalid 'careersUrl' field." })
+  .trim()
+  .min(1, "Missing or invalid 'careersUrl' field.")
+  .max(2048, "'careersUrl' is too long.")
+  .refine(isLikelyDomainOrUrl, {
+    message: "'careersUrl' must be a valid domain or HTTP(S) URL.",
+  });
+
 const auditRequestSchema = z.object({
-  url: z
-    .string({ error: "Missing or invalid 'url' field." })
-    .trim()
-    .min(1, "Missing or invalid 'url' field.")
-    .max(2048, "'url' is too long.")
-    .refine(isLikelyDomainOrUrl, {
-      message: "'url' must be a valid domain or HTTP(S) URL.",
-    }),
+  url: urlFieldSchema,
+  careersUrl: careersUrlFieldSchema.optional(),
 });
 
 function getClientIpAddress(request: NextRequest): string {
@@ -171,6 +183,7 @@ export async function POST(
     }
 
     const input = parsedBody.data.url;
+    const careersUrlInput = parsedBody.data.careersUrl;
     const preflightValidation = await validateUrl(input);
     if (!preflightValidation.ok) {
       void logAuditRequest({
@@ -189,11 +202,34 @@ export async function POST(
       });
     }
 
+    let validatedCareersUrl: string | undefined;
+    if (careersUrlInput) {
+      const careersValidation = await validateUrl(careersUrlInput);
+      if (!careersValidation.ok) {
+        void logAuditRequest({
+          actor: clientIp,
+          result: "failure",
+          resource: AUDIT_RESOURCE,
+          metadata: {
+            reason: "blocked_or_private_careers_url",
+            input,
+            careers_url: careersUrlInput,
+          },
+        });
+        return apiErrorResponse({
+          error: "Careers URL points to a blocked or private network.",
+          code: API_ERROR_CODE.invalidPayload,
+          status: 400,
+        });
+      }
+      validatedCareersUrl = careersValidation.normalizedUrl.toString();
+    }
+
     const resolved = await resolveCompanyUrl(input);
     const domain = resolved.url ?? preflightValidation.normalizedUrl.hostname;
     const companyName = resolved.name || preflightValidation.normalizedUrl.hostname;
 
-    const result = await runWebsiteChecks(domain, companyName);
+    const result = await runWebsiteChecks(domain, companyName, validatedCareersUrl);
     void logAuditRequest({
       actor: clientIp,
       result: "success",

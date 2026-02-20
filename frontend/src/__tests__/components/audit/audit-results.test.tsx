@@ -3,8 +3,8 @@
  * Module implementation for audit-results.test.tsx.
  */
 
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { AuditResults } from "@/components/audit/audit-results";
 import type { WebsiteCheckResult } from "@/lib/audit/website-checks";
 
@@ -197,6 +197,58 @@ describe("AuditResults", () => {
       });
       render(<AuditResults result={result} />);
       expect(screen.getByText(/No careers page found/)).toBeInTheDocument();
+    });
+  });
+
+  describe("careers URL fallback prompt", () => {
+    it("renders careers URL prompt when careersPageStatus is not_found", () => {
+      const result = createMockResult({
+        careersPageStatus: "not_found",
+        careersPageUrl: null,
+      });
+      render(<AuditResults result={result} />);
+
+      expect(
+        screen.getByText(/We couldn't find your careers page\. If it's on a different domain, paste the link below\./),
+      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("e.g. jobs.yourcompany.com/careers")).toBeInTheDocument();
+      expect(screen.getByRole("button", { name: "Re-scan with careers page" })).toBeInTheDocument();
+    });
+
+    it("does not render careers URL prompt when careersPageStatus is full", () => {
+      const result = createMockResult({
+        careersPageStatus: "full",
+        careersPageUrl: "https://example.com/careers",
+      });
+      render(<AuditResults result={result} />);
+
+      expect(
+        screen.queryByText(/We couldn't find your careers page\. If it's on a different domain, paste the link below\./),
+      ).not.toBeInTheDocument();
+    });
+
+    it("accepts URL input and calls onRerunWithCareersUrl on submit", () => {
+      const onRerunWithCareersUrl = vi.fn();
+      const result = createMockResult({
+        careersPageStatus: "not_found",
+        careersPageUrl: null,
+      });
+
+      render(
+        <AuditResults
+          result={result}
+          onRerunWithCareersUrl={onRerunWithCareersUrl}
+          isRerunning={false}
+        />,
+      );
+
+      fireEvent.change(screen.getByLabelText("Careers page URL"), {
+        target: { value: "jobs.example.com/careers" },
+      });
+      fireEvent.click(screen.getByRole("button", { name: "Re-scan with careers page" }));
+
+      expect(onRerunWithCareersUrl).toHaveBeenCalledTimes(1);
+      expect(onRerunWithCareersUrl).toHaveBeenCalledWith("jobs.example.com/careers");
     });
   });
 
