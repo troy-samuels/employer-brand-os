@@ -5,7 +5,11 @@
 
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { parseRobotsPolicy, runWebsiteChecks } from "@/lib/audit/website-checks";
+import {
+  extractCrossDomainCareerLinks,
+  parseRobotsPolicy,
+  runWebsiteChecks,
+} from "@/lib/audit/website-checks";
 import { validateUrl } from "@/lib/audit/url-validator";
 
 vi.mock("@/lib/audit/url-validator", () => ({
@@ -116,6 +120,48 @@ Disallow: /jobs
       expect(parsed.status).toBe("blocks");
       expect(parsed.allowedBots).toEqual([]);
       expect(parsed.blockedBots).toEqual(["GPTBot"]);
+    });
+  });
+
+  describe("extractCrossDomainCareerLinks", () => {
+    it("finds cross-domain careers links such as jobs.nhs.uk", () => {
+      const homepageHtml = `
+        <html><body>
+          <a href="https://jobs.nhs.uk/candidate/search">Search NHS jobs</a>
+          <a href="/about">About</a>
+        </body></html>
+      `;
+
+      const links = extractCrossDomainCareerLinks(homepageHtml, "https://nhs.uk/", "nhs.uk");
+
+      expect(links).toContain("https://jobs.nhs.uk/candidate/search");
+    });
+
+    it("finds outbound ATS links from homepage HTML", () => {
+      const homepageHtml = `
+        <html><body>
+          <a href="https://boards.greenhouse.io/exampleco">Open roles</a>
+          <a href="https://example.com/contact">Contact</a>
+        </body></html>
+      `;
+
+      const links = extractCrossDomainCareerLinks(homepageHtml, "https://example.com/", "example.com");
+
+      expect(links).toContain("https://boards.greenhouse.io/exampleco");
+    });
+
+    it("ignores same-host links", () => {
+      const homepageHtml = `
+        <html><body>
+          <a href="/careers">Careers</a>
+          <a href="https://nhs.uk/careers">NHS Careers</a>
+          <a href="https://www.nhs.uk/jobs">NHS Jobs</a>
+        </body></html>
+      `;
+
+      const links = extractCrossDomainCareerLinks(homepageHtml, "https://nhs.uk/", "nhs.uk");
+
+      expect(links).toEqual([]);
     });
   });
 
@@ -666,6 +712,63 @@ Disallow: /jobs
 
       expect(result.careersPageStatus).toBe("full");
       expect(result.careersPageUrl).toBe("https://example.de/karriere");
+    });
+
+    it("prefers a stronger cross-domain careers page found on homepage links", async () => {
+      const weakSameDomainHtml = `<html><body>${"Open roles. ".repeat(30)}</body></html>`;
+      const strongCrossDomainHtml = `<html><body>${"Explore careers and opportunities. ".repeat(220)}</body></html>`;
+
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (url.endsWith("/llms.txt") || url.endsWith("/robots.txt") || url.endsWith("/sitemap.xml")) {
+          return Promise.resolve({
+            ok: false,
+            status: 404,
+            text: () => Promise.resolve(""),
+          });
+        }
+
+        if (url === "https://example.com/careers") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(weakSameDomainHtml),
+          });
+        }
+
+        if (url === "https://jlpjobs.com/careers") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(strongCrossDomainHtml),
+          });
+        }
+
+        if (url === "https://example.com/") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () =>
+              Promise.resolve(
+                '<html><body><a href="https://jlpjobs.com/careers">Careers</a></body></html>',
+              ),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          text: () => Promise.resolve(""),
+        });
+      });
+
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await runWebsiteChecks("example.com", "Example");
+      const fetchedUrls = fetchMock.mock.calls.map((call) => call[0]);
+
+      expect(fetchedUrls).toContain("https://jlpjobs.com/careers");
+      expect(result.careersPageStatus).toBe("full");
+      expect(result.careersPageUrl).toBe("https://jlpjobs.com/careers");
     });
 
     it("checks www.jobs.<domain> variants when jobs.<domain> has no DNS/content", async () => {

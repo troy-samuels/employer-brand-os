@@ -164,6 +164,36 @@ const ATS_SUBDOMAINS = [
   "opportunities",
 ];
 
+const CROSS_DOMAIN_CAREER_TERMS = [
+  "job",
+  "jobs",
+  "career",
+  "careers",
+  "hiring",
+  "join",
+  "work",
+  "recruit",
+  "talent",
+  "vacancies",
+  "opportunities",
+];
+
+const CROSS_DOMAIN_HOST_PATTERNS = [
+  /(?:^|\.)jobs?\./i,
+  /(?:^|[.-])jobs?(?:[.-]|$)/i,
+  /(?:^|[.-])careers?(?:[.-]|$)/i,
+];
+
+const MAX_CROSS_DOMAIN_CAREER_CANDIDATES = 16;
+
+const CAREERS_STATUS_RANK: Record<CareersPageStatus, number> = {
+  not_found: 0,
+  bot_protected: 0.5,
+  none: 1,
+  partial: 2,
+  full: 3,
+};
+
 const JOB_PATH_HINT_PATTERNS = [
   /\/jobs?(?:\/|$)/i,
   /\/careers?(?:\/|$)/i,
@@ -579,6 +609,35 @@ function isSameDomain(hostname: string, domain: string): boolean {
   return hostname === domain || hostname.endsWith(`.${domain}`);
 }
 
+function classifyCareersResponse(html: string, resolvedUrl: string): CareersCheckResult {
+  const textLength = stripHtmlTags(html).length;
+  if (textLength > 1000) {
+    return { status: "full", url: resolvedUrl, blockedUrl: null, html };
+  }
+  if (textLength >= 200) {
+    return { status: "partial", url: resolvedUrl, blockedUrl: null, html };
+  }
+  return { status: "none", url: resolvedUrl, blockedUrl: null, html };
+}
+
+function isBetterCareersResult(candidate: CareersCheckResult, current: CareersCheckResult): boolean {
+  const candidateRank = CAREERS_STATUS_RANK[candidate.status];
+  const currentRank = CAREERS_STATUS_RANK[current.status];
+  if (candidateRank !== currentRank) {
+    return candidateRank > currentRank;
+  }
+
+  if (
+    candidate.status !== "full" &&
+    candidate.status !== "partial" &&
+    candidate.status !== "none"
+  ) {
+    return false;
+  }
+
+  return stripHtmlTags(candidate.html).length > stripHtmlTags(current.html).length;
+}
+
 function getCareersCandidateUrls(domain: string): string[] {
   const normalizedDomain = domain.toLowerCase();
   const baseDomain = stripLeadingWww(normalizedDomain);
@@ -617,6 +676,81 @@ function getCareersCandidateUrls(domain: string): string[] {
   }
 
   return urls;
+}
+
+export function extractCrossDomainCareerLinks(
+  homepageHtml: string,
+  homepageUrl: string,
+  domain: string,
+): string[] {
+  if (!homepageHtml || !homepageUrl || !domain) {
+    return [];
+  }
+
+  const normalizedDomain = domain.toLowerCase();
+  const baseDomain = stripLeadingWww(normalizedDomain);
+  const sameHostnames = new Set<string>([
+    normalizedDomain,
+    baseDomain,
+    `www.${baseDomain}`,
+  ]);
+  const linkRegex = /<a\b[^>]*href\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'<>]+))[^>]*>/gi;
+  const links: string[] = [];
+  const seen = new Set<string>();
+
+  for (const match of homepageHtml.matchAll(linkRegex)) {
+    const href = (match[1] ?? match[2] ?? match[3] ?? "").trim();
+    if (!href || href.startsWith("#")) {
+      continue;
+    }
+
+    if (/^(?:mailto:|tel:|javascript:)/i.test(href)) {
+      continue;
+    }
+
+    let resolvedUrl: URL;
+    try {
+      resolvedUrl = new URL(href, homepageUrl);
+    } catch {
+      continue;
+    }
+
+    if (!/^https?:$/i.test(resolvedUrl.protocol)) {
+      continue;
+    }
+
+    const hostname = resolvedUrl.hostname.toLowerCase();
+    if (sameHostnames.has(hostname)) {
+      continue;
+    }
+
+    const isAts = isTrustedAtsHost(hostname);
+    const lowerHostname = hostname.toLowerCase();
+    const lowerPath = resolvedUrl.pathname.toLowerCase();
+    const lowerSearch = resolvedUrl.search.toLowerCase();
+    const searchable = `${lowerHostname}${lowerPath}${lowerSearch}`;
+    const hasCareerTerm = CROSS_DOMAIN_CAREER_TERMS.some((term) => searchable.includes(term));
+    const hasCommonPattern = CROSS_DOMAIN_HOST_PATTERNS.some((pattern) => pattern.test(lowerHostname));
+
+    if (!isAts && !hasCareerTerm && !hasCommonPattern) {
+      continue;
+    }
+
+    resolvedUrl.hash = "";
+    const normalizedUrl = resolvedUrl.toString();
+    if (seen.has(normalizedUrl)) {
+      continue;
+    }
+
+    seen.add(normalizedUrl);
+    links.push(normalizedUrl);
+
+    if (links.length >= MAX_CROSS_DOMAIN_CAREER_CANDIDATES) {
+      break;
+    }
+  }
+
+  return links;
 }
 
 function extractMetaRefreshRedirectUrl(html: string, baseUrl: string): string | null {
@@ -915,13 +1049,6 @@ function collectJsonLdTypes(node: unknown, typeSet: Set<string>): void {
 }
 
 async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
-  const statusRank: Record<CareersPageStatus, number> = {
-    not_found: 0,
-    bot_protected: 0.5,
-    none: 1,
-    partial: 2,
-    full: 3,
-  };
   let bestResult: CareersCheckResult = {
     status: "not_found",
     url: null,
@@ -953,22 +1080,13 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
         continue;
       }
 
-      const textLength = stripHtmlTags(response.text).length;
       const resolvedUrl = response.url || careersUrl;
-
-      if (textLength > 1000) {
-        return { status: "full", url: resolvedUrl, blockedUrl: null, html: response.text };
-      }
-      if (textLength >= 200) {
-        const candidateResult: CareersCheckResult = { status: "partial", url: resolvedUrl, blockedUrl: null, html: response.text };
-        if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
-          bestResult = candidateResult;
-        }
-        continue;
+      const candidateResult = classifyCareersResponse(response.text, resolvedUrl);
+      if (candidateResult.status === "full") {
+        return candidateResult;
       }
 
-      const candidateResult: CareersCheckResult = { status: "none", url: resolvedUrl, blockedUrl: null, html: response.text };
-      if (statusRank[candidateResult.status] > statusRank[bestResult.status]) {
+      if (isBetterCareersResult(candidateResult, bestResult)) {
         bestResult = candidateResult;
       }
     }
@@ -978,22 +1096,81 @@ async function runCareersCheck(domain: string): Promise<CareersCheckResult> {
   if (bestResult.status === "not_found" && firstBlockedUrl) {
     const rendered = await renderBotProtectedPage(firstBlockedUrl);
     if (rendered.html) {
-      const textLength = stripHtmlTags(rendered.html).length;
       const resolvedUrl = rendered.url || firstBlockedUrl;
-
-      if (textLength > 1000) {
-        return { status: "full", url: resolvedUrl, blockedUrl: null, html: rendered.html };
-      }
-      if (textLength >= 200) {
-        return { status: "partial", url: resolvedUrl, blockedUrl: null, html: rendered.html };
-      }
-      if (textLength > 0) {
-        return { status: "none", url: resolvedUrl, blockedUrl: null, html: rendered.html };
+      if (stripHtmlTags(rendered.html).length > 0) {
+        return classifyCareersResponse(rendered.html, resolvedUrl);
       }
     }
 
     // All fallbacks failed — report as bot-protected
     return { status: "bot_protected", url: null, blockedUrl: firstBlockedUrl, html: "" };
+  }
+
+  return bestResult;
+}
+
+async function runCrossDomainCareersCheck(
+  homepageHtml: string,
+  homepageUrl: string,
+  domain: string,
+): Promise<CareersCheckResult> {
+  const candidateUrls = extractCrossDomainCareerLinks(homepageHtml, homepageUrl, domain);
+  if (candidateUrls.length === 0) {
+    return {
+      status: "not_found",
+      url: null,
+      blockedUrl: null,
+      html: "",
+    };
+  }
+
+  let bestResult: CareersCheckResult = {
+    status: "not_found",
+    url: null,
+    blockedUrl: null,
+    html: "",
+  };
+  let firstBlockedUrl: string | null = null;
+
+  for (let start = 0; start < candidateUrls.length; start += CAREERS_PROBE_CONCURRENCY) {
+    const batch = candidateUrls.slice(start, start + CAREERS_PROBE_CONCURRENCY);
+    const responses = await Promise.all(
+      batch.map((careersUrl) =>
+        fetchCareersPage(careersUrl, domain).then((response) => ({
+          careersUrl,
+          response,
+        })),
+      ),
+    );
+
+    for (const { careersUrl, response } of responses) {
+      if (response.isBotProtected && !firstBlockedUrl) {
+        firstBlockedUrl = response.url || careersUrl;
+      }
+
+      if (!response.ok || response.status !== 200) {
+        continue;
+      }
+
+      const resolvedUrl = response.url || careersUrl;
+      const candidateResult = classifyCareersResponse(response.text, resolvedUrl);
+      if (candidateResult.status === "full") {
+        return candidateResult;
+      }
+
+      if (isBetterCareersResult(candidateResult, bestResult)) {
+        bestResult = candidateResult;
+      }
+    }
+  }
+
+  if (bestResult.status === "not_found" && firstBlockedUrl) {
+    return {
+      status: "bot_protected",
+      url: null,
+      blockedUrl: firstBlockedUrl,
+      html: "",
+    };
   }
 
   return bestResult;
@@ -1682,11 +1859,23 @@ export async function runWebsiteChecks(
     }
 
     const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
+    let bestCareersCheck = careersCheck;
 
-    careersPageStatus = careersCheck.status;
-    careersPageUrl = careersCheck.url;
-    careersBlockedUrl = careersCheck.blockedUrl;
-    careersPageHtml = careersCheck.html ?? null;
+    if (homepageHtml) {
+      const crossDomainCareersCheck = await runCrossDomainCareersCheck(
+        homepageHtml,
+        homepageUrl,
+        normalizedDomain,
+      );
+      if (isBetterCareersResult(crossDomainCareersCheck, bestCareersCheck)) {
+        bestCareersCheck = crossDomainCareersCheck;
+      }
+    }
+
+    careersPageStatus = bestCareersCheck.status;
+    careersPageUrl = bestCareersCheck.url;
+    careersBlockedUrl = bestCareersCheck.blockedUrl;
+    careersPageHtml = bestCareersCheck.html ?? null;
 
     // If the homepage appeared empty (JS-rendered shell) but we found real
     // content elsewhere, upgrade the overall status — the site isn't truly empty.
@@ -1705,8 +1894,8 @@ export async function runWebsiteChecks(
     }
 
     const salaryDetection = await analyzeSalaryAcrossCareersAndJobListings(
-      careersCheck.html,
-      careersCheck.url,
+      bestCareersCheck.html,
+      bestCareersCheck.url,
       normalizedDomain,
     );
     hasSalaryData = salaryDetection.hasSalaryData;
@@ -1717,13 +1906,17 @@ export async function runWebsiteChecks(
     // Collect JSON-LD schemas from multiple pages: homepage, careers page, and job listings
     const htmlSamplesToScan = [homepageHtml];
     
-    if (careersCheck.html) {
-      htmlSamplesToScan.push(careersCheck.html);
+    if (bestCareersCheck.html) {
+      htmlSamplesToScan.push(bestCareersCheck.html);
     }
 
     // Also get job listing pages for JSON-LD checking
-    if (careersCheck.html && careersCheck.url) {
-      const jobListingLinks = extractJobListingLinks(careersCheck.html, careersCheck.url, normalizedDomain);
+    if (bestCareersCheck.html && bestCareersCheck.url) {
+      const jobListingLinks = extractJobListingLinks(
+        bestCareersCheck.html,
+        bestCareersCheck.url,
+        normalizedDomain,
+      );
       if (jobListingLinks.length > 0) {
         const sampledResponses = await Promise.all(
           jobListingLinks.slice(0, 3).map((link) => fetchSafe(link))
