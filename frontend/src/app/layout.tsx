@@ -5,8 +5,50 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://rankwell.io"),
-  title: "Rankwell — Take Back Your Reputation from AI",
-  description: "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+  title: {
+    default: "Rankwell — Take Back Your Reputation from AI",
+    template: "%s | Rankwell",
+  },
+  description:
+    "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+  keywords: [
+    "employer brand",
+    "AI visibility",
+    "ChatGPT",
+    "employer reputation",
+    "structured data",
+    "JSON-LD",
+    "AI citations",
+    "employer SEO",
+  ],
+  authors: [{ name: "Rankwell" }],
+  openGraph: {
+    type: "website",
+    locale: "en_GB",
+    url: "https://rankwell.io",
+    siteName: "Rankwell",
+    title: "Rankwell — Take Back Your Reputation from AI",
+    description:
+      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "Rankwell — Is AI telling the truth about your company?",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Rankwell — Take Back Your Reputation from AI",
+    description:
+      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+    images: ["/opengraph-image"],
+  },
+  alternates: {
+    canonical: "https://rankwell.io",
+  },
 };
 
 export const viewport: Viewport = {

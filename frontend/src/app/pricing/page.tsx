@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { BASE_URL, SITE_NAME, generateProductSchema, JsonLd } from "@/lib/seo";
 
 /* ------------------------------------------------------------------ */
 /* Data                                                                */
@@ -131,8 +132,21 @@ const faqs = [
 export default function PricingPage() {
   const [annual, setAnnual] = useState(false);
 
+  const productSchema = generateProductSchema({
+    name: `${SITE_NAME} — AI Employer Visibility Platform`,
+    description:
+      "Control what AI tells candidates about your company. Weekly monitoring, hallucination alerts, and tools to fix your AI employer reputation.",
+    url: `${BASE_URL}/pricing`,
+    offers: [
+      { name: "Starter Plan", price: "49", priceCurrency: "GBP" },
+      { name: "Growth Plan", price: "149", priceCurrency: "GBP" },
+      { name: "Scale Plan", price: "399", priceCurrency: "GBP" },
+    ],
+  });
+
   return (
     <div className="min-h-screen bg-slate-50">
+      <JsonLd data={productSchema} />
       <Header />
 
       <main>

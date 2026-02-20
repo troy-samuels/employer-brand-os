@@ -10,11 +10,25 @@ import { ArrowRight, HelpCircle } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { generateFAQSchema, JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "FAQ — AI Visibility Questions Answered | Rankwell",
+  title: "FAQ — AI Visibility Questions Answered",
   description:
     "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
+  openGraph: {
+    title: "FAQ — AI Visibility Questions Answered | Rankwell",
+    description:
+      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
+    url: "https://rankwell.io/faq",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "FAQ — AI Visibility Questions Answered | Rankwell",
+    description:
+      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
+  },
   alternates: { canonical: "https://rankwell.io/faq" },
 };
 
@@ -113,8 +127,17 @@ export default function FaqPage() {
   // Group by category
   const categories = Array.from(new Set(faqs.map((f) => f.category)));
 
+  // Generate FAQ schema from all FAQs
+  const faqSchema = generateFAQSchema(
+    faqs.map((f) => ({
+      question: f.question,
+      answer: f.summary,
+    }))
+  );
+
   return (
     <div className="min-h-screen bg-slate-50">
+      <JsonLd data={faqSchema} />
       <Header />
 
       <main>

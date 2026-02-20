@@ -5,14 +5,31 @@
 
 import type { Metadata } from "next";
 import Link from "next/link";
+import { generateHowToSchema, JsonLd } from "@/lib/seo";
 
 /**
  * Exposes exported value(s): metadata.
  */
 export const metadata: Metadata = {
-  title: "How We Score Your AI Visibility | Rankwell",
+  title: "How We Score Your AI Visibility",
   description:
     "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+  openGraph: {
+    title: "How We Score Your AI Visibility | Rankwell",
+    description:
+      "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+    url: "https://rankwell.io/how-we-score",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "How We Score Your AI Visibility | Rankwell",
+    description:
+      "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+  },
+  alternates: {
+    canonical: "https://rankwell.io/how-we-score",
+  },
 };
 
 const CHECKS = [
@@ -59,8 +76,19 @@ const CHECKS = [
  * @returns The resulting value.
  */
 export default function HowWeScorePage() {
+  const howToSchema = generateHowToSchema({
+    name: "How to Calculate Your AI Visibility Score",
+    description:
+      "Learn how Rankwell calculates your AI Visibility Score using six evidence-based checks weighted according to peer-reviewed research.",
+    steps: CHECKS.map((check) => ({
+      name: check.name,
+      text: `${check.what} ${check.why}`,
+    })),
+  });
+
   return (
     <main className="min-h-screen bg-slate-50">
+      <JsonLd data={howToSchema} />
       {/* Header */}
       <div className="bg-white border-b border-slate-200 relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_1px_1px,_var(--neutral-200)_1px,_transparent_0)] [background-size:32px_32px] opacity-30" />

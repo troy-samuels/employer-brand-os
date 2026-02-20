@@ -10,6 +10,7 @@ import { ArrowRight } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { getAllPosts, type BlogPostMetadata } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog | Rankwell — AI Employer Visibility Insights",
@@ -19,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Blog post registry                                                  */
+/* Hardcoded blog posts (legacy)                                       */
 /* ------------------------------------------------------------------ */
 
 interface BlogPost {
@@ -32,7 +33,7 @@ interface BlogPost {
   featured?: boolean;
 }
 
-const posts: BlogPost[] = [
+const hardcodedPosts: BlogPost[] = [
   {
     slug: "what-ai-tells-candidates-about-your-company",
     title: "What AI tells candidates about your company (and why it's probably wrong)",
@@ -109,10 +110,41 @@ const posts: BlogPost[] = [
 ];
 
 /* ------------------------------------------------------------------ */
+/* Merge markdown and hardcoded posts                                 */
+/* ------------------------------------------------------------------ */
+
+function mergePosts(): BlogPost[] {
+  // Get markdown posts
+  const markdownPosts = getAllPosts().map((post: BlogPostMetadata) => ({
+    slug: post.slug,
+    title: post.title,
+    description: post.description,
+    category: post.category,
+    readTime: post.readTime,
+    date: post.date,
+    featured: post.featured,
+  }));
+
+  // Combine and dedupe (markdown takes precedence over hardcoded)
+  const markdownSlugs = new Set(markdownPosts.map((p) => p.slug));
+  const nonDuplicateHardcoded = hardcodedPosts.filter(
+    (p) => !markdownSlugs.has(p.slug)
+  );
+
+  const allPosts = [...markdownPosts, ...nonDuplicateHardcoded];
+
+  // Sort by date (newest first)
+  return allPosts.sort((a, b) => {
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
+  });
+}
+
+/* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
 
 export default function BlogPage() {
+  const posts = mergePosts();
   const featured = posts.find((p) => p.featured);
   const rest = posts.filter((p) => !p.featured);
 

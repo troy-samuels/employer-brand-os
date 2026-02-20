@@ -11,9 +11,29 @@ import { Footer } from '@/components/shared/footer';
  * Exposes exported value(s): metadata.
  */
 export const metadata: Metadata = {
-  title: 'Data Processing Agreement — Rankwell',
+  title: 'Data Processing Agreement',
   description:
     'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
+  openGraph: {
+    title: 'Data Processing Agreement | Rankwell',
+    description:
+      'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
+    url: 'https://rankwell.io/dpa',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Data Processing Agreement | Rankwell',
+    description:
+      'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
+  },
+  alternates: {
+    canonical: 'https://rankwell.io/dpa',
+    },
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 /**

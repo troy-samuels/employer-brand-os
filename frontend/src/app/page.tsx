@@ -20,12 +20,34 @@ import CTA from "@/components/landing/cta";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { useAudit } from "@/lib/hooks/use-audit";
+import {
+  BASE_URL,
+  SITE_NAME,
+  generateOrganizationSchema,
+  generateWebsiteSchema,
+  JsonLd,
+} from "@/lib/seo";
 
 export default function Home() {
   const { state, isLoading, result, error, runAudit, reset } = useAudit();
 
+  const organizationSchema = generateOrganizationSchema({
+    name: SITE_NAME,
+    url: BASE_URL,
+    description:
+      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+  });
+
+  const websiteSchema = generateWebsiteSchema({
+    name: SITE_NAME,
+    url: BASE_URL,
+    description: "Take back your reputation from AI. Free employer brand audit in 30 seconds.",
+  });
+
   return (
     <div className="min-h-screen bg-white">
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={websiteSchema} />
       <Header />
 
       <main>

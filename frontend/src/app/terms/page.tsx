@@ -11,9 +11,29 @@ import { Footer } from '@/components/shared/footer';
  * Exposes exported value(s): metadata.
  */
 export const metadata: Metadata = {
-  title: 'Terms of Service — Rankwell',
+  title: 'Terms of Service',
   description:
     'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
+  openGraph: {
+    title: 'Terms of Service | Rankwell',
+    description:
+      'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
+    url: 'https://rankwell.io/terms',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Terms of Service | Rankwell',
+    description:
+      'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
+  },
+  alternates: {
+    canonical: 'https://rankwell.io/terms',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 /**

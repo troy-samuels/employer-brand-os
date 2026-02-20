@@ -11,9 +11,29 @@ import { Footer } from '@/components/shared/footer';
  * Exposes exported value(s): metadata.
  */
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Rankwell',
+  title: 'Privacy Policy',
   description:
     'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+  openGraph: {
+    title: 'Privacy Policy | Rankwell',
+    description:
+      'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+    url: 'https://rankwell.io/privacy',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Privacy Policy | Rankwell',
+    description:
+      'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+  },
+  alternates: {
+    canonical: 'https://rankwell.io/privacy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 /**

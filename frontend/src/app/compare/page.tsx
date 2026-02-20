@@ -29,14 +29,30 @@ import { aiSnapshots, type AISnapshot } from "@/data/ai-snapshots";
 /* ------------------------------------------------------------------ */
 
 export const metadata: Metadata = {
-  title: "What Does AI Say About You? | Rankwell",
+  title: "What Does AI Say About You?",
   description:
     "See exactly what ChatGPT, Perplexity, and Gemini tell candidates about your company. Side-by-side AI responses — the truth about your AI employer reputation.",
   openGraph: {
     title: "What Does AI Say About You? | Rankwell",
     description:
       "See what AI tells candidates about your company. Side-by-side comparison across ChatGPT, Perplexity, and Gemini.",
+    url: "https://rankwell.io/compare",
     type: "website",
+    images: [
+      {
+        url: "/opengraph-image",
+        width: 1200,
+        height: 630,
+        alt: "What Does AI Say About You?",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "What Does AI Say About You? | Rankwell",
+    description:
+      "See exactly what ChatGPT, Perplexity, and Gemini tell candidates about your company. Side-by-side AI responses — the truth about your AI employer reputation.",
+    images: ["/opengraph-image"],
   },
   alternates: {
     canonical: "https://rankwell.io/compare",

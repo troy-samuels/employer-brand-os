@@ -1,7 +1,6 @@
 /**
  * @module app/blog/[slug]/page
- * Individual blog post page — renders long-form content.
- * For now, content is inline. Will move to MDX or CMS later.
+ * Individual blog post page — renders markdown or hardcoded HTML content.
  */
 
 import type { Metadata } from "next";
@@ -12,9 +11,20 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { sanitizeHtml } from "@/lib/utils/sanitize-html";
+import { getPostBySlug, formatDate, getAllPostSlugs } from "@/lib/blog";
+import { MarkdownRenderer } from "@/components/blog/markdown-renderer";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+/* ------------------------------------------------------------------ */
+/* generateStaticParams - for static generation of markdown posts     */
+/* ------------------------------------------------------------------ */
+
+export async function generateStaticParams() {
+  const slugs = getAllPostSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 /* ------------------------------------------------------------------ */
@@ -1355,6 +1365,25 @@ Industry: [industry].
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
+  
+  // Try markdown first
+  const markdownPost = getPostBySlug(slug);
+  if (markdownPost) {
+    return {
+      title: `${markdownPost.title} | Rankwell`,
+      description: markdownPost.description,
+      openGraph: {
+        title: markdownPost.title,
+        description: markdownPost.description,
+        type: "article",
+        publishedTime: markdownPost.date,
+        authors: markdownPost.author ? [markdownPost.author] : undefined,
+      },
+      alternates: { canonical: `https://rankwell.io/blog/${slug}` },
+    };
+  }
+  
+  // Fall back to hardcoded
   const post = blogContent[slug];
   if (!post) return { title: "Post Not Found | Rankwell" };
 
@@ -1376,8 +1405,81 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function BlogPost({ params }: PageProps) {
   const { slug } = await params;
-  const post = blogContent[slug];
+  
+  // Try markdown first
+  const markdownPost = getPostBySlug(slug);
+  if (markdownPost) {
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      headline: markdownPost.title,
+      description: markdownPost.description,
+      datePublished: markdownPost.date,
+      dateModified: markdownPost.date,
+      author: {
+        "@type": markdownPost.author?.includes("Team") ? "Organization" : "Person",
+        name: markdownPost.author || "Rankwell Team",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "Rankwell",
+        logo: {
+          "@type": "ImageObject",
+          url: "https://rankwell.io/logo.png",
+        },
+      },
+    };
 
+    return (
+      <div className="min-h-screen bg-slate-50">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+        />
+        <Header />
+
+        <main>
+          <article className="bg-white border-b border-slate-200">
+            <div className="mx-auto max-w-2xl px-6 py-16 lg:py-20">
+              {/* Back link */}
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors mb-8"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" />
+                All posts
+              </Link>
+
+              {/* Meta */}
+              <div className="flex items-center gap-3 mb-4">
+                <span className="inline-flex items-center rounded-full bg-brand-accent/10 px-3 py-1 text-xs font-semibold text-brand-accent">
+                  {markdownPost.category}
+                </span>
+                <span className="text-xs text-slate-400">
+                  {formatDate(markdownPost.date)}
+                </span>
+                <span className="text-xs text-slate-400">·</span>
+                <span className="text-xs text-slate-400">{markdownPost.readTime} read</span>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight leading-[1.1] mb-10">
+                {markdownPost.title}
+              </h1>
+
+              {/* Markdown content */}
+              <MarkdownRenderer content={markdownPost.content} />
+            </div>
+          </article>
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  // Fall back to hardcoded HTML
+  const post = blogContent[slug];
   if (!post) notFound();
 
   return (

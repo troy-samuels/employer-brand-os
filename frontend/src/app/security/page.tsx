@@ -11,9 +11,29 @@ import { Footer } from '@/components/shared/footer';
  * Exposes exported value(s): metadata.
  */
 export const metadata: Metadata = {
-  title: 'Security — Rankwell',
+  title: 'Security',
   description:
     'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+  openGraph: {
+    title: 'Security | Rankwell',
+    description:
+      'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+    url: 'https://rankwell.io/security',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Security | Rankwell',
+    description:
+      'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+  },
+  alternates: {
+    canonical: 'https://rankwell.io/security',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 /**
