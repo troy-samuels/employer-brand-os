@@ -12,7 +12,7 @@ import {
 } from "@/lib/audit/brand-reputation";
 
 const FETCH_TIMEOUT_MS = 5000;
-const AUDIT_USER_AGENT = "RankwellAuditBot/1.0";
+const AUDIT_USER_AGENT = "RankwellAuditBot/1.1 (+https://rankwell.ai/audit)";
 const HEADLESS_FALLBACK_MAX_TEXT_CHARS = 500;
 const HEADLESS_FALLBACK_MIN_HTML_BYTES = 5000;
 const HEADLESS_FALLBACK_EXTENDED_TEXT_CHARS = 1200;
@@ -74,10 +74,11 @@ const JOB_TITLE_TERMS = [
   "associate",
 ];
 
-const SALARY_CURRENCY_PATTERN = String.raw`(?:[£$€¥₹₩₽₪₺₱৳]|gbp|usd|eur|jpy|inr|krw|rub|ils|try|php|bdt|chf|rm|myr|kr|zł|pln|zar|r|aud|cad|sgd|hkd|nzd|thb|idr)`;
+const SALARY_CURRENCY_PATTERN = String.raw`(?:a\$|c\$|s\$|hk\$|nz\$|r\$|zł|[£$€¥₹₩₽₪₺₱৳฿]|\b(?:gbp|usd|eur|jpy|inr|krw|rub|ils|try|php|bdt|chf|myr|pln|zar|aud|cad|sgd|hkd|nzd|thb|idr|cny|rmb|brl|mxn|sek|nok|dkk)\b|\b(?:rm|rp|kr|r)\b(?=\s*\d))`;
 const SALARY_AMOUNT_PATTERN = String.raw`(?:\d{1,3}(?:[,.\s]\d{3})+|\d{4,9}|\d{2,3}(?:[.,]\d+)?\s*[kK])`;
 const SALARY_VALUE_PATTERN = String.raw`${SALARY_CURRENCY_PATTERN}\s*${SALARY_AMOUNT_PATTERN}`;
 const SALARY_RANGE_PATTERN = String.raw`${SALARY_VALUE_PATTERN}\s*(?:-|–|—|to|bis|à|a)\s*(?:${SALARY_CURRENCY_PATTERN}\s*)?${SALARY_AMOUNT_PATTERN}`;
+const AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN = String.raw`\b\d{1,3}(?:[,\.\s]\d{3})*(?:[.,]\d+)?(?:\s*[kK])?\s*`;
 
 const CAREERS_PATHS = [
   "/careers",
@@ -475,6 +476,8 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
       response = await fetch(currentUrl, {
         headers: {
           "User-Agent": AUDIT_USER_AGENT,
+          Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          "Accept-Language": "en-US,en;q=0.9",
         },
         signal: controller.signal,
         redirect: "manual",
@@ -600,9 +603,16 @@ function getCareersCandidateUrls(domain: string): string[] {
   }
 
   for (const prefix of CAREERS_SUBDOMAIN_PREFIXES) {
-    appendCandidate(`https://${prefix}.${normalizedDomain}`);
+    const domainVariants = [normalizedDomain];
     if (baseDomain !== normalizedDomain) {
-      appendCandidate(`https://${prefix}.${baseDomain}`);
+      domainVariants.push(baseDomain);
+    }
+
+    for (const variant of domainVariants) {
+      appendCandidate(`https://${prefix}.${variant}`);
+      // Some organizations expose careers only on www.jobs.<domain> style hosts
+      // (for example, www.jobs.nhs.uk) even when jobs.<domain> has no DNS record.
+      appendCandidate(`https://www.${prefix}.${variant}`);
     }
   }
 
@@ -661,9 +671,13 @@ function isAllowedCareersRedirectTarget(targetUrl: string, domain: string): bool
     }
 
     return CAREERS_SUBDOMAIN_PREFIXES.some((prefix) => {
-      const sameDomainVariant = `${prefix}.${normalizedDomain}`;
-      const baseDomainVariant = `${prefix}.${baseDomain}`;
-      return targetHostname === sameDomainVariant || targetHostname === baseDomainVariant;
+      const variants = [
+        `${prefix}.${normalizedDomain}`,
+        `${prefix}.${baseDomain}`,
+        `www.${prefix}.${normalizedDomain}`,
+        `www.${prefix}.${baseDomain}`,
+      ];
+      return variants.includes(targetHostname);
     });
   } catch {
     return false;
@@ -1371,34 +1385,49 @@ function hasJobPostingBaseSalaryInJsonLd(careersHtml: string): boolean {
 
 function detectCurrency(text: string): CurrencyCode {
   const currencyPatterns: Array<{ pattern: RegExp; code: CurrencyCode }> = [
-    { pattern: /£|gbp/i, code: "GBP" },
-    { pattern: /\$|usd/i, code: "USD" },
-    { pattern: /€|eur/i, code: "EUR" },
-    { pattern: /¥|jpy/i, code: "JPY" },
-    { pattern: /₹|inr/i, code: "INR" },
-    { pattern: /₩|krw/i, code: "KRW" },
-    { pattern: /cny|rmb/i, code: "CNY" },
-    { pattern: /aud|a\$/i, code: "AUD" },
-    { pattern: /cad|c\$/i, code: "CAD" },
-    { pattern: /chf/i, code: "CHF" },
-    { pattern: /sek|kr/i, code: "SEK" },
-    { pattern: /nok/i, code: "NOK" },
-    { pattern: /dkk/i, code: "DKK" },
-    { pattern: /zł|pln/i, code: "PLN" },
-    { pattern: /\br\b|zar/i, code: "ZAR" },
-    { pattern: /brl|r\$/i, code: "BRL" },
-    { pattern: /mxn/i, code: "MXN" },
-    { pattern: /sgd|s\$/i, code: "SGD" },
-    { pattern: /hkd|hk\$/i, code: "HKD" },
-    { pattern: /nzd|nz\$/i, code: "NZD" },
-    { pattern: /thb|฿/i, code: "THB" },
-    { pattern: /myr|rm/i, code: "MYR" },
-    { pattern: /idr|rp/i, code: "IDR" },
-    { pattern: /php|₱/i, code: "PHP" },
-    { pattern: /rub|₽/i, code: "RUB" },
-    { pattern: /try|₺/i, code: "TRY" },
-    { pattern: /ils|₪/i, code: "ILS" },
-    { pattern: /bdt|৳/i, code: "BDT" },
+    { pattern: /(?:£\s*\d|\bgbp\b)/i, code: "GBP" },
+    { pattern: /(?:a\$\s*\d|\baud\b)/i, code: "AUD" },
+    { pattern: /(?:c\$\s*\d|\bcad\b)/i, code: "CAD" },
+    { pattern: /(?:s\$\s*\d|\bsgd\b)/i, code: "SGD" },
+    { pattern: /(?:hk\$\s*\d|\bhkd\b)/i, code: "HKD" },
+    { pattern: /(?:nz\$\s*\d|\bnzd\b)/i, code: "NZD" },
+    { pattern: /(?:r\$\s*\d|\bbrl\b)/i, code: "BRL" },
+    { pattern: /(?:\$\s*\d|\busd\b)/i, code: "USD" },
+    { pattern: /(?:€\s*\d|\beur\b)/i, code: "EUR" },
+    { pattern: /(?:¥\s*\d|\bjpy\b)/i, code: "JPY" },
+    { pattern: /(?:₹\s*\d|\binr\b)/i, code: "INR" },
+    { pattern: /(?:₩\s*\d|\bkrw\b)/i, code: "KRW" },
+    { pattern: /(?:\bcny\b|\brmb\b)/i, code: "CNY" },
+    { pattern: /\bchf\b/i, code: "CHF" },
+    { pattern: /\bnok\b/i, code: "NOK" },
+    { pattern: /\bdkk\b/i, code: "DKK" },
+    { pattern: /(?:zł\s*\d|\bpln\b)/i, code: "PLN" },
+    {
+      pattern: new RegExp(String.raw`\bzar\b|\br\b(?=\s*\d)|${AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN}r\b`, "i"),
+      code: "ZAR",
+    },
+    { pattern: /\bmxn\b/i, code: "MXN" },
+    { pattern: /(?:฿\s*\d|\bthb\b)/i, code: "THB" },
+    {
+      pattern: new RegExp(String.raw`\bmyr\b|\brm\b(?=\s*\d)|${AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN}rm\b`, "i"),
+      code: "MYR",
+    },
+    {
+      pattern: new RegExp(String.raw`\bidr\b|\brp\b(?=\s*\d)|${AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN}rp\b`, "i"),
+      code: "IDR",
+    },
+    { pattern: /(?:₱\s*\d|\bphp\b)/i, code: "PHP" },
+    { pattern: /(?:₽\s*\d|\brub\b)/i, code: "RUB" },
+    {
+      pattern: new RegExp(String.raw`₺\s*\d|\btry\b(?=\s*\d)|${AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN}try\b`, "i"),
+      code: "TRY",
+    },
+    { pattern: /(?:₪\s*\d|\bils\b)/i, code: "ILS" },
+    { pattern: /(?:৳\s*\d|\bbdt\b)/i, code: "BDT" },
+    {
+      pattern: new RegExp(String.raw`\bsek\b|\bkr\b(?=\s*\d)|${AMOUNT_BEFORE_SUFFIX_CURRENCY_PATTERN}kr\b`, "i"),
+      code: "SEK",
+    },
   ];
 
   for (const { pattern, code } of currencyPatterns) {

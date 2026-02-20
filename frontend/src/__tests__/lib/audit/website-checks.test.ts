@@ -208,6 +208,34 @@ Disallow: /jobs
       expect(result.scoreBreakdown.salaryData).toBe(3);
     });
 
+    it("does not detect MYR when 'rm' appears only inside normal words", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Open Roles</h2><p>We offer a competitive salary. Please read the terms and complete the form before applying.</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.co.uk", "Example UK");
+
+      expect(result.salaryConfidence).toBe("mention_only");
+      expect(result.detectedCurrency).toBeNull();
+    });
+
+    it("detects MYR when salary ranges use RM as a currency token", async () => {
+      vi.stubGlobal(
+        "fetch",
+        createFetchMock(
+          "<html><body><h2>Engineer</h2><p>RM 5,000 - RM 7,000 per month</p></body></html>",
+        ),
+      );
+
+      const result = await runWebsiteChecks("example.my", "Example MY");
+
+      expect(result.hasSalaryData).toBe(true);
+      expect(result.detectedCurrency).toBe("MYR");
+    });
+
     it("does not score salary data when careers page has no salary references", async () => {
       vi.stubGlobal(
         "fetch",
@@ -354,7 +382,7 @@ Disallow: /jobs
       expect(result.scoreBreakdown.robotsTxt).toBeLessThan(17);
     });
 
-    it("does not call fetch when URL validation fails", async () => {
+    it("does not fetch the target domain when URL validation fails", async () => {
       vi.mocked(validateUrl).mockResolvedValue({
         ok: false,
         reason: "private_network",
@@ -362,8 +390,9 @@ Disallow: /jobs
       vi.stubGlobal("fetch", vi.fn());
 
       const result = await runWebsiteChecks("127.0.0.1", "Localhost");
+      const fetchedUrls = vi.mocked(global.fetch).mock.calls.map((call) => String(call[0]));
 
-      expect(global.fetch).not.toHaveBeenCalled();
+      expect(fetchedUrls.some((url) => url.includes("127.0.0.1"))).toBe(false);
       expect(result.score).toBe(0);
       expect(result.robotsTxtStatus).toBe("not_found");
       expect(result.robotsTxtAllowedBots).toEqual([]);
@@ -637,6 +666,42 @@ Disallow: /jobs
 
       expect(result.careersPageStatus).toBe("full");
       expect(result.careersPageUrl).toBe("https://example.de/karriere");
+    });
+
+    it("checks www.jobs.<domain> variants when jobs.<domain> has no DNS/content", async () => {
+      const richCareersHtml = `<html><body>${"NHS roles and vacancies. ".repeat(220)}</body></html>`;
+      const fetchMock = vi.fn().mockImplementation((url: string) => {
+        if (url === "https://www.jobs.nhs.uk/" || url === "https://www.jobs.nhs.uk") {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve(richCareersHtml),
+          });
+        }
+
+        if (url.endsWith("/")) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            text: () => Promise.resolve("<html><body>Home</body></html>"),
+          });
+        }
+
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          text: () => Promise.resolve(""),
+        });
+      });
+
+      vi.stubGlobal("fetch", fetchMock);
+
+      const result = await runWebsiteChecks("nhs.uk", "NHS");
+      const fetchedUrls = fetchMock.mock.calls.map((call) => call[0]);
+
+      expect(fetchedUrls).toContain("https://www.jobs.nhs.uk/");
+      expect(result.careersPageStatus).toBe("full");
+      expect(result.careersPageUrl).toBe("https://www.jobs.nhs.uk/");
     });
 
     it("follows same-domain meta refresh to careers subdomain and scores final content", async () => {

@@ -25,6 +25,7 @@ export type BrandReputation = {
 const REVIEW_PLATFORMS: { name: string; domain: string }[] = [
   { name: "Glassdoor", domain: "glassdoor." },
   { name: "Indeed", domain: "indeed." },
+  { name: "LinkedIn", domain: "linkedin." },
   { name: "Blind", domain: "teamblind.com" },
   { name: "Comparably", domain: "comparably.com" },
   { name: "Kununu", domain: "kununu.com" },
@@ -97,7 +98,82 @@ interface BraveSearchResult {
   description: string;
 }
 
-async function searchBrave(
+const BRAVE_SEARCH_TIMEOUT_MS = 8_000;
+const BRAVE_SEARCH_USER_AGENT = "RankwellAuditBot/1.1 (+https://rankwell.ai/audit)";
+const BRAVE_SEARCH_MAX_HTML_RESULTS = 20;
+const BRAVE_SEARCH_IGNORED_HOSTS = new Set([
+  "search.brave.com",
+  "cdn.search.brave.com",
+  "imgs.search.brave.com",
+]);
+
+function decodeHtmlEntities(input: string): string {
+  return input
+    .replace(/&amp;/gi, "&")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">");
+}
+
+function stripHtml(input: string): string {
+  return input.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function normalizeSearchUrl(rawUrl: string): string | null {
+  const decoded = decodeHtmlEntities(rawUrl);
+  try {
+    const parsed = new URL(decoded);
+    if (!["http:", "https:"].includes(parsed.protocol)) {
+      return null;
+    }
+    const hostname = parsed.hostname.toLowerCase();
+    if (BRAVE_SEARCH_IGNORED_HOSTS.has(hostname)) {
+      return null;
+    }
+    return parsed.toString();
+  } catch {
+    return null;
+  }
+}
+
+function extractBraveHtmlResults(html: string): BraveSearchResult[] {
+  const results: BraveSearchResult[] = [];
+  const seen = new Set<string>();
+  const anchorPattern = /<a\b[^>]*href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+
+  for (const match of html.matchAll(anchorPattern)) {
+    const candidateUrl = normalizeSearchUrl(match[1] ?? "");
+    if (!candidateUrl || seen.has(candidateUrl)) {
+      continue;
+    }
+
+    const title = stripHtml(decodeHtmlEntities(match[2] ?? ""));
+    if (!title) {
+      continue;
+    }
+
+    const startIndex = typeof match.index === "number" ? match.index + match[0].length : -1;
+    const nearbyChunk = startIndex >= 0 ? html.slice(startIndex, startIndex + 800) : "";
+    const snippetMatch = nearbyChunk.match(/<div class="content[^"]*"[^>]*>([\s\S]*?)<\/div>/i);
+    const description = stripHtml(decodeHtmlEntities(snippetMatch?.[1] ?? ""));
+
+    seen.add(candidateUrl);
+    results.push({
+      title,
+      url: candidateUrl,
+      description,
+    });
+
+    if (results.length >= BRAVE_SEARCH_MAX_HTML_RESULTS) {
+      break;
+    }
+  }
+
+  return results;
+}
+
+async function searchBraveApi(
   query: string,
 ): Promise<BraveSearchResult[]> {
   const apiKey = process.env.BRAVE_SEARCH_API_KEY;
@@ -112,7 +188,7 @@ async function searchBrave(
     });
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8_000);
+    const timeoutId = setTimeout(() => controller.abort(), BRAVE_SEARCH_TIMEOUT_MS);
 
     try {
       const response = await fetch(
@@ -148,14 +224,82 @@ async function searchBrave(
   }
 }
 
+async function searchBraveHtml(
+  query: string,
+): Promise<BraveSearchResult[]> {
+  try {
+    const params = new URLSearchParams({
+      q: query,
+      source: "web",
+    });
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), BRAVE_SEARCH_TIMEOUT_MS);
+
+    try {
+      const response = await fetch(
+        `https://search.brave.com/search?${params.toString()}`,
+        {
+          headers: {
+            "User-Agent": BRAVE_SEARCH_USER_AGENT,
+            Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+          },
+          signal: controller.signal,
+        },
+      );
+
+      if (!response.ok) {
+        return [];
+      }
+
+      const html = await response.text();
+      return extractBraveHtmlResults(html);
+    } finally {
+      clearTimeout(timeoutId);
+    }
+  } catch {
+    return [];
+  }
+}
+
+async function searchBrave(
+  query: string,
+): Promise<BraveSearchResult[]> {
+  const apiResults = await searchBraveApi(query);
+  if (apiResults.length > 0) {
+    return apiResults;
+  }
+
+  return searchBraveHtml(query);
+}
+
+function mergeUniqueResults(...resultSets: BraveSearchResult[][]): BraveSearchResult[] {
+  const merged: BraveSearchResult[] = [];
+  const seen = new Set<string>();
+
+  for (const set of resultSets) {
+    for (const result of set) {
+      if (seen.has(result.url)) {
+        continue;
+      }
+      seen.add(result.url);
+      merged.push(result);
+    }
+  }
+
+  return merged;
+}
+
 /* ── Main check ──────────────────────────────────── */
 
 export async function checkBrandReputation(
   companyName: string,
 ): Promise<BrandReputation> {
-  const results = await searchBrave(
-    `"${companyName}" employer reviews working at`,
-  );
+  const [reviewResults, linkedInResults] = await Promise.all([
+    searchBrave(`"${companyName}" employer reviews working at`),
+    searchBrave(`"${companyName}" linkedin company jobs`),
+  ]);
+  const results = mergeUniqueResults(reviewResults, linkedInResults);
 
   const platforms: ReviewPlatform[] = [];
   const snippets: string[] = [];
