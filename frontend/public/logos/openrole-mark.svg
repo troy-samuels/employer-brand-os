@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 240 240">
+  <!--
+    OpenRole mark — hex iris knot (stroked)
+    6 curved arms, each an L-shaped stroke from outer to inner
+    Thinner strokes with smooth curves for a clean, geometric look
+  -->
+  <defs>
+    <path id="arm" d="
+      M 120 24 
+      L 120 80
+      Q 120 100, 102 110
+      L 64 132
+      Q 52 140, 56 154
+      L 64 170
+    "/>
+  </defs>
+  
+  <g fill="none" stroke="#1A1A1A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <use href="#arm"/>
+    <use href="#arm" transform="rotate(60,120,120)"/>
+    <use href="#arm" transform="rotate(120,120,120)"/>
+    <use href="#arm" transform="rotate(180,120,120)"/>
+    <use href="#arm" transform="rotate(240,120,120)"/>
+    <use href="#arm" transform="rotate(300,120,120)"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 80" fill="none">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600&amp;display=swap');
+  </style>
+  <text 
+    x="0" 
+    y="60" 
+    font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif"
+    font-weight="600"
+    font-size="64"
+    fill="#1A1A1A"
+    letter-spacing="-1.5"
+  >OpenRole</text>
+</svg>
