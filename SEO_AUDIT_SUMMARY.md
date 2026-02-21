@@ -1,7 +1,7 @@
-# Rankwell SEO Audit — February 2026
+# OpenRole SEO Audit — February 2026
 
 **Audit Date:** 19 February 2026  
-**Domain:** rankwell.io  
+**Domain:** openrole.co.uk  
 **Framework:** Next.js 15 (App Router)  
 **Deployment:** Vercel
 
@@ -53,7 +53,7 @@
 
 ### Homepage (/)
 **Current:**
-- Title: "Rankwell — Take Back Your Reputation from AI"
+- Title: "OpenRole — Take Back Your Reputation from AI"
 - Description: "AI is telling candidates the wrong things..."
 - ❌ No OpenGraph
 - ❌ No Twitter Cards
@@ -64,7 +64,7 @@
 
 ### Blog Hub (/blog)
 **Current:**
-- Title: "Blog | Rankwell — AI Employer Visibility Insights"
+- Title: "Blog | OpenRole — AI Employer Visibility Insights"
 - Description: Present
 - ✅ Canonical URL set
 - ❌ No OpenGraph
@@ -117,7 +117,7 @@
 - "What AI tells candidates about your company"
 - "Why your Glassdoor profile doesn't matter anymore"
 - "The zero-click candidate"
-- "llms.txt: the file every employer needs" (NEEDS REWRITE per RANKWELL_RECALIBRATION.md)
+- "llms.txt: the file every employer needs" (NEEDS REWRITE per OPENROLE_RECALIBRATION.md)
 - "AI is hallucinating your salary data"
 - "800 million people use ChatGPT every week"
 - "GEO for employer branding" (PARTIALLY IMPLEMENTED)
@@ -146,9 +146,9 @@
 
 ### Homepage
 **Needed:**
-- Organization schema (Rankwell company info)
+- Organization schema (OpenRole company info)
 - WebSite schema (search action)
-- Product schema (Rankwell tool)
+- Product schema (OpenRole tool)
 
 ### Blog Posts
 **Needed:**
@@ -211,7 +211,7 @@
 1. **Create blog content directory** — Move hardcoded posts to markdown
 2. **Add JSON-LD to homepage** — Organization + Product schema
 3. **Add JSON-LD to blog posts** — Article + FAQ schema
-4. **Rewrite llms.txt blog post** — Per RANKWELL_RECALIBRATION.md (it's currently recommending something proven not to work)
+4. **Rewrite llms.txt blog post** — Per OPENROLE_RECALIBRATION.md (it's currently recommending something proven not to work)
 5. **Add OpenGraph to all pages** — Social sharing essential
 
 ### P1 — High (This Week)

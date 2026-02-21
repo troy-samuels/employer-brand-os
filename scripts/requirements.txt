@@ -1,4 +1,4 @@
-# BrandOS Lead Generation Scripts
+# OpenRole Lead Generation Scripts
 # ================================
 
 # Core

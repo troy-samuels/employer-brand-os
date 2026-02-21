@@ -1,7 +1,7 @@
 /**
  * @module components/landing/testimonials
  * Before/After comparison — a single ChatGPT-style chat interface that
- * streams responses word-by-word, toggling between Without / With Rankwell.
+ * streams responses word-by-word, toggling between Without / With OpenRole.
  */
 
 "use client";
@@ -321,7 +321,7 @@ export default function BeforeAfter() {
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
             A candidate asks ChatGPT about working at your company.
-            Here&apos;s what changes when Rankwell is active.
+            Here&apos;s what changes when OpenRole is active.
           </p>
         </motion.div>
 
@@ -342,7 +342,7 @@ export default function BeforeAfter() {
                 mode === "without" ? "bg-red-500" : "bg-neutral-300"
               )}
             />
-            Without Rankwell
+            Without OpenRole
           </button>
           <button
             onClick={() => handleToggle("with")}
@@ -359,7 +359,7 @@ export default function BeforeAfter() {
                 mode === "with" ? "bg-emerald-500" : "bg-neutral-300"
               )}
             />
-            With Rankwell
+            With OpenRole
           </button>
         </div>
 
@@ -434,7 +434,7 @@ export default function BeforeAfter() {
                 onClick={() => handleToggle("with")}
                 className="text-emerald-600 font-semibold hover:underline"
               >
-                With Rankwell
+                With OpenRole
               </button>{" "}
               to see the difference →
             </motion.p>

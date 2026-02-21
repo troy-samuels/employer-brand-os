@@ -1,4 +1,4 @@
-# BrandOS: The Stripe for Employer Truth
+# OpenRole: The Stripe for Employer Truth
 
 ## The Problem: Invisible and Illegal
 
@@ -10,7 +10,7 @@ Most companies are **"Invisible and Illegal"**:
 
 ## The Solution: The Smart Pixel & Sanitization Engine
 
-BrandOS is the **employment data infrastructure layer for the AI age**. Our Smart Pixel overlays a company's existing site, intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
+OpenRole is the **employment data infrastructure layer for the AI age**. Our Smart Pixel overlays a company's existing site, intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
 
 Think of it like Stripe for payments—one integration, instant compliance, AI-ready data.
 
@@ -80,7 +80,7 @@ Think of it like Stripe for payments—one integration, instant compliance, AI-r
 ## Project Structure
 
 ```
-employer-brand-os/
+employer-openrole/
 ├── frontend/               # Next.js dashboard for clients
 │   └── src/
 │       ├── app/            # Pages (dashboard, API routes)

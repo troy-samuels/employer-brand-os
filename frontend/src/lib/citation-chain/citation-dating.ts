@@ -169,7 +169,7 @@ async function getWaybackDate(url: string): Promise<{ date: string; method: Date
 
       const response = await fetch(`${WAYBACK_CDX_ENDPOINT}?${params.toString()}`, {
         signal: controller.signal,
-        headers: { "user-agent": "BrandOS-CitationDating/1.0" },
+        headers: { "user-agent": "OpenRole-CitationDating/1.0" },
       });
 
       if (!response.ok) {

@@ -1,4 +1,4 @@
-# Twitter/X Threads — Rankwell
+# Twitter/X Threads — OpenRole
 
 > Created 12 Feb 2026 by Malcolm
 > Rule: Punchy, data-driven, thread format. Each tweet must work standalone but build momentum as a thread.

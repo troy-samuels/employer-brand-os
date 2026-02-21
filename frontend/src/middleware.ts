@@ -169,7 +169,7 @@ function withSecurityHeaders(
   pathname: string,
   nonce: string
 ): NextResponse {
-  response.headers.set("x-rankwell-csp-nonce", nonce);
+  response.headers.set("x-openrole-csp-nonce", nonce);
   response.headers.set("Content-Security-Policy", buildCsp(nonce));
   response.headers.set("X-Permitted-Cross-Domain-Policies", "none");
   response.headers.set("Cross-Origin-Opener-Policy", "same-origin");
@@ -234,7 +234,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set("x-rankwell-csp-nonce", nonce);
+  requestHeaders.set("x-openrole-csp-nonce", nonce);
 
   let supabaseResponse = NextResponse.next({
     request: {

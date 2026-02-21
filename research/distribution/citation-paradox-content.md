@@ -268,7 +268,7 @@ Only Levels.fyi has figured out the right approach — treat AI as a distributio
 
 ## 6. Blog Article Outline — "The Citation Paradox"
 
-**Target:** Long-form SEO content for rankwell.io/blog
+**Target:** Long-form SEO content for openrole.co.uk/blog
 **Length:** ~2,500 words
 **Keywords:** AI employer brand, robots.txt AI blocking, Glassdoor AI, employer reputation AI
 

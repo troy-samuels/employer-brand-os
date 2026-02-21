@@ -1,8 +1,8 @@
-# BrandOS Design System
+# OpenRole Design System
 
 ## Design Intent
 
-BrandOS sells trust to non-technical buyers — HR leaders, marketing directors, C-suite. The interface must feel like a premium product these people already use (Notion, Linear, Pitch) — not like a developer dashboard with a coat of paint.
+OpenRole sells trust to non-technical buyers — HR leaders, marketing directors, C-suite. The interface must feel like a premium product these people already use (Notion, Linear, Pitch) — not like a developer dashboard with a coat of paint.
 
 Every design decision answers one question: **does this make a busy VP of Talent feel confident spending £299/month?**
 
@@ -14,7 +14,7 @@ Every design decision answers one question: **does this make a busy VP of Talent
 No glassmorphism, no gradients-for-the-sake-of-gradients, no floating orbs. Information hierarchy does the heavy lifting. If someone can't understand the screen in 3 seconds, it's wrong.
 
 **2. Warmth over coldness.**
-Zinc, slate, and cool grays signal developer tools. BrandOS should feel approachable and authoritative — warm neutrals that invite rather than intimidate.
+Zinc, slate, and cool grays signal developer tools. OpenRole should feel approachable and authoritative — warm neutrals that invite rather than intimidate.
 
 **3. Density appropriate for the audience.**
 HR teams don't want 47 metrics on a dashboard. Show them 3 numbers that matter and let them drill down if they choose. White space is a feature, not waste.
@@ -300,7 +300,7 @@ The landing page has different density and scale than the dashboard.
 
 **Social proof section (replacing fake testimonials):**
 - Before/After comparison showing real AI responses
-- Split layout: left side (red-tinted, "What AI says now") / right side (green-tinted, "After BrandOS")
+- Split layout: left side (red-tinted, "What AI says now") / right side (green-tinted, "After OpenRole")
 - This is more convincing than any testimonial for a product with no customers yet
 
 **Pricing section:**
@@ -318,15 +318,15 @@ The landing page has different density and scale than the dashboard.
 
 ## Verify Page (Hosted Truth Pages)
 
-These are public-facing and may be the first BrandOS page a candidate sees.
+These are public-facing and may be the first OpenRole page a candidate sees.
 
 - `--neutral-50` background (matches landing page)
 - Cards in `--white` with `--neutral-200` border, 12px radius
 - Overline labels for each fact category
 - Compensation Confidence Score badge prominently placed
 - Verified badge at the top of the page
-- "Powered by BrandOS" link in header — subtle, not competing with the employer's brand
-- The employer's brand is the star. BrandOS is the infrastructure.
+- "Powered by OpenRole" link in header — subtle, not competing with the employer's brand
+- The employer's brand is the star. OpenRole is the infrastructure.
 
 ---
 
@@ -381,4 +381,4 @@ If someone asks "what should this feel like?":
 - **Pitch** — warm, premium, designed for creative/business audiences
 - **Stripe's dashboard** — not the marketing site; the actual dashboard. Clear hierarchy, no noise.
 
-These are references, not templates. BrandOS should have its own identity — grounded in trust, warmth, and clarity.
+These are references, not templates. OpenRole should have its own identity — grounded in trust, warmth, and clarity.

@@ -7,12 +7,12 @@
 
 ## EXECUTIVE SUMMARY: AI AMPLIFIES OUR VALUE
 
-### Core Finding: **AI Agents Don't Threaten BrandOS - They Validate It**
+### Core Finding: **AI Agents Don't Threaten OpenRole - They Validate It**
 
 **The Problem Amplified:**
 - **Original:** ATS outputs messy HTML that AI can't read
 - **AI-Enhanced:** 40%+ of job discovery now happens via AI agents with incomplete data
-- **Result:** BrandOS is 10x more critical, not less relevant
+- **Result:** OpenRole is 10x more critical, not less relevant
 
 **The Solution Amplified:**
 - **Original positioning:** "The SSL Certificate of Employer Branding"  
@@ -125,7 +125,7 @@ UPDATE email_contacts SET lead_score = lead_score +
 ### Competitive Mention Tracking
 **Setup:** Monitor email replies for mentions of Workday, Greenhouse, etc.  
 **Action:** Auto-tag for competitive follow-up sequence  
-**Content:** Direct comparison showing BrandOS advantages for AI compatibility
+**Content:** Direct comparison showing OpenRole advantages for AI compatibility
 
 ---
 
@@ -205,7 +205,7 @@ Built for the AI age:
 ### Traditional ATS Vendors (Workday, Greenhouse)
 **Status:** Increasingly vulnerable to AI-first solutions  
 **Our Message:** "Your ATS was built for humans. AI agents need structured data."  
-**Proof Point:** Side-by-side comparison of ATS output vs BrandOS JSON-LD
+**Proof Point:** Side-by-side comparison of ATS output vs OpenRole JSON-LD
 
 ### Emerging AI Recruiting Tools  
 **Status:** Potential partners, not competitors  
@@ -305,7 +305,7 @@ Total Enhanced Target:        4,700 customers = $29.8M ARR
 ## CONCLUSION & STRATEGIC RECOMMENDATION
 
 ### Key Finding: AI Emergence is a Massive Tailwind
-The rise of AI agents doesn't threaten BrandOS - it makes our value proposition exponentially more critical. Every AI agent making recruiting decisions with incomplete data proves our thesis.
+The rise of AI agents doesn't threaten OpenRole - it makes our value proposition exponentially more critical. Every AI agent making recruiting decisions with incomplete data proves our thesis.
 
 ### Strategic Advantages Amplified by AI:
 1. **First-Mover Advantage:** We're AI-native, competitors are retrofitting
@@ -320,7 +320,7 @@ The rise of AI agents doesn't threaten BrandOS - it makes our value proposition 
 4. **Quarter 2:** Establish partnerships with AI recruiting tools
 
 ### Revenue Acceleration Potential:
-The combination of AI urgency + 2.5M owned database + AI-native positioning could accelerate BrandOS from startup to market leader within 12 months.
+The combination of AI urgency + 2.5M owned database + AI-native positioning could accelerate OpenRole from startup to market leader within 12 months.
 
 **Recommendation: Deploy AI-enhanced strategy immediately. The window for first-mover advantage in "AI recruiting infrastructure" is closing rapidly.**
 

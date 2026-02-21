@@ -13,22 +13,22 @@ import { generateHowToSchema, JsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "How We Score Your AI Visibility",
   description:
-    "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+    "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
   openGraph: {
-    title: "How We Score Your AI Visibility | Rankwell",
+    title: "How We Score Your AI Visibility | OpenRole",
     description:
-      "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
-    url: "https://rankwell.io/how-we-score",
+      "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+    url: "https://openrole.co.uk/how-we-score",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "How We Score Your AI Visibility | Rankwell",
+    title: "How We Score Your AI Visibility | OpenRole",
     description:
-      "Understand the six checks behind your Rankwell AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+      "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
   },
   alternates: {
-    canonical: "https://rankwell.io/how-we-score",
+    canonical: "https://openrole.co.uk/how-we-score",
   },
 };
 
@@ -79,7 +79,7 @@ export default function HowWeScorePage() {
   const howToSchema = generateHowToSchema({
     name: "How to Calculate Your AI Visibility Score",
     description:
-      "Learn how Rankwell calculates your AI Visibility Score using six evidence-based checks weighted according to peer-reviewed research.",
+      "Learn how OpenRole calculates your AI Visibility Score using six evidence-based checks weighted according to peer-reviewed research.",
     steps: CHECKS.map((check) => ({
       name: check.name,
       text: `${check.what} ${check.why}`,
@@ -145,7 +145,7 @@ export default function HowWeScorePage() {
             Ready to fix your score?
           </h2>
           <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-            Rankwell automatically optimises your employer brand for AI — so when
+            OpenRole automatically optimises your employer brand for AI — so when
             candidates ask about you, the answers are yours.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">

@@ -1,4 +1,4 @@
-# Rankwell Internal Linking Strategy
+# OpenRole Internal Linking Strategy
 
 **Date:** February 2026  
 **Purpose:** Map content clusters, anchor text recommendations, and linking architecture for maximum SEO impact.
@@ -98,14 +98,14 @@ We're using a **pillar + spoke model** where comprehensive guide posts (pillars)
 5. "Understand [the financial cost](/blog/cost-of-ai-misinformation) of AI misinformation"
 
 **Product pages:**
-1. [Free Audit Tool] — "Run a free Rankwell audit to see what AI says about you now"
+1. [Free Audit Tool] — "Run a free OpenRole audit to see what AI says about you now"
 2. [JSON-LD Generator] — "Use our free JSON-LD generator to create structured data"
 3. [Pricing] — "Weekly monitoring ensures you catch inaccuracies before candidates do"
 
 **Anchor text variations:**
 - "Run a free audit" → `/`
-- "free Rankwell audit" → `/`
-- "Rankwell audit tool" → `/`
+- "free OpenRole audit" → `/`
+- "OpenRole audit tool" → `/`
 - "See what AI says about you" → `/`
 
 ---
@@ -261,7 +261,7 @@ We're using a **pillar + spoke model** where comprehensive guide posts (pillars)
 - "ROI of AI visibility"
 
 **For product links:**
-- "free Rankwell audit"
+- "free OpenRole audit"
 - "run a free audit"
 - "check what AI says about you"
 - "JSON-LD generator"
@@ -310,7 +310,7 @@ Section 6 (Common mistakes):
 "Don't waste time on [the llms.txt myth](/blog/llms-txt-myth)..."
 
 Conclusion:
-"[Run a free Rankwell audit](/) to see what AI says about you now."
+"[Run a free OpenRole audit](/) to see what AI says about you now."
 ```
 
 ---

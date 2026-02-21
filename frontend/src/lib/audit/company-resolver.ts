@@ -7,7 +7,7 @@ import { validateUrl } from "@/lib/audit/url-validator";
 
 const FETCH_TIMEOUT_MS = 5_000;
 const URL_SCHEME_REGEX = /^[a-z][a-z0-9+.-]*:\/\//i;
-const USER_AGENT = "RankwellAuditBot/1.0 (+https://rankwell.io)";
+const USER_AGENT = "OpenRoleAuditBot/1.0 (+https://openrole.co.uk)";
 const MAX_REDIRECT_HOPS = 5;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
 

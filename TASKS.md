@@ -1,4 +1,4 @@
-# Rankwell — Phase 1 Build Tasks
+# OpenRole — Phase 1 Build Tasks
 *Build the Audit Engine — the foundation for all user journeys*
 
 Reference docs:
@@ -175,7 +175,7 @@ Reference docs:
 - [ ] Formula: `(views × hallucination_rate × estimated_dropoff × cost_per_hire / views_per_hire)`
 - [ ] `hallucination_rate` derived from the actual audit data (% of categories with wrong/missing data)
 - [ ] Result displays as large formatted number: "£XX,XXX / month in estimated wasted recruiting spend"
-- [ ] Below the number: "Rankwell Pro: £299/month — ROI: XXx"
+- [ ] Below the number: "OpenRole Pro: £299/month — ROI: XXx"
 - [ ] Inputs update the calculation in real-time (no submit button)
 - [ ] All currency formatted with locale-appropriate separators
 - [ ] Mobile responsive: table scrolls horizontally if needed, calculator stacks vertically

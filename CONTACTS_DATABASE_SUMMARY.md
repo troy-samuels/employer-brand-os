@@ -1,4 +1,4 @@
-# Rankwell Contacts Database — Mission Complete
+# OpenRole Contacts Database — Mission Complete
 
 **Workstream 3 Deliverables: 2.5M Contact Strategy, Schema, Import Pipeline, GTM Plan**
 
@@ -221,7 +221,7 @@ npx tsx scripts/import-contacts.ts
 
 **Option B: Supabase CLI**
 ```bash
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 supabase db push --linked
 ```
 (May require migration repair first due to version mismatch)
@@ -243,7 +243,7 @@ console.log(data ? '✅ Tables exist' : '❌ Tables not found');
 
 #### 2. Run Test Import (100 rows)
 ```bash
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 npx tsx scripts/import-contacts.ts "" 100
 ```
 
@@ -265,7 +265,7 @@ npx tsx scripts/import-contacts.ts "" 100
 **IMPORTANT: This will take ~45-60 minutes. Run overnight or during low-usage time.**
 
 ```bash
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 npx tsx scripts/import-contacts.ts
 ```
 
@@ -293,11 +293,11 @@ npx tsx scripts/import-contacts.ts
    ```
 
 #### 5. Configure Sending Domain
-1. Add domain: `mail.rankwell.ai`
+1. Add domain: `mail.openrole.ai`
 2. Configure DNS records (Resend provides):
    - SPF: `v=spf1 include:resend.com ~all`
    - DKIM: [Resend-specific record]
-   - DMARC: `v=DMARC1; p=none; rua=mailto:troy@rankwell.ai`
+   - DMARC: `v=DMARC1; p=none; rua=mailto:troy@openrole.ai`
 3. Verify domain (can take 24-48h)
 
 #### 6. Set Up Webhook Handler
@@ -332,7 +332,7 @@ Or Troy can approve me building a template management UI in the app.
 Add section on email marketing data processing:
 
 > **Email Marketing**
-> We process business contact information (work email addresses, job titles, company names) for legitimate business interests under GDPR Article 6(1)(f). This data is used to send relevant information about employer brand optimization. You can unsubscribe anytime via the link in any email or by contacting privacy@rankwell.ai.
+> We process business contact information (work email addresses, job titles, company names) for legitimate business interests under GDPR Article 6(1)(f). This data is used to send relevant information about employer brand optimization. You can unsubscribe anytime via the link in any email or by contacting privacy@openrole.ai.
 
 #### 10. Create Unsubscribe Page
 **File:** `frontend/app/unsubscribe/page.tsx`
@@ -422,7 +422,7 @@ The data is gold. The infrastructure is ready. The strategy is documented.
 
 ## 📁 Files Delivered
 
-All files in `~/Desktop/employer-brand-os/`:
+All files in `~/Desktop/employer-openrole/`:
 
 1. **`scripts/analyze-contacts.ts`** — Data analysis (2.5M profile)
 2. **`scripts/import-contacts.ts`** — Full import pipeline
@@ -471,5 +471,5 @@ Plus analysis output (already run, stats above).
 
 **Document Version:** 1.0  
 **Completed:** 2025-02-19 23:52 GMT  
-**Agent:** Malcolm (Subagent Session: rankwell-contacts)  
-**For:** Troy Goldman / Rankwell
+**Agent:** Malcolm (Subagent Session: openrole-contacts)  
+**For:** Troy Goldman / OpenRole

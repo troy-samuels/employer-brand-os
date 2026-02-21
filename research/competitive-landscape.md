@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The "AI employer reputation" space is nascent — almost nobody is doing exactly what Rankwell does. There are adjacent competitors in employer branding, AI reputation management, and GEO/AEO tools, but **no single product monitors what AI says about employers and helps them fix it**. This is a genuine whitespace opportunity.
+The "AI employer reputation" space is nascent — almost nobody is doing exactly what OpenRole does. There are adjacent competitors in employer branding, AI reputation management, and GEO/AEO tools, but **no single product monitors what AI says about employers and helps them fix it**. This is a genuine whitespace opportunity.
 
 ---
 
@@ -49,7 +49,7 @@ The "AI employer reputation" space is nascent — almost nobody is doing exactly
 | **Blind** | Anonymous workplace discussions | Unstructured, often negative, heavily feeds AI narratives |
 | **LinkedIn** | Company pages, employee content | Employer brand tools focus on content creation/distribution, not AI monitoring |
 
-**Key Insight:** These platforms are *inputs* to AI models. They don't monitor or optimise the *outputs*. This is exactly where Rankwell sits.
+**Key Insight:** These platforms are *inputs* to AI models. They don't monitor or optimise the *outputs*. This is exactly where OpenRole sits.
 
 ### 2.2 AI Reputation Management (General)
 | Company | What They Do | Gap |
@@ -65,13 +65,13 @@ The "AI employer reputation" space is nascent — almost nobody is doing exactly
 ### 2.3 GEO/AEO Tools (Generative Engine Optimisation)
 | Company/Tool | What They Do | Gap |
 |-------------|-------------|-----|
-| **Otterly.ai** | AI search monitoring, brand visibility tracking | Closest to what Rankwell does, but generic (not employer-specific) |
+| **Otterly.ai** | AI search monitoring, brand visibility tracking | Closest to what OpenRole does, but generic (not employer-specific) |
 | **Profound** | AI brand monitoring, tracks mentions in ChatGPT/Perplexity | Generic brand monitoring, not employer-focused |
 | **Peec.ai** | GEO analytics platform | SEO-focused, not employer brand |
 | **Single Grain** | GEO consulting and content | Agency/consulting, not a SaaS tool |
 | **ClickFlow** | SEO A/B testing | Traditional SEO, adding GEO features |
 
-**Key Insight:** GEO tools are emerging but generic. None are purpose-built for employer branding. Rankwell can be "GEO for employer brands."
+**Key Insight:** GEO tools are emerging but generic. None are purpose-built for employer branding. OpenRole can be "GEO for employer brands."
 
 ### 2.4 Employer Branding Agencies & Consultancies
 | Company | What They Do | Gap |
@@ -120,7 +120,7 @@ The "AI employer reputation" space is nascent — almost nobody is doing exactly
 - SEO market is ~$80B globally
 - If even 5% shifts to GEO, that's $4B market emerging
 
-### Rankwell's Addressable Market
+### OpenRole's Addressable Market
 - **Target:** UK companies with 50+ employees actively recruiting
 - **UK TAM:** ~50,000 companies, at £200-2,000/month = £120M-1.2B/year
 - **Initial SOM:** 500 companies at £500/month average = £3M ARR
@@ -130,7 +130,7 @@ The "AI employer reputation" space is nascent — almost nobody is doing exactly
 
 ## 5. Competitive Moats
 
-### What Rankwell Can Build That's Hard to Copy
+### What OpenRole Can Build That's Hard to Copy
 1. **Proprietary audit data** — every audit run creates a dataset of what AI says about employers. Over time, this becomes the most comprehensive database of AI employer representations in existence.
 2. **Historical tracking** — showing how AI responses change over time is incredibly valuable. First mover advantage in data accumulation.
 3. **The AI Employer Index** — a public leaderboard creates brand authority, drives organic traffic, and generates leads. Hard for a later entrant to replicate the SEO value.
@@ -142,7 +142,7 @@ The "AI employer reputation" space is nascent — almost nobody is doing exactly
 ## 6. Positioning
 
 ### Current Framing
-"Rankwell: Own your AI employer reputation"
+"OpenRole: Own your AI employer reputation"
 
 ### Refined Positioning Based on Research
 **For HR/TA Leaders:** "See what AI tells candidates about your company — and fix it"

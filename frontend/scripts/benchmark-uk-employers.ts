@@ -1,6 +1,6 @@
 /**
  * @module scripts/benchmark-uk-employers
- * Benchmarks 100 major UK employers using the Rankwell audit engine.
+ * Benchmarks 100 major UK employers using the OpenRole audit engine.
  *
  * Usage:
  *   npx tsx scripts/benchmark-uk-employers.ts [--force] [--limit=N] [--offset=N]
@@ -262,7 +262,7 @@ async function main() {
   await loadModules();
 
   console.log("╔══════════════════════════════════════════════════════════╗");
-  console.log("║   Rankwell UK Employer Benchmark                       ║");
+  console.log("║   OpenRole UK Employer Benchmark                       ║");
   console.log("╚══════════════════════════════════════════════════════════╝");
   console.log();
 

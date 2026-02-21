@@ -1,5 +1,5 @@
 /**
- * Legacy compatibility loader for older Rankwell/BrandOS embeds.
+ * Legacy compatibility loader for older OpenRole/OpenRole embeds.
  *
  * Canonical runtime is served from /api/pixel/v1/script.
  * This file forwards legacy data attributes to the canonical runtime.
@@ -10,26 +10,26 @@
   try {
     var current =
       document.currentScript ||
-      document.querySelector('script[data-key],script[data-rankwell-key],script[data-brandos-key]');
+      document.querySelector('script[data-key],script[data-openrole-key],script[data-openrole-key]');
 
     if (!current) return;
 
     var key =
       (current.getAttribute("data-key") ||
-        current.getAttribute("data-rankwell-key") ||
-        current.getAttribute("data-brandos-key") ||
+        current.getAttribute("data-openrole-key") ||
+        current.getAttribute("data-openrole-key") ||
         "").trim();
     if (!key) return;
 
     var location =
       (current.getAttribute("data-location") ||
-        current.getAttribute("data-brandos-location") ||
+        current.getAttribute("data-openrole-location") ||
         "").trim();
 
     var configuredBase =
       (current.getAttribute("data-api-base") ||
         current.getAttribute("data-api") ||
-        current.getAttribute("data-brandos-api") ||
+        current.getAttribute("data-openrole-api") ||
         "").trim();
 
     var origin = "";
@@ -45,13 +45,13 @@
 
     var canonicalSrc = origin.replace(/\/$/, "") + "/api/pixel/v1/script";
 
-    var existing = document.querySelector('script[data-rankwell-runtime="v1"]');
+    var existing = document.querySelector('script[data-openrole-runtime="v1"]');
     if (existing) return;
 
     var runtime = document.createElement("script");
     runtime.src = canonicalSrc;
     runtime.async = true;
-    runtime.setAttribute("data-rankwell-runtime", "v1");
+    runtime.setAttribute("data-openrole-runtime", "v1");
     runtime.setAttribute("data-key", key);
     if (location) runtime.setAttribute("data-location", location);
 

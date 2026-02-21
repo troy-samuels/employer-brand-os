@@ -1,4 +1,4 @@
-# BrandOS: Technical Architecture (2026)
+# OpenRole: Technical Architecture (2026)
 
 ## Philosophy: Lean Infrastructure for AI Visibility & Compliance
 
@@ -11,12 +11,12 @@ Built for a **Solo Founder + AI assistance**. Every technology choice optimizes 
 
 ## Layer 1: Infrastructure (The Smart Pixel & Sanitization Engine)
 
-The heart of BrandOS is a lightweight JavaScript SDK that injects verified employer data as JSON-LD schema.
+The heart of OpenRole is a lightweight JavaScript SDK that injects verified employer data as JSON-LD schema.
 
 ### How It Works
 
 ```
-Client Website                    BrandOS Infrastructure
+Client Website                    OpenRole Infrastructure
      │                                     │
      │  1. Load pixel via GTM              │
      ▼                                     │
@@ -38,7 +38,7 @@ Client Website                    BrandOS Infrastructure
 The Sanitization Engine translates internal ATS codes to public-friendly job titles.
 
 ```
-Internal ATS                    BrandOS Sanitization               Public Output
+Internal ATS                    OpenRole Sanitization               Public Output
      │                                     │                            │
 L4-Eng-NY  ───────────────────────────────►│                            │
                           ┌────────────────┴────────────────┐           │
@@ -102,7 +102,7 @@ L4-Eng-NY  ───────────────────────
 | Tool | Purpose | Cost |
 |------|---------|------|
 | **Perplexity API** | Live web search + AI to detect what models say | ~$0.03/query |
-| **Claude API** | Analyze sentiment and map to BrandOS products | ~$0.01/query |
+| **Claude API** | Analyze sentiment and map to OpenRole products | ~$0.01/query |
 | **OpenRouter** | Access multiple models (Gemini, Llama, Mistral) | Variable |
 
 ### Monitoring Flow

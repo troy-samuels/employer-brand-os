@@ -68,7 +68,7 @@ export async function fetchGoogleResults(
       headers: {
         "content-type": "application/json",
         "x-api-key": apiKey,
-        "user-agent": "Rankwell-CitationChain/1.0 (+https://rankwell.ai)",
+        "user-agent": "OpenRole-CitationChain/1.0 (+https://openrole.ai)",
       },
       body: JSON.stringify({
         q: trimmedQuery,

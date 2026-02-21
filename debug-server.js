@@ -5,9 +5,9 @@ const server = http.createServer((req, res) => {
   res.end(`
     <!DOCTYPE html>
     <html>
-    <head><title>BrandOS Debug Server</title></head>
+    <head><title>OpenRole Debug Server</title></head>
     <body style="font-family: Arial, sans-serif; padding: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-      <h1>✅ BrandOS Debug Server Running!</h1>
+      <h1>✅ OpenRole Debug Server Running!</h1>
       <p>Node.js version: ${process.version}</p>
       <p>Platform: ${process.platform}</p>
       <p>Time: ${new Date().toISOString()}</p>

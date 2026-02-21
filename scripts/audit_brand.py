@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS - Multi-Model Reputation Check
+OpenRole - Multi-Model Reputation Check
 Interrogates 3 AI model families via OpenRouter to detect hallucinations
 and bad data about a company's employer brand.
 """
@@ -128,7 +128,7 @@ def save_consensus_report(company_name: str, results: dict) -> str:
 
     with open(filepath, 'w') as f:
         f.write("=" * 70 + "\n")
-        f.write(f"  BRANDOS AI CONSENSUS REPORT\n")
+        f.write(f"  OPENROLE AI CONSENSUS REPORT\n")
         f.write(f"  Company: {company_name}\n")
         f.write(f"  Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         f.write(f"  Models Queried: {len(MODEL_COUNCIL)}\n")
@@ -205,7 +205,7 @@ def print_summary(company_name: str, results: dict):
 def main():
     if len(sys.argv) < 2:
         print("\n" + "="*60)
-        print("  BRANDOS - MULTI-MODEL REPUTATION CHECK")
+        print("  OPENROLE - MULTI-MODEL REPUTATION CHECK")
         print("="*60)
         print("\nUsage: python audit_brand.py 'Company Name'")
         print("Example: python audit_brand.py \"McDonald's\"")

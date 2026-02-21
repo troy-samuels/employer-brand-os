@@ -1,4 +1,4 @@
-# COMPREHENSIVE RESEARCH VALIDATION: BRANDOS EMPLOYER IDENTITY PLATFORM
+# COMPREHENSIVE RESEARCH VALIDATION: OPENROLE EMPLOYER IDENTITY PLATFORM
 **Research Agent:** Malcolm  
 **Date:** February 6, 2026  
 **Research Scope:** Business Validation, Technical Feasibility, Academic Evidence  
@@ -10,7 +10,7 @@
 
 **Overall Viability Assessment:** ✅ **STRONGLY VALIDATED (85% confidence)**
 
-BrandOS addresses real, documented problems in AI-mediated recruitment through a technically sound approach. Academic research confirms major LLM citation accuracy issues (78-90% error rates), while Google's technical documentation validates the JSON-LD structured data approach. The regulatory environment creates urgent compliance pressure, and no direct competitors address this specific infrastructure need.
+OpenRole addresses real, documented problems in AI-mediated recruitment through a technically sound approach. Academic research confirms major LLM citation accuracy issues (78-90% error rates), while Google's technical documentation validates the JSON-LD structured data approach. The regulatory environment creates urgent compliance pressure, and no direct competitors address this specific infrastructure need.
 
 **Key Risk:** Source authority limited by paywall restrictions and recent publication dates (many preprints not yet peer-reviewed).
 
@@ -96,7 +96,7 @@ BrandOS addresses real, documented problems in AI-mediated recruitment through a
   "@context": "https://schema.org/",
   "@type": "JobPosting",
   "title": "Software Engineer",
-  "dateModified": "2026-02-06T14:44:00.000Z",  // BrandOS freshness signal
+  "dateModified": "2026-02-06T14:44:00.000Z",  // OpenRole freshness signal
   "baseSalary": {
     "@type": "MonetaryAmount",
     "currency": "USD",
@@ -199,7 +199,7 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 **Revenue Model Validation:**
 - **HR Tech spending:** $15,000-50,000/year average (industry estimates)
 - **Compliance tools:** $200-800/month typical pricing
-- **BrandOS pricing ($299-899/month):** Fits market range
+- **OpenRole pricing ($299-899/month):** Fits market range
 
 **Conservative TAM:** 48,600 companies × $300/month average = $175M annual market
 
@@ -223,14 +223,14 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 
 **Architecture Strengths:**
 ```javascript
-// BrandOS Smart Pixel Core (Simplified)
+// OpenRole Smart Pixel Core (Simplified)
 (function() {
-  const config = window.brandosConfig || {};
+  const config = window.openroleConfig || {};
   
-  fetch(`https://api.brandos.io/v1/inject/${config.companyId}`)
+  fetch(`https://api.openrole.co.uk/v1/inject/${config.companyId}`)
     .then(response => response.json())
     .then(data => injectStructuredData(data))
-    .catch(error => console.warn('BrandOS: Failed to load', error));
+    .catch(error => console.warn('OpenRole: Failed to load', error));
     
   function injectStructuredData(data) {
     const script = document.createElement('script');
@@ -249,7 +249,7 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 **Technical Validation:**
 - **<5KB payload** - Minimal performance impact
 - **Asynchronous loading** - Non-blocking page rendering  
-- **Failsafe design** - Site works if BrandOS is down
+- **Failsafe design** - Site works if OpenRole is down
 - **CDN compatible** - Global performance optimization
 
 ### **Scaling Architecture**
@@ -282,7 +282,7 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 **Risk: ATS Vendors Add Native JSON-LD**
 - **Probability:** High (obvious feature gap)
 - **Impact:** Medium (reduces market but doesn't eliminate)
-- **Mitigation:** BrandOS adds compliance intelligence beyond basic schema
+- **Mitigation:** OpenRole adds compliance intelligence beyond basic schema
 
 **Risk: LLM Citation Behavior Changes**
 - **Probability:** Medium (model updates change algorithms)
@@ -458,7 +458,7 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 
 ### **PROCEED WITH HIGH CONFIDENCE**
 
-**The comprehensive research validates BrandOS as a category-creation opportunity with exceptional timing:**
+**The comprehensive research validates OpenRole as a category-creation opportunity with exceptional timing:**
 
 ✅ **Problem is urgent and documented** (78-90% AI citation error rates)  
 ✅ **Technical solution is validated** (Google recommends exact approach)  
@@ -499,6 +499,6 @@ where P(di|x) = relevance_score + authority_signals + freshness_weight
 **Research Integrity:** ✅ Transparent  
 **Evidence Quality:** ✅ Documented  
 **Confidence Calibration:** ✅ Appropriate  
-**Recommendation:** ✅ **Proceed with BrandOS development**
+**Recommendation:** ✅ **Proceed with OpenRole development**
 
-*This research represents the most comprehensive validation of the BrandOS opportunity available as of February 2026, with appropriate acknowledgment of source limitations and confidence levels.*
+*This research represents the most comprehensive validation of the OpenRole opportunity available as of February 2026, with appropriate acknowledgment of source limitations and confidence levels.*

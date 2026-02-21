@@ -511,5 +511,5 @@ Each includes:
 
 ---
 
-*Report compiled by Malcolm (AI Agent) for the Rankwell Employer Brand OS project*
+*Report compiled by Malcolm (AI Agent) for the OpenRole Employer Brand OS project*
 *All findings based on public web access as of 2026-02-20*

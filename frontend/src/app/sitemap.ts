@@ -7,7 +7,7 @@ import type { MetadataRoute } from "next";
 import { untypedTable } from "@/lib/supabase/untyped-table";
 import { getAllPosts } from "@/lib/blog";
 
-const BASE_URL = "https://rankwell.io";
+const BASE_URL = "https://openrole.co.uk";
 
 // Hardcoded blog posts (for sitemap purposes - duplicates will be handled)
 const hardcodedBlogSlugs = [

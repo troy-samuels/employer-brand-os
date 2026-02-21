@@ -1,14 +1,14 @@
 # AI SEO & Employer Brand Intelligence: Executive Brief
 
 **Date:** February 2026  
-**Prepared For:** Rankwell Strategic Planning  
+**Prepared For:** OpenRole Strategic Planning  
 **Research Scope:** GEO Market Landscape + Employer Branding Intersection
 
 ---
 
 ## THE OPPORTUNITY IN ONE SENTENCE
 
-85.6% of job seekers now use AI to research employers, but no GEO platform serves this $17B employer branding vertical—creating a category-defining opportunity for Rankwell.
+85.6% of job seekers now use AI to research employers, but no GEO platform serves this $17B employer branding vertical—creating a category-defining opportunity for OpenRole.
 
 ---
 
@@ -65,7 +65,7 @@
 4. ✗ Attribution to hiring outcomes
 5. ✗ Pre-built employer brand prompt libraries
 
-**→ Rankwell can own the employer brand vertical before Profound/Otterly add EB features.**
+**→ OpenRole can own the employer brand vertical before Profound/Otterly add EB features.**
 
 ### 5. MARKET SIZING
 
@@ -83,7 +83,7 @@
 - Year 1 target: **30-50 customers** → **£750K-£1.25M ARR**
 - Year 3 target: **200-300 customers** → **£5M-£7.5M ARR**
 
-### 6. WHY RANKWELL WINS
+### 6. WHY OPENROLE WINS
 
 **Unique Positioning:**
 1. **First vertical GEO platform** purpose-built for employer branding
@@ -136,13 +136,13 @@
 
 **The Problem:** 85% of job seekers use AI to research employers, but employer brands have no visibility or control over what AI says about them.
 
-**The Solution:** Rankwell = AI Reputation Intelligence for Employers. Audit → Monitor → Fix.
+**The Solution:** OpenRole = AI Reputation Intelligence for Employers. Audit → Monitor → Fix.
 
 **The Market:** $17B employer branding industry × 65-86% AI adoption = massive, underserved opportunity.
 
 **The Competition:** No vertical leader exists. 6-12 month window to own the category.
 
-**The ROI:** £25K Rankwell investment prevents £50K-£150K annual loss from AI misrepresentation. 2x-6x first-year ROI.
+**The ROI:** £25K OpenRole investment prevents £50K-£150K annual loss from AI misrepresentation. 2x-6x first-year ROI.
 
 **The Ask:** Execute fast. Launch Q2 2026. Own employer brand GEO before Profound or Otterly wake up.
 

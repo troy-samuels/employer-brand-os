@@ -30,7 +30,7 @@ Features implemented:
 **Status:** ✅ Enhanced with full OG/Twitter cards
 
 Includes:
-- ✅ Title template (`%s | Rankwell`)
+- ✅ Title template (`%s | OpenRole`)
 - ✅ OpenGraph metadata (type, locale, url, siteName, images)
 - ✅ Twitter Card metadata (summary_large_image)
 - ✅ Canonical URL
@@ -96,7 +96,7 @@ Configuration:
 ```
 User-agent: *
 Allow: /
-Sitemap: https://rankwell.io/sitemap.xml
+Sitemap: https://openrole.co.uk/sitemap.xml
 ```
 
 ### 8. Canonical URLs
@@ -105,7 +105,7 @@ Sitemap: https://rankwell.io/sitemap.xml
 All pages include:
 ```typescript
 alternates: {
-  canonical: "https://rankwell.io/[path]"
+  canonical: "https://openrole.co.uk/[path]"
 }
 ```
 
@@ -191,16 +191,16 @@ Route (app)
 
 ```bash
 # Verify metadata
-curl -s https://rankwell.io | grep -A5 'og:title'
+curl -s https://openrole.co.uk | grep -A5 'og:title'
 
 # Verify JSON-LD
-curl -s https://rankwell.io | grep 'application/ld+json' -A20
+curl -s https://openrole.co.uk | grep 'application/ld+json' -A20
 
 # Verify sitemap
-curl -s https://rankwell.io/sitemap.xml | head -50
+curl -s https://openrole.co.uk/sitemap.xml | head -50
 
 # Verify robots.txt
-curl -s https://rankwell.io/robots.txt
+curl -s https://openrole.co.uk/robots.txt
 ```
 
 ---

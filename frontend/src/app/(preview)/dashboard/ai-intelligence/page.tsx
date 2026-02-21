@@ -11,7 +11,7 @@ import ModelComparison from "@/components/dashboard/model-comparison";
 import CrawlerDashboard from "@/components/dashboard/crawler-dashboard";
 
 export const metadata = {
-  title: "AI Intelligence Dashboard | Rankwell",
+  title: "AI Intelligence Dashboard | OpenRole",
   description:
     "See what AI models say about your company, track citations, and monitor AI crawler activity.",
 };
@@ -34,7 +34,7 @@ export default function AIIntelligencePage() {
         {/* ── Page header ───────────────────────────── */}
         <div className="mx-auto max-w-[1200px] px-6 lg:px-12 pt-12 pb-8">
           <p className="overline mb-2">
-            Rankwell
+            OpenRole
           </p>
           <h1 className="text-2xl lg:text-3xl font-bold text-neutral-950 tracking-tight">
             AI Intelligence Dashboard

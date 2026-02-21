@@ -1,4 +1,4 @@
-# Hacker News Posts — Rankwell
+# Hacker News Posts — OpenRole
 
 > Created 12 Feb 2026 by Malcolm
 > Rule: HN audience is technical, sceptical, and allergic to marketing. Lead with the interesting technical/societal problem. Show, don't sell.
@@ -9,7 +9,7 @@
 
 **Title:** Show HN: AI Employer Index – What ChatGPT, Perplexity and Gemini say about UK companies as employers
 
-**URL:** [rankwell.io/index]
+**URL:** [openrole.co.uk/index]
 
 **Body (Show HN text):**
 

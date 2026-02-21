@@ -1,8 +1,8 @@
-# BrandOS: Development Guardrails
+# OpenRole: Development Guardrails
 
 ## Core Principle
 
-BrandOS is **infrastructure, not marketing software**. Every feature must support the "SSL Certificate" metaphor: invisible, essential, and impossible to remove without breaking something.
+OpenRole is **infrastructure, not marketing software**. Every feature must support the "SSL Certificate" metaphor: invisible, essential, and impossible to remove without breaking something.
 
 ---
 
@@ -18,7 +18,7 @@ BrandOS is **infrastructure, not marketing software**. Every feature must suppor
 ### Deployment & Access
 
 - **DO** build for "Zero-IT" deployment. HR/Marketing must be able to install the Smart Pixel via Google Tag Manager without IT tickets.
-- **DO** support hosted Truth Pages (`brandos.com/verify/[company]`) for franchises who can't modify their website.
+- **DO** support hosted Truth Pages (`openrole.com/verify/[company]`) for franchises who can't modify their website.
 - **DO** build for "Multi-Persona" access: Corporate HQ, Location Managers, and HR Admins.
 - **DO** make the pixel installation copy-paste simple (like Meta Pixel or Google Analytics).
 
@@ -50,7 +50,7 @@ BrandOS is **infrastructure, not marketing software**. Every feature must suppor
 
 - **DON'T** require IT involvement for pixel deployment. The whole point is "Zero-IT."
 - **DON'T** hardcode industry-specific labels. Use variables that can be customized (e.g., `brand_entity` instead of `restaurant`).
-- **DON'T** build features that can't be "Verified." If we can't prove it's true, it doesn't belong in BrandOS.
+- **DON'T** build features that can't be "Verified." If we can't prove it's true, it doesn't belong in OpenRole.
 - **DON'T** create mobile apps. Use responsive web for all features.
 
 ### Business

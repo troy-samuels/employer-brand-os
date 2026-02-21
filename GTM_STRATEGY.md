@@ -1,4 +1,4 @@
-# Rankwell GTM Strategy: 2.5M Contact Database
+# OpenRole GTM Strategy: 2.5M Contact Database
 **How a World-Class Enterprise GTM Team Would Execute**
 
 ---
@@ -35,7 +35,7 @@
 - Company size: 500+ employees preferred
 
 **Why:**
-1. Rankwell is UK-focused initially
+1. OpenRole is UK-focused initially
 2. Decision-makers control budgets
 3. Largest ROI per contact
 4. Faster sales cycles with qualified leads
@@ -107,7 +107,7 @@ Free audit: [Link]
 Takes 60 seconds. Results in 2 minutes.
 
 Troy
-Rankwell
+OpenRole
 ```
 
 **CTA:** Free audit link (tracked)
@@ -131,7 +131,7 @@ I ask because we just helped Sofology (furniture retailer, 1000+ employees) fix 
 The fix took 48 hours.
 
 Their Head of People said:  
-> "We were spending £40K/mo on job ads no one saw. Rankwell made us visible to the candidates who actually matter."
+> "We were spending £40K/mo on job ads no one saw. OpenRole made us visible to the candidates who actually matter."
 
 See your own results: [Audit Link]
 
@@ -198,7 +198,7 @@ The reality? **73% score below 40.**
 Find out where you really stand: [Free Audit]
 
 Troy  
-Rankwell — AI Employer Brand Intelligence
+OpenRole — AI Employer Brand Intelligence
 ```
 
 **CTA:** Free audit
@@ -247,7 +247,7 @@ Hi {{firstName}},
 
 Free tool for HR teams:
 
-**Rankwell AI Audit**  
+**OpenRole AI Audit**  
 → See how ChatGPT, Perplexity, and Claude describe your employer brand  
 → 60-second audit  
 → Instant results
@@ -305,7 +305,7 @@ We're using **legitimate interest** as our legal basis under GDPR Article 6(1)(f
 **Our Approach:**
 - All UK contacts are work emails (B2B exemption applies)
 - Clear "Unsubscribe" link in footer
-- Sender: "Troy Goldman, Rankwell Ltd"
+- Sender: "Troy Goldman, OpenRole Ltd"
 - Physical address: [Troy's registered UK business address]
 
 ---
@@ -374,7 +374,7 @@ We're using **legitimate interest** as our legal basis under GDPR Article 6(1)(f
 | 31+ | 2,500 | 50K+ /mo | Begin Tier 3 (volume) |
 
 **Infrastructure:**
-- **Sending Domain:** `mail.rankwell.ai` (separate from main domain)
+- **Sending Domain:** `mail.openrole.ai` (separate from main domain)
 - **DKIM/SPF/DMARC:** All configured
 - **Resend.com:** Transactional email provider (99.9% deliverability)
 - **Warm-up tool:** Resend's warm-up feature enabled
@@ -385,7 +385,7 @@ We're using **legitimate interest** as our legal basis under GDPR Article 6(1)(f
 **Goal:** Scale beyond single-domain limits
 
 **Approach:**
-- Add 2nd sending domain: `hello.rankwell.ai`
+- Add 2nd sending domain: `hello.openrole.ai`
 - Rotate domains for different segments
 - Parallel warm-up process
 
@@ -464,7 +464,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Campaign send
 await resend.emails.send({
-  from: 'Troy Goldman <troy@mail.rankwell.ai>',
+  from: 'Troy Goldman <troy@mail.openrole.ai>',
   to: contact.email,
   subject: renderSubject(template, contact),
   html: renderHTML(template, contact),
@@ -476,7 +476,7 @@ await resend.emails.send({
   ],
   headers: {
     'X-Entity-Ref-ID': contact.id, // For tracking
-    'List-Unsubscribe': `<https://rankwell.ai/unsubscribe?id=${contact.id}>`,
+    'List-Unsubscribe': `<https://openrole.ai/unsubscribe?id=${contact.id}>`,
     'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click'
   }
 });
@@ -765,7 +765,7 @@ This automatically updates:
 <hr style="margin: 40px 0; border: none; border-top: 1px solid #e5e7eb;">
 
 <p style="font-size: 12px; color: #6b7280; line-height: 1.6;">
-  <strong>Rankwell Ltd</strong><br>
+  <strong>OpenRole Ltd</strong><br>
   [Troy's UK Registered Business Address]<br>
   Company No: [Registration Number]
 </p>
@@ -777,8 +777,8 @@ This automatically updates:
 </p>
 
 <p style="font-size: 11px; color: #9ca3af;">
-  <a href="https://rankwell.ai/privacy" style="color: #9ca3af;">Privacy Policy</a> | 
-  <a href="https://rankwell.ai/terms" style="color: #9ca3af;">Terms of Service</a>
+  <a href="https://openrole.ai/privacy" style="color: #9ca3af;">Privacy Policy</a> | 
+  <a href="https://openrole.ai/terms" style="color: #9ca3af;">Terms of Service</a>
 </p>
 ```
 
@@ -786,7 +786,7 @@ This automatically updates:
 ```markdown
 # You've been unsubscribed
 
-We've removed you from all future Rankwell marketing emails.
+We've removed you from all future OpenRole marketing emails.
 
 **You will NOT receive:**
 - Product updates
@@ -819,7 +819,7 @@ Changed your mind? [Resubscribe here]
 - [ ] All 2.5M contacts imported
 - [ ] Contacts segmented (tier 1, 2, 3 tags)
 - [ ] Resend account created + billing set up
-- [ ] Sending domain verified (`mail.rankwell.ai`)
+- [ ] Sending domain verified (`mail.openrole.ai`)
 - [ ] DKIM, SPF, DMARC configured
 - [ ] Warm-up schedule started (50/day for 7 days)
 - [ ] Webhook endpoint deployed + tested
@@ -868,7 +868,7 @@ Changed your mind? [Resubscribe here]
 - **Multi-touch:** 7-12 touchpoints before conversion
 - **Account-based:** Coordinate email with LinkedIn, ads, events
 
-### What We'll Do (Rankwell)
+### What We'll Do (OpenRole)
 1. **Start small, scale smart:** 18K → 250K → 2.5M over 12 weeks
 2. **Free value first:** Audit is genuinely useful (not a lead magnet)
 3. **Ruthless segmentation:** Right message, right person, right time

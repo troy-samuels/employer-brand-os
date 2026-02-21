@@ -2,7 +2,7 @@
 title: "The Cost of AI Misinformation: Why Wrong Salary Data Is Costing You £240K/Month"
 description: "When AI tells candidates you pay £30K less than you actually do, here's the financial impact — and why your CFO should care about AI visibility."
 date: "2026-02-21"
-author: "Rankwell Research Team"
+author: "OpenRole Research Team"
 category: "Analysis"
 readTime: "11 min"
 tags: ["cost analysis", "ROI", "recruitment costs", "CFO", "talent acquisition"]
@@ -384,14 +384,14 @@ And unlike most recruiting problems, **this one is fixable in 30 days for under 
 ---
 
 **Want to see what AI says about your salaries right now?**  
-[Run a free Rankwell audit](https://rankwell.io) — it checks ChatGPT, Google AI, and Perplexity in 30 seconds.
+[Run a free OpenRole audit](https://openrole.co.uk) — it checks ChatGPT, Google AI, and Perplexity in 30 seconds.
 
 If AI is underestimating by £20K+, your CFO will want to see the report.
 
 ---
 
 **Sources:**
-- Rankwell audit data: 200 UK tech companies (Feb 2026)
+- OpenRole audit data: 200 UK tech companies (Feb 2026)
 - LinkedIn Talent Solutions: Cost per hire benchmarks (2025)
 - Indeed: Time-to-hire industry averages (2025)
 - Greenhouse: Recruiting funnel conversion rates (2024)

@@ -291,7 +291,7 @@ ${JSON.stringify(faqSchema, null, 2)}
 ${JSON.stringify(jobPosting, null, 2)}
 </script>
 
-<!-- Generate all schemas automatically: https://rankwell.io/tools/employer-schema -->`;
+<!-- Generate all schemas automatically: https://openrole.co.uk/tools/employer-schema -->`;
 }
 
 function generateCareersRecommendation(audit: StoredAuditResult): string {
@@ -421,11 +421,11 @@ Add these user agents to your allow list:
 - PerplexityBot
 - Amazonbot
 
-**Option B: Use the Rankwell pixel (recommended)**
+**Option B: Use the OpenRole pixel (recommended)**
 The pixel runs from YOUR domain, so bot protection doesn't apply.
 Your verified employer data becomes visible to every AI model instantly.
 
-→ See how it works: https://rankwell.io/pricing
+→ See how it works: https://openrole.co.uk/pricing
 
 **Option C: Serve a static HTML fallback**
 Create a simple HTML version of your careers page at /careers

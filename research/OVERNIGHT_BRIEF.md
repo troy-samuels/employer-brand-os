@@ -10,7 +10,7 @@
 ### 2. AI SEO Competitive Landscape
 - Who else is in the "AI employer reputation" space
 - Adjacent competitors (Glassdoor, employer branding tools)
-- Gap analysis — where Rankwell can own the space
+- Gap analysis — where OpenRole can own the space
 
 ### 3. Surprise Deliverable (4+ hours of work)
 - TBD — will be decided during research phase based on findings

@@ -1,7 +1,7 @@
 /**
  * @module features/pixel/types/pixel.types
  * Smart Pixel Types
- * Core type definitions for the Rankwell Smart Pixel infrastructure
+ * Core type definitions for the OpenRole Smart Pixel infrastructure
  */
 
 // Validated API key data returned from database

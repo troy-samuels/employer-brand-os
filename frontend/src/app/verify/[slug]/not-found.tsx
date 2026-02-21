@@ -19,7 +19,7 @@ export default function NotFound() {
             href="/"
             className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
           >
-            Powered by Rankwell
+            Powered by OpenRole
           </Link>
         </div>
       </header>
@@ -51,7 +51,7 @@ export default function NotFound() {
           <div className="flex items-center justify-center gap-1">
             <span className="w-1.5 h-1.5 bg-neutral-300 rounded-full" />
             <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">
-              Rankwell
+              OpenRole
             </span>
           </div>
         </div>

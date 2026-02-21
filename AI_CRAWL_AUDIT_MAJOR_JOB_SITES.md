@@ -8,7 +8,7 @@
 
 **Every major employment platform either blocks or ignores AI/LLM crawlers.** Not a single one has proactively structured their employer data for AI consumption. This creates a massive information vacuum — when candidates ask ChatGPT, Claude, or Perplexity about companies, salaries, or benefits, these AI agents are working blind.
 
-**BrandOS fills this gap.** Employers who use BrandOS become the *only* verified source of employment data in the AI layer.
+**OpenRole fills this gap.** Employers who use OpenRole become the *only* verified source of employment data in the AI layer.
 
 ---
 
@@ -88,7 +88,7 @@
 
 ---
 
-## Key Insights for BrandOS
+## Key Insights for OpenRole
 
 ### 1. The Data Vacuum is Real
 The three largest sources of employment data (Glassdoor, Indeed, LinkedIn) have all deliberately blocked AI crawlers. When someone asks an AI "What does Company X pay?", the AI literally cannot access current data from any of these platforms.
@@ -105,7 +105,7 @@ Workday (powering thousands of career sites) has no AI-specific provisions at al
 ### 5. The "Shadow Salary" Problem is Structural
 It's not a temporary gap. These platforms are *choosing* to block AI because their business model depends on owning the data. This means the problem gets worse as AI adoption grows — more candidates use AI, but the AI has less access to real data.
 
-### 6. BrandOS Competitive Positioning
+### 6. OpenRole Competitive Positioning
 - **Against Glassdoor:** "They block AI from seeing your data. We make sure AI gets your *verified* data."
 - **Against Indeed:** "Indeed won't let AI read your job listings. We make your employer brand the first thing AI sees."
 - **Against LinkedIn:** "LinkedIn walls off your company page from AI agents. We give AI your real story."

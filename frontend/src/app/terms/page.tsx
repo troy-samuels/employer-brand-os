@@ -13,22 +13,22 @@ import { Footer } from '@/components/shared/footer';
 export const metadata: Metadata = {
   title: 'Terms of Service',
   description:
-    'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
+    'Terms and conditions for using OpenRole employer brand audit and optimisation services.',
   openGraph: {
-    title: 'Terms of Service | Rankwell',
+    title: 'Terms of Service | OpenRole',
     description:
-      'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
-    url: 'https://rankwell.io/terms',
+      'Terms and conditions for using OpenRole employer brand audit and optimisation services.',
+    url: 'https://openrole.co.uk/terms',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Terms of Service | Rankwell',
+    title: 'Terms of Service | OpenRole',
     description:
-      'Terms and conditions for using Rankwell employer brand audit and optimisation services.',
+      'Terms and conditions for using OpenRole employer brand audit and optimisation services.',
   },
   alternates: {
-    canonical: 'https://rankwell.io/terms',
+    canonical: 'https://openrole.co.uk/terms',
   },
   robots: {
     index: true,
@@ -63,14 +63,14 @@ export default function TermsPage() {
               1. Agreement
             </h2>
             <p>
-              By accessing or using Rankwell (&ldquo;the Service&rdquo;), you
+              By accessing or using OpenRole (&ldquo;the Service&rdquo;), you
               agree to these Terms of Service. If you are using the Service on
               behalf of an organisation, you represent that you have the
               authority to bind that organisation to these terms.
             </p>
             <p className="mt-2">
-              &ldquo;Rankwell&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, and
-              &ldquo;our&rdquo; refer to the operator of rankwell.io.
+              &ldquo;OpenRole&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, and
+              &ldquo;our&rdquo; refer to the operator of openrole.co.uk.
               &ldquo;You&rdquo; and &ldquo;your&rdquo; refer to the individual
               or organisation using the Service.
             </p>
@@ -81,7 +81,7 @@ export default function TermsPage() {
             <h2 className="text-xl font-semibold text-slate-900 mb-3">
               2. The Service
             </h2>
-            <p>Rankwell provides:</p>
+            <p>OpenRole provides:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>
                 Employer brand audits that assess how your company appears to AI
@@ -109,10 +109,10 @@ export default function TermsPage() {
               You are responsible for maintaining the confidentiality of your API
               keys and account credentials. You must notify us immediately at{' '}
               <a
-                href="mailto:security@rankwell.io"
+                href="mailto:security@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                security@rankwell.io
+                security@openrole.co.uk
               </a>{' '}
               if you suspect unauthorised access to your account.
             </p>
@@ -126,9 +126,9 @@ export default function TermsPage() {
           {/* 4 */}
           <section>
             <h2 className="text-xl font-semibold text-slate-900 mb-3">
-              4. The Rankwell pixel
+              4. The OpenRole pixel
             </h2>
-            <p>By installing the Rankwell pixel on your website, you:</p>
+            <p>By installing the OpenRole pixel on your website, you:</p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>
                 Confirm you have the authority to add scripts to the domain
@@ -139,7 +139,7 @@ export default function TermsPage() {
                 AI crawlers and search engines
               </li>
               <li>
-                Acknowledge the pixel communicates only with Rankwell API
+                Acknowledge the pixel communicates only with OpenRole API
                 endpoints
               </li>
               <li>
@@ -207,7 +207,7 @@ export default function TermsPage() {
                 our infrastructure
               </li>
               <li>
-                Misrepresent your audit score, verified status, or Rankwell
+                Misrepresent your audit score, verified status, or OpenRole
                 badge
               </li>
               <li>
@@ -226,7 +226,7 @@ export default function TermsPage() {
               7. Intellectual property
             </h2>
             <p>
-              Rankwell, our logo, scoring methodology, and pixel technology are
+              OpenRole, our logo, scoring methodology, and pixel technology are
               our intellectual property. Your audit results and employer data
               remain yours.
             </p>
@@ -269,10 +269,10 @@ export default function TermsPage() {
               . Enterprise customers requiring a Data Processing Agreement (DPA)
               can request one at{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>
               .
             </p>
@@ -298,7 +298,7 @@ export default function TermsPage() {
               11. Limitation of liability
             </h2>
             <p>
-              To the maximum extent permitted by law, Rankwell&apos;s total
+              To the maximum extent permitted by law, OpenRole&apos;s total
               liability for any claim arising from your use of the Service is
               limited to the amount you paid us in the 12 months preceding the
               claim, or £100, whichever is greater.
@@ -315,7 +315,7 @@ export default function TermsPage() {
               12. Indemnification
             </h2>
             <p>
-              You agree to indemnify and hold Rankwell harmless from any claims,
+              You agree to indemnify and hold OpenRole harmless from any claims,
               damages, or expenses arising from your use of the Service,
               violation of these terms, or infringement of any third party&apos;s
               rights.
@@ -356,10 +356,10 @@ export default function TermsPage() {
             <p>
               For questions about these terms, contact us at{' '}
               <a
-                href="mailto:hello@rankwell.io"
+                href="mailto:hello@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                hello@rankwell.io
+                hello@openrole.co.uk
               </a>
               .
             </p>

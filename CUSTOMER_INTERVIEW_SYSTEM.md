@@ -1,4 +1,4 @@
-# CUSTOMER INTERVIEW SYSTEM: BrandOS Validation
+# CUSTOMER INTERVIEW SYSTEM: OpenRole Validation
 **Target:** 50 customer interviews across 3 segments  
 **Timeline:** Day 2-3 execution  
 **Methodology:** Brian Chesky intensive customer discovery
@@ -212,9 +212,9 @@ Research: AI Employment Data Infrastructure
 
 #### Solution Validation (15 minutes)
 
-**BrandOS Concept Introduction:**
+**OpenRole Concept Introduction:**
 - "I'd like to share a concept and get your reaction..."
-- [Present BrandOS Smart Pixel concept with visual]
+- [Present OpenRole Smart Pixel concept with visual]
 - "What's your initial reaction to this approach?"
 - "Would this solve problems you're currently facing?"
 

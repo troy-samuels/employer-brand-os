@@ -11,7 +11,7 @@ import { type NextRequest } from "next/server";
  * @returns The resulting value.
  * 
  * SECURITY: Stricter CSRF validation - only allows same-origin, not same-site.
- * This prevents subdomain attacks (e.g., attacker.rankwell.io → api.rankwell.io).
+ * This prevents subdomain attacks (e.g., attacker.openrole.co.uk → api.openrole.co.uk).
  */
 export function validateCsrf(request: NextRequest): boolean {
   const host = request.headers.get("host");

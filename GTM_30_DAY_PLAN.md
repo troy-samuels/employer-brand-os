@@ -1,7 +1,7 @@
-# RANKWELL: 30-DAY GO-TO-MARKET PLAYBOOK
+# OPENROLE: 30-DAY GO-TO-MARKET PLAYBOOK
 ## From Zero to 1,000 Paying Customers — The Operations Manual
 
-**Product:** Rankwell (formerly BrandOS) — Shows companies what AI says about them as employers, helps them fix it with verified data.  
+**Product:** OpenRole (formerly OpenRole) — Shows companies what AI says about them as employers, helps them fix it with verified data.  
 **Price:** £199/month (Pro) | £99/month/client (Agency)  
 **Goal:** 100 paying customers in 30 days. 1,000 in 6 months.  
 **Date:** February 2026  
@@ -59,7 +59,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 **Why they buy TODAY:**
 - Their clients are asking "What does ChatGPT say about us?" and they can't answer
-- Rankwell becomes a new service line they can charge £500–£2,000/month for while paying £99/client
+- OpenRole becomes a new service line they can charge £500–£2,000/month for while paying £99/client
 - It's a **retention tool** — clients who get weekly AI monitoring reports don't leave the agency
 - They buy once, we get 20–100 employer accounts in one deal
 
@@ -82,7 +82,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 3. **The Big Three have blocked AI.** Glassdoor, Indeed, and LinkedIn explicitly block AI crawlers from salary, review, and job data. This means the only employer brand information AI can access is whatever scraps exist on company websites — which are usually unstructured and unoptimized.
 
-4. **EU Pay Transparency Directive hits June 2026.** Companies need structured salary data published. Rankwell provides this as a side effect of the core product.
+4. **EU Pay Transparency Directive hits June 2026.** Companies need structured salary data published. OpenRole provides this as a side effect of the core product.
 
 5. **No one else does this.** Zero tools currently show companies what AI says about them as employers. This is category creation.
 
@@ -94,7 +94,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 | # | Company | HQ | Size | Why them |
 |---|---------|-----|------|----------|
-| 1 | **Chatter Communications** | Leeds | 11–50 | Award-winning EB agency. Already selling EVP, careers sites, engagement. Rankwell = new service line. |
+| 1 | **Chatter Communications** | Leeds | 11–50 | Award-winning EB agency. Already selling EVP, careers sites, engagement. OpenRole = new service line. |
 | 2 | **ThirtyThree** | London | 20–50 | Specialist employer brand agency. Work with major UK brands. Need AI differentiation. |
 | 3 | **Blackbridge Communications** | London | 10–30 | EB and internal comms agency. Clients include NHS trusts, councils. |
 | 4 | **TMP Worldwide (now Radancy)** | London | 200+ | Global recruitment marketing agency. UK office manages 50+ employer brands. |
@@ -104,7 +104,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 | # | Company | HQ | Size | Why them |
 |---|---------|-----|------|----------|
-| 6 | **Cielo Talent** | UK office | 3,000+ global | Major RPO. If they adopt Rankwell for clients, instant scale. |
+| 6 | **Cielo Talent** | UK office | 3,000+ global | Major RPO. If they adopt OpenRole for clients, instant scale. |
 | 7 | **AMS (Alexander Mann Solutions)** | London | 4,500+ | Huge RPO. Employer brand is core service. First-mover incentive. |
 | 8 | **Guidant Global** | London | 200+ | RPO and MSP. Employer brand consulting is growth area for them. |
 | 9 | **Resource Solutions** | London | 3,000+ | Part of Robert Walters group. Major RPO with employer brand services. |
@@ -143,19 +143,19 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 ### Direct Competitors (Who Else Audits Employer Brands?)
 
-**The short answer: Nobody does what Rankwell does.** No tool currently shows companies what AI specifically says about them as employers. But several companies touch adjacent problems:
+**The short answer: Nobody does what OpenRole does.** No tool currently shows companies what AI specifically says about them as employers. But several companies touch adjacent problems:
 
 #### Tier 1: Traditional Employer Brand Research
 
-| Competitor | What They Do | Pricing | Gap Rankwell Fills |
+| Competitor | What They Do | Pricing | Gap OpenRole Fills |
 |-----------|-------------|---------|-------------------|
-| **Universum** (Stepstone Group) | Annual employer attractiveness surveys. Ranks companies by student/professional perception. | £15K–£50K/year for custom research. Enterprise only. | Static annual data vs. Rankwell's real-time AI monitoring. No AI-specific insights. 12-month contracts. |
+| **Universum** (Stepstone Group) | Annual employer attractiveness surveys. Ranks companies by student/professional perception. | £15K–£50K/year for custom research. Enterprise only. | Static annual data vs. OpenRole's real-time AI monitoring. No AI-specific insights. 12-month contracts. |
 | **Randstad Employer Brand Research** | Annual survey of 6,000+ workers per country on employer perceptions. | Free report, but pay £10K+ for custom cuts and competitor data. | Measures human perception, not AI perception. Annual, not weekly. Can't action findings. |
 | **Employer Brand Index (EBI)** by Link Humans | Ongoing social media monitoring for employer brand. Tracks 16 attributes across social channels. | £500–£2,000/month depending on scope. | Monitors social media, NOT AI responses. Doesn't track what ChatGPT/Perplexity/Claude say. |
 
 #### Tier 2: Glassdoor & Review Platforms
 
-| Competitor | What They Do | Pricing | Gap Rankwell Fills |
+| Competitor | What They Do | Pricing | Gap OpenRole Fills |
 |-----------|-------------|---------|-------------------|
 | **Glassdoor for Employers** | Profile management, review responses, analytics. | Free basic. Enhanced Profile: £5K–£15K/year. Job slots extra. | Glassdoor **blocks AI crawlers**. Managing your Glassdoor profile does nothing for AI visibility. And Glassdoor shows you reviews, not what AI says. |
 | **Comparably** | Employee culture and compensation data. Awards and rankings. | Free employer profile. Premium: ~$5K/year. | Self-reported data. No AI monitoring. No structured data output. |
@@ -163,7 +163,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 #### Tier 3: Adjacent HR Tech
 
-| Competitor | What They Do | Pricing | Gap Rankwell Fills |
+| Competitor | What They Do | Pricing | Gap OpenRole Fills |
 |-----------|-------------|---------|-------------------|
 | **LinkedIn Talent Insights** | Labour market analytics, talent pool data, competitive intelligence. | £5K–£25K/year. Part of LinkedIn Recruiter suite. | LinkedIn blocks AI. Their "insights" are internal to LinkedIn. No AI monitoring. |
 | **Beamery** | Talent CRM, sourcing, internal mobility. | Enterprise only. £50K+/year. | Completely different product. No AI monitoring. |
@@ -172,7 +172,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 #### Tier 4: Emerging/Adjacent
 
-| Competitor | What They Do | Pricing | Gap Rankwell Fills |
+| Competitor | What They Do | Pricing | Gap OpenRole Fills |
 |-----------|-------------|---------|-------------------|
 | **Otterly.ai** | AI search monitoring for brands (SEO focus). | $49–$399/month. | Monitors AI search results for marketing, not employment. Could pivot. Watch closely. |
 | **Profound** | AI-powered brand tracking via LLM queries. | Early stage, $500+/month. | General brand monitoring. Not employer-specific. No employer data infrastructure. |
@@ -180,7 +180,7 @@ The easiest sale isn't the biggest company — it's the person whose **job liter
 
 ### What's Missing From Every Competitor's Offering
 
-1. **None monitor what AI says about employers.** This is Rankwell's unique angle. Zero overlap.
+1. **None monitor what AI says about employers.** This is OpenRole's unique angle. Zero overlap.
 2. **None provide structured data (JSON-LD) for AI readability.** Career pages are invisible to LLMs.
 3. **None surface the "Shadow Salary" — the salary AI thinks a company pays.** This is our killer hook.
 4. **None connect auditing to fixing.** Universum tells you your ranking. They can't help you change it.
@@ -230,7 +230,7 @@ The free audit is the hook. It creates urgency by showing the problem. The fix r
 
 #### Day 1–2: Launch Infrastructure
 
-- [ ] **Product:** Free audit tool live at rankwell.ai (or brandos.ai)
+- [ ] **Product:** Free audit tool live at openrole.ai (or openrole.co.uk)
   - Input: Company name
   - Output: Shadow Salary score, AI Accuracy score, 3 example AI responses with inaccuracies highlighted
   - Gate: "Enter email for full report" 
@@ -247,7 +247,7 @@ The free audit is the hook. It creates urgency by showing the problem. The fix r
   - This is genuinely newsworthy — pitch to HR publications
 - [ ] **Blog post 2:** "The Shadow Salary Problem: What AI Thinks Your Company Pays (And Why It's Wrong)"
   - Pick 5 well-known UK employers. Run the audit. Show the gaps.
-  - Name names (Rankwell audits are public-facing anyway)
+  - Name names (OpenRole audits are public-facing anyway)
 - [ ] **LinkedIn post series:** 5 posts queued for Week 1
   - Post 1: The robots.txt revelation (with screenshots)
   - Post 2: "I audited [famous company]'s AI employer brand. Here's what I found."
@@ -257,7 +257,7 @@ The free audit is the hook. It creates urgency by showing the problem. The fix r
 
 #### Day 3–5: First Outreach Wave
 
-- [ ] **20 personalised audits:** Run Rankwell audit for 20 target companies from our list. Save PDFs.
+- [ ] **20 personalised audits:** Run OpenRole audit for 20 target companies from our list. Save PDFs.
 - [ ] **20 cold emails:** Send audit results as unsolicited value. "I ran your AI employer brand audit — here's what ChatGPT says about working at [Company]."
 - [ ] **5 agency DMs:** LinkedIn messages to MDs at Chatter, ThirtyThree, Blackbridge, Tonic, TMP/Radancy
 - [ ] **5 warm intros:** Ask existing network for introductions to EB professionals
@@ -296,7 +296,7 @@ The free audit is the hook. It creates urgency by showing the problem. The fix r
 - [ ] **Book demos:** Target 10 demo calls this week. 15-minute format:
   - Show their specific audit results (live, not slides)
   - Show what AI says about their biggest competitor
-  - Show the fix: "Here's what happens when you verify your data on Rankwell"
+  - Show the fix: "Here's what happens when you verify your data on OpenRole"
   - Close: "£199/month, cancel anytime. Fix this today?"
 - [ ] **Send 20 more cold emails** (new batch, different companies)
 
@@ -314,7 +314,7 @@ The free audit is the hook. It creates urgency by showing the problem. The fix r
 - [ ] **Agency pitch deck:** 5 slides max.
   1. "Your clients are asking about AI. You don't have an answer."
   2. "Here's what AI says about [their actual client]" (run the audit)
-  3. "Rankwell gives you a new service line. £99/client. You charge £500+."
+  3. "OpenRole gives you a new service line. £99/client. You charge £500+."
   4. "White-label dashboard. Your brand. Your clients."
   5. "Start with 10 clients. Go live this week."
 - [ ] **Book agency demos:** Target 5 agency conversations
@@ -419,7 +419,7 @@ By now you know:
 #### Day 22–24: Partnership Acceleration
 
 - [ ] **ATS integration partnerships:**
-  - **Teamtailor:** They have 12,000+ customers. Partnership = Rankwell as a recommended integration.
+  - **Teamtailor:** They have 12,000+ customers. Partnership = OpenRole as a recommended integration.
   - **Pinpoint:** Modern ATS popular with UK mid-market. Integration could be a co-marketing play.
   - **Ashby:** Growing fast in tech. AI-forward brand. Natural partnership.
   - **Workable:** Strong in SMB/mid-market. 27K+ companies.
@@ -523,7 +523,7 @@ The ICP lives on LinkedIn. Employer Brand Managers, Heads of TA, HR Directors, a
 | Tuesday | **Industry insight** | "The top 3 employer review sites all block AI from their data. Here's what that means for you." |
 | Wednesday | **How-to/tip** | "3 things you can do today to make your careers page visible to AI (takes 10 minutes)" |
 | Thursday | **Controversy/hot take** | "Employer brand teams are spending £100K/year on channels AI can't read. Time to reallocate." |
-| Friday | **Case study/result** | "Before Rankwell: ChatGPT said [Company] pays £45K for senior devs. Reality: £75K. Here's how we fixed it." |
+| Friday | **Case study/result** | "Before OpenRole: ChatGPT said [Company] pays £45K for senior devs. Reality: £75K. Here's how we fixed it." |
 
 **Post format that works for HR LinkedIn:**
 - Short paragraphs (1–2 lines max)
@@ -565,7 +565,7 @@ The ICP lives on LinkedIn. Employer Brand Managers, Heads of TA, HR Directors, a
 **Key principle:** Every cold email includes the recipient's actual audit data. This is the cheat code. We're not selling a concept — we're showing them their own problem.
 
 **Tools needed:**
-- Email: Custom domain (e.g., hello@rankwell.ai)
+- Email: Custom domain (e.g., hello@openrole.ai)
 - Finding emails: Hunter.io, Apollo.io, or LinkedIn Sales Navigator
 - Sending: Instantly.ai or Smartlead (for deliverability and sequences)
 - CRM: Simple spreadsheet initially, then HubSpot free
@@ -613,7 +613,7 @@ The ICP lives on LinkedIn. Employer Brand Managers, Heads of TA, HR Directors, a
 
 ### Content Strategy (Long-term Channel — compounds over time)
 
-#### Blog (rankwell.ai/blog)
+#### Blog (openrole.ai/blog)
 
 **Publishing cadence:** 2 articles/week
 
@@ -648,10 +648,10 @@ The ICP lives on LinkedIn. Employer Brand Managers, Heads of TA, HR Directors, a
 
 | Partner | Why | Approach |
 |---------|-----|----------|
-| **Teamtailor** | 12K+ customers, employer branding focus | "Your career pages aren't AI-readable. Rankwell integration fixes this. Co-marketing opportunity." |
+| **Teamtailor** | 12K+ customers, employer branding focus | "Your career pages aren't AI-readable. OpenRole integration fixes this. Co-marketing opportunity." |
 | **Ashby** | Growing fast in tech, AI-forward | "Your customers are AI-savvy. They'll love AI employer brand monitoring." |
 | **Pinpoint** | UK-focused, mid-market | "We share the exact same ICP. Integration + co-marketing." |
-| **Workable** | 27K+ companies, strong SMB | "Huge opportunity: SMB employers invisible to AI. Rankwell integration adds instant value." |
+| **Workable** | 27K+ companies, strong SMB | "Huge opportunity: SMB employers invisible to AI. OpenRole integration adds instant value." |
 | **Greenhouse** | Enterprise ATS | Longer play. Start with "technology partner" listing. |
 
 #### HR Tech (Co-Marketing Partners)
@@ -692,13 +692,13 @@ Company runs free audit
 **Mechanics:**
 - Make audit results shareable with one click (social sharing buttons)
 - Include a "Share your AI Employer Brand Score" badge/card
-- Each shared audit links back to rankwell.ai to run your own
+- Each shared audit links back to openrole.ai to run your own
 - **Expected viral coefficient: 0.3** (every 10 audits generate 3 more from sharing)
 
 ### Loop 2: The Competitor Trigger
 
 ```
-Company A signs up for Rankwell
+Company A signs up for OpenRole
   → Sees competitor data ("Company B has a better AI employer brand score")
     → Company B finds out (because Company A mentions it, or we tell them)
       → Company B runs audit
@@ -716,36 +716,36 @@ Company A signs up for Rankwell
 
 ```
 Agency signs up (£99/client × 20 clients)
-  → Agency wins new pitch using Rankwell data
-    → New client gets onboarded to Rankwell
+  → Agency wins new pitch using OpenRole data
+    → New client gets onboarded to OpenRole
       → Agency grows revenue, signs more clients
-        → More Rankwell licenses
+        → More OpenRole licenses
           → Repeat
 ```
 
 **Mechanics:**
 - Give agencies a "pitch kit" — audit templates they can run for prospects
 - Agency can run unlimited free audits for business development
-- Every new agency client = new Rankwell subscriber automatically
+- Every new agency client = new OpenRole subscriber automatically
 - **Expected multiplier: Each agency adds 5–10 new clients per quarter**
 
 ### Loop 4: The Verify Page as a Growth Lever
 
 ```
-Employer creates verified Rankwell profile
-  → Adds "Verified by Rankwell" badge to careers page
-    → Candidates see badge, click through to rankwell.ai
+Employer creates verified OpenRole profile
+  → Adds "Verified by OpenRole" badge to careers page
+    → Candidates see badge, click through to openrole.ai
       → Candidate shares with their current employer
         → Current employer runs audit
           → Signs up
 ```
 
 **Mechanics:**
-- "Verified by Rankwell ✓" badge for careers pages (like SSL certificates for employer data)
-- Badge links to the employer's Rankwell verify page
+- "Verified by OpenRole ✓" badge for careers pages (like SSL certificates for employer data)
+- Badge links to the employer's OpenRole verify page
 - Verify page shows: salary data verified ✓, benefits confirmed ✓, culture data accurate ✓
-- Social proof: "This employer's data has been verified by Rankwell"
-- **Candidates become the sales force.** When they see inaccurate AI data about a prospective employer, they can check Rankwell for verified information.
+- Social proof: "This employer's data has been verified by OpenRole"
+- **Candidates become the sales force.** When they see inaccurate AI data about a prospective employer, they can check OpenRole for verified information.
 
 ### Loop 5: The Benchmark Report Lead Magnet
 
@@ -776,7 +776,7 @@ Publish "UK AI Employer Brand Index 2026"
 Customer receives weekly monitoring email
   → Forwards to colleague/boss ("Look at this!")
     → Boss shares in leadership meeting
-      → Leadership asks "What's Rankwell?"
+      → Leadership asks "What's OpenRole?"
         → Internal champion strengthens
           → Churn reduces to near-zero
             → Renewals + upgrades
@@ -904,7 +904,7 @@ the number AI thinks you pay, which may be completely wrong.
 I've attached your full report. No strings, it's genuinely useful.
 
 If fixing this matters (it probably should — 40% of job searches now 
-involve AI), I'm happy to show you what Rankwell does in 15 minutes.
+involve AI), I'm happy to show you what OpenRole does in 15 minutes.
 
 [Calendar link]
 
@@ -929,7 +929,7 @@ Because they're about to start asking. 40% of job searches now involve
 AI, and every major employer data source (Glassdoor, Indeed, LinkedIn) 
 blocks AI from their data.
 
-I built Rankwell — it monitors what AI says about employers weekly. 
+I built OpenRole — it monitors what AI says about employers weekly. 
 Shadow salaries, culture hallucinations, visibility gaps. The whole picture.
 
 The agency model: £99/client/month. You white-label it, charge your 
@@ -970,7 +970,7 @@ The problem: Glassdoor, Indeed, and LinkedIn block AI from their data.
 So AI pieces together your employer brand from scraps — old articles, 
 Reddit threads, stale Glassdoor reviews.
 
-I built Rankwell to fix this. We show you exactly what every major AI 
+I built OpenRole to fix this. We show you exactly what every major AI 
 says about you as an employer, flag the inaccuracies, and give you a 
 verified data profile that AI can actually read.
 
@@ -1052,7 +1052,7 @@ Best,
 | Thu | Blog | "The Shadow Salary Problem: What AI Thinks 10 UK Tech Companies Pay vs. Reality" | Lead gen. Companies contact us. |
 | Thu | LinkedIn | Key findings from blog post 2. Carousel or infographic. | Drive blog traffic. |
 | Fri | Reddit | Post research findings in r/humanresources and r/recruiting | Community seeding. |
-| Fri | LinkedIn | "I built Rankwell because I discovered something terrifying about how AI talks about employers." | Founder story. Product launch. |
+| Fri | LinkedIn | "I built OpenRole because I discovered something terrifying about how AI talks about employers." | Founder story. Product launch. |
 
 ### Week 2
 
@@ -1088,7 +1088,7 @@ Best,
 | Wed | LinkedIn | Partnership announcement (ATS integration or agency) | Credibility |
 | Thu | Blog | "What We Learned From 1,000 AI Employer Brand Audits" | Data-driven authority |
 | Thu | LinkedIn | Key findings from the data | Viral data content |
-| Fri | LinkedIn | "Month 1 of Rankwell: What I've learned building in public" | Founder authenticity |
+| Fri | LinkedIn | "Month 1 of OpenRole: What I've learned building in public" | Founder authenticity |
 | Fri | Product Hunt | Launch day (if ready) | Spike of traffic + signups |
 
 ---
@@ -1202,11 +1202,11 @@ Target: 400 reports/month by end of Month 1 (100 customers × 4 weekly reports).
 - "You're essentially invisible and uncontrolled."
 
 ### The Solution (3 min)
-- Show their Rankwell dashboard (or mock-up):
+- Show their OpenRole dashboard (or mock-up):
   - Shadow Salary Gap: X%
   - AI Accuracy Score: X/100
   - Competitor Comparison: "Here's how [Competitor] compares"
-- "Rankwell monitors all major AI models weekly. You get a Monday morning email."
+- "OpenRole monitors all major AI models weekly. You get a Monday morning email."
 - Show the verified profile page
 - "When you verify your data, AI starts finding it. Your Shadow Salary gap closes."
 
@@ -1260,6 +1260,6 @@ Target: 400 reports/month by end of Month 1 (100 customers × 4 weekly reports).
 
 *This plan was built with real competitive intelligence, actual market pricing, and named targets. It's designed to be executed by a solo founder with AI assistance, scaling to a small team as revenue justifies it.*
 
-*The unfair advantage: **nobody else is doing this.** The category doesn't exist yet. Rankwell creates it.*
+*The unfair advantage: **nobody else is doing this.** The category doesn't exist yet. OpenRole creates it.*
 
 *Now execute.*

@@ -14,4 +14,4 @@ All content is:
 - Human-sounding (no corporate speak)
 - Community-native (matches voice of each platform)
 - Data-backed (78% accuracy stat, salary discrepancies, sourced quotes)
-- Product-free (no direct Rankwell mentions in Reddit/LinkedIn/Twitter posts)
+- Product-free (no direct OpenRole mentions in Reddit/LinkedIn/Twitter posts)

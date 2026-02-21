@@ -1,4 +1,4 @@
-# Reddit Distribution Posts — Rankwell
+# Reddit Distribution Posts — OpenRole
 
 > Created 12 Feb 2026 by Malcolm
 > Rule: Lead with the PROBLEM. Sound like a real person in each community. No corporate voice.

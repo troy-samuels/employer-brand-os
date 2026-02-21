@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Professional Design Analysis using Gemini 3 Pro
-For BrandOS UI Enhancement
+For OpenRole UI Enhancement
 """
 
 import google.generativeai as genai
@@ -12,7 +12,7 @@ import json
 # genai.configure(api_key="your-api-key")
 
 def analyze_current_design():
-    """Analyze current BrandOS design with professional design criteria"""
+    """Analyze current OpenRole design with professional design criteria"""
     
     current_analysis = {
         "typography_issues": [
@@ -216,7 +216,7 @@ def generate_implementation_guidelines():
 def main():
     """Main analysis and recommendation engine"""
     
-    print("🎨 PROFESSIONAL DESIGN ANALYSIS FOR BRANDOS")
+    print("🎨 PROFESSIONAL DESIGN ANALYSIS FOR OPENROLE")
     print("=" * 60)
     
     # Current state analysis

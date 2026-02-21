@@ -85,7 +85,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!audit) {
     return {
-      title: "Company Not Found | Rankwell",
+      title: "Company Not Found | OpenRole",
       description: "This company hasn't been audited yet.",
     };
   }
@@ -94,15 +94,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const score = audit.score;
 
   return {
-    title: `${name} AI Visibility Score: ${score}/100 | Rankwell`,
-    description: `How well does AI represent ${name} to job seekers? ${name} scored ${score}/100 on the Rankwell AI Visibility audit. See the full breakdown.`,
+    title: `${name} AI Visibility Score: ${score}/100 | OpenRole`,
+    description: `How well does AI represent ${name} to job seekers? ${name} scored ${score}/100 on the OpenRole AI Visibility audit. See the full breakdown.`,
     openGraph: {
-      title: `${name} scores ${score}/100 on AI Visibility | Rankwell`,
+      title: `${name} scores ${score}/100 on AI Visibility | OpenRole`,
       description: `When candidates ask AI about ${name}, how accurate are the answers? See the full report.`,
       type: "article",
     },
     alternates: {
-      canonical: `https://rankwell.io/company/${slug}`,
+      canonical: `https://openrole.co.uk/company/${slug}`,
     },
   };
 }
@@ -286,7 +286,7 @@ export default async function CompanyPage({ params }: PageProps) {
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link href="/" className="text-lg font-bold text-slate-900 tracking-tight">
-            Rankwell
+            OpenRole
           </Link>
           <Link
             href="/#audit"
@@ -439,7 +439,7 @@ export default async function CompanyPage({ params }: PageProps) {
               Is this your company?
             </h3>
             <p className="text-sm text-slate-500">
-              Claim your profile to update your information, install the Rankwell pixel,
+              Claim your profile to update your information, install the OpenRole pixel,
               and control how AI represents your employer brand.
             </p>
           </div>
@@ -459,7 +459,7 @@ export default async function CompanyPage({ params }: PageProps) {
           This report is based on publicly available data from {audit.company_domain}.
           Scores are calculated using the{" "}
           <Link href="/how-we-score" className="underline hover:text-slate-600">
-            Rankwell AI Visibility methodology
+            OpenRole AI Visibility methodology
           </Link>
           . Last updated {auditDate}.
         </p>
@@ -494,8 +494,8 @@ export default async function CompanyPage({ params }: PageProps) {
             description: scoreMessage(audit.score, audit.company_name),
             author: {
               "@type": "Organization",
-              name: "Rankwell",
-              url: "https://rankwell.io",
+              name: "OpenRole",
+              url: "https://openrole.co.uk",
             },
             datePublished: audit.created_at,
             dateModified: audit.updated_at,

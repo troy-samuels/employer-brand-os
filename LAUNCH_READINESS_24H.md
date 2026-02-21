@@ -1,4 +1,4 @@
-# Rankwell — 24-Hour Launch Readiness Plan
+# OpenRole — 24-Hour Launch Readiness Plan
 *Created: 2026-02-20 00:30*
 
 ---
@@ -28,7 +28,7 @@
 ### 🔴 Blockers for Tomorrow
 - **OpenRouter API key** — needed for live AI model queries in the audit
 - **Resend API key** — needed for email outreach and Monday email digest
-- **Domain verification** — is rankwell.io live? DNS configured?
+- **Domain verification** — is openrole.co.uk live? DNS configured?
 - **Vercel deployment** — need to verify production build works
 
 ---
@@ -123,7 +123,7 @@
 ### 🔴 Critical Path (Today)
 1. Get OpenRouter API key working → enables live audits
 2. Get Resend API key → enables email outreach
-3. Deploy latest code to production → live at rankwell.io
+3. Deploy latest code to production → live at openrole.co.uk
 4. Pre-audit 50 UK companies → populate index + create social proof
 
 ### 🟡 High Impact (This Week)

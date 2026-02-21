@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS: Import 2.5M Leads CSV to Supabase
+OpenRole: Import 2.5M Leads CSV to Supabase
 Processes CSV in chunks and batch inserts to avoid timeouts.
 """
 
@@ -79,7 +79,7 @@ def count_csv_rows(filepath: str) -> int:
 def import_leads():
     """Main import function."""
     print("=" * 60)
-    print("BrandOS: Leads Import to Supabase")
+    print("OpenRole: Leads Import to Supabase")
     print("=" * 60)
 
     # Check if CSV exists

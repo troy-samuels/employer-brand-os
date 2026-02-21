@@ -1,7 +1,7 @@
 # Security Standards Alignment
 
 ## Purpose
-This document lists the external security standards and frameworks used to guide BrandOS security controls. It is a reference for our internal protocol and does **not** represent a formal certification or audit attestation.
+This document lists the external security standards and frameworks used to guide OpenRole security controls. It is a reference for our internal protocol and does **not** represent a formal certification or audit attestation.
 
 ## Standards referenced
 - **OWASP ASVS (Application Security Verification Standard)** — application-level control requirements for authentication, access control, input handling, and security logging.

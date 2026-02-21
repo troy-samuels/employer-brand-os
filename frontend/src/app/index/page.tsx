@@ -29,17 +29,17 @@ import { Footer } from "@/components/shared/footer";
 /* ------------------------------------------------------------------ */
 
 export const metadata: Metadata = {
-  title: "AI Employer Visibility Index | Rankwell",
+  title: "AI Employer Visibility Index | OpenRole",
   description:
     "The definitive ranking of how accurately AI represents UK employers. See which companies are visible to ChatGPT, Google AI, Perplexity, and more — and which are invisible.",
   openGraph: {
-    title: "AI Employer Visibility Index | Rankwell",
+    title: "AI Employer Visibility Index | OpenRole",
     description:
       "Which companies are AI-visible? The live leaderboard of employer brand scores across 6 AI models.",
     type: "website",
   },
   alternates: {
-    canonical: "https://rankwell.io/index",
+    canonical: "https://openrole.co.uk/index",
   },
 };
 
@@ -382,7 +382,7 @@ export default async function IndexPage() {
                       href="/how-we-score"
                       className="underline hover:text-slate-600"
                     >
-                      Rankwell methodology
+                      OpenRole methodology
                     </Link>
                     .
                   </p>

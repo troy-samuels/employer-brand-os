@@ -1,5 +1,5 @@
 # TECHNICAL NO BRAINER ROADMAP: COMPREHENSIVE IMPLEMENTATION
-**Context:** Transform BrandOS into bulletproof "no brainer" adoption platform  
+**Context:** Transform OpenRole into bulletproof "no brainer" adoption platform  
 **Scope:** All user stories, edge cases, and technical requirements for seamless UX  
 **Timeline:** Phase-based development for rapid market deployment
 
@@ -29,12 +29,12 @@
 
 #### Technical Requirements
 ```javascript
-// BrandOS Smart Pixel SDK Architecture
-class BrandOSPixel {
+// OpenRole Smart Pixel SDK Architecture
+class OpenRolePixel {
   constructor(config) {
     this.companyId = config.companyId;
-    this.apiEndpoint = config.apiEndpoint || 'https://api.brandos.com';
-    this.fallbackHost = config.fallbackHost || 'jobs.brandos.io';
+    this.apiEndpoint = config.apiEndpoint || 'https://api.openrole.com';
+    this.fallbackHost = config.fallbackHost || 'jobs.openrole.co.uk';
     this.version = '1.0.0';
     this.retryCount = 0;
     this.maxRetries = 3;
@@ -64,7 +64,7 @@ class BrandOSPixel {
     const response = await fetch(`${this.apiEndpoint}/api/facts/${this.companyId}`, {
       method: 'GET',
       headers: {
-        'User-Agent': 'BrandOS-Pixel/1.0.0',
+        'User-Agent': 'OpenRole-Pixel/1.0.0',
         'X-Pixel-Version': this.version
       }
     });
@@ -83,7 +83,7 @@ class BrandOSPixel {
       "@type": "JobPosting",
       "identifier": {
         "@type": "PropertyValue",
-        "name": "BrandOS-Verified",
+        "name": "OpenRole-Verified",
         "value": `${this.companyId}-${Date.now()}`
       },
       "hiringOrganization": {
@@ -125,14 +125,14 @@ class BrandOSPixel {
   }
 
   injectSchema(schema) {
-    // Remove existing BrandOS schemas to prevent duplicates
-    const existing = document.querySelectorAll('script[data-brandos-schema]');
+    // Remove existing OpenRole schemas to prevent duplicates
+    const existing = document.querySelectorAll('script[data-openrole-schema]');
     existing.forEach(script => script.remove());
 
     // Create new schema script
     const script = document.createElement('script');
     script.type = 'application/ld+json';
-    script.setAttribute('data-brandos-schema', 'true');
+    script.setAttribute('data-openrole-schema', 'true');
     script.textContent = JSON.stringify(schema, null, 2);
     
     // Insert into head for maximum crawlability
@@ -177,15 +177,15 @@ class BrandOSPixel {
       });
     } catch (error) {
       // Silent fail for analytics
-      console.debug('BrandOS analytics error:', error);
+      console.debug('OpenRole analytics error:', error);
     }
   }
 }
 
 // Global initialization function
-window.BrandOS = {
+window.OpenRole = {
   init: function(config) {
-    const pixel = new BrandOSPixel(config);
+    const pixel = new OpenRolePixel(config);
     
     // Initialize immediately or wait for DOM ready
     if (document.readyState === 'loading') {
@@ -413,16 +413,16 @@ export function PixelSetupWizard({ companyId }: { companyId: string }) {
     }
   ]);
 
-  const pixelCode = `<!-- BrandOS Smart Pixel -->
+  const pixelCode = `<!-- OpenRole Smart Pixel -->
 <script>
 (function(b,r,a,n,d,o,s){
   b[d]=b[d]||{};b[d].q=b[d].q||[];
   o=r.createElement(a);s=r.getElementsByTagName(a)[0];
-  o.async=1;o.src='https://pixel.brandos.com/sdk.js';
+  o.async=1;o.src='https://pixel.openrole.com/sdk.js';
   s.parentNode.insertBefore(o,s);
-})(window,document,'script','','BrandOS');
+})(window,document,'script','','OpenRole');
 
-BrandOS.init({
+OpenRole.init({
   companyId: '${companyId}',
   version: '1.0.0'
 });
@@ -430,7 +430,7 @@ BrandOS.init({
 
   const gtmCode = `<!-- Google Tag Manager -->
 <script>
-gtag('config', 'BRANDOS-${companyId}', {
+gtag('config', 'OPENROLE-${companyId}', {
   'pixel_id': '${companyId}'
 });
 </script>`;
@@ -497,10 +497,10 @@ gtag('config', 'BRANDOS-${companyId}', {
                 </p>
                 <div className="flex items-center gap-2">
                   <code className="bg-white px-2 py-1 rounded text-sm">
-                    https://jobs.brandos.io/{companyId}
+                    https://jobs.openrole.co.uk/{companyId}
                   </code>
                   <a 
-                    href={`https://jobs.brandos.io/${companyId}`}
+                    href={`https://jobs.openrole.co.uk/${companyId}`}
                     target="_blank"
                     className="text-yellow-700 hover:text-yellow-800"
                   >
@@ -1213,7 +1213,7 @@ class FranchiseManager {
         results.push({
           locationId,
           success: verification.success,
-          pixelUrl: `https://pixel.brandos.com/${pixelConfig.companyId}`,
+          pixelUrl: `https://pixel.openrole.com/${pixelConfig.companyId}`,
           complianceStatus: await this.checkLocationCompliance(location)
         });
         
@@ -1462,11 +1462,11 @@ class CustomAITrainingService:
         """Create dedicated API endpoints for AI agent queries"""
         
         endpoints = {
-            'job_search': f'https://api.brandos.com/ai/{company_id}/jobs',
-            'company_info': f'https://api.brandos.com/ai/{company_id}/about',
-            'benefits_query': f'https://api.brandos.com/ai/{company_id}/benefits',
-            'culture_query': f'https://api.brandos.com/ai/{company_id}/culture',
-            'salary_inquiry': f'https://api.brandos.com/ai/{company_id}/compensation'
+            'job_search': f'https://api.openrole.com/ai/{company_id}/jobs',
+            'company_info': f'https://api.openrole.com/ai/{company_id}/about',
+            'benefits_query': f'https://api.openrole.com/ai/{company_id}/benefits',
+            'culture_query': f'https://api.openrole.com/ai/{company_id}/culture',
+            'salary_inquiry': f'https://api.openrole.com/ai/{company_id}/compensation'
         }
         
         # Configure each endpoint with custom responses
@@ -1483,7 +1483,7 @@ class CustomAITrainingService:
             'endpoints': endpoints,
             'authentication': self.generate_api_keys(company_id),
             'rate_limits': {'requests_per_minute': 1000},
-            'monitoring_dashboard': f'https://dashboard.brandos.com/ai/{company_id}'
+            'monitoring_dashboard': f'https://dashboard.openrole.com/ai/{company_id}'
         }
 ```
 
@@ -1501,7 +1501,7 @@ class CSPHandler {
     try {
       // Attempt to inject test script
       const testScript = document.createElement('script');
-      testScript.src = 'https://pixel.brandos.com/csp-test.js';
+      testScript.src = 'https://pixel.openrole.com/csp-test.js';
       document.head.appendChild(testScript);
       
       // Wait for load or error
@@ -1517,12 +1517,12 @@ class CSPHandler {
   
   static async activateHostedFallback(companyId: string) {
     // Create hosted mirror with all job data
-    const hostedUrl = `https://jobs.brandos.io/${companyId}`;
+    const hostedUrl = `https://jobs.openrole.co.uk/${companyId}`;
     
     // Add DNS prefetch for faster loading
     const prefetch = document.createElement('link');
     prefetch.rel = 'dns-prefetch';
-    prefetch.href = 'https://jobs.brandos.io';
+    prefetch.href = 'https://jobs.openrole.co.uk';
     document.head.appendChild(prefetch);
     
     // Add canonical reference
@@ -1603,12 +1603,12 @@ class NetworkResilienceHandler {
   }
   
   getFromCache(key) {
-    const cached = localStorage.getItem(`brandos_${key}`);
+    const cached = localStorage.getItem(`openrole_${key}`);
     return cached ? JSON.parse(cached) : null;
   }
   
   setCache(key, data) {
-    localStorage.setItem(`brandos_${key}`, JSON.stringify({
+    localStorage.setItem(`openrole_${key}`, JSON.stringify({
       data,
       timestamp: Date.now()
     }));
@@ -1708,7 +1708,7 @@ class PrivacyComplianceHandler {
   
   storeConsent(given) {
     if (this.hasLocalStorage()) {
-      localStorage.setItem('brandos_consent', JSON.stringify({
+      localStorage.setItem('openrole_consent', JSON.stringify({
         given,
         timestamp: Date.now(),
         version: '1.0'
@@ -1799,7 +1799,7 @@ Priority 2 (Platform Expansion):
 
 ## CONCLUSION: TECHNICAL NO BRAINER ACHIEVEMENT
 
-This comprehensive technical roadmap transforms BrandOS from concept to bulletproof "no brainer" adoption platform by addressing:
+This comprehensive technical roadmap transforms OpenRole from concept to bulletproof "no brainer" adoption platform by addressing:
 
 ### **✅ IMMEDIATE PAIN RELIEF** 
 - Live AI demos showing visceral company problems

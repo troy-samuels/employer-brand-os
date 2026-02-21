@@ -80,7 +80,7 @@ describe("pixel facts api", () => {
   });
 
   it("supports preflight requests without query-string key values", async () => {
-    const request = new NextRequest("https://rankwell.test/api/pixel/v1/facts", {
+    const request = new NextRequest("https://openrole.test/api/pixel/v1/facts", {
       method: "OPTIONS",
       headers: {
         origin: "https://jobs.example.com",
@@ -95,16 +95,16 @@ describe("pixel facts api", () => {
     );
   });
 
-  it("accepts api keys from X-Rankwell-Key header", async () => {
-    const request = new NextRequest("https://rankwell.test/api/pixel/v1/facts?location=33f8f54e-e9d2-48e8-b7b8-2e3c833365d6", {
+  it("accepts api keys from X-OpenRole-Key header", async () => {
+    const request = new NextRequest("https://openrole.test/api/pixel/v1/facts?location=33f8f54e-e9d2-48e8-b7b8-2e3c833365d6", {
       method: "GET",
       headers: {
         origin: "https://jobs.example.com",
         referer: "https://jobs.example.com/careers",
-        "x-rankwell-key": "bos_live_valid1234567890",
-        "x-rankwell-signature": "signature",
-        "x-rankwell-timestamp": "1700000000",
-        "x-rankwell-nonce": "nonce-1",
+        "x-openrole-key": "bos_live_valid1234567890",
+        "x-openrole-signature": "signature",
+        "x-openrole-timestamp": "1700000000",
+        "x-openrole-nonce": "nonce-1",
       },
     });
 

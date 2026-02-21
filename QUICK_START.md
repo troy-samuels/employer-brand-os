@@ -1,4 +1,4 @@
-# ⚡ Rankwell Contacts — Quick Start Guide
+# ⚡ OpenRole Contacts — Quick Start Guide
 
 **For Troy: Step-by-step execution in the next 48 hours**
 
@@ -31,7 +31,7 @@ Creates 7 tables in Supabase to store contacts, companies, campaigns, and email 
    → https://supabase.com/dashboard/project/gkjhglqaodxzcqbccybc/sql/new
 
 2. Open this file in your editor:
-   → `~/Desktop/employer-brand-os/supabase/migrations/20250218000000_create_contacts_system.sql`
+   → `~/Desktop/employer-openrole/supabase/migrations/20250218000000_create_contacts_system.sql`
 
 3. Copy the entire contents (22KB)
 
@@ -67,7 +67,7 @@ Imports 100 contacts as a test to make sure everything works.
 
 2. Navigate to project:
    ```bash
-   cd ~/Desktop/employer-brand-os
+   cd ~/Desktop/employer-openrole
    ```
 
 3. Run test import:
@@ -164,7 +164,7 @@ Email sending service (like Mailchimp but for developers). You need this to actu
 
 2. Click **"Sign Up"**
 
-3. Create account (use troy@rankwell.ai or whatever email)
+3. Create account (use troy@openrole.ai or whatever email)
 
 4. Skip the onboarding walkthrough
 
@@ -172,11 +172,11 @@ Email sending service (like Mailchimp but for developers). You need this to actu
 
 6. Click **"Create API Key"**
 
-7. Name it: "Rankwell Production"
+7. Name it: "OpenRole Production"
 
 8. Copy the key (starts with `re_...`)
 
-9. Open `~/Desktop/employer-brand-os/frontend/.env.local`
+9. Open `~/Desktop/employer-openrole/frontend/.env.local`
 
 10. Add this line:
     ```
@@ -194,7 +194,7 @@ Email sending service (like Mailchimp but for developers). You need this to actu
 ## Step 6: Add Sending Domain (10 minutes setup, 24h wait)
 
 ### What it does:
-Configures `mail.rankwell.ai` so emails come from your domain (not resend.com).
+Configures `mail.openrole.ai` so emails come from your domain (not resend.com).
 
 ### How to do it:
 
@@ -202,7 +202,7 @@ Configures `mail.rankwell.ai` so emails come from your domain (not resend.com).
 
 2. Click **"Add Domain"**
 
-3. Enter: `mail.rankwell.ai`
+3. Enter: `mail.openrole.ai`
 
 4. Click **"Add"**
 
@@ -226,7 +226,7 @@ Configures `mail.rankwell.ai` so emails come from your domain (not resend.com).
    ```
    Type: TXT
    Name: _dmarc.mail
-   Value: v=DMARC1; p=none; rua=mailto:troy@rankwell.ai
+   Value: v=DMARC1; p=none; rua=mailto:troy@openrole.ai
    ```
 
 6. Go to your DNS provider (Cloudflare? Vercel? Your registrar?)

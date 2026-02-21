@@ -120,7 +120,7 @@ const faqs = [
     a: "Yes — if you manage employer brands for multiple clients, we offer wholesale pricing from £99/month per location. Get in touch.",
   },
   {
-    q: "What AI models does Rankwell monitor?",
+    q: "What AI models does OpenRole monitor?",
     a: "Starter covers ChatGPT, Google AI Overviews, and Perplexity — the three highest-reach models for candidate research. Growth adds Microsoft Copilot. Scale covers all six including Claude and Meta AI. We add new models as they gain adoption.",
   },
 ];
@@ -349,7 +349,7 @@ export default function PricingPage() {
                   </ul>
 
                   <a
-                    href="mailto:hello@rankwell.io"
+                    href="mailto:hello@openrole.co.uk"
                     className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-neutral-200 transition-colors shrink-0"
                   >
                     Talk to us
@@ -364,7 +364,7 @@ export default function PricingPage() {
               <p className="text-sm text-slate-500">
                 Recruitment agency or consultancy?{" "}
                 <a
-                  href="mailto:hello@rankwell.io"
+                  href="mailto:hello@openrole.co.uk"
                   className="text-brand-accent hover:underline font-medium"
                 >
                   Ask about wholesale pricing

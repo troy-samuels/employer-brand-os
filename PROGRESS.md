@@ -1,15 +1,15 @@
-# BrandOS Progress Log
+# OpenRole Progress Log
 
 ## 2026-02-06 — Strategy Rewrite & Design System Overhaul
 
-### Strategy Doc (`employer-brand-os.md`)
+### Strategy Doc (`employer-openrole.md`)
 Complete rewrite targeting non-technical buyers (HR, marketing, C-suite).
 
 **New concepts introduced:**
 - **Shadow Salary** — what AI thinks you pay vs. reality. The core sales hook.
 - **Compensation Confidence Score** — verified trust signal for companies that won't share exact figures.
 - **Four disclosure levels** — Verified Employer → Range Verified → Full Transparency → Total Compensation Intelligence.
-- **Glassdoor Counterweight** — BrandOS as verified employer data vs. stale self-reported guesses.
+- **Glassdoor Counterweight** — OpenRole as verified employer data vs. stale self-reported guesses.
 - **Total compensation framing** — benefits, equity, flexibility made visible to AI.
 
 **Removed:** All technical jargon (JSON-LD, CSP, pixel architecture), internal team roadmap, developer-facing language.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS - Guerilla Stack Brand Audit Tool
+OpenRole - Guerilla Stack Brand Audit Tool
 Low-cost employer brand audit using DuckDuckGo (free) + OpenRouter (free AI models).
 """
 
@@ -155,7 +155,7 @@ def save_audit(company_name: str, search_data: str, analysis: str):
 
 def main():
     print("\n" + "="*60)
-    print("  BRANDOS - GUERILLA BRAND AUDIT TOOL")
+    print("  OPENROLE - GUERILLA BRAND AUDIT TOOL")
     print("  DuckDuckGo + OpenRouter (Free Stack)")
     print("="*60 + "\n")
 

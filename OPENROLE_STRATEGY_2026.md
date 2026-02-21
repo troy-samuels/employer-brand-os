@@ -1,11 +1,11 @@
-# BrandOS: Strategy Document
+# OpenRole: Strategy Document
 **February 2026**
 
 ---
 
 ## 1. One-Line Pitch
 
-**BrandOS is the verified employer data layer for AI.** When candidates ask ChatGPT, Claude, or Perplexity about a company, BrandOS ensures they get the truth — not a hallucination stitched together from stale Glassdoor reviews and blocked job boards.
+**OpenRole is the verified employer data layer for AI.** When candidates ask ChatGPT, Claude, or Perplexity about a company, OpenRole ensures they get the truth — not a hallucination stitched together from stale Glassdoor reviews and blocked job boards.
 
 ---
 
@@ -65,16 +65,16 @@ We tested employer websites separately. The findings:
 
 ## 3. The Solution
 
-### BrandOS fills the gap between employers and AI.
+### OpenRole fills the gap between employers and AI.
 
-Employers enter their verified data once. BrandOS makes it available to every AI platform — automatically, continuously, in every format AI understands.
+Employers enter their verified data once. OpenRole makes it available to every AI platform — automatically, continuously, in every format AI understands.
 
-### What BrandOS creates from one onboarding form:
+### What OpenRole creates from one onboarding form:
 
 | Output | What it does | Who reads it |
 |---|---|---|
-| **Hosted Profile** (`brandos.ai/company/[slug]`) | AI-optimised employer page with JSON-LD structured data | Perplexity, ChatGPT (browsing), Gemini, candidates |
-| **Public API Endpoint** (`brandos.ai/api/v1/employers/[slug]`) | Structured JSON, public read | AI agents with tool-use, recruitment platforms, aggregators |
+| **Hosted Profile** (`openrole.co.uk/company/[slug]`) | AI-optimised employer page with JSON-LD structured data | Perplexity, ChatGPT (browsing), Gemini, candidates |
+| **Public API Endpoint** (`openrole.co.uk/api/v1/employers/[slug]`) | Structured JSON, public read | AI agents with tool-use, recruitment platforms, aggregators |
 | **llms.txt** | Structured guidance for AI about the employer | All AI crawlers |
 | **Embed Snippet** | Injects JSON-LD into employer's existing careers page | Google, all search-connected AI |
 | **Knowledge Graph Push** | Submits verified data to Wikidata + Google Business Profile | Future AI training data, Google Knowledge Panel |
@@ -93,16 +93,16 @@ Everything else happens invisibly.
 
 ## 4. Three Customer Types
 
-BrandOS serves three distinct employers with one product:
+OpenRole serves three distinct employers with one product:
 
 ### A. Small employer with no website
 **Who:** 1-200 employees. HR manager posts directly to Indeed or LinkedIn. No careers page.
 
 **Problem:** Their entire employer presence is locked inside platforms that block AI. They don't exist in the AI layer.
 
-**Solution:** BrandOS IS their AI-visible careers page. The hosted profile at `brandos.ai/company/[slug]` is their employer brand in AI.
+**Solution:** OpenRole IS their AI-visible careers page. The hosted profile at `openrole.co.uk/company/[slug]` is their employer brand in AI.
 
-**Pitch:** *"You spend money posting to Indeed. Indeed blocks AI from reading those posts. Post on BrandOS too — takes 5 minutes, now AI can find you."*
+**Pitch:** *"You spend money posting to Indeed. Indeed blocks AI from reading those posts. Post on OpenRole too — takes 5 minutes, now AI can find you."*
 
 ### B. Mid-size employer with a careers page
 **Who:** 200-2,000 employees. Has an HR team and a careers section on their website.
@@ -120,7 +120,7 @@ BrandOS serves three distinct employers with one product:
 
 **Solution:** Company profile focused on brand data — culture, benefits, compensation philosophy, values. Monitoring focused on sentiment and accuracy, not job visibility.
 
-**Pitch:** *"You spend six figures on employer branding. Then AI tells a different story. BrandOS makes sure AI tells yours."*
+**Pitch:** *"You spend six figures on employer branding. Then AI tells a different story. OpenRole makes sure AI tells yours."*
 
 ---
 
@@ -131,7 +131,7 @@ The audit is the entire top of funnel. It proves the problem and creates the sal
 ### How it works:
 
 1. Employer enters their company name
-2. BrandOS queries ChatGPT, Claude, and Perplexity with standardised prompts about that employer
+2. OpenRole queries ChatGPT, Claude, and Perplexity with standardised prompts about that employer
 3. Simultaneously crawls the employer's own website for structured data
 4. Displays headline results on screen:
    - Shadow Salary Gap score
@@ -139,7 +139,7 @@ The audit is the entire top of funnel. It proves the problem and creates the sal
    - 2-3 example AI responses with inaccuracies highlighted
 5. "Enter your email for the full report"
 6. Full report sent via email within 2 minutes
-7. **In the background:** BrandOS pre-builds a draft hosted profile using data scraped from the employer's own site
+7. **In the background:** OpenRole pre-builds a draft hosted profile using data scraped from the employer's own site
 8. Email includes: "We've started building your AI employer profile → Verify your data and go live"
 9. Employer clicks through to a pre-filled onboarding form — confirms details, adds salary ranges, publishes
 
@@ -149,7 +149,7 @@ The employer isn't signing up for a product. They're claiming something that alr
 
 ### 4-6 weeks later:
 
-BrandOS re-runs the audit automatically. When AI responses improve (because structured data has been crawled), the employer gets a second email: "Your Shadow Salary Gap dropped from 28% to 9%." That's the conversion from free to paid.
+OpenRole re-runs the audit automatically. When AI responses improve (because structured data has been crawled), the employer gets a second email: "Your Shadow Salary Gap dropped from 28% to 9%." That's the conversion from free to paid.
 
 ---
 
@@ -195,7 +195,7 @@ Two tiers. No decision paralysis.
 
 ### Why this works:
 
-- **Free tier seeds the network effect.** Every free employer makes the API more valuable. More data = more useful for AI agents = more reason to be on BrandOS.
+- **Free tier seeds the network effect.** Every free employer makes the API more valuable. More data = more useful for AI agents = more reason to be on OpenRole.
 - **Single paid tier removes friction.** Low enough for any HR budget to approve without procurement. High enough to build a real business.
 - **The maths:** 1,000 paying customers = £199K MRR = £2.4M ARR.
 
@@ -206,25 +206,25 @@ Two tiers. No decision paralysis.
 ### Against Glassdoor:
 *"They block AI from seeing your data. We make sure AI gets your verified data."*
 
-Glassdoor's business model depends on owning employee-submitted data. They will never give AI free access to it — that's their moat. BrandOS doesn't compete with Glassdoor for data. We give employers a channel that Glassdoor structurally can't provide.
+Glassdoor's business model depends on owning employee-submitted data. They will never give AI free access to it — that's their moat. OpenRole doesn't compete with Glassdoor for data. We give employers a channel that Glassdoor structurally can't provide.
 
 ### Against Indeed:
 *"Indeed won't let AI read your job listings. We make your employer brand the first thing AI sees."*
 
-Indeed blocks AI crawlers from all job listings. A company posting exclusively to Indeed is invisible in the AI layer. BrandOS is the complementary channel — not replacing Indeed, but making the employer visible where Indeed refuses to.
+Indeed blocks AI crawlers from all job listings. A company posting exclusively to Indeed is invisible in the AI layer. OpenRole is the complementary channel — not replacing Indeed, but making the employer visible where Indeed refuses to.
 
 ### Against LinkedIn:
 *"LinkedIn walls off your company page from AI agents. We give AI your real story."*
 
-LinkedIn blocks everything — jobs, salary explorer, profiles, company data. BrandOS fills the gap LinkedIn leaves.
+LinkedIn blocks everything — jobs, salary explorer, profiles, company data. OpenRole fills the gap LinkedIn leaves.
 
 ### Against ATS providers (Workday, Greenhouse, Lever):
-*"Your ATS makes your careers page invisible to AI. BrandOS makes it readable."*
+*"Your ATS makes your careers page invisible to AI. OpenRole makes it readable."*
 
-No ATS has AI-readiness provisions. Every company using Workday's careers portal is invisible to AI by default. BrandOS can partner with or sell through ATS providers as the AI-optimisation layer.
+No ATS has AI-readiness provisions. Every company using Workday's careers portal is invisible to AI by default. OpenRole can partner with or sell through ATS providers as the AI-optimisation layer.
 
 ### Against Reed.co.uk:
-Reed is the only job site that gets it — they have llms.txt, welcome AI crawlers, and built reed.ai. But Reed serves job seekers and recruiters. BrandOS serves employers directly. Reed validates our thesis; they're not the competition.
+Reed is the only job site that gets it — they have llms.txt, welcome AI crawlers, and built reed.ai. But Reed serves job seekers and recruiters. OpenRole serves employers directly. Reed validates our thesis; they're not the competition.
 
 ---
 
@@ -232,13 +232,13 @@ Reed is the only job site that gets it — they have llms.txt, welcome AI crawle
 
 ### The moat compounds:
 
-1. **Data network effect.** More employers on BrandOS = more valuable the API for AI agents. At 10,000 employers, one API query returns verified data on all of them. AI agents will default to BrandOS as a source.
+1. **Data network effect.** More employers on OpenRole = more valuable the API for AI agents. At 10,000 employers, one API query returns verified data on all of them. AI agents will default to OpenRole as a source.
 
 2. **Monitoring data compounds.** Every week of monitoring data makes trend analysis, accuracy tracking, and competitive benchmarking more valuable. Can't be replicated overnight.
 
-3. **Standard-setting.** If BrandOS defines how employer data is structured for AI, we become the standard. First mover in a category that doesn't exist yet.
+3. **Standard-setting.** If OpenRole defines how employer data is structured for AI, we become the standard. First mover in a category that doesn't exist yet.
 
-4. **Switching costs.** Once an employer's AI visibility depends on BrandOS (hosted profile, API, monitoring), switching means going invisible again.
+4. **Switching costs.** Once an employer's AI visibility depends on OpenRole (hosted profile, API, monitoring), switching means going invisible again.
 
 ### What's NOT defensible (and that's fine):
 
@@ -289,7 +289,7 @@ Pay transparency legislation is accelerating globally:
 - **EU Pay Transparency Directive** — Takes effect June 2026, all member states
 - **UK** — Proposed legislation in progress, expected 2026-2027
 
-Companies will be forced to publish compensation data. Right now they have no structured way to make that data AI-readable. BrandOS becomes the compliance tool, not just a marketing one.
+Companies will be forced to publish compensation data. Right now they have no structured way to make that data AI-readable. OpenRole becomes the compliance tool, not just a marketing one.
 
 ---
 
@@ -315,7 +315,7 @@ Companies will be forced to publish compensation data. Right now they have no st
 
 ### Immediate (this month):
 - Build MVP: free audit + onboarding + hosted profiles + monitoring dashboard
-- Deploy to brandos.ai
+- Deploy to openrole.co.uk
 - Publish 3 blog articles from robots.txt research
 - Onboard 3 test companies internally
 - Soft launch to HR/recruitment communities
@@ -344,8 +344,8 @@ Three forces are converging in 2026:
 
 3. **The incumbents are blocking AI.** Glassdoor, Indeed, and LinkedIn have chosen to wall off their data. This creates a structural vacuum that only a new platform can fill.
 
-The window is 12-18 months before ATS vendors and job boards adapt. BrandOS needs to be the established standard by then.
+The window is 12-18 months before ATS vendors and job boards adapt. OpenRole needs to be the established standard by then.
 
 ---
 
-*BrandOS — Verified employer data for the AI age.*
+*OpenRole — Verified employer data for the AI age.*

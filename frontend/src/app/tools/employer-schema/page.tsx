@@ -430,7 +430,7 @@ export default function EmployerSchemaGenerator() {
                 {
                   icon: <Globe className="h-5 w-5 text-blue-500" />,
                   title: "Works everywhere",
-                  desc: "Paste into your HTML head, use Google Tag Manager, or automate with Rankwell's Smart Pixel.",
+                  desc: "Paste into your HTML head, use Google Tag Manager, or automate with OpenRole's Smart Pixel.",
                 },
               ].map((item, i) => (
                 <div
@@ -779,7 +779,7 @@ export default function EmployerSchemaGenerator() {
                               3.
                             </span>
                             <span>
-                              <strong>Or automate with Rankwell.</strong> Our{" "}
+                              <strong>Or automate with OpenRole.</strong> Our{" "}
                               <Link
                                 href="/pricing"
                                 className="text-brand-accent hover:underline"
@@ -829,7 +829,7 @@ export default function EmployerSchemaGenerator() {
               Want to go further?
             </h2>
             <p className="text-sm text-slate-500 mb-6">
-              Structured data is step one. A full Rankwell audit checks 50+
+              Structured data is step one. A full OpenRole audit checks 50+
               signals across 6 AI models and gives you a complete action plan to
               control your employer brand narrative.
             </p>

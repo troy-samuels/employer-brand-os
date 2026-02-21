@@ -1,8 +1,8 @@
-# Rankwell — Product Vision
+# OpenRole — Product Vision
 *Last updated: 2026-02-11*
 
 ## Core Thesis
-**Google Search Results = AI Knowledge.** LLMs inherit Google's ranking hierarchy. If Glassdoor ranks #1 for "[Company] salary", AI cites Glassdoor. The company's own domain doesn't exist in the chain. Rankwell maps this chain and fixes it.
+**Google Search Results = AI Knowledge.** LLMs inherit Google's ranking hierarchy. If Glassdoor ranks #1 for "[Company] salary", AI cites Glassdoor. The company's own domain doesn't exist in the chain. OpenRole maps this chain and fixes it.
 
 ## The Citation Chain (How AI Gets Its "Knowledge")
 1. Google ranks pages for employer queries (salary, culture, benefits, etc.)
@@ -12,7 +12,7 @@
 5. Company's own domain rarely appears — 0% citation rate is common
 6. Data is often years old, entities get confused, salary figures are wrong
 
-**Rankwell turns "AI Hallucinations" into "SEO Failures" — a problem companies already know how to fix.**
+**OpenRole turns "AI Hallucinations" into "SEO Failures" — a problem companies already know how to fix.**
 
 ---
 
@@ -27,7 +27,7 @@
 - **Sentiment Weight** — If the #1 Google result is a 2-star Glassdoor page and the company's 5-star careers page is at #50, show the chain is mathematically broken. Weight by position × sentiment.
 - **Entity Confusion Detection** — Flag when AI conflates company with similarly-named entities. Meridian Tech → Meridian IT + Meridian Technology Group + Meridian Solutions + Meridian Health Plan. This is a Legal/Compliance issue, not just an HR one.
 - **Trust Delta** — If AI says £55K (3rd party) but company actual is £75K (1st party), the Delta is £20K. Quantify in lost candidates: (Delta × estimated applicant volume) = cost.
-- **Cost of Misinformation Calculator** — The CFO Closer: (Job Views) × (Hallucination Rate) × (Est. Cost per Hire) = Total Reputation Loss. "AI hallucinations are costing you £240K/month in lost engineering talent. Rankwell costs £899. Pays for itself in 3 hours."
+- **Cost of Misinformation Calculator** — The CFO Closer: (Job Views) × (Hallucination Rate) × (Est. Cost per Hire) = Total Reputation Loss. "AI hallucinations are costing you £240K/month in lost engineering talent. OpenRole costs £899. Pays for itself in 3 hours."
 
 ### Tier 2: The Monitor (Monday Morning Subscription)
 **Result: Accountability**
@@ -99,11 +99,11 @@ Entity Confusion is the **Trojan Horse** — it lets you talk to Legal, who have
 ---
 
 ## Positioning
-**Rankwell is a Search Intelligence Agency in a Box.**
+**OpenRole is a Search Intelligence Agency in a Box.**
 
 Not a monitoring tool. Not an SEO tool. A new category:
 **AI Reputation Infrastructure.**
 
 By focusing on Entity Confusion and Freshness, the product moves into **Risk Mitigation** — where enterprise money lives.
 
-The collapse of the Glassdoor/Indeed system is the tailwind. Companies that optimise for AI citation now will dominate talent acquisition for the next decade. Rankwell is the picks-and-shovels play.
+The collapse of the Glassdoor/Indeed system is the tailwind. Companies that optimise for AI citation now will dominate talent acquisition for the next decade. OpenRole is the picks-and-shovels play.

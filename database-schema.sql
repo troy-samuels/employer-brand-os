@@ -1,5 +1,5 @@
 -- ============================================================
--- BrandOS: Database Schema for Smart Pixel Infrastructure
+-- OpenRole: Database Schema for Smart Pixel Infrastructure
 -- Multi-tenant, RLS-enabled, Pay Transparency Compliant
 -- Version: 2.0 (2026 Strategic Pivot)
 -- ============================================================
@@ -404,7 +404,7 @@ CREATE TABLE compliance_checks (
 -- HOSTED TRUTH PAGES (for Verify tier - franchises)
 -- ============================================================
 
--- Hosted Pages (brandos.com/verify/[slug])
+-- Hosted Pages (openrole.com/verify/[slug])
 CREATE TABLE hosted_pages (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     organization_id UUID REFERENCES organizations(id) ON DELETE CASCADE,

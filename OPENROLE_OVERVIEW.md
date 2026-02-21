@@ -1,4 +1,4 @@
-# BrandOS: The Employment Data Infrastructure for the AI Age
+# OpenRole: The Employment Data Infrastructure for the AI Age
 
 > **"The Stripe for Employer Truth"** — A Smart Pixel that makes every job visible to AI agents, compliant with pay transparency laws, and sanitized for public consumption.
 
@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-BrandOS is an employment data infrastructure platform that solves two converging crises facing every company that hires:
+OpenRole is an employment data infrastructure platform that solves two converging crises facing every company that hires:
 
 1. **The Visibility Crisis.** 40% of job searches now happen through AI agents — ChatGPT, Claude, Perplexity, Google AI Overviews. Most career sites output messy HTML that these agents cannot read. The result: jobs disappear from the fastest-growing discovery channel in recruiting history.
 
@@ -14,7 +14,7 @@ BrandOS is an employment data infrastructure platform that solves two converging
 
 **No existing product addresses both problems.**
 
-BrandOS fills this gap with a **Smart Pixel** — a single line of JavaScript, deployed in minutes via Google Tag Manager with zero IT involvement. The pixel intercepts messy ATS output, translates internal job codes into public-friendly titles, and injects verified structured data (JSON-LD) that AI agents can read and regulators can audit.
+OpenRole fills this gap with a **Smart Pixel** — a single line of JavaScript, deployed in minutes via Google Tag Manager with zero IT involvement. The pixel intercepts messy ATS output, translates internal job codes into public-friendly titles, and injects verified structured data (JSON-LD) that AI agents can read and regulators can audit.
 
 The business model is infrastructure-grade: 95%+ gross margins, sub-$100/month operating costs at 100 clients, and an agency wholesale channel where one partnership sale deploys across 25–100 locations instantly.
 
@@ -75,28 +75,28 @@ The result: **most companies are simultaneously invisible and illegal**, and the
 
 ## 2. The Solution
 
-BrandOS is the infrastructure layer between messy internal hiring data and the external world — AI agents, search engines, and regulators.
+OpenRole is the infrastructure layer between messy internal hiring data and the external world — AI agents, search engines, and regulators.
 
 ### The Smart Pixel
 
 A single line of JavaScript, deployed via Google Tag Manager in under 5 minutes:
 
 ```html
-<script src="https://cdn.brandos.io/pixel.js" data-key="bos_live_xxxx" async></script>
+<script src="https://cdn.openrole.co.uk/pixel.js" data-key="bos_live_xxxx" async></script>
 ```
 
 **What it does:**
-- Fetches the company's verified employment facts from BrandOS
+- Fetches the company's verified employment facts from OpenRole
 - Translates internal ATS codes into public-friendly job titles (e.g., `L4-Eng-NY` → `Senior Software Engineer`)
 - Injects JSON-LD structured data into the page, making it readable by Google, ChatGPT, Claude, and Perplexity
 - Validates pay transparency compliance by jurisdiction automatically
-- Fails silently — if BrandOS is unreachable, the client's website is unaffected
+- Fails silently — if OpenRole is unreachable, the client's website is unaffected
 
 **Key design principle: Zero-IT deployment.** HR and Marketing teams install the pixel themselves. No developer tickets, no infrastructure changes, no IT approval required.
 
 ### The Sanitization Engine
 
-Internal ATS systems use codes that mean nothing to the outside world. BrandOS maintains a translation layer:
+Internal ATS systems use codes that mean nothing to the outside world. OpenRole maintains a translation layer:
 
 | Internal Code | Public Title | Job Family | Level |
 |---|---|---|---|
@@ -108,13 +108,13 @@ These mappings are managed through the dashboard and applied automatically whene
 
 ### Hosted Truth Pages
 
-For companies with strict Content Security Policies that block third-party JavaScript, BrandOS provides a hosted alternative: a verified employer profile page at `brandos.io/verify/[company-slug]` that serves the same structured data directly to AI crawlers.
+For companies with strict Content Security Policies that block third-party JavaScript, OpenRole provides a hosted alternative: a verified employer profile page at `openrole.co.uk/verify/[company-slug]` that serves the same structured data directly to AI crawlers.
 
 ---
 
 ## 3. Platform Architecture
 
-BrandOS is built as a four-layer platform. Each layer adds value independently but compounds when combined.
+OpenRole is built as a four-layer platform. Each layer adds value independently but compounds when combined.
 
 ### Layer 1: Infrastructure — Smart Pixel & Sanitization
 *The entry point. Solves immediate visibility pain.*
@@ -224,15 +224,15 @@ A step-by-step technical walkthrough of the core product:
 ┌─────────────────────────────────────────────────────────┐
 │  COMPANY CAREER PAGE                                     │
 │                                                          │
-│  1. Page loads with BrandOS pixel script tag              │
-│     <script src="cdn.brandos.io/pixel.js"                │
+│  1. Page loads with OpenRole pixel script tag              │
+│     <script src="cdn.openrole.co.uk/pixel.js"                │
 │             data-key="bos_live_xxxx" async>               │
 │                                                          │
 │  2. Pixel extracts API key, sends GET request:            │
 │     → /api/pixel/v1/facts?key=bos_live_xxxx              │
 │                                                          │
 │  ┌──────────────────────────────────────────────────┐    │
-│  │  BRANDOS API (Server-Side)                        │    │
+│  │  OPENROLE API (Server-Side)                        │    │
 │  │                                                    │    │
 │  │  3. Validate API key (active, not expired)         │    │
 │  │  4. Validate origin domain against allowlist       │    │
@@ -245,18 +245,18 @@ A step-by-step technical walkthrough of the core product:
 │                                                          │
 │  10. Pixel injects <script type="application/ld+json">    │
 │      into page <head>                                     │
-│  11. Fires 'brandos:loaded' event for client tracking     │
+│  11. Fires 'openrole:loaded' event for client tracking     │
 │                                                          │
 │  AI CRAWLERS (Google, ChatGPT, Claude, Perplexity)       │
 │  12. Read structured JSON-LD → jobs become discoverable   │
 └─────────────────────────────────────────────────────────┘
 ```
 
-**Resilience:** The pixel wraps all operations in try/catch. If BrandOS is unreachable, the client's page loads normally with no errors. A `brandos:error` event fires for optional client-side monitoring.
+**Resilience:** The pixel wraps all operations in try/catch. If OpenRole is unreachable, the client's page loads normally with no errors. A `openrole:error` event fires for optional client-side monitoring.
 
 **Performance:** The pixel is <5KB, loads asynchronously, and adds <200ms to page load. API responses include `X-Response-Time` headers for monitoring.
 
-**CSP Fallback:** If a company's Content Security Policy blocks third-party scripts, the Hosted Truth Page at `brandos.io/verify/[slug]` serves identical structured data. AI crawlers discover it through the company's sitemap or direct indexing.
+**CSP Fallback:** If a company's Content Security Policy blocks third-party scripts, the Hosted Truth Page at `openrole.co.uk/verify/[slug]` serves identical structured data. AI crawlers discover it through the company's sitemap or direct indexing.
 
 ---
 
@@ -283,7 +283,7 @@ A step-by-step technical walkthrough of the core product:
 - 50–1,000 employees, Glassdoor rating 2.5–3.8
 - Board pressure for "AI recruiting strategy"
 - Competitive disadvantage against companies already optimizing for AI discovery
-- **Why they buy:** ROI is obvious — preventing one bad hire pays for 4 months of BrandOS
+- **Why they buy:** ROI is obvious — preventing one bad hire pays for 4 months of OpenRole
 
 **Tertiary: Recruitment Marketing Agencies**
 - Managing 10–100+ client locations
@@ -298,7 +298,7 @@ The timing is driven by two forcing functions:
 
 2. **Regulatory deadlines are fixed.** The EU Pay Transparency Directive takes effect June 2026. Companies operating in Europe must comply — there is no extension. US state laws are already active and expanding.
 
-These two trends are converging on the same solution: structured, verified, machine-readable employment data. BrandOS provides it.
+These two trends are converging on the same solution: structured, verified, machine-readable employment data. OpenRole provides it.
 
 ---
 
@@ -319,13 +319,13 @@ No existing product combines AI-optimized job data injection with automated pay 
 
 ### Competitive Moats
 
-1. **Sanitization Moat.** BrandOS is the indispensable translator between internal ATS codes and AI-readable output. Without it, messy data leaks to the public.
+1. **Sanitization Moat.** OpenRole is the indispensable translator between internal ATS codes and AI-readable output. Without it, messy data leaks to the public.
 
 2. **Agency Lock-In.** Once the pixel is deployed across 50+ client locations, removing it breaks their AI visibility. Switching costs are real.
 
 3. **Active Retention.** The Monday Morning Report continuously proves value — fines prevented, traffic improvements, rankings gained. CFOs see ROI every week.
 
-4. **Regulatory Specialization.** Employment law compliance is domain expertise that generic tools cannot replicate. As laws evolve, BrandOS updates automatically.
+4. **Regulatory Specialization.** Employment law compliance is domain expertise that generic tools cannot replicate. As laws evolve, OpenRole updates automatically.
 
 ### Likely Competitor Response Timeline
 
@@ -357,7 +357,7 @@ No existing product combines AI-optimized job data injection with automated pay 
 | Target Monthly Churn | <3% |
 | Net Revenue Retention | 127% (tier upgrades) |
 
-The $299 entry price is designed to sit below procurement thresholds at most companies — a VP of HR can expense it without CFO approval. The agency wholesale model at $150/location creates a compelling margin for partners while maintaining high-margin revenue for BrandOS.
+The $299 entry price is designed to sit below procurement thresholds at most companies — a VP of HR can expense it without CFO approval. The agency wholesale model at $150/location creates a compelling margin for partners while maintaining high-margin revenue for OpenRole.
 
 ---
 
@@ -369,7 +369,7 @@ The $299 entry price is designed to sit below procurement thresholds at most com
 
 - Target recruitment marketing agencies managing multi-location clients
 - Wholesale rate ($150/location) vs. retail ($299+/location) creates partner margin
-- Agencies handle onboarding and support — BrandOS handles infrastructure
+- Agencies handle onboarding and support — OpenRole handles infrastructure
 - Agency certification program builds loyalty and switching costs
 - **Goal:** 10 agency partners by Month 12
 
@@ -526,7 +526,7 @@ ATS vendors will eventually add basic structured data output. However, they are 
 - Provide AI hallucination monitoring
 - Target SMB customers with self-service deployment
 
-**Mitigation:** Establish market position and agency partnerships before this happens. BrandOS competes on compliance intelligence and zero-IT deployment, not just JSON-LD generation.
+**Mitigation:** Establish market position and agency partnerships before this happens. OpenRole competes on compliance intelligence and zero-IT deployment, not just JSON-LD generation.
 
 ### Risk 2: Google Builds a Competing Solution
 **Probability:** Medium (40%)
@@ -558,7 +558,7 @@ The agency wholesale model is the primary growth channel. If agencies are slow t
 
 ### Current: Solo Founder + AI Development
 
-BrandOS is built and operated by a solo founder using AI-assisted development (Claude Code). This is viable at the current stage because:
+OpenRole is built and operated by a solo founder using AI-assisted development (Claude Code). This is viable at the current stage because:
 
 - **The Smart Pixel scales without human intervention.** Once deployed, it serves structured data to millions of AI crawlers with no marginal effort.
 - **Serverless architecture eliminates DevOps.** Supabase, Vercel, and Cloudflare handle scaling, uptime, and security.
@@ -579,7 +579,7 @@ No hiring is planned until revenue justifies it. The architecture is designed fo
 
 ## 15. Investment Thesis
 
-### Why BrandOS Is a Compelling Opportunity
+### Why OpenRole Is a Compelling Opportunity
 
 **1. Perfect Timing.**
 AI-mediated job search and pay transparency regulation are both accelerating on fixed timelines. The EU Directive (June 2026) creates a non-negotiable deadline. Companies must act — the only question is which solution they choose.
@@ -591,7 +591,7 @@ No existing product combines AI job data optimization with compliance automation
 95%+ gross margins. Sub-$100/month infrastructure costs at 100 clients. Solo founder operation through $50K+ MRR. The business reaches profitability fast and stays there.
 
 **4. Channel Multiplication.**
-The agency wholesale model means one sales conversation deploys BrandOS across 25–100 locations. Customer acquisition cost drops as the agency network grows.
+The agency wholesale model means one sales conversation deploys OpenRole across 25–100 locations. Customer acquisition cost drops as the agency network grows.
 
 **5. Structural Defensibility.**
 Once deployed, removing the pixel breaks AI visibility and compliance. Sanitization rules are organization-specific IP. The Monday Morning Report creates executive-level dependency. Churn is structurally difficult.
@@ -619,7 +619,7 @@ $2.4B+ addressable market, growing as new jurisdictions adopt pay transparency m
 
 ## Appendix: Design System
 
-BrandOS follows a "Stripe for Employer Truth" visual identity — professional, authoritative, and trust-focused.
+OpenRole follows a "Stripe for Employer Truth" visual identity — professional, authoritative, and trust-focused.
 
 **Core Palette:**
 
@@ -635,4 +635,4 @@ BrandOS follows a "Stripe for Employer Truth" visual identity — professional, 
 
 ---
 
-*BrandOS — Making every job visible, compliant, and true.*
+*OpenRole — Making every job visible, compliant, and true.*

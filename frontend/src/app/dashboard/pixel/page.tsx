@@ -39,7 +39,7 @@ export default function PixelPage() {
         </p>
         <pre className="rounded-lg bg-gray-900 text-gray-100 p-4 text-xs overflow-x-auto">
 {`<script
-  src="https://rankwell.io/api/pixel/v1/script"
+  src="https://openrole.co.uk/api/pixel/v1/script"
   data-key="bos_live_your_full_key_here"
   async></script>`}
         </pre>

@@ -1,4 +1,4 @@
-# BRANDOS PRODUCT SPECIFICATION
+# OPENROLE PRODUCT SPECIFICATION
 **Product Vision:** Frictionless AI employment optimization with defensible feature depth  
 **Core Principle:** Easy to adopt, impossible to replicate  
 **Date:** February 6, 2026
@@ -7,7 +7,7 @@
 
 ## 🎯 PRODUCT OVERVIEW
 
-**BrandOS transforms employer websites from AI-invisible to AI-optimized in under 5 minutes, then continuously enhances visibility through an expanding suite of employment intelligence features.**
+**OpenRole transforms employer websites from AI-invisible to AI-optimized in under 5 minutes, then continuously enhances visibility through an expanding suite of employment intelligence features.**
 
 ### **Core Product Pillars:**
 1. **🔍 AI Readiness Audit** - Instant value, lead generation
@@ -20,7 +20,7 @@
 
 ## 🧠 AUTOMATED EMPLOYER DATA LAYER
 
-**The core insight: employers shouldn't need to understand AI, structured data, or SEO to get their brand right in AI responses. BrandOS does everything automatically from one simple onboarding form.**
+**The core insight: employers shouldn't need to understand AI, structured data, or SEO to get their brand right in AI responses. OpenRole does everything automatically from one simple onboarding form.**
 
 ### **The Employer Experience (5 Minutes to Value)**
 
@@ -34,46 +34,46 @@ The entire setup is designed for an HR Director who's never heard of JSON-LD and
 
 **That's it. Five steps. No developer needed. No technical decisions to make.**
 
-### **What BrandOS Auto-Generates From That Single Input**
+### **What OpenRole Auto-Generates From That Single Input**
 
-From one onboarding form, BrandOS creates and maintains five outputs that make the employer visible to every AI platform:
+From one onboarding form, OpenRole creates and maintains five outputs that make the employer visible to every AI platform:
 
-- **Hosted Profile** at `brandos.ai/company/[slug]` — A professionally designed, AI-optimised page with JSON-LD structured data, proper meta tags, and Open Graph markup. This becomes the canonical source of truth that AI agents reference. The employer gets a beautiful public page; the AI gets perfectly structured data. Everyone wins.
+- **Hosted Profile** at `openrole.co.uk/company/[slug]` — A professionally designed, AI-optimised page with JSON-LD structured data, proper meta tags, and Open Graph markup. This becomes the canonical source of truth that AI agents reference. The employer gets a beautiful public page; the AI gets perfectly structured data. Everyone wins.
 
-- **Public API Endpoint** at `brandos.ai/api/v1/employers/[slug]` — Structured JSON, public read access, authenticated write. Any AI agent, recruitment tool, or third-party platform can query it directly. This is the employer's verified data, available to anyone who asks.
+- **Public API Endpoint** at `openrole.co.uk/api/v1/employers/[slug]` — Structured JSON, public read access, authenticated write. Any AI agent, recruitment tool, or third-party platform can query it directly. This is the employer's verified data, available to anyone who asks.
 
-- **llms.txt Entry** — BrandOS maintains a master `llms.txt` file indexing every employer on the platform. Individual employer profiles get their own `llms.txt` too. This is the emerging standard for telling AI systems what data is available and how to use it.
+- **llms.txt Entry** — OpenRole maintains a master `llms.txt` file indexing every employer on the platform. Individual employer profiles get their own `llms.txt` too. This is the emerging standard for telling AI systems what data is available and how to use it.
 
-- **Embed Snippet** — One JavaScript tag that injects JSON-LD structured data into the employer's existing careers page and sends a freshness heartbeat back to BrandOS. The employer's own website becomes AI-readable without any redesign.
+- **Embed Snippet** — One JavaScript tag that injects JSON-LD structured data into the employer's existing careers page and sends a freshness heartbeat back to OpenRole. The employer's own website becomes AI-readable without any redesign.
 
-- **Knowledge Graph Push** — BrandOS auto-submits verified employer data to Wikidata and Google Business Profile on a monthly cycle. This seeds the knowledge bases that AI models draw from during training and retrieval.
+- **Knowledge Graph Push** — OpenRole auto-submits verified employer data to Wikidata and Google Business Profile on a monthly cycle. This seeds the knowledge bases that AI models draw from during training and retrieval.
 
 ### **Automated Freshness System**
 
-Stale data is worse than no data. BrandOS keeps everything current without the employer lifting a finger:
+Stale data is worse than no data. OpenRole keeps everything current without the employer lifting a finger:
 
-- **ATS integration auto-updates** — When new roles are posted in Workday, Greenhouse, Lever, or BambooHR, BrandOS picks them up automatically. No manual syncing.
+- **ATS integration auto-updates** — When new roles are posted in Workday, Greenhouse, Lever, or BambooHR, OpenRole picks them up automatically. No manual syncing.
 - **Quarterly salary confirmation prompts** — A simple one-click email: "Are these salary ranges still accurate?" Confirm and you're done for another quarter.
-- **AI audit loop** — BrandOS continuously queries AI platforms about the employer, comparing responses against verified data. When AI responses drift from reality, the employer gets flagged immediately.
-- **Regulatory watch** — BrandOS monitors pay transparency legislation across jurisdictions and auto-flags when new laws affect the employer's listed roles. No more scrambling when Colorado or the EU changes the rules.
+- **AI audit loop** — OpenRole continuously queries AI platforms about the employer, comparing responses against verified data. When AI responses drift from reality, the employer gets flagged immediately.
+- **Regulatory watch** — OpenRole monitors pay transparency legislation across jurisdictions and auto-flags when new laws affect the employer's listed roles. No more scrambling when Colorado or the EU changes the rules.
 
 ---
 
 ## 📡 LLM VISIBILITY MONITORING ENGINE
 
-**The question every employer should be asking: "What does AI say about us when candidates ask?" BrandOS answers that question automatically, every week, across every major AI platform.**
+**The question every employer should be asking: "What does AI say about us when candidates ask?" OpenRole answers that question automatically, every week, across every major AI platform.**
 
 ### **The Shadow Salary Monitoring System**
 
-BrandOS runs a continuous monitoring operation that tracks what AI platforms tell candidates about every employer on the platform:
+OpenRole runs a continuous monitoring operation that tracks what AI platforms tell candidates about every employer on the platform:
 
-- **Standardised prompt bank** — For each employer, BrandOS maintains a library of test queries: salary queries ("What does [Company] pay for [Role]?"), culture queries ("What's it like to work at [Company]?"), benefits queries ("What benefits does [Company] offer?"), and comparison queries ("How does [Company] compare to [Competitor]?").
+- **Standardised prompt bank** — For each employer, OpenRole maintains a library of test queries: salary queries ("What does [Company] pay for [Role]?"), culture queries ("What's it like to work at [Company]?"), benefits queries ("What benefits does [Company] offer?"), and comparison queries ("How does [Company] compare to [Competitor]?").
 
-- **Weekly automated runs** — Every week, BrandOS fires these prompts against ChatGPT API, Claude API, Perplexity API, and Gemini API. Automated, consistent, comparable across platforms.
+- **Weekly automated runs** — Every week, OpenRole fires these prompts against ChatGPT API, Claude API, Perplexity API, and Gemini API. Automated, consistent, comparable across platforms.
 
 - **Response parsing** — An LLM extraction layer analyses each response, pulling out specific salary figures, sentiment signals, and factual claims. No manual review needed.
 
-- **Comparison engine** — BrandOS compares what AI says against the employer's verified data, calculating three core metrics and tracking them over time with weekly trend charts.
+- **Comparison engine** — OpenRole compares what AI says against the employer's verified data, calculating three core metrics and tracking them over time with weekly trend charts.
 
 ### **Three Core Metrics**
 
@@ -81,16 +81,16 @@ Every employer dashboard shows three numbers that tell the whole story:
 
 1. **Shadow Salary Gap** — The difference between what AI tells candidates and what the employer actually pays. Example: AI says "£65,000" for a Senior Developer role, but verified data shows £85,000. That's a 23% gap — and it's costing the employer every candidate who believes the AI.
 
-2. **Accuracy Score** — What percentage of AI claims about the employer match verified data? Benefits, locations, culture statements, salary ranges — BrandOS checks all of it. An accuracy score of 40% means AI is wrong more often than it's right.
+2. **Accuracy Score** — What percentage of AI claims about the employer match verified data? Benefits, locations, culture statements, salary ranges — OpenRole checks all of it. An accuracy score of 40% means AI is wrong more often than it's right.
 
 3. **Mention Rate** — How often does the employer appear when candidates ask AI about relevant roles, industries, or locations? If competitors show up and you don't, you're invisible.
 
 ### **The Before/After Proof**
 
-This is how BrandOS sells itself:
+This is how OpenRole sells itself:
 
-- Run the full monitoring audit **before** the employer adds any BrandOS data. Capture the baseline — what AI currently says (or doesn't say) about them.
-- Wait 4-6 weeks for AI platforms to crawl and index the new structured data from BrandOS.
+- Run the full monitoring audit **before** the employer adds any OpenRole data. Capture the baseline — what AI currently says (or doesn't say) about them.
+- Wait 4-6 weeks for AI platforms to crawl and index the new structured data from OpenRole.
 - Run the audit again. Show the improvement side by side.
 
 The gap between "before" and "after" is the demo. When an employer sees their Shadow Salary Gap drop from 30% to 5%, or their Accuracy Score jump from 40% to 90%, the product sells itself.
@@ -106,7 +106,7 @@ Different AI platforms pick up new data at different speeds — employers should
 | Gemini | Weeks | Tied to Google's indexing cycle |
 | Base model knowledge | Months | Waits for next training data cut |
 
-BrandOS optimises for all of these timelines simultaneously — live-crawlable pages for Perplexity, structured data for Google/Gemini, and knowledge graph entries for future training cuts.
+OpenRole optimises for all of these timelines simultaneously — live-crawlable pages for Perplexity, structured data for Google/Gemini, and knowledge graph entries for future training cuts.
 
 ### **API Costs**
 
@@ -119,21 +119,21 @@ The monitoring engine doubles as the top-of-funnel acquisition tool. Position it
 > **"What does AI think about your company?"**
 > Enter your company name. Get a free report showing exactly what ChatGPT, Claude, Perplexity, and Gemini tell candidates about your employer brand — and where they're getting it wrong.
 
-Every employer who runs the free audit sees their gaps. The natural next step is BrandOS fixing those gaps. No hard sell needed.
+Every employer who runs the free audit sees their gaps. The natural next step is OpenRole fixing those gaps. No hard sell needed.
 
 ---
 
 ## 🔗 NETWORK EFFECT & DEFENSIBILITY
 
-**BrandOS isn't a file generator or a one-time optimisation tool. It's a platform — and platforms get more valuable with every employer that joins.**
+**OpenRole isn't a file generator or a one-time optimisation tool. It's a platform — and platforms get more valuable with every employer that joins.**
 
 ### **The Platform Moat**
 
-The defensibility of BrandOS comes from network effects that compound over time:
+The defensibility of OpenRole comes from network effects that compound over time:
 
-- **More employers = more valuable API.** If 10,000 employers are on BrandOS, an AI agent can query ONE API endpoint for verified employment data on all of them. That's dramatically more useful than scraping 10,000 individual websites.
+- **More employers = more valuable API.** If 10,000 employers are on OpenRole, an AI agent can query ONE API endpoint for verified employment data on all of them. That's dramatically more useful than scraping 10,000 individual websites.
 
-- **Glassdoor built network effects with reviews. BrandOS builds them with verified employer data.** Glassdoor's moat is that candidates go where the reviews are. BrandOS's moat is that AI agents go where the verified data is.
+- **Glassdoor built network effects with reviews. OpenRole builds them with verified employer data.** Glassdoor's moat is that candidates go where the reviews are. OpenRole's moat is that AI agents go where the verified data is.
 
 - **The API endpoint + Knowledge Graph management = platform, not a file.** Anyone can copy a `robots.txt` configuration or generate an `llms.txt` file. Nobody can replicate a verified employer data network with thousands of companies, real-time freshness monitoring, and continuous AI platform integration.
 
@@ -141,7 +141,7 @@ The defensibility of BrandOS comes from network effects that compound over time:
 
 ### **Competitive Positioning**
 
-The current employment data landscape is actively hostile to AI. BrandOS is the antidote:
+The current employment data landscape is actively hostile to AI. OpenRole is the antidote:
 
 - **Against Glassdoor:** *"They block AI from seeing your data. We make sure AI gets your verified data."*
   
@@ -149,7 +149,7 @@ The current employment data landscape is actively hostile to AI. BrandOS is the 
   
 - **Against LinkedIn:** *"LinkedIn walls off your company page from AI agents. We give AI your real story."*
 
-Every major job platform has chosen to block AI crawlers. That's a strategic gift to BrandOS — it creates a vacuum that only a purpose-built platform can fill.
+Every major job platform has chosen to block AI crawlers. That's a strategic gift to OpenRole — it creates a vacuum that only a purpose-built platform can fill.
 
 ### **Evidence Base (Research: 6-7 February 2026)**
 
@@ -167,7 +167,7 @@ Our research confirmed that the employment data landscape is completely unprepar
 - Glassdoor receives **21,000 visits/month** from ChatGPT
 - Reed receives **14,000 visits/month** from ChatGPT
 
-The demand is there. Candidates are already asking AI about employers. The question is whether those AI responses contain verified data or hallucinated guesses. BrandOS ensures it's the former.
+The demand is there. Candidates are already asking AI about employers. The question is whether those AI responses contain verified data or hallucinated guesses. OpenRole ensures it's the former.
 
 ---
 
@@ -225,7 +225,7 @@ The demand is there. Candidates are already asking AI about employers. The quest
 │ 2. Career pages blocked from bots   │
 │ 3. $35,000+ compliance risk         │
 │                                     │
-│ [FIX WITH BRANDOS: FREE TRIAL]      │
+│ [FIX WITH OPENROLE: FREE TRIAL]      │
 └─────────────────────────────────────┘
 ```
 
@@ -233,7 +233,7 @@ The demand is there. Candidates are already asking AI about employers. The quest
 
 ```python
 # audit-engine/core.py
-class BrandOSAudit:
+class OpenRoleAudit:
     def __init__(self):
         self.checks = [
             TechnicalInfrastructureCheck(),
@@ -279,31 +279,31 @@ class BrandOSAudit:
 **Installation Experience:**
 ```javascript
 // Option 1: Google Tag Manager (Preferred)
-// Copy-paste this ID into GTM: GTM-BRANDOS-XXXX
+// Copy-paste this ID into GTM: GTM-OPENROLE-XXXX
 
 // Option 2: Direct Install (Advanced)
-<script async src="https://pixel.brandos.io/v1/brandos.js" 
+<script async src="https://pixel.openrole.co.uk/v1/openrole.js" 
         data-company-id="comp_abc123"
         data-environment="production">
 </script>
 
 // Option 3: WordPress Plugin
-// Install "BrandOS Employment Optimizer" plugin
+// Install "OpenRole Employment Optimizer" plugin
 ```
 
 ### **Pixel Technical Specifications:**
 
 ```javascript
-// brandos-pixel.js - Production Version
+// openrole-pixel.js - Production Version
 (function() {
     'use strict';
     
     // Security: Content Security Policy compliant
-    const BRANDOS_API = 'https://api.brandos.io/v1';
+    const OPENROLE_API = 'https://api.openrole.co.uk/v1';
     const PIXEL_VERSION = '1.0.0';
     const MAX_RETRY_ATTEMPTS = 3;
     
-    class BrandOSPixel {
+    class OpenRolePixel {
         constructor() {
             this.config = this.getConfig();
             this.isLoaded = false;
@@ -337,10 +337,10 @@ class BrandOSAudit:
         }
         
         async loadEmploymentData() {
-            const response = await fetch(`${BRANDOS_API}/companies/${this.config.companyId}/jobs`, {
+            const response = await fetch(`${OPENROLE_API}/companies/${this.config.companyId}/jobs`, {
                 headers: {
-                    'X-BrandOS-Version': PIXEL_VERSION,
-                    'X-BrandOS-Referrer': window.location.hostname
+                    'X-OpenRole-Version': PIXEL_VERSION,
+                    'X-OpenRole-Referrer': window.location.hostname
                 }
             });
             
@@ -352,14 +352,14 @@ class BrandOSAudit:
         }
         
         injectStructuredData() {
-            // Remove existing BrandOS schema
-            const existing = document.querySelectorAll('script[data-brandos]');
+            // Remove existing OpenRole schema
+            const existing = document.querySelectorAll('script[data-openrole]');
             existing.forEach(script => script.remove());
             
             // Inject fresh JSON-LD
             const script = document.createElement('script');
             script.type = 'application/ld+json';
-            script.setAttribute('data-brandos', 'true');
+            script.setAttribute('data-openrole', 'true');
             script.textContent = JSON.stringify({
                 '@context': 'https://schema.org/',
                 '@type': 'Organization',
@@ -429,9 +429,9 @@ class BrandOSAudit:
     
     // Auto-initialize when DOM ready
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => new BrandOSPixel().init());
+        document.addEventListener('DOMContentLoaded', () => new OpenRolePixel().init());
     } else {
-        new BrandOSPixel().init();
+        new OpenRolePixel().init();
     }
 })();
 ```
@@ -446,8 +446,8 @@ class SecurityValidator {
         const csp = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
         if (csp) {
             const content = csp.getAttribute('content');
-            if (!content.includes('api.brandos.io')) {
-                console.warn('BrandOS: Add api.brandos.io to CSP connect-src');
+            if (!content.includes('api.openrole.co.uk')) {
+                console.warn('OpenRole: Add api.openrole.co.uk to CSP connect-src');
             }
         }
     }
@@ -475,13 +475,13 @@ class SecurityValidator {
 ### **Installation Testing:**
 
 ```bash
-# BrandOS Security Audit Script
-curl -H "User-Agent: BrandOS-Security-Scanner" \
-     -H "X-BrandOS-Test: true" \
-     "https://yourcompany.com/" | grep -E "(brandos|application/ld\+json)"
+# OpenRole Security Audit Script
+curl -H "User-Agent: OpenRole-Security-Scanner" \
+     -H "X-OpenRole-Test: true" \
+     "https://yourcompany.com/" | grep -E "(openrole|application/ld\+json)"
 
 # Expected output:
-# ✓ BrandOS pixel loaded successfully
+# ✓ OpenRole pixel loaded successfully
 # ✓ JSON-LD schema detected
 # ✓ No security warnings
 # ✓ Page load time: 1.2s (within acceptable range)
@@ -710,7 +710,7 @@ const AnalyticsDashboard = () => {
     
     useEffect(() => {
         // Real-time metrics updates
-        const ws = new WebSocket('wss://analytics.brandos.io');
+        const ws = new WebSocket('wss://analytics.openrole.co.uk');
         
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -992,8 +992,8 @@ class EmploymentIntelligence {
 ### **Feature Suite Integration:**
 
 ```typescript
-// Unified BrandOS Platform
-class BrandOSPlatform {
+// Unified OpenRole Platform
+class OpenRolePlatform {
     private auditEngine = new AuditEngine();
     private pixelManager = new PixelManager();
     private complianceIntelligence = new ComplianceIntelligence();
@@ -1170,4 +1170,4 @@ LOW PRIORITY:
 
 ---
 
-**The BrandOS product suite combines ease of adoption with deep defensibility - starting with a simple pixel that evolves into an irreplaceable employment intelligence platform.**
+**The OpenRole product suite combines ease of adoption with deep defensibility - starting with a simple pixel that evolves into an irreplaceable employment intelligence platform.**

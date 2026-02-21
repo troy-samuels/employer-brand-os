@@ -114,8 +114,8 @@ export const PIXEL_SCRIPT_BODY = `(() => {
     function resolveApiKey(scriptTag) {
       return (
         scriptTag.getAttribute("data-key") ||
-        scriptTag.getAttribute("data-rankwell-key") ||
-        scriptTag.getAttribute("data-brandos-key") ||
+        scriptTag.getAttribute("data-openrole-key") ||
+        scriptTag.getAttribute("data-openrole-key") ||
         ""
       ).trim();
     }
@@ -198,10 +198,10 @@ export const PIXEL_SCRIPT_BODY = `(() => {
               mode: "cors",
               credentials: "omit",
               headers: {
-                "X-Rankwell-Key": config.apiKey,
-                "X-Rankwell-Timestamp": timestamp,
-                "X-Rankwell-Nonce": nonce,
-                "X-Rankwell-Signature": signature
+                "X-OpenRole-Key": config.apiKey,
+                "X-OpenRole-Timestamp": timestamp,
+                "X-OpenRole-Nonce": nonce,
+                "X-OpenRole-Signature": signature
             }
           });
         } catch {
@@ -235,7 +235,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
           return;
         }
 
-        const existing = doc.getElementById("rankwell-pixel-jsonld");
+        const existing = doc.getElementById("openrole-pixel-jsonld");
         if (existing && existing.parentNode) {
           existing.parentNode.removeChild(existing);
         }
@@ -247,7 +247,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
         const node = doc.createElement("script");
         node.type = "application/ld+json";
-        node.id = "rankwell-pixel-jsonld";
+        node.id = "openrole-pixel-jsonld";
         if (config.nonce) {
           node.setAttribute("nonce", config.nonce);
         }
@@ -277,10 +277,10 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
     function installSpaNavigationHooks(onNavigate) {
       try {
-        if (globalObject.__rankwellPixelNavHookInstalled) {
+        if (globalObject.__openrolePixelNavHookInstalled) {
           return;
         }
-        globalObject.__rankwellPixelNavHookInstalled = true;
+        globalObject.__openrolePixelNavHookInstalled = true;
 
         const historyObject = globalObject.history;
         if (!historyObject) {
@@ -296,7 +296,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
           historyObject[methodName] = function() {
             const result = original.apply(this, arguments);
             try {
-              globalObject.dispatchEvent(new Event("rankwell:navigation"));
+              globalObject.dispatchEvent(new Event("openrole:navigation"));
             } catch {}
             return result;
           };
@@ -307,7 +307,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
         globalObject.addEventListener("popstate", onNavigate, { passive: true });
         globalObject.addEventListener("hashchange", onNavigate, { passive: true });
-        globalObject.addEventListener("rankwell:navigation", onNavigate, { passive: true });
+        globalObject.addEventListener("openrole:navigation", onNavigate, { passive: true });
       } catch {}
     }
 
@@ -341,7 +341,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
     if (typeof MutationObserver === "function") {
       const mutationObserver = new MutationObserver(() => {
-        const injected = doc.getElementById("rankwell-pixel-jsonld");
+        const injected = doc.getElementById("openrole-pixel-jsonld");
         if (!injected) {
           triggerInjection();
         }
@@ -356,7 +356,7 @@ export const PIXEL_SCRIPT_BODY = `(() => {
 
     if (typeof globalObject.setInterval === "function") {
       globalObject.setInterval(() => {
-        const injected = doc.getElementById("rankwell-pixel-jsonld");
+        const injected = doc.getElementById("openrole-pixel-jsonld");
         if (!injected) {
           triggerInjection();
         }

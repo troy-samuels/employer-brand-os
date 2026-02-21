@@ -15,21 +15,21 @@ import { generateFAQSchema, JsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "FAQ — AI Visibility Questions Answered",
   description:
-    "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
+    "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
   openGraph: {
-    title: "FAQ — AI Visibility Questions Answered | Rankwell",
+    title: "FAQ — AI Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
-    url: "https://rankwell.io/faq",
+      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
+    url: "https://openrole.co.uk/faq",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FAQ — AI Visibility Questions Answered | Rankwell",
+    title: "FAQ — AI Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the Rankwell pixel, and how scoring works.",
+      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
   },
-  alternates: { canonical: "https://rankwell.io/faq" },
+  alternates: { canonical: "https://openrole.co.uk/faq" },
 };
 
 interface FaqEntry {
@@ -62,34 +62,34 @@ const faqs: FaqEntry[] = [
       "ChatGPT (800M users), Google AI Overviews (built into search), Meta AI (1B users in WhatsApp/Instagram), Perplexity, Copilot, and Claude. Each reaches different candidate demographics.",
     category: "Understanding AI Visibility",
   },
-  // How Rankwell Works
+  // How OpenRole Works
   {
     slug: "how-scoring-works",
     question: "How does the AI Visibility Score work?",
     summary:
       "Your score (0-100) measures how accurately AI can represent your company. We check 6 dimensions: structured data (JSON-LD), bot access, careers page, brand reputation, salary transparency, and content format.",
-    category: "How Rankwell Works",
+    category: "How OpenRole Works",
   },
   {
     slug: "what-is-llms-txt",
     question: "Does llms.txt help with AI visibility?",
     summary:
       "Research shows llms.txt has zero measurable impact on AI citations. Senthor analysed 10M+ AI requests and found 0 major bots reading it. Structured data (JSON-LD) is what actually works — proven to boost AI visibility by 30–40%.",
-    category: "How Rankwell Works",
+    category: "How OpenRole Works",
   },
   {
     slug: "what-is-the-pixel",
-    question: "What does the Rankwell pixel do?",
+    question: "What does the OpenRole pixel do?",
     summary:
       "A lightweight script on your careers page that makes your employer data available to AI crawlers — even if your ATS normally blocks them. Open-source, SRI-verified, GDPR compliant.",
-    category: "How Rankwell Works",
+    category: "How OpenRole Works",
   },
   {
     slug: "how-often-are-audits-updated",
     question: "How often is AI monitoring updated?",
     summary:
       "Free audits are point-in-time snapshots. Paid plans include weekly monitoring with a Monday email report showing what changed, your score trend, and specific recommendations.",
-    category: "How Rankwell Works",
+    category: "How OpenRole Works",
   },
   // Security & Privacy
   {
@@ -101,7 +101,7 @@ const faqs: FaqEntry[] = [
   },
   {
     slug: "data-handling",
-    question: "How does Rankwell handle our company data?",
+    question: "How does OpenRole handle our company data?",
     summary:
       "All data encrypted at rest and in transit. EU-hosted infrastructure. GDPR compliant. We only process publicly available website data — nothing behind authentication, nothing private.",
     category: "Security & Privacy",
@@ -215,7 +215,7 @@ export default function FaqPage() {
                 Free audit
               </Link>
               <a
-                href="mailto:hello@rankwell.io"
+                href="mailto:hello@openrole.co.uk"
                 className="inline-flex items-center justify-center rounded-xl bg-slate-100 px-6 py-3 text-sm font-semibold text-slate-900 hover:bg-neutral-200 transition-colors"
               >
                 Contact us

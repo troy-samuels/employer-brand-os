@@ -1,7 +1,7 @@
 # The Citation Paradox: Why Blocked Sites Still Dominate AI Answers
 
 **Research date:** 2026-02-12
-**Researcher:** Malcolm (BrandOS)
+**Researcher:** Malcolm (OpenRole)
 
 ---
 
@@ -120,7 +120,7 @@ Disallow: /
 - Includes an attribution request in their robots.txt asking AI to cite and link back
 - Explicitly offers API access and data licensing
 
-**This is the model BrandOS should champion.** Levels.fyi treats AI as a distribution channel, not a threat. They control what AI sees, ensure it's accurate, and get attribution in return.
+**This is the model OpenRole should champion.** Levels.fyi treats AI as a distribution channel, not a threat. They control what AI sees, ensure it's accurate, and get attribution in return.
 
 ---
 
@@ -218,9 +218,9 @@ Indeed allows ChatGPT-User but blocks Claude's crawler. Glassdoor blocks everyth
 
 ---
 
-## The BrandOS Opportunity
+## The OpenRole Opportunity
 
-This research validates the entire BrandOS thesis:
+This research validates the entire OpenRole thesis:
 
 1. **First-party data is the only reliable channel** — everything else is blocked, stale, or inconsistent
 2. **llms.txt is the Levels.fyi model** — the only platform getting AI right is the one providing machine-readable employer data directly

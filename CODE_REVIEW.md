@@ -1,4 +1,4 @@
-# Enterprise Code Review — Rankwell (BrandOS) Frontend
+# Enterprise Code Review — OpenRole (OpenRole) Frontend
 
 **Reviewed:** 2025-07-13  
 **Reviewer:** Automated enterprise-grade review  

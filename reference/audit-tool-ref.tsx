@@ -244,7 +244,7 @@ export function AuditTool() {
                   Ready to fix these issues automatically?
                 </h3>
                 <p className="text-surface-600 mb-6">
-                  BrandOS Smart Pixel fixes all of these in under 5 minutes. No code changes needed.
+                  OpenRole Smart Pixel fixes all of these in under 5 minutes. No code changes needed.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Button size="lg">Start Free Trial</Button>

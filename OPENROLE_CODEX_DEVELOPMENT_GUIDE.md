@@ -1,13 +1,13 @@
-# BRANDOS CODEX DEVELOPMENT GUIDE
+# OPENROLE CODEX DEVELOPMENT GUIDE
 **Version:** 1.0  
-**Purpose:** Complete technical blueprint for building world-class BrandOS platform  
+**Purpose:** Complete technical blueprint for building world-class OpenRole platform  
 **Standards:** Enterprise-grade quality, 100-developer team coordination level
 
 ---
 
 ## 🎯 MISSION STATEMENT
 
-Build BrandOS as the definitive AI employment optimization platform - a product that enterprises trust with their most critical hiring data. Every line of code, every design decision, and every user interaction must reflect world-class SaaS quality.
+Build OpenRole as the definitive AI employment optimization platform - a product that enterprises trust with their most critical hiring data. Every line of code, every design decision, and every user interaction must reflect world-class SaaS quality.
 
 **Quality Standard:** This product competes directly with established enterprise software. Build accordingly.
 
@@ -33,7 +33,7 @@ PDF Generation: Puppeteer + React-PDF
 
 ### **Project Structure (Exact)**
 ```
-brandos/
+openrole/
 ├── README.md
 ├── package.json
 ├── next.config.js
@@ -48,7 +48,7 @@ brandos/
 │   ├── favicon.ico
 │   ├── logo.svg
 │   ├── pixel/
-│   │   └── brandos-pixel.js
+│   │   └── openrole-pixel.js
 │   └── images/
 ├── src/
 │   ├── app/
@@ -595,20 +595,20 @@ export default function AuditForm() {
 
 ### **Pixel JavaScript (EXACT IMPLEMENTATION)**
 ```javascript
-// public/pixel/brandos-pixel.js
+// public/pixel/openrole-pixel.js
 (function() {
   'use strict';
   
   // Configuration
   const CONFIG = {
-    API_BASE: 'https://api.brandos.io/v1',
+    API_BASE: 'https://api.openrole.co.uk/v1',
     VERSION: '1.0.0',
     MAX_RETRIES: 3,
     TIMEOUT: 10000,
     DEBUG: false
   };
   
-  class BrandOSPixel {
+  class OpenRolePixel {
     constructor() {
       this.isInitialized = false;
       this.companyId = null;
@@ -631,23 +631,23 @@ export default function AuditForm() {
     }
     
     loadConfiguration() {
-      const script = document.querySelector('[data-brandos-company-id]');
+      const script = document.querySelector('[data-openrole-company-id]');
       if (!script) {
-        throw new Error('BrandOS pixel script not found. Ensure data-brandos-company-id attribute is set.');
+        throw new Error('OpenRole pixel script not found. Ensure data-openrole-company-id attribute is set.');
       }
       
-      this.companyId = script.getAttribute('data-brandos-company-id');
-      this.pixelId = script.getAttribute('data-brandos-pixel-id') || this.generatePixelId();
-      this.environment = script.getAttribute('data-brandos-env') || 'production';
+      this.companyId = script.getAttribute('data-openrole-company-id');
+      this.pixelId = script.getAttribute('data-openrole-pixel-id') || this.generatePixelId();
+      this.environment = script.getAttribute('data-openrole-env') || 'production';
       
-      if (script.hasAttribute('data-brandos-debug')) {
+      if (script.hasAttribute('data-openrole-debug')) {
         CONFIG.DEBUG = true;
       }
     }
     
     validateConfiguration() {
       if (!this.companyId || this.companyId.length < 10) {
-        throw new Error('Invalid company ID. Contact BrandOS support.');
+        throw new Error('Invalid company ID. Contact OpenRole support.');
       }
       
       // Validate domain
@@ -663,10 +663,10 @@ export default function AuditForm() {
       try {
         const response = await this.fetchWithRetry(url, {
           headers: {
-            'X-BrandOS-Version': CONFIG.VERSION,
-            'X-BrandOS-Pixel-ID': this.pixelId,
-            'X-BrandOS-Referrer': window.location.hostname,
-            'X-BrandOS-User-Agent': navigator.userAgent
+            'X-OpenRole-Version': CONFIG.VERSION,
+            'X-OpenRole-Pixel-ID': this.pixelId,
+            'X-OpenRole-Referrer': window.location.hostname,
+            'X-OpenRole-User-Agent': navigator.userAgent
           }
         });
         
@@ -681,7 +681,7 @@ export default function AuditForm() {
         this.trackPixelLoad();
         this.isInitialized = true;
         
-        this.log('info', 'BrandOS pixel loaded successfully', {
+        this.log('info', 'OpenRole pixel loaded successfully', {
           jobCount: data.jobs?.length || 0,
           companyId: this.companyId
         });
@@ -697,8 +697,8 @@ export default function AuditForm() {
         return;
       }
       
-      // Remove existing BrandOS structured data
-      const existingScripts = document.querySelectorAll('script[data-brandos-schema]');
+      // Remove existing OpenRole structured data
+      const existingScripts = document.querySelectorAll('script[data-openrole-schema]');
       existingScripts.forEach(script => script.remove());
       
       // Generate JSON-LD schema
@@ -707,8 +707,8 @@ export default function AuditForm() {
       // Inject structured data
       const script = document.createElement('script');
       script.type = 'application/ld+json';
-      script.setAttribute('data-brandos-schema', 'true');
-      script.setAttribute('data-brandos-version', CONFIG.VERSION);
+      script.setAttribute('data-openrole-schema', 'true');
+      script.setAttribute('data-openrole-version', CONFIG.VERSION);
       script.textContent = JSON.stringify(schema, null, 2);
       
       document.head.appendChild(script);
@@ -860,8 +860,8 @@ export default function AuditForm() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'X-BrandOS-Company-ID': this.companyId,
-            'X-BrandOS-Pixel-ID': this.pixelId
+            'X-OpenRole-Company-ID': this.companyId,
+            'X-OpenRole-Pixel-ID': this.pixelId
           },
           body: JSON.stringify({
             event_type: eventType,
@@ -907,7 +907,7 @@ export default function AuditForm() {
       if (!CONFIG.DEBUG && level === 'info') return;
       
       const logMethod = console[level] || console.log;
-      const prefix = `[BrandOS Pixel]`;
+      const prefix = `[OpenRole Pixel]`;
       
       if (data) {
         logMethod(`${prefix} ${message}`, data);
@@ -920,11 +920,11 @@ export default function AuditForm() {
   // Auto-initialize when DOM is ready
   function initializePixel() {
     if (window.brandOSPixel) {
-      console.warn('[BrandOS Pixel] Already initialized');
+      console.warn('[OpenRole Pixel] Already initialized');
       return;
     }
     
-    window.brandOSPixel = new BrandOSPixel();
+    window.brandOSPixel = new OpenRolePixel();
   }
   
   // Initialize based on document state
@@ -935,7 +935,7 @@ export default function AuditForm() {
   }
   
   // Expose pixel for debugging
-  if (window.location.hostname === 'localhost' || window.location.search.includes('brandos_debug=1')) {
+  if (window.location.hostname === 'localhost' || window.location.search.includes('openrole_debug=1')) {
     window.brandOSPixelDebug = {
       getPixel: () => window.brandOSPixel,
       getPerformance: () => window.brandOSPixel?.performanceMetrics,
@@ -1192,8 +1192,8 @@ export async function GET(
 ) {
   try {
     const companyId = params.id;
-    const pixelId = request.headers.get('X-BrandOS-Pixel-ID');
-    const referrer = request.headers.get('X-BrandOS-Referrer');
+    const pixelId = request.headers.get('X-OpenRole-Pixel-ID');
+    const referrer = request.headers.get('X-OpenRole-Referrer');
     
     // Validate company and pixel
     const company = await getCompanyById(companyId);
@@ -1369,7 +1369,7 @@ test('pixel performance monitoring', async ({ page }) => {
   await page.waitForTimeout(2000);
   
   // Verify pixel loaded successfully
-  const pixelLoaded = logs.some(log => log.includes('BrandOS pixel loaded successfully'));
+  const pixelLoaded = logs.some(log => log.includes('OpenRole pixel loaded successfully'));
   expect(pixelLoaded).toBe(true);
   
   // Check structured data injection
@@ -1396,15 +1396,15 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 # Email Configuration  
 RESEND_API_KEY=your-resend-api-key
-FROM_EMAIL=noreply@brandos.io
+FROM_EMAIL=noreply@openrole.co.uk
 
 # API Configuration
-NEXT_PUBLIC_API_URL=https://api.brandos.io
-PIXEL_CDN_URL=https://pixel.brandos.io
+NEXT_PUBLIC_API_URL=https://api.openrole.co.uk
+PIXEL_CDN_URL=https://pixel.openrole.co.uk
 
 # Authentication
 NEXTAUTH_SECRET=your-nextauth-secret
-NEXTAUTH_URL=https://app.brandos.io
+NEXTAUTH_URL=https://app.openrole.co.uk
 
 # Analytics
 NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
@@ -1458,7 +1458,7 @@ SENTRY_DSN=your-sentry-dsn
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://app.brandos.io"
+          "value": "https://app.openrole.co.uk"
         },
         {
           "key": "Access-Control-Allow-Methods",
@@ -1466,7 +1466,7 @@ SENTRY_DSN=your-sentry-dsn
         },
         {
           "key": "Access-Control-Allow-Headers",
-          "value": "X-Requested-With, Content-Type, Authorization, X-BrandOS-Company-ID"
+          "value": "X-Requested-With, Content-Type, Authorization, X-OpenRole-Company-ID"
         }
       ]
     }
@@ -1495,7 +1495,7 @@ SENTRY_DSN=your-sentry-dsn
 
 set -e
 
-echo "🚀 Starting BrandOS deployment..."
+echo "🚀 Starting OpenRole deployment..."
 
 # Environment check
 if [ -z "$VERCEL_TOKEN" ]; then
@@ -1871,7 +1871,7 @@ export default function Component({
 ```
 
 ### **Success Criteria**
-The BrandOS platform must achieve:
+The OpenRole platform must achieve:
 1. **100% uptime** during business hours
 2. **Sub-second response times** for all user interactions
 3. **Zero security vulnerabilities** in production
@@ -1882,11 +1882,11 @@ The BrandOS platform must achieve:
 
 ## 🎨 DESIGN EXCELLENCE STANDARDS
 
-This platform represents BrandOS in the marketplace. Every pixel, every interaction, every message must reflect:
+This platform represents OpenRole in the marketplace. Every pixel, every interaction, every message must reflect:
 - **Professionalism**: Enterprise customers trust their most important data with us
 - **Reliability**: The product works flawlessly under all conditions  
 - **Simplicity**: Complex functionality presented in intuitive interfaces
 - **Performance**: Fast, responsive, and delightful to use
 - **Scalability**: Built to handle massive growth from day one
 
-**Build BrandOS as if 100 world-class developers collaborated on every detail. This is the standard of quality that will define our success.**
+**Build OpenRole as if 100 world-class developers collaborated on every detail. This is the standard of quality that will define our success.**

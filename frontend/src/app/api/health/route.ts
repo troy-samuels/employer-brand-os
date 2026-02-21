@@ -43,7 +43,7 @@ export async function GET(
 
     return apiSuccessResponse<HealthResponse>({
       status: "OK",
-      message: "Rankwell API server is running",
+      message: "OpenRole API server is running",
       timestamp: new Date().toISOString(),
     });
   } catch (error) {

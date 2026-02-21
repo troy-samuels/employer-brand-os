@@ -13,10 +13,10 @@ import { Footer } from "@/components/shared/footer";
 import { getAllPosts, type BlogPostMetadata } from "@/lib/blog";
 
 export const metadata: Metadata = {
-  title: "Blog | Rankwell — AI Employer Visibility Insights",
+  title: "Blog | OpenRole — AI Employer Visibility Insights",
   description:
     "Research-backed insights on how AI represents employers. Data from thousands of audits across ChatGPT, Google AI, Perplexity, and more.",
-  alternates: { canonical: "https://rankwell.io/blog" },
+  alternates: { canonical: "https://openrole.co.uk/blog" },
 };
 
 /* ------------------------------------------------------------------ */

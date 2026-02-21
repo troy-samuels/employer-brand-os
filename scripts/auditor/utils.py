@@ -1,5 +1,5 @@
 """
-Utility functions for BrandOS Auditor.
+Utility functions for OpenRole Auditor.
 """
 
 import re

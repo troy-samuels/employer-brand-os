@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { generateApiKey, getApiKey } from '@/features/api-keys';
 import type { GetApiKeyResult } from '@/features/api-keys';
 
-const PIXEL_ENDPOINT_BASE = process.env.NEXT_PUBLIC_APP_URL || 'https://rankwell.io';
+const PIXEL_ENDPOINT_BASE = process.env.NEXT_PUBLIC_APP_URL || 'https://openrole.co.uk';
 const CDN_ENDPOINT = `${PIXEL_ENDPOINT_BASE.replace(/\/$/, '')}/api/pixel/v1/script`;
 
 /**
@@ -60,7 +60,7 @@ export default function IntegrationPage() {
 
   const generateSnippet = (key: string | null) => {
     const installKey = key?.trim() || 'REPLACE_WITH_FULL_BOS_KEY';
-    return `<!-- Rankwell Smart Pixel -->
+    return `<!-- OpenRole Smart Pixel -->
 <script
   src="${CDN_ENDPOINT}"
   data-key="${installKey}"
@@ -89,7 +89,7 @@ export default function IntegrationPage() {
         <div className="max-w-2xl space-y-8">
           {/* Introduction */}
           <p className="text-sm text-zinc-500 leading-relaxed">
-            Deploy the Rankwell Smart Pixel to inject verified JSON-LD schema into your
+            Deploy the OpenRole Smart Pixel to inject verified JSON-LD schema into your
             careers page. The pixel automatically updates when you modify your company facts.
           </p>
 

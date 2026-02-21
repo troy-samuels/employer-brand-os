@@ -1,4 +1,4 @@
-# ✅ MISSION COMPLETE: Rankwell Contacts Database
+# ✅ MISSION COMPLETE: OpenRole Contacts Database
 
 **Workstream 3: 2.5M Contact Strategy & Supabase Import**
 
@@ -23,7 +23,7 @@
 
 **Completed:** 2025-02-20 00:05 GMT  
 **Duration:** 24 minutes  
-**Agent:** Malcolm (Subagent: rankwell-contacts)
+**Agent:** Malcolm (Subagent: openrole-contacts)
 
 ---
 
@@ -48,7 +48,7 @@
 ### 📁 Files Created (10 total)
 
 ```
-employer-brand-os/
+employer-openrole/
 │
 ├── 📄 EXECUTIVE_SUMMARY.md              (7KB) ★ Start here
 ├── 📄 QUICK_START.md                   (13KB) ★ Step-by-step
@@ -57,7 +57,7 @@ employer-brand-os/
 ├── 📄 PRIORITY_SEGMENTS_ANALYSIS.md    (15KB) Targeting strategy
 ├── 📄 CONTACTS_README.md               (14KB) Navigation guide
 ├── 📄 CONTACTS_INDEX.md                 (9KB) Master index
-├── 📄 SESSION_SUMMARY_RANKWELL_CONTACTS.md (15KB) Session log
+├── 📄 SESSION_SUMMARY_OPENROLE_CONTACTS.md (15KB) Session log
 ├── 📄 MISSION_COMPLETE.md               (This file)
 │
 ├── scripts/
@@ -185,7 +185,7 @@ Hook: Simple value, no pressure, self-service
 # → Click "Run"
 
 # Step 2: Test import (2 min)
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 npx tsx scripts/import-contacts.ts "" 100
 
 # Step 3: Full import (45 min)
@@ -385,7 +385,7 @@ Week 4: First Revenue ✅
 
 **Mission Status:** ✅ **COMPLETE**  
 **Awaiting:** Troy's decision to execute  
-**Agent:** Malcolm (Subagent: rankwell-contacts)  
+**Agent:** Malcolm (Subagent: openrole-contacts)  
 **Completed:** 2025-02-20 00:05 GMT
 
 ---

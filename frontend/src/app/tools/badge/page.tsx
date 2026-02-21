@@ -1,8 +1,8 @@
 /**
  * @module app/tools/badge/page
- * Embeddable AI Score Badge — companies embed their Rankwell score
+ * Embeddable AI Score Badge — companies embed their OpenRole score
  * on their careers page. This is a distribution play:
- * - Every badge is a backlink to Rankwell
+ * - Every badge is a backlink to OpenRole
  * - Every badge is social proof for the company
  * - Every badge drives candidates to check scores
  * - Every badge is free advertising
@@ -56,7 +56,7 @@ function generateSvg(
   <rect width="200" height="32" rx="6" fill="${bg}" stroke="${border}" stroke-width="1"/>
   <text x="8" y="20" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="${text}">AI Score</text>
   <text x="62" y="20" font-family="system-ui,sans-serif" font-size="11" font-weight="700" fill="${color}">${score}/100</text>
-  <text x="108" y="20" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">by Rankwell</text>
+  <text x="108" y="20" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">by OpenRole</text>
 </svg>`;
   }
 
@@ -66,7 +66,7 @@ function generateSvg(
   <text x="16" y="24" font-family="system-ui,sans-serif" font-size="11" fill="${muted}">AI Employer Visibility</text>
   <text x="16" y="46" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="${color}">${score}/100</text>
   <text x="80" y="46" font-family="system-ui,sans-serif" font-size="12" fill="${muted}">${label}</text>
-  <text x="168" y="46" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">rankwell.io</text>
+  <text x="168" y="46" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">openrole.co.uk</text>
 </svg>`;
   }
 
@@ -79,7 +79,7 @@ function generateSvg(
   <text x="52" y="72" font-family="system-ui,sans-serif" font-size="14" fill="${muted}">/100</text>
   <rect x="90" y="56" width="80" height="22" rx="11" fill="${color}" opacity="0.1"/>
   <text x="107" y="71" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="${color}">${label}</text>
-  <text x="16" y="88" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">Verified by Rankwell · rankwell.io</text>
+  <text x="16" y="88" font-family="system-ui,sans-serif" font-size="9" fill="${muted}">Verified by OpenRole · openrole.co.uk</text>
 </svg>`;
 }
 
@@ -92,9 +92,9 @@ function generateEmbedCode(
 ): string {
   const svg = generateSvg(company, score, style, theme);
   const encodedSvg = `data:image/svg+xml,${encodeURIComponent(svg)}`;
-  return `<!-- Rankwell AI Score Badge -->
-<a href="https://rankwell.io/company/${slug}" target="_blank" rel="noopener" title="${company} AI Employer Visibility Score: ${score}/100">
-  <img src="${encodedSvg}" alt="${company} AI Score: ${score}/100 - Verified by Rankwell" />
+  return `<!-- OpenRole AI Score Badge -->
+<a href="https://openrole.co.uk/company/${slug}" target="_blank" rel="noopener" title="${company} AI Employer Visibility Score: ${score}/100">
+  <img src="${encodedSvg}" alt="${company} AI Score: ${score}/100 - Verified by OpenRole" />
 </a>`;
 }
 
@@ -255,7 +255,7 @@ export default function BadgePage() {
                       href="/#audit"
                       className="underline hover:text-amber-900"
                     >
-                      free Rankwell audit
+                      free OpenRole audit
                     </Link>
                     . Displaying an inaccurate score is against our terms.
                   </p>
@@ -324,7 +324,7 @@ export default function BadgePage() {
                         <strong>2.</strong> Paste into your careers page HTML
                       </li>
                       <li>
-                        <strong>3.</strong> The badge links to your Rankwell
+                        <strong>3.</strong> The badge links to your OpenRole
                         profile automatically
                       </li>
                     </ol>

@@ -16,7 +16,7 @@ import {
   deriveHallucinationRate,
   formatGbpCurrency,
   formatRoiMultiple,
-  RANKWELL_PRO_MONTHLY_PRICE_GBP,
+  OPENROLE_PRO_MONTHLY_PRICE_GBP,
   type DeltaItem,
 } from "@/lib/citation-chain/trust-delta";
 import { cn } from "@/lib/utils";
@@ -103,7 +103,7 @@ export function CostCalculator({ deltaItems, className }: CostCalculatorProps) {
           / month in estimated wasted recruiting spend
         </p>
         <p className="mt-4 text-sm font-medium text-neutral-100">
-          Rankwell Pro: {formatGbpCurrency(RANKWELL_PRO_MONTHLY_PRICE_GBP)}/month — ROI:{" "}
+          OpenRole Pro: {formatGbpCurrency(OPENROLE_PRO_MONTHLY_PRICE_GBP)}/month — ROI:{" "}
           {formatRoiMultiple(costEstimate.roi)}
         </p>
       </div>

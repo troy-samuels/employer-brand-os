@@ -1,4 +1,4 @@
-# TECHNICAL VALIDATION RESEARCH: BRANDOS EMPLOYER IDENTITY PLATFORM
+# TECHNICAL VALIDATION RESEARCH: OPENROLE EMPLOYER IDENTITY PLATFORM
 **Research Lead:** Malcolm (AI Research Agent)  
 **Date:** February 6, 2026  
 **Scope:** Academic & Industry Validation of Core Technical Claims  
@@ -58,7 +58,7 @@
   "title": "Software Engineer",
   "description": "We are seeking...",
   "datePosted": "2026-02-06",
-  "dateModified": "2026-02-06",  // BrandOS "freshness signal"
+  "dateModified": "2026-02-06",  // OpenRole "freshness signal"
   "baseSalary": {
     "@type": "MonetaryAmount",
     "currency": "USD",
@@ -71,7 +71,7 @@
 }
 ```
 
-**BrandOS Advantage:** The "dateModified" timestamp approach is EXACTLY what Google documentation suggests for keeping content fresh.
+**OpenRole Advantage:** The "dateModified" timestamp approach is EXACTLY what Google documentation suggests for keeping content fresh.
 
 ### 2.2 ATS "Code Soup" Problem ✅ VALIDATED
 
@@ -93,7 +93,7 @@
 - Claude cannot determine salary ranges from internal codes
 - Gemini fails to understand location from abbreviations
 
-**BrandOS Solution Validation:** Translating `L4-Eng-NY` → `Senior Software Engineer (Verified)` makes jobs discoverable.
+**OpenRole Solution Validation:** Translating `L4-Eng-NY` → `Senior Software Engineer (Verified)` makes jobs discoverable.
 
 ### 2.3 AI Hallucination in Employment Context ✅ CONFIRMED
 
@@ -110,7 +110,7 @@
 3. **Benefits**: Outdated healthcare/PTO information from job boards
 4. **Company Size**: Employee counts from stale funding announcements
 
-**BrandOS Mitigation Validity:** Injecting current, timestamped data directly addresses this problem.
+**OpenRole Mitigation Validity:** Injecting current, timestamped data directly addresses this problem.
 
 ---
 
@@ -138,7 +138,7 @@
 - Legacy ATS systems lack automated compliance features
 - Legal risk from incorrect or missing disclosures
 
-**BrandOS Market Timing:** Peak compliance pressure creating urgent need for automated solutions.
+**OpenRole Market Timing:** Peak compliance pressure creating urgent need for automated solutions.
 
 ### 3.2 Market Size Validation ⚠️ ESTIMATED BUT REASONABLE
 
@@ -151,7 +151,7 @@
 **Revenue Potential Validation:**
 - HR Tech spending: $15,000-50,000/year average
 - Compliance tools: $200-800/month typical
-- BrandOS pricing ($299-899/month) fits market range
+- OpenRole pricing ($299-899/month) fits market range
 
 **Conservative TAM:** 48,600 companies × $300/month average = $175M annual market
 
@@ -184,7 +184,7 @@
 - Namely legal updates: Reactive, not proactive
 - **Gap:** No automation, no AI visibility connection
 
-**BrandOS Unique Position:** Only solution connecting compliance automation + AI visibility optimization.
+**OpenRole Unique Position:** Only solution connecting compliance automation + AI visibility optimization.
 
 ---
 
@@ -194,18 +194,18 @@
 
 **Technical Implementation:**
 ```javascript
-// BrandOS Smart Pixel Core Architecture
+// OpenRole Smart Pixel Core Architecture
 (function() {
   'use strict';
   
-  const brandosConfig = window.brandosConfig || {};
-  const apiEndpoint = 'https://api.brandos.io/v1/inject';
+  const openroleConfig = window.openroleConfig || {};
+  const apiEndpoint = 'https://api.openrole.co.uk/v1/inject';
   
   // Fetch current employment data
-  fetch(apiEndpoint + '/company/' + brandosConfig.companyId)
+  fetch(apiEndpoint + '/company/' + openroleConfig.companyId)
     .then(response => response.json())
     .then(data => injectStructuredData(data))
-    .catch(error => console.warn('BrandOS: Failed to load', error));
+    .catch(error => console.warn('OpenRole: Failed to load', error));
     
   function injectStructuredData(data) {
     const script = document.createElement('script');
@@ -231,7 +231,7 @@
 **Architecture Strengths:**
 - **<5KB payload**: Minimal performance impact
 - **Asynchronous loading**: Non-blocking page rendering
-- **Failsafe design**: Site works if BrandOS is down
+- **Failsafe design**: Site works if OpenRole is down
 - **CDN distributed**: Global performance optimization
 
 ### 5.2 Security & Compliance ✅ WELL-DESIGNED
@@ -331,7 +331,7 @@
 - **2026**: **CURRENT INFLECTION POINT** - AI-mediated job discovery becoming dominant
 - **2027-2028**: Traditional job boards lose market share
 
-**BrandOS Timing:** Perfect window - problem is urgent but solutions don't exist yet.
+**OpenRole Timing:** Perfect window - problem is urgent but solutions don't exist yet.
 
 ### 7.2 Regulatory Convergence ✅ OPTIMAL
 
@@ -360,7 +360,7 @@
 **Risk: ATS Vendors Add Native JSON-LD**
 - **Probability**: High
 - **Impact**: Medium
-- **Mitigation**: BrandOS adds compliance intelligence beyond basic markup
+- **Mitigation**: OpenRole adds compliance intelligence beyond basic markup
 
 **Risk: LLM Citation Behaviour Changes**
 - **Probability**: Medium
@@ -408,7 +408,7 @@
 3. Structured data improves retrieval accuracy significantly
 4. "Ground truth" sources needed to combat hallucinations
 
-**BrandOS Solution Alignment:** Direct injection of authoritative, timestamped data addresses core RAG limitations.
+**OpenRole Solution Alignment:** Direct injection of authoritative, timestamped data addresses core RAG limitations.
 
 ### 9.2 Information Retrieval Research
 
@@ -522,7 +522,7 @@
 **Solo Founder Viability: 88%**  
 **18-Month Success Probability: 85%**
 
-*The comprehensive research strongly validates proceeding with BrandOS development and launch. Market window is open, technology is proven, and regulatory environment creates urgent demand.*
+*The comprehensive research strongly validates proceeding with OpenRole development and launch. Market window is open, technology is proven, and regulatory environment creates urgent demand.*
 
 ---
 
@@ -546,4 +546,4 @@
 - **⚠️ PROBABLE (70-89%)**: Strong evidence, some uncertainty  
 - **❓ UNCERTAIN (<70%)**: Conflicting or limited evidence
 
-This research represents the most comprehensive validation of the BrandOS opportunity available as of February 2026.
+This research represents the most comprehensive validation of the OpenRole opportunity available as of February 2026.

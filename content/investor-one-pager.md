@@ -1,4 +1,4 @@
-# Rankwell — Investor One-Pager
+# OpenRole — Investor One-Pager
 *AI Reputation Intelligence for Employers*
 
 ---
@@ -18,7 +18,7 @@ The employer brand industry spends **$17 billion annually** on careers pages, jo
 
 ## The Solution
 
-**Rankwell maps how AI describes employers and fixes the gaps.**
+**OpenRole maps how AI describes employers and fixes the gaps.**
 
 ### Product Stack:
 1. **Free Audit** (lead gen) — Shows what AI says about your company, where it gets its data, and what's wrong. 30 seconds.
@@ -74,13 +74,13 @@ The employer brand industry spends **$17 billion annually** on careers pages, jo
 
 ## Competitive Landscape
 
-| Player | Funding | Pricing | Key Difference from Rankwell |
+| Player | Funding | Pricing | Key Difference from OpenRole |
 |--------|---------|---------|------------------------------|
 | Profound | $7.5M (Felicis, YC) | $75K-$250K/yr | Generic brand, no fix tools, no self-serve |
 | Otterly.ai | Bootstrapped | $29-$489/mo | Monitor-only, no employer focus |
 | PerceptionX | Unknown | Custom | Sentiment only, no technical tools |
 
-**Rankwell is the only tool that does Audit + Monitor + Fix for employer brands specifically.**
+**OpenRole is the only tool that does Audit + Monitor + Fix for employer brands specifically.**
 
 ---
 
@@ -118,4 +118,4 @@ Seeking **£500K pre-seed** to:
 
 ---
 
-*Contact: troy@rankwell.io*
+*Contact: troy@openrole.co.uk*

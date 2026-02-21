@@ -1,5 +1,5 @@
 """
-BrandOS Auditor Package
+OpenRole Auditor Package
 Forensic tool to analyze how AI agents view company career data.
 """
 

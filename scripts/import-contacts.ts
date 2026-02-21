@@ -398,7 +398,7 @@ async function importContacts(
     stateFile = path.join(__dirname, 'import-state.json')
   } = options;
   
-  console.log('🚀 Starting Rankwell Contacts Import');
+  console.log('🚀 Starting OpenRole Contacts Import');
   console.log('=' .repeat(80));
   console.log(`📂 Source: ${csvPath}`);
   console.log(`📊 Batch size: ${batchSize.toLocaleString()}`);

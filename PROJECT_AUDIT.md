@@ -1,4 +1,4 @@
-# Rankwell — Comprehensive Project Audit
+# OpenRole — Comprehensive Project Audit
 
 **Audited:** 2025-02-11  
 **Scope:** Full frontend codebase at `/frontend`  
@@ -46,7 +46,7 @@ All dashboard API routes return hardcoded sample data from `constants.ts` (Acme 
 
 ### 🟡 IMPORTANT: Dashboard settings page is non-functional
 **File:** `src/app/dashboard/settings/page.tsx`  
-Pure UI shell with placeholder values ("Rankwell", "rankwell.io", "you@company.com"). The "Save Settings" button does nothing — no form handler, no API call.
+Pure UI shell with placeholder values ("OpenRole", "openrole.co.uk", "you@company.com"). The "Save Settings" button does nothing — no form handler, no API call.
 
 ### 🟡 IMPORTANT: Pixel install snippet uses dummy values
 **File:** `src/app/dashboard/pixel/page.tsx`  
@@ -115,7 +115,7 @@ Uses a Zod schema to validate an empty query object on a health check. Unnecessa
 These are the default Next.js starter template SVGs. They ship to production and signal "we didn't clean up our boilerplate."
 
 ### 🟡 IMPORTANT: No favicon/logo assets
-No custom favicon (beyond the default `src/app/favicon.ico`), no apple-touch-icon, no OG image, no brand logo SVG. The header just uses text "Rankwell" — no logo.
+No custom favicon (beyond the default `src/app/favicon.ico`), no apple-touch-icon, no OG image, no brand logo SVG. The header just uses text "OpenRole" — no logo.
 
 ### 🟢 NICE-TO-HAVE: pixel-test.html in public
 **File:** `public/pixel-test.html`  
@@ -130,7 +130,7 @@ A development/testing HTML file that's publicly accessible. Should be in a dev-o
 Both set Content-Security-Policy headers. The middleware generates nonce-based CSP (`script-src 'self' 'nonce-${nonce}'`) while next.config.ts has a static one (`script-src 'self'`). Headers set in both places may conflict. The middleware version is better (supports nonces) but the config one is stricter (no nonce = blocks inline scripts).
 
 ### 🟢 NICE-TO-HAVE: package.json name is just "frontend"
-Should be `@rankwell/frontend` or `rankwell-app` for clarity in logs and error reports.
+Should be `@openrole/frontend` or `openrole-app` for clarity in logs and error reports.
 
 ---
 
@@ -186,7 +186,7 @@ All three legal pages show `lastUpdated = '9 February 2026'`. Current date is Fe
 Privacy, Terms, DPA, and Security pages have no Header/Footer components. Users who land directly on `/privacy` (e.g., from Google) have no way to navigate to the rest of the site. The Security page has its own header but also lacks the standard nav.
 
 ### 🟢 NICE-TO-HAVE: No company registration info
-Legal pages reference "Rankwell" but don't include a company registration number, registered address, or legal entity name. UK enterprises may expect this.
+Legal pages reference "OpenRole" but don't include a company registration number, registered address, or legal entity name. UK enterprises may expect this.
 
 ---
 
@@ -258,8 +258,8 @@ No "Trusted by" section, no client logos, no "As seen in" press mentions, no rev
 ### 🟡 IMPORTANT: No founder/team information
 No "About" page, no team section, no LinkedIn links to founders. Enterprise buyers want to know who's behind the product before installing scripts on their website.
 
-### 🟡 IMPORTANT: Enterprise contact is just "hello@rankwell.io"
-Multiple pages link to `mailto:hello@rankwell.io` for enterprise inquiries. No contact form, no Calendly link, no sales demo booking. High-intent enterprise leads are sent to a generic email.
+### 🟡 IMPORTANT: Enterprise contact is just "hello@openrole.co.uk"
+Multiple pages link to `mailto:hello@openrole.co.uk` for enterprise inquiries. No contact form, no Calendly link, no sales demo booking. High-intent enterprise leads are sent to a generic email.
 
 ---
 

@@ -1,4 +1,4 @@
-# ✅ RANKWELL SECURITY WORKSTREAM 2 - COMPLETE
+# ✅ OPENROLE SECURITY WORKSTREAM 2 - COMPLETE
 
 **Mission:** Pixel/Snippet Security Hardening & Testing  
 **Status:** ✅ COMPLETE  
@@ -9,7 +9,7 @@
 
 ## Mission Accomplished
 
-Completed comprehensive security audit and hardening of the Rankwell Smart Pixel. All critical and high-severity vulnerabilities have been **FIXED and DEPLOYED**.
+Completed comprehensive security audit and hardening of the OpenRole Smart Pixel. All critical and high-severity vulnerabilities have been **FIXED and DEPLOYED**.
 
 ---
 

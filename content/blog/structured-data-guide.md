@@ -2,7 +2,7 @@
 title: "Structured Data for Employer Brands: A Technical Guide to JSON-LD"
 description: "Complete implementation guide for schema.org structured data on employer websites. With code examples for Organization, JobPosting, FAQPage, and EmployerAggregateRating schemas."
 date: "2026-02-22"
-author: "Rankwell Engineering Team"
+author: "OpenRole Engineering Team"
 category: "Technical"
 readTime: "20 min"
 tags: ["JSON-LD", "schema.org", "structured data", "technical SEO", "implementation"]
@@ -617,7 +617,7 @@ Before deploying, validate your structured data:
 - Validates against official schema.org spec
 - More strict than Google's tool
 
-**3. Rankwell Schema Checker** (Coming Soon)
+**3. OpenRole Schema Checker** (Coming Soon)
 - Checks employer-specific fields
 - Verifies AI-readable formatting
 
@@ -788,7 +788,7 @@ Structured data isn't set-and-forget. Here's the maintenance schedule:
 - [ ] Run full site validation
 
 **Ongoing:**
-- [ ] Monitor what AI says about you ([Rankwell audit](https://rankwell.io))
+- [ ] Monitor what AI says about you ([OpenRole audit](https://openrole.co.uk))
 - [ ] Update schema when facts change
 - [ ] Add schema to new pages as you publish them
 
@@ -807,7 +807,7 @@ Companies that implement this see:
 
 Start with Organization schema on your homepage. Add FAQPage to your careers page. Include salary data in JobPosting schemas.
 
-Then measure. [Run a Rankwell audit](https://rankwell.io) before and 30 days after. You'll see the difference.
+Then measure. [Run a OpenRole audit](https://openrole.co.uk) before and 30 days after. You'll see the difference.
 
 ---
 
@@ -821,10 +821,10 @@ Then measure. [Run a Rankwell audit](https://rankwell.io) before and 30 days aft
 **Validation Tools:**
 - [Google Rich Results Test](https://search.google.com/test/rich-results)
 - [Schema Markup Validator](https://validator.schema.org/)
-- [Rankwell Audit Tool](https://rankwell.io)
+- [OpenRole Audit Tool](https://openrole.co.uk)
 
 **Code Generators:**
-- [Rankwell JSON-LD Generator](https://rankwell.io/tools/employer-schema)
+- [OpenRole JSON-LD Generator](https://openrole.co.uk/tools/employer-schema)
 - [Technical SEO Schema Generator](https://technicalseo.com/tools/schema-markup-generator/)
 
 **Further Reading:**
@@ -835,6 +835,6 @@ Then measure. [Run a Rankwell audit](https://rankwell.io) before and 30 days aft
 ---
 
 **Questions? Found an error? Want to share your implementation?**  
-Email: engineering@rankwell.io
+Email: engineering@openrole.co.uk
 
 We maintain this guide publicly and update it as schema.org standards evolve. Pull requests welcome.

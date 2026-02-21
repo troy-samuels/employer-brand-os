@@ -1,4 +1,4 @@
-# Rankwell Competitive Battlecard
+# OpenRole Competitive Battlecard
 *For internal use — sales conversations, investor meetings*
 
 ---
@@ -33,7 +33,7 @@
 - $75K minimum excludes 95% of the market
 - No structured data tools, no pixel, no content playbooks
 
-**How Rankwell Wins:**
+**How OpenRole Wins:**
 - We do audit + monitor + fix (they only monitor)
 - Self-serve freemium → enterprise (wider funnel)
 - Employer-brand specific = deeper product for HR buyers
@@ -67,7 +67,7 @@
 - No content optimisation tools
 - Limited to monitoring, doesn't explain WHY scores change
 
-**How Rankwell Wins:**
+**How OpenRole Wins:**
 - Full-stack: audit + monitor + fix vs. monitor-only
 - Employer-brand specific = deeper vertical value
 - Free audit generates leads (they have no free tier)
@@ -99,7 +99,7 @@
 - Monitor-only
 - Limited market presence
 
-**How Rankwell Wins:**
+**How OpenRole Wins:**
 - Employer-brand vertical depth
 - Self-serve + enterprise
 - Full audit + fix pipeline
@@ -131,7 +131,7 @@
 - No fix/remediation tools
 - Shallow analytics
 
-**How Rankwell Wins:**
+**How OpenRole Wins:**
 - Much deeper product (citation chain, trust delta, entity confusion)
 - Employer-brand specific
 - Enterprise-ready with dashboard + pixel
@@ -157,11 +157,11 @@
 
 ---
 
-## Rankwell's Unique Positioning
+## OpenRole's Unique Positioning
 
 ### What NOBODY Else Does:
 
-| Capability | Rankwell | Profound | Otterly | PerceptionX | Scrunch |
+| Capability | OpenRole | Profound | Otterly | PerceptionX | Scrunch |
 |-----------|----------|----------|---------|-------------|---------|
 | Free self-serve audit | ✅ | ❌ | ❌ | ❌ | ✅ (limited) |
 | Employer-brand specific | ✅ | ❌ | ❌ | ❌ | ❌ |

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS: Create leads table in Supabase
+OpenRole: Create leads table in Supabase
 Run this before import_leads.py
 """
 
@@ -72,7 +72,7 @@ CREATE INDEX idx_leads_country ON leads(address_country);
 
 def main():
     print("=" * 60)
-    print("BrandOS: Create Leads Table in Supabase")
+    print("OpenRole: Create Leads Table in Supabase")
     print("=" * 60)
 
     url = os.getenv("SUPABASE_URL")

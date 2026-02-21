@@ -1,5 +1,5 @@
 -- =====================================================
--- RANKWELL CONTACTS & OUTREACH SYSTEM
+-- OPENROLE CONTACTS & OUTREACH SYSTEM
 -- Migration: 20250218000000_create_contacts_system.sql
 -- =====================================================
 

@@ -4,13 +4,13 @@ import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://rankwell.io"),
+  metadataBase: new URL("https://openrole.co.uk"),
   title: {
-    default: "Rankwell — Take Back Your Reputation from AI",
-    template: "%s | Rankwell",
+    default: "OpenRole — Take Back Your Reputation from AI",
+    template: "%s | OpenRole",
   },
   description:
-    "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+    "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
   keywords: [
     "employer brand",
     "AI visibility",
@@ -21,33 +21,33 @@ export const metadata: Metadata = {
     "AI citations",
     "employer SEO",
   ],
-  authors: [{ name: "Rankwell" }],
+  authors: [{ name: "OpenRole" }],
   openGraph: {
     type: "website",
     locale: "en_GB",
-    url: "https://rankwell.io",
-    siteName: "Rankwell",
-    title: "Rankwell — Take Back Your Reputation from AI",
+    url: "https://openrole.co.uk",
+    siteName: "OpenRole",
+    title: "OpenRole — Take Back Your Reputation from AI",
     description:
-      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+      "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Rankwell — Is AI telling the truth about your company?",
+        alt: "OpenRole — Is AI telling the truth about your company?",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Rankwell — Take Back Your Reputation from AI",
+    title: "OpenRole — Take Back Your Reputation from AI",
     description:
-      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+      "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
     images: ["/opengraph-image"],
   },
   alternates: {
-    canonical: "https://rankwell.io",
+    canonical: "https://openrole.co.uk",
   },
 };
 
@@ -62,7 +62,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = (await headers()).get("x-rankwell-csp-nonce") ?? "";
+  const nonce = (await headers()).get("x-openrole-csp-nonce") ?? "";
 
   return (
     <html lang="en">

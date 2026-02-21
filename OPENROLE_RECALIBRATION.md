@@ -1,4 +1,4 @@
-# Rankwell Product Recalibration — Evidence-Based Pivot
+# OpenRole Product Recalibration — Evidence-Based Pivot
 
 **Date:** 19 February 2026
 **Trigger:** Citation factors research reveals llms.txt has zero impact; current scoring model and value proposition are misaligned with evidence.
@@ -7,7 +7,7 @@
 
 ## The Problem
 
-Rankwell's current product is built on assumptions that the citation research has disproven:
+OpenRole's current product is built on assumptions that the citation research has disproven:
 
 | Assumption | Reality | Impact |
 |-----------|---------|--------|
@@ -124,6 +124,6 @@ This is the same "give employers a tool to control their AI presence" value prop
 
 ## The Opportunity
 
-This recalibration is actually a competitive advantage. Competitors (including PerceptionX, Otterly, Profound) are all still recommending llms.txt. We now have evidence they don't. By pivoting to evidence-based recommendations, Rankwell becomes the **only** tool in the market that aligns its advice with peer-reviewed research.
+This recalibration is actually a competitive advantage. Competitors (including PerceptionX, Otterly, Profound) are all still recommending llms.txt. We now have evidence they don't. By pivoting to evidence-based recommendations, OpenRole becomes the **only** tool in the market that aligns its advice with peer-reviewed research.
 
 The blog post "The llms.txt myth" alone could be a viral piece — it's contrarian, evidence-backed, and challenges the entire industry's current advice.

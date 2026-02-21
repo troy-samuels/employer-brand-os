@@ -1,13 +1,13 @@
-# BrandOS Landing Page - Telegram Access
+# OpenRole Landing Page - Telegram Access
 
 ## CURRENT STATUS:
-The BrandOS landing page is built and running locally, but needs public deployment for Telegram access.
+The OpenRole landing page is built and running locally, but needs public deployment for Telegram access.
 
 ## WHAT'S READY:
 - ✅ Professional landing page with glass morphism design
 - ✅ Complete value proposition: "The Stripe for Employer Truth"
 - ✅ 3 feature cards: Smart Pixel, Hallucination Radar, Benchmarking
-- ✅ Problem/solution positioning: "Invisible and Illegal" → BrandOS solution
+- ✅ Problem/solution positioning: "Invisible and Illegal" → OpenRole solution
 - ✅ Strong CTAs: "Start Free Trial" and "Get Early Access"
 
 ## IMMEDIATE ACCESS OPTIONS:

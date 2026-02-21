@@ -17,7 +17,7 @@ export function Footer() {
           {/* Left */}
           <div className="flex flex-col gap-3">
             <Link href="/" className="font-bold text-white text-lg tracking-tight">
-              Rankwell
+              OpenRole
             </Link>
             <span className="text-slate-400 max-w-xs leading-relaxed">
               Verified employer data for the AI age. Control what AI tells candidates about your company.
@@ -63,7 +63,7 @@ export function Footer() {
               DPA
             </Link>
             <a
-              href="mailto:hello@rankwell.io"
+              href="mailto:hello@openrole.co.uk"
               className="hover:text-white transition-colors duration-200"
             >
               Contact
@@ -73,7 +73,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 pt-6 border-t border-slate-700 text-slate-500 text-xs">
-          © 2026 Rankwell. All rights reserved.
+          © 2026 OpenRole. All rights reserved.
         </div>
       </div>
     </footer>

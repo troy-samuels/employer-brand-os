@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS Audit Tool - CLI Entry Point
+OpenRole Audit Tool - CLI Entry Point
 
 Forensic tool to analyze how AI agents view a company's career data.
 Uses Perplexity API (sonar-reasoning-pro) for real-time analysis.
@@ -20,9 +20,9 @@ from auditor import CompanyAuditor
 
 
 def print_banner():
-    """Print the BrandOS banner."""
+    """Print the OpenRole banner."""
     print("\n" + "=" * 60)
-    print("  BRANDOS AUDIT TOOL")
+    print("  OPENROLE AUDIT TOOL")
     print("  AI Career Data Forensics")
     print("=" * 60)
 

@@ -49,7 +49,7 @@ const blogContent: Record<string, BlogContent> = {
     date: "11 February 2026",
     readTime: "8 min read",
     category: "Research",
-    ogTitle: "What AI tells candidates about your company | Rankwell",
+    ogTitle: "What AI tells candidates about your company | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         800 million people use ChatGPT every week. 13.5% of those conversations are
@@ -211,7 +211,7 @@ const blogContent: Record<string, BlogContent> = {
     date: "12 February 2026",
     readTime: "6 min read",
     category: "Analysis",
-    ogTitle: "Why your Glassdoor profile doesn't matter anymore | Rankwell",
+    ogTitle: "Why your Glassdoor profile doesn't matter anymore | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         For fifteen years, Glassdoor was the definitive source of employer reputation.
@@ -347,7 +347,7 @@ const blogContent: Record<string, BlogContent> = {
     date: "13 February 2026",
     readTime: "7 min read",
     category: "Trends",
-    ogTitle: "The zero-click candidate | Rankwell",
+    ogTitle: "The zero-click candidate | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         The candidate journey used to be a funnel. Google search → Glassdoor → Careers page → Apply.
@@ -487,7 +487,7 @@ const blogContent: Record<string, BlogContent> = {
     date: "14 February 2026",
     readTime: "5 min read",
     category: "Guide",
-    ogTitle: "llms.txt guide for employers | Rankwell",
+    ogTitle: "llms.txt guide for employers | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         You know <code>robots.txt</code> — the file that tells search engines what to crawl.
@@ -581,7 +581,7 @@ Industry: [industry].
         <div class="rounded-xl bg-white border border-slate-200 p-5">
           <h3 class="font-semibold text-slate-900 mb-1">5. Monitor the impact</h3>
           <p class="text-sm text-slate-600">
-            Run a <a href="/#audit" class="text-brand-accent hover:underline">Rankwell audit</a>
+            Run a <a href="/#audit" class="text-brand-accent hover:underline">OpenRole audit</a>
             before and after adding your llms.txt. You should see your AI Visibility Score
             improve within 2-4 weeks as models recrawl your domain.
           </p>
@@ -639,7 +639,7 @@ Industry: [industry].
         <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
         <ul class="text-xs text-slate-500 space-y-1">
           <li>llmstxt.org — llms.txt specification</li>
-          <li>Rankwell audit data — 500 UK employers (Feb 2026)</li>
+          <li>OpenRole audit data — 500 UK employers (Feb 2026)</li>
           <li>AB&C Creative — "Built to Be Found" employer brand guide (Jan 2026)</li>
         </ul>
       </div>
@@ -653,7 +653,7 @@ Industry: [industry].
     date: "15 February 2026",
     readTime: "9 min read",
     category: "Research",
-    ogTitle: "AI is hallucinating salary data | Rankwell",
+    ogTitle: "AI is hallucinating salary data | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         "How much does [company] pay for a senior engineer?" is one of the most common
@@ -773,7 +773,7 @@ Industry: [industry].
       <div class="mt-12 pt-8 border-t border-slate-200">
         <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
         <ul class="text-xs text-slate-500 space-y-1">
-          <li>Rankwell audit data — 200 UK employers across 4 sectors (Feb 2026)</li>
+          <li>OpenRole audit data — 200 UK employers across 4 sectors (Feb 2026)</li>
           <li>ONS Annual Survey of Hours and Earnings (2025)</li>
           <li>Glassdoor, Indeed, LinkedIn, Levels.fyi robots.txt — verified Feb 2026</li>
           <li>Profound — LLM citation analysis (2025)</li>
@@ -789,7 +789,7 @@ Industry: [industry].
     date: "16 February 2026",
     readTime: "6 min read",
     category: "Data",
-    ogTitle: "800M weekly ChatGPT users — what it means for employer brands | Rankwell",
+    ogTitle: "800M weekly ChatGPT users — what it means for employer brands | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         In October 2025, OpenAI reported 800 million weekly active users on ChatGPT.
@@ -937,7 +937,7 @@ Industry: [industry].
     date: "19 February 2026",
     readTime: "10 min read",
     category: "Guide",
-    ogTitle: "GEO for Employer Branding: The Complete Guide | Rankwell",
+    ogTitle: "GEO for Employer Branding: The Complete Guide | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         GEO — Generative Engine Optimisation — is the practice of optimising your brand's
@@ -1031,7 +1031,7 @@ Industry: [industry].
             <li>• Overall sentiment (positive, neutral, negative?)</li>
           </ul>
           <p class="text-sm text-slate-500 mt-3">
-            Or use <a href="/#audit" class="text-brand-accent hover:underline">Rankwell's free audit</a>
+            Or use <a href="/#audit" class="text-brand-accent hover:underline">OpenRole's free audit</a>
             to get this in 30 seconds.
           </p>
         </div>
@@ -1175,7 +1175,7 @@ Industry: [industry].
           <li>MktClarity — GEO market growing at 34% CAGR (Nov 2025)</li>
           <li>Semrush — 19% of SEOs practise GEO; AI visitors 4.4x more valuable (2025)</li>
           <li>Profound — 680M LLM citation analysis (Aug 2024–Jun 2025)</li>
-          <li>Rankwell audit data — 500 UK employers (Feb 2026)</li>
+          <li>OpenRole audit data — 500 UK employers (Feb 2026)</li>
           <li>Rally Recruitment Marketing — "AI Changing Employer Brand" (Jan 2026)</li>
           <li>Employer Branding News — "GEO for Employer Branding" (Jul 2025)</li>
         </ul>
@@ -1190,7 +1190,7 @@ Industry: [industry].
     date: "19 February 2026",
     readTime: "7 min read",
     category: "Analysis",
-    ogTitle: "The AI Employer Brand Score | Rankwell",
+    ogTitle: "The AI Employer Brand Score | OpenRole",
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
         For years, employer brand was measured by proxy: Glassdoor stars, LinkedIn follower
@@ -1346,7 +1346,7 @@ Industry: [industry].
       <div class="mt-12 pt-8 border-t border-slate-200">
         <h3 class="text-sm font-semibold text-slate-900 mb-3">Sources</h3>
         <ul class="text-xs text-slate-500 space-y-1">
-          <li>Rankwell audit data — 500 UK employers (Feb 2026)</li>
+          <li>OpenRole audit data — 500 UK employers (Feb 2026)</li>
           <li>OpenAI — 800M weekly active users (Oct 2025)</li>
           <li>SparkToro — 60% zero-click search rate (2024)</li>
           <li>Pew Research — 8% CTR when AI Overviews appear (Jul 2025)</li>
@@ -1370,7 +1370,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const markdownPost = getPostBySlug(slug);
   if (markdownPost) {
     return {
-      title: `${markdownPost.title} | Rankwell`,
+      title: `${markdownPost.title} | OpenRole`,
       description: markdownPost.description,
       openGraph: {
         title: markdownPost.title,
@@ -1379,13 +1379,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
         publishedTime: markdownPost.date,
         authors: markdownPost.author ? [markdownPost.author] : undefined,
       },
-      alternates: { canonical: `https://rankwell.io/blog/${slug}` },
+      alternates: { canonical: `https://openrole.co.uk/blog/${slug}` },
     };
   }
   
   // Fall back to hardcoded
   const post = blogContent[slug];
-  if (!post) return { title: "Post Not Found | Rankwell" };
+  if (!post) return { title: "Post Not Found | OpenRole" };
 
   return {
     title: post.ogTitle,
@@ -1395,7 +1395,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description: post.description,
       type: "article",
     },
-    alternates: { canonical: `https://rankwell.io/blog/${slug}` },
+    alternates: { canonical: `https://openrole.co.uk/blog/${slug}` },
   };
 }
 
@@ -1418,14 +1418,14 @@ export default async function BlogPost({ params }: PageProps) {
       dateModified: markdownPost.date,
       author: {
         "@type": markdownPost.author?.includes("Team") ? "Organization" : "Person",
-        name: markdownPost.author || "Rankwell Team",
+        name: markdownPost.author || "OpenRole Team",
       },
       publisher: {
         "@type": "Organization",
-        name: "Rankwell",
+        name: "OpenRole",
         logo: {
           "@type": "ImageObject",
-          url: "https://rankwell.io/logo.png",
+          url: "https://openrole.co.uk/logo.png",
         },
       },
     };

@@ -14,9 +14,9 @@ export async function getEmploymentData(companyId: string) {
   return {
     company: {
       id: companyId,
-      name: "Rankwell Demo",
-      website: "https://rankwell.io",
-      logo_url: "/images/rankwell-logo.svg",
+      name: "OpenRole Demo",
+      website: "https://openrole.co.uk",
+      logo_url: "/images/openrole-logo.svg",
     },
     jobs: SAMPLE_JOBS,
     compliance: {

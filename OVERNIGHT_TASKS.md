@@ -29,7 +29,7 @@
 - After audit completes, show: "See how you compare to [industry] average"
 - Pull from aggregated audit data to show percentile ranking
 - Visual comparison chart (your score vs industry average vs top 10%)
-- This differentiates Rankwell from any manual audit tool
+- This differentiates OpenRole from any manual audit tool
 
 ## Wave 5: Marketing GTM (Sub-agent, 30min)
 - Research: Who are the first 100 customers? Specific niche, specific titles, specific companies
@@ -38,7 +38,7 @@
 - Outreach templates: cold email, LinkedIn DM, Reddit/community posts
 - Content calendar: 30 days of posts
 - Pricing validation: what do competitors charge, what's the right entry point
-- Write to: /employer-brand-os/GTM_30_DAY_PLAN.md
+- Write to: /employer-openrole/GTM_30_DAY_PLAN.md
 
 ## Wave 6: Final Polish (Codex, 15min)
 - Full build verification

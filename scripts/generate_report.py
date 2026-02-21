@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS Report Generator - Board-Level Infrastructure Audit
+OpenRole Report Generator - Board-Level Infrastructure Audit
 
 Generates a Professional Diagnostic PDF using WeasyPrint and an HTML/CSS template,
 embodying the "Tech Luxury" design system.
@@ -103,19 +103,19 @@ def generate_report(audit_data: dict, output_path: str = None) -> str:
         recommendation = (
             'IMMEDIATE ACTION REQUIRED. Your employer brand infrastructure is critically exposed. '
             'AI agents are unable to find structured career data on your domain, resulting in '
-            'candidate traffic being redirected to third-party platforms. Deploy BrandOS Smart Pixel '
+            'candidate traffic being redirected to third-party platforms. Deploy OpenRole Smart Pixel '
             'to establish data sovereignty and reclaim your employer brand narrative.'
         )
     elif score < 80:
         recommendation = (
             'ACTION RECOMMENDED. Your employer brand has partial visibility to AI agents. '
             'Missing structured data is causing traffic leakage to competitors and job boards. '
-            'Deploy BrandOS Smart Pixel to complete your employer data infrastructure.'
+            'Deploy OpenRole Smart Pixel to complete your employer data infrastructure.'
         )
     else:
         recommendation = (
             'MAINTAIN VIGILANCE. Your employer brand infrastructure meets baseline requirements. '
-            'Continue monitoring for data drift and third-party hijacking. Consider BrandOS '
+            'Continue monitoring for data drift and third-party hijacking. Consider OpenRole '
             'BrandShield for automated compliance and hallucination detection.'
         )
         
@@ -153,7 +153,7 @@ def generate_report(audit_data: dict, output_path: str = None) -> str:
     if not output_path:
         safe_company = company.replace('.', '_').replace('/', '_').replace(' ', '_')
         timestamp_str = datetime.now().strftime('%Y%m%d_%H%M%S')
-        output_path = f'brandos_audit_{safe_company}_{timestamp_str}.pdf'
+        output_path = f'openrole_audit_{safe_company}_{timestamp_str}.pdf'
         
     css_path = script_dir / 'report_style.css'
     
@@ -195,7 +195,7 @@ def main():
     output_path = sys.argv[2] if len(sys.argv) > 2 else None
 
     print("\n" + "=" * 50)
-    print("  BRANDOS INFRASTRUCTURE AUDIT (v2)")
+    print("  OPENROLE INFRASTRUCTURE AUDIT (v2)")
     print("=" * 50)
     print(f"\n  Company:  {audit_data.get('company_domain', 'Unknown')}")
     print(f"  Score:    {audit_data.get('visibility_score', 0)}/100")

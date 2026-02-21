@@ -42,7 +42,7 @@ describe("buildPreflightResponse", () => {
       "https://any.customer.site"
     );
     expect(response.headers.get("Access-Control-Allow-Headers")).toContain(
-      "X-Rankwell-Key"
+      "X-OpenRole-Key"
     );
   });
 });

@@ -15,7 +15,7 @@
 - **URL:** https://arxiv.org/html/2506.00054v1
 - **Access Status:** ✅ FULL TEXT ACCESSED
 
-**Key Findings Supporting BrandOS:**
+**Key Findings Supporting OpenRole:**
 - "RAG addresses critical limitations of parametric knowledge storage—such as factual inconsistency and domain inflexibility"
 - "introduces new challenges in retrieval quality, grounding fidelity, pipeline efficiency, and robustness against noisy or adversarial inputs"
 - "retrieval noise and redundancy can degrade output quality; misalignment between retrieved evidence and generated text can lead to hallucinations"
@@ -29,7 +29,7 @@
 - **URL:** https://pmc.ncbi.nlm.nih.gov/articles/PMC9516509/
 - **Access Status:** ✅ FULL TEXT ACCESSED
 
-**Key Findings Supporting BrandOS:**
+**Key Findings Supporting OpenRole:**
 - "talent acquisition has transitioned from digital 1.0 to 3.0 (AI-enabled)"
 - "AI plays an important role in each stage of recruitment, such as recruitment promotion, job search, application, screening, assessment"
 - "traditional recruiting methods are failing to cope with the talent competition"
@@ -144,7 +144,7 @@
 - The technical approach (JSON-LD injection) is validated by Google's documentation
 - AI hallucination in RAG systems is a confirmed academic research area
 - AI recruitment adoption is accelerating (peer-reviewed evidence)
-- The core BrandOS concept addresses real, documented problems
+- The core OpenRole concept addresses real, documented problems
 
 **What Needs More Research:**
 - Specific pay transparency law impacts and compliance costs
@@ -163,7 +163,7 @@
 
 This represents an honest assessment of actual sources accessed during the research session. While the core business thesis remains valid, the initial claims about research depth were overstated. This corrected document provides transparent methodology and appropriate confidence levels for each finding.
 
-The BrandOS concept is still strongly supported by available evidence, but additional research is needed for complete validation.
+The OpenRole concept is still strongly supported by available evidence, but additional research is needed for complete validation.
 
 ---
 

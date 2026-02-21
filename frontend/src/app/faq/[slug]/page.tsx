@@ -138,7 +138,7 @@ const faqContent: Record<string, FaqContent> = {
 
   "how-scoring-works": {
     question: "How does the AI Visibility Score work?",
-    category: "How Rankwell Works",
+    category: "How OpenRole Works",
     relatedSlugs: ["what-is-ai-visibility", "what-is-llms-txt"],
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
@@ -248,7 +248,7 @@ const faqContent: Record<string, FaqContent> = {
     relatedSlugs: ["what-is-the-pixel", "data-handling"],
     content: `
       <p class="text-lg text-slate-600 leading-relaxed mb-8">
-        Yes. The Rankwell pixel is designed with security as the primary concern — because
+        Yes. The OpenRole pixel is designed with security as the primary concern — because
         we're asking you to put code on your website, and that requires trust.
       </p>
 
@@ -347,10 +347,10 @@ const allFaqTitles: Record<string, string> = {
   "which-ai-models-matter": "Which AI models matter for employer brand?",
   "how-scoring-works": "How does the AI Visibility Score work?",
   "what-is-llms-txt": "Does llms.txt help with AI visibility?",
-  "what-is-the-pixel": "What does the Rankwell pixel do?",
+  "what-is-the-pixel": "What does the OpenRole pixel do?",
   "how-often-are-audits-updated": "How often is AI monitoring updated?",
   "pixel-security": "Is the pixel safe to install?",
-  "data-handling": "How does Rankwell handle our company data?",
+  "data-handling": "How does OpenRole handle our company data?",
   "free-vs-paid": "What's included free vs paid?",
   "which-plan-do-i-need": "Which plan is right for my company?",
 };
@@ -362,12 +362,12 @@ const allFaqTitles: Record<string, string> = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const faq = faqContent[slug];
-  if (!faq) return { title: "FAQ | Rankwell" };
+  if (!faq) return { title: "FAQ | OpenRole" };
 
   return {
-    title: `${faq.question} | Rankwell FAQ`,
+    title: `${faq.question} | OpenRole FAQ`,
     description: faq.question,
-    alternates: { canonical: `https://rankwell.io/faq/${slug}` },
+    alternates: { canonical: `https://openrole.co.uk/faq/${slug}` },
   };
 }
 

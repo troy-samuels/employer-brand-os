@@ -1,4 +1,4 @@
-# BRANDOS RESEARCH VALIDATION: EXECUTIVE SUMMARY
+# OPENROLE RESEARCH VALIDATION: EXECUTIVE SUMMARY
 **Research Agent:** Malcolm  
 **Date:** February 6, 2026  
 **Validation Sources:** 200+ academic papers, industry reports, technical docs  
@@ -45,7 +45,7 @@
 ### **Compliance-First Positioning** ✅ VALIDATED  
 - **Why**: Legal pain creates urgent purchase decisions
 - **Evidence**: Companies face $50k-300k fines for non-compliance
-- **ROI**: BrandOS at $899/month vs legal consulting at $50k/year
+- **ROI**: OpenRole at $899/month vs legal consulting at $50k/year
 
 ### **Technical Architecture** ✅ SOLO-FOUNDER READY
 - **5KB JavaScript pixel**: Minimal performance impact, enterprise-safe
@@ -97,7 +97,7 @@
 
 ### **Risk 2: ATS Vendors Add Native JSON-LD**  
 - **Probability**: High
-- **Mitigation**: BrandOS adds compliance intelligence beyond basic markup
+- **Mitigation**: OpenRole adds compliance intelligence beyond basic markup
 - **Differentiation**: Legal expertise + automation vs generic schema
 
 ### **Risk 3: Economic Downturn Reduces HR Tech Spending**
@@ -109,10 +109,10 @@
 
 ## 💡 UNEXPECTED RESEARCH FINDINGS
 
-### **Finding 1: Glassdoor Actively Blocks Bots** ✅ VALIDATES BRANDOS THESIS
+### **Finding 1: Glassdoor Actively Blocks Bots** ✅ VALIDATES OPENROLE THESIS
 - **Discovery**: Hit Cloudflare security during research
 - **Implication**: Companies ARE protecting their data from AI scraping
-- **Opportunity**: BrandOS provides "authoritative source" alternative
+- **Opportunity**: OpenRole provides "authoritative source" alternative
 
 ### **Finding 2: Google Explicitly Recommends This Approach**
 - **Source**: developers.google.com/search/docs/appearance/structured-data/job-posting
@@ -122,7 +122,7 @@
 ### **Finding 3: Academic Research Confirms RAG Limitations**  
 - **Papers**: 40+ recent studies on AI hallucination in retrieval systems
 - **Finding**: Structured, timestamped data significantly reduces hallucinations
-- **BrandOS Solution**: Directly addresses core technical limitation
+- **OpenRole Solution**: Directly addresses core technical limitation
 
 ---
 

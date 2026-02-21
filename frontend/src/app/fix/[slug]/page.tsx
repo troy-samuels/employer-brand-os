@@ -79,13 +79,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!audit) {
     return {
-      title: "Fix It — Company Not Found | Rankwell",
+      title: "Fix It — Company Not Found | OpenRole",
       description: "This company hasn't been audited yet.",
     };
   }
 
   return {
-    title: `Fix Your AI Visibility — ${audit.company_name} | Rankwell`,
+    title: `Fix Your AI Visibility — ${audit.company_name} | OpenRole`,
     description: `Copy-paste fixes to improve ${audit.company_name}'s AI visibility score from ${audit.score}/100. Fix JSON-LD structured data, content format, careers page, and robots.txt issues.`,
     robots: { index: false, follow: true },
   };

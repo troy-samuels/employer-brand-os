@@ -18,7 +18,7 @@ The search landscape has undergone a fundamental transformation in 2025-2026, dr
 
 - **Employer Brand Risk:** Without GEO optimization, employer brands face AI-mediated misrepresentation, hallucinations, and invisibility to the fastest-growing segment of job candidates.
 
-**The Rankwell Opportunity:** As the first AI Reputation Intelligence tool purpose-built for the employer branding vertical, Rankwell addresses a critical market gap at the intersection of a $17B employer branding industry and the emerging GEO category.
+**The OpenRole Opportunity:** As the first AI Reputation Intelligence tool purpose-built for the employer branding vertical, OpenRole addresses a critical market gap at the intersection of a $17B employer branding industry and the emerging GEO category.
 
 ---
 
@@ -544,7 +544,7 @@ The GEO/AI SEO market has emerged rapidly in 2024-2025, with three distinct wave
 5. **Attribution:** No direct tracking of "hired candidates influenced by AI research"
 6. **Integration with ATS/HCM:** No workforce tech integrations
 
-**Rankwell's Unique Differentiators:**
+**OpenRole's Unique Differentiators:**
 
 1. **Employer Brand Vertical Focus:**
    - Pre-built prompt library for hiring-related queries
@@ -604,7 +604,7 @@ The GEO/AI SEO market has emerged rapidly in 2024-2025, with three distinct wave
 | Employee Advocacy | $15K-$50K | LinkedIn Elevate, PostBeyond |
 | **Total TA Tech Stack** | **$365K-$1.4M** | |
 
-**Where Rankwell Fits:**
+**Where OpenRole Fits:**
 
 - **Budget Line:** "Employer Brand Tech" or "Recruitment Marketing Tech"
 - **Realistic Price Point:** £15K-£45K annually (Starter to Enterprise tiers)
@@ -634,7 +634,7 @@ The GEO/AI SEO market has emerged rapidly in 2024-2025, with three distinct wave
 - **Application volume loss:** 10-20% in AI-influenced candidates
 - **Cost to company:** $50K-$150K annually in additional sourcing/headhunter costs
 
-**Rankwell ROI:**
+**OpenRole ROI:**
 
 - **Cost:** £25K/year
 - **Benefit:** Prevent $50K-$150K in lost productivity and increased hiring costs
@@ -649,11 +649,11 @@ The GEO/AI SEO market has emerged rapidly in 2024-2025, with three distinct wave
 - **Career Site & Tech:** 15-20%
 - **Social Media Advertising:** 10-15%
 - **Events/Campus Recruiting:** 5-10%
-- **Analytics & Optimization:** 5-10% **← Rankwell fits here**
+- **Analytics & Optimization:** 5-10% **← OpenRole fits here**
 
 **Market Opportunity Math:**
 
-- **UK Enterprise Employers (1,200)** × **£25K average Rankwell spend** = **£30M UK TAM**
+- **UK Enterprise Employers (1,200)** × **£25K average OpenRole spend** = **£30M UK TAM**
 - **UK + Europe + US Mid-Market & Enterprise (15,000 companies)** × **£30K avg** = **£450M ($585M) Global TAM**
 
 ---
@@ -668,15 +668,15 @@ The GEO/AI SEO market has emerged rapidly in 2024-2025, with three distinct wave
 
 3. **The Market Timing Is Perfect:** GEO category is nascent (12-18 months old), but awareness is growing rapidly. Early movers can define the employer brand vertical.
 
-4. **No Vertical Leader Exists:** Profound and Otterly serve all brands generically. Rankwell can own the employer brand niche.
+4. **No Vertical Leader Exists:** Profound and Otterly serve all brands generically. OpenRole can own the employer brand niche.
 
-5. **The ROI Is Demonstrable:** Poor employer brand representation costs £50K-£150K annually in lost candidates. Rankwell's £15K-£45K pricing delivers clear positive ROI.
+5. **The ROI Is Demonstrable:** Poor employer brand representation costs £50K-£150K annually in lost candidates. OpenRole's £15K-£45K pricing delivers clear positive ROI.
 
-### 8.2 Strategic Recommendations for Rankwell
+### 8.2 Strategic Recommendations for OpenRole
 
 **Positioning:**
 
-**"Rankwell: AI Reputation Intelligence for Employers"**
+**"OpenRole: AI Reputation Intelligence for Employers"**
 
 Tagline: *"See how AI describes your company to job candidates. Fix what's broken. Win the talent war."*
 
@@ -903,9 +903,9 @@ Use this framework to calculate the ROI of investing in AI employer brand optimi
 8. **Increased Cost-Per-Hire Due to Smaller Pool:** £_____
 9. **Annual Cost of AI Misrepresentation:** (7 × 3) + (8 × 1) = £_____
 
-**Rankwell Investment:**
+**OpenRole Investment:**
 
-10. **Annual Rankwell Subscription:** £15,000 - £45,000
+10. **Annual OpenRole Subscription:** £15,000 - £45,000
 11. **Internal Resource Time (monitoring + optimization):** £_____ (estimate 0.2 FTE = ~£10K)
 12. **Total Investment:** (10 + 11) = £_____
 
@@ -920,7 +920,7 @@ Use this framework to calculate the ROI of investing in AI employer brand optimi
 
 - Company: 200 hires/year, £5,000 cost-per-hire
 - AI Impact: 15% higher cost-per-hire = £150K annual loss
-- Rankwell Cost: £25K + £10K internal = £35K
+- OpenRole Cost: £25K + £10K internal = £35K
 - Benefit: 70% reduction in AI impact = £105K savings
 - Net Benefit: £70K
 - **ROI: 200%**
@@ -964,7 +964,7 @@ Use this framework to calculate the ROI of investing in AI employer brand optimi
 **Version:** 1.0  
 **Date:** February 2026  
 **Author:** Malcolm (Clawdbot AI Research Agent)  
-**Commissioned By:** Rankwell / Troy Samuels  
+**Commissioned By:** OpenRole / Troy Samuels  
 **Purpose:** PhD-level market research for AI SEO + Employer Brand intersection
 
 **Changelog:**

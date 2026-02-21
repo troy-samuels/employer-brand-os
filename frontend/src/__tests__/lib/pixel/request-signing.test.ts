@@ -33,9 +33,9 @@ function createSignedRequest(input: {
   return new NextRequest(input.url, {
     method,
     headers: {
-      "X-Rankwell-Timestamp": input.timestamp,
-      "X-Rankwell-Nonce": input.nonce,
-      "X-Rankwell-Signature": signature,
+      "X-OpenRole-Timestamp": input.timestamp,
+      "X-OpenRole-Nonce": input.nonce,
+      "X-OpenRole-Signature": signature,
     },
   });
 }
@@ -43,7 +43,7 @@ function createSignedRequest(input: {
 describe("verifyPixelRequestSignature", () => {
   it("accepts valid signatures within the default 5-minute window", () => {
     const request = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_valid123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_valid123456",
       secret: "bos_live_valid123456",
       timestamp: "1000",
       nonce: "nonce-valid-window",
@@ -58,7 +58,7 @@ describe("verifyPixelRequestSignature", () => {
 
   it("rejects requests outside the allowed timestamp window", () => {
     const request = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_old123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_old123456",
       secret: "bos_live_old123456",
       timestamp: "1000",
       nonce: "nonce-old-window",
@@ -76,7 +76,7 @@ describe("verifyPixelRequestSignature", () => {
 
   it("detects replay attacks for duplicate nonce values", () => {
     const request = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_replay123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_replay123456",
       secret: "bos_live_replay123456",
       timestamp: "2000",
       nonce: "nonce-replay",
@@ -104,13 +104,13 @@ describe("verifyPixelRequestSignature", () => {
 
   it("allows nonce reuse after expiry cleanup", () => {
     const firstRequest = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_cleanup123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_cleanup123456",
       secret: "bos_live_cleanup123456",
       timestamp: "3000",
       nonce: "nonce-cleanup",
     });
     const secondRequest = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_cleanup123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_cleanup123456",
       secret: "bos_live_cleanup123456",
       timestamp: "3006",
       nonce: "nonce-cleanup",
@@ -142,7 +142,7 @@ describe("verifyPixelRequestSignature", () => {
 
     for (let index = 0; index < 20; index += 1) {
       const request = createSignedRequest({
-        url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_trim123456",
+        url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_trim123456",
         secret,
         timestamp: "4000",
         nonce: `nonce-trim-${index}`,
@@ -158,7 +158,7 @@ describe("verifyPixelRequestSignature", () => {
     }
 
     const replayLatest = createSignedRequest({
-      url: "https://rankwell.test/api/pixel/v1/facts?key=bos_live_trim123456",
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_trim123456",
       secret,
       timestamp: "4000",
       nonce: "nonce-trim-19",

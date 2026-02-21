@@ -103,7 +103,7 @@ export interface CostCalculatorInput {
 export interface CostCalculationResult {
   /** Estimated wasted spend per month in GBP. */
   monthlyWastedSpend: number;
-  /** ROI multiplier versus Rankwell Pro subscription cost. */
+  /** ROI multiplier versus OpenRole Pro subscription cost. */
   roi: number;
 }
 
@@ -133,9 +133,9 @@ export const DEFAULT_ESTIMATED_DROPOFF = 0.2;
 export const DEFAULT_VIEWS_PER_HIRE = 100;
 
 /**
- * Rankwell Pro monthly subscription price in GBP.
+ * OpenRole Pro monthly subscription price in GBP.
  */
-export const RANKWELL_PRO_MONTHLY_PRICE_GBP = 299;
+export const OPENROLE_PRO_MONTHLY_PRICE_GBP = 299;
 
 /**
  * Parse a salary range from a free-text AI response.
@@ -228,7 +228,7 @@ export function calculateMisinformationCost(
 
   return {
     monthlyWastedSpend: roundTo(monthlyWastedSpend, 2),
-    roi: roundTo(monthlyWastedSpend / RANKWELL_PRO_MONTHLY_PRICE_GBP, 2),
+    roi: roundTo(monthlyWastedSpend / OPENROLE_PRO_MONTHLY_PRICE_GBP, 2),
   };
 }
 

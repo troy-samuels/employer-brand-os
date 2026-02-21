@@ -292,7 +292,7 @@ function BotProtectCard({ blockedUrl }: BotProtectCardProps) {
         href="/pricing"
         className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
       >
-        Fix this with the Rankwell pixel
+        Fix this with the OpenRole pixel
         <ArrowSquareOut size={15} weight="bold" />
       </a>
 

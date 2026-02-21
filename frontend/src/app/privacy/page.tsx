@@ -13,22 +13,22 @@ import { Footer } from '@/components/shared/footer';
 export const metadata: Metadata = {
   title: 'Privacy Policy',
   description:
-    'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+    'How OpenRole collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
   openGraph: {
-    title: 'Privacy Policy | Rankwell',
+    title: 'Privacy Policy | OpenRole',
     description:
-      'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
-    url: 'https://rankwell.io/privacy',
+      'How OpenRole collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+    url: 'https://openrole.co.uk/privacy',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Privacy Policy | Rankwell',
+    title: 'Privacy Policy | OpenRole',
     description:
-      'How Rankwell collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
+      'How OpenRole collects, uses, and protects your data. GDPR and UK DPA 2018 compliant.',
   },
   alternates: {
-    canonical: 'https://rankwell.io/privacy',
+    canonical: 'https://openrole.co.uk/privacy',
   },
   robots: {
     index: true,
@@ -63,18 +63,18 @@ export default function PrivacyPage() {
               1. Who we are
             </h2>
             <p>
-              Rankwell (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
-              operates the website rankwell.io and provides employer brand audit
+              OpenRole (&ldquo;we&rdquo;, &ldquo;us&rdquo;, &ldquo;our&rdquo;)
+              operates the website openrole.co.uk and provides employer brand audit
               and optimisation services. We are the data controller for the
               personal data described in this policy.
             </p>
             <p className="mt-2">
               Contact:{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>
             </p>
           </section>
@@ -139,7 +139,7 @@ export default function PrivacyPage() {
             <ul className="list-disc pl-5 space-y-1">
               <li>To generate and deliver your employer brand audit report</li>
               <li>
-                To provide the Rankwell pixel service and AI visibility metrics
+                To provide the OpenRole pixel service and AI visibility metrics
               </li>
               <li>To communicate with you about your account and audit results</li>
               <li>To detect and prevent abuse, fraud, and security incidents</li>
@@ -257,10 +257,10 @@ export default function PrivacyPage() {
             <p className="mt-2">
               To exercise any of these rights, email{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>
               . We respond within 30 days. Deletion requests are processed
               within 48 hours.
@@ -296,7 +296,7 @@ export default function PrivacyPage() {
               9. Cookies
             </h2>
             <p>
-              Rankwell uses only strictly necessary cookies for session
+              OpenRole uses only strictly necessary cookies for session
               management. We do not use tracking cookies, analytics cookies, or
               advertising cookies. No cookie banner is required because we do not
               use optional cookies.
@@ -309,14 +309,14 @@ export default function PrivacyPage() {
               10. Children&apos;s data
             </h2>
             <p>
-              Rankwell is a business-to-business service. We do not knowingly
+              OpenRole is a business-to-business service. We do not knowingly
               collect personal data from anyone under 18. If you believe a minor
               has submitted data to us, contact{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>{' '}
               and we will delete it promptly.
             </p>
@@ -343,10 +343,10 @@ export default function PrivacyPage() {
             <p>
               For any privacy-related questions or concerns, contact us at{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>
               .
             </p>

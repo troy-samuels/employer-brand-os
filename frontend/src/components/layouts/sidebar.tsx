@@ -79,7 +79,7 @@ export function Sidebar() {
       <div className="px-6 py-6">
         <Link href="/dashboard">
           <span className="text-base font-semibold tracking-tight text-sidebar-primary">
-            Rankwell
+            OpenRole
           </span>
         </Link>
       </div>

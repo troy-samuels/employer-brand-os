@@ -13,22 +13,22 @@ import { Footer } from '@/components/shared/footer';
 export const metadata: Metadata = {
   title: 'Data Processing Agreement',
   description:
-    'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
+    'Standard Data Processing Agreement for OpenRole enterprise customers. GDPR Article 28 compliant.',
   openGraph: {
-    title: 'Data Processing Agreement | Rankwell',
+    title: 'Data Processing Agreement | OpenRole',
     description:
-      'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
-    url: 'https://rankwell.io/dpa',
+      'Standard Data Processing Agreement for OpenRole enterprise customers. GDPR Article 28 compliant.',
+    url: 'https://openrole.co.uk/dpa',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Data Processing Agreement | Rankwell',
+    title: 'Data Processing Agreement | OpenRole',
     description:
-      'Standard Data Processing Agreement for Rankwell enterprise customers. GDPR Article 28 compliant.',
+      'Standard Data Processing Agreement for OpenRole enterprise customers. GDPR Article 28 compliant.',
   },
   alternates: {
-    canonical: 'https://rankwell.io/dpa',
+    canonical: 'https://openrole.co.uk/dpa',
     },
   robots: {
     index: false,
@@ -57,8 +57,8 @@ export default function DpaPage() {
         </p>
         <p className="mt-6 text-slate-600 leading-relaxed">
           This Data Processing Agreement (&ldquo;DPA&rdquo;) forms part of the
-          agreement between Rankwell (&ldquo;Processor&rdquo;) and the
-          organisation using Rankwell services (&ldquo;Controller&rdquo;), in
+          agreement between OpenRole (&ldquo;Processor&rdquo;) and the
+          organisation using OpenRole services (&ldquo;Controller&rdquo;), in
           accordance with GDPR Article 28 and the UK Data Protection Act 2018.
         </p>
 
@@ -69,14 +69,14 @@ export default function DpaPage() {
               1. Scope &amp; purpose
             </h2>
             <p>
-              Rankwell processes personal data on behalf of the Controller solely
+              OpenRole processes personal data on behalf of the Controller solely
               for the purpose of providing employer brand audit and optimisation
               services, including:
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
               <li>Generating employer brand audit reports</li>
               <li>
-                Operating the Rankwell pixel to serve structured employer data
+                Operating the OpenRole pixel to serve structured employer data
               </li>
               <li>Providing verified employer profile pages</li>
               <li>Delivering AI visibility metrics and monitoring</li>
@@ -148,7 +148,7 @@ export default function DpaPage() {
               </table>
             </div>
             <p className="mt-3 text-sm text-slate-500">
-              No special category data (Article 9) is processed. The Rankwell
+              No special category data (Article 9) is processed. The OpenRole
               pixel does not process any personal data of website visitors.
             </p>
           </section>
@@ -158,7 +158,7 @@ export default function DpaPage() {
             <h2 className="text-xl font-semibold text-slate-900 mb-3">
               3. Processor obligations
             </h2>
-            <p>Rankwell shall:</p>
+            <p>OpenRole shall:</p>
             <ul className="list-disc pl-5 space-y-2 mt-2">
               <li>
                 Process personal data only on documented instructions from the
@@ -208,7 +208,7 @@ export default function DpaPage() {
               4. Security measures
             </h2>
             <p>
-              Rankwell implements the following technical and organisational
+              OpenRole implements the following technical and organisational
               measures:
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
@@ -293,7 +293,7 @@ export default function DpaPage() {
               7. Breach notification
             </h2>
             <p>
-              In the event of a personal data breach, Rankwell shall notify the
+              In the event of a personal data breach, OpenRole shall notify the
               Controller within 24 hours, providing:
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2">
@@ -310,7 +310,7 @@ export default function DpaPage() {
               8. Termination
             </h2>
             <p>
-              Upon termination of the agreement, Rankwell shall, at the
+              Upon termination of the agreement, OpenRole shall, at the
               Controller&apos;s choice, delete or return all personal data within
               30 days. Proof of deletion will be provided upon request. Backup
               copies are purged within 90 days of termination.
@@ -338,10 +338,10 @@ export default function DpaPage() {
               Enterprise customers requiring a signed copy of this DPA, or
               custom amendments, should contact{' '}
               <a
-                href="mailto:privacy@rankwell.io"
+                href="mailto:privacy@openrole.co.uk"
                 className="text-teal-700 underline underline-offset-2"
               >
-                privacy@rankwell.io
+                privacy@openrole.co.uk
               </a>
               . We typically return signed agreements within 2 business days.
             </p>

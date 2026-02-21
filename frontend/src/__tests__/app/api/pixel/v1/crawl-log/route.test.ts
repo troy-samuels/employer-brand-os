@@ -48,16 +48,16 @@ vi.mock("@/lib/pixel/health", () => ({
 }));
 
 function createPostRequest(body: string): NextRequest {
-  return new NextRequest("https://rankwell.test/api/pixel/v1/crawl-log", {
+  return new NextRequest("https://openrole.test/api/pixel/v1/crawl-log", {
     method: "POST",
     headers: {
       "content-type": "application/json",
       origin: "https://jobs.example.com",
       referer: "https://jobs.example.com/careers",
-      "x-rankwell-key": "bos_live_valid1234567890",
-      "x-rankwell-signature": "signature",
-      "x-rankwell-timestamp": "1700000000",
-      "x-rankwell-nonce": "nonce-1",
+      "x-openrole-key": "bos_live_valid1234567890",
+      "x-openrole-signature": "signature",
+      "x-openrole-timestamp": "1700000000",
+      "x-openrole-nonce": "nonce-1",
     },
     body,
   });
@@ -85,7 +85,7 @@ describe("POST /api/pixel/v1/crawl-log", () => {
   });
 
   it("returns permissive preflight headers for browser preflight", async () => {
-    const request = new NextRequest("https://rankwell.test/api/pixel/v1/crawl-log", {
+    const request = new NextRequest("https://openrole.test/api/pixel/v1/crawl-log", {
       method: "OPTIONS",
       headers: {
         origin: "https://jobs.example.com",

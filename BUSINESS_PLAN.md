@@ -1,6 +1,6 @@
-# BrandOS: Strategic Business Plan (2026)
+# OpenRole: Strategic Business Plan (2026)
 
-**One-Line Pitch:** BrandOS is the employment data infrastructure layer for the AI age—a "Smart Pixel" that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
+**One-Line Pitch:** OpenRole is the employment data infrastructure layer for the AI age—a "Smart Pixel" that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
 
 ---
 
@@ -12,7 +12,7 @@
 1. **Invisible:** Their ATS (Applicant Tracking System) outputs messy HTML that AI agents cannot read, causing a 40% drop in traffic.
 2. **Illegal:** New 2026 Pay Transparency laws (EU Directive, NY/CA/CO) require strict salary disclosures that legacy systems fail to automate.
 
-**The Solution:** BrandOS is the **"Stripe for Employer Truth."** We provide a Smart Pixel that overlays a company's existing site. It intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
+**The Solution:** OpenRole is the **"Stripe for Employer Truth."** We provide a Smart Pixel that overlays a company's existing site. It intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
 
 **The Unfair Advantage:** We launch with a proprietary database of **460,000 employer contacts** and a "Wholesale Channel" strategy targeting Recruitment Agencies to scale without a massive sales team.
 
@@ -23,7 +23,7 @@
 *Applying Peter Thiel's Principle: "What important truth do very few people agree with you on?"*
 
 - **The Contrarian Truth:** The Applicant Tracking System (ATS) is a database for *storage*, not *discovery*. ATS giants (Workday, Greenhouse) will not solve the AI data problem because their data is internal, messy, and unstructured.
-- **The Opportunity:** A "Neutral Standardization Layer" is required between the messy Internal ATS and the public AI Web. BrandOS is that layer.
+- **The Opportunity:** A "Neutral Standardization Layer" is required between the messy Internal ATS and the public AI Web. OpenRole is that layer.
 - **The "Hair on Fire" Pain:** In 2026, companies don't care about "Brand Reputation." They care about **Compliance Fines** (Regulatory Risk) and **Ghosting** (Traffic Risk). We sell the cure to these immediate pains.
 
 ---
@@ -37,7 +37,7 @@
 - **ATS Defense:** The **"Sanitization Engine."** We don't just display data; we translate it.
   - *Example:* Internal Code `L4-Eng-NY` → Public Title `Senior Software Engineer`.
   - *Benefit:* Keeps internal mess private while making public data pristine for AI.
-- **CSP Fallback:** If a client's security blocks our script, we auto-provision a **"Hosted Truth Mirror"** (`jobs.brandos.io/client`) that guarantees visibility regardless of IT settings.
+- **CSP Fallback:** If a client's security blocks our script, we auto-provision a **"Hosted Truth Mirror"** (`jobs.openrole.co.uk/client`) that guarantees visibility regardless of IT settings.
 
 ### Layer 2: Compliance (Automated Guardrails & Safety)
 *The "Moat" & Retention.*
@@ -50,7 +50,7 @@
 
 - **Problem:** Infrastructure is invisible. CFOs cancel what they can't see.
 - **Solution:** The **"Monday Morning Visibility Report."** An automated email sent to stakeholders:
-  - *"This week, BrandOS served 14,000 structured data points to Google/OpenAI."*
+  - *"This week, OpenRole served 14,000 structured data points to Google/OpenAI."*
   - *"We auto-corrected 3 non-compliant job posts, preventing potential fines."*
   - *"Your 'Senior Dev' role is now ranking #1 on Google Jobs."*
 
@@ -70,7 +70,7 @@
 *Target: High-Volume Franchises & Retail (The "Desperate Middle").*
 
 1. **The Hook:** Automate a scan of their site.
-2. **The Pitch:** "You are invisible to 40% of candidates because your ATS blocks AI agents. I ran a scan: Google Jobs is hiding your listings. BrandOS fixes the code instantly."
+2. **The Pitch:** "You are invisible to 40% of candidates because your ATS blocks AI agents. I ran a scan: Google Jobs is hiding your listings. OpenRole fixes the code instantly."
 3. **The Close:** "This also automates your EU/NY Pay Transparency compliance."
 
 ### Accelerator Motion: The "Agency Partner" Channel
@@ -78,7 +78,7 @@
 *Target: Recruitment Marketing Agencies (RMAs) managing 50+ locations.*
 
 - **The Problem:** Agencies are being fired because their clients aren't getting applicants.
-- **The Pitch:** "Whitelabel BrandOS for your 50 clients. You get credit for 'Fixing their AI Strategy' and ensuring compliance. You buy at wholesale, sell at retail."
+- **The Pitch:** "Whitelabel OpenRole for your 50 clients. You get credit for 'Fixing their AI Strategy' and ensuring compliance. You buy at wholesale, sell at retail."
 - **Why this wins:** We sell to 1 Agency → We acquire 50 Clients. This solves the "Solo Founder Sales Bottleneck."
 
 ---

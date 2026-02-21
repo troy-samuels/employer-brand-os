@@ -5,7 +5,7 @@
 
 /**
  * Smart Pixel Feature
- * Public exports for the Rankwell Smart Pixel infrastructure
+ * Public exports for the OpenRole Smart Pixel infrastructure
  */
 
 // Types

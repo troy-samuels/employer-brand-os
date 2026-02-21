@@ -1,4 +1,4 @@
-# Rankwell Analytics & Authority Engine — Spec
+# OpenRole Analytics & Authority Engine — Spec
 
 **Purpose:** Turn raw audit data into the definitive authority on how AI represents employers. Every audit feeds the flywheel. The data becomes the moat.
 
@@ -318,15 +318,15 @@ GET /api/insights/stats
     pctNoSalary: 78,
     pctBotBlocked: 23,
     lastUpdated: "2026-03-01",
-    citation: "Source: Rankwell AI Visibility Index, rankwell.io/insights"
+    citation: "Source: OpenRole AI Visibility Index, openrole.co.uk/insights"
   }
 ```
 
 Embed widget:
 ```html
-<script src="https://rankwell.io/embed/stats.js"></script>
+<script src="https://openrole.co.uk/embed/stats.js"></script>
 ```
-Renders a small "Powered by Rankwell" stat card. Free backlink.
+Renders a small "Powered by OpenRole" stat card. Free backlink.
 
 ---
 

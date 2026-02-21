@@ -46,7 +46,7 @@ export function buildCorsHeaders(
   headers.set(
     'Access-Control-Allow-Headers',
     options?.allowHeaders ??
-      'Content-Type, X-Rankwell-Key, X-Rankwell-Timestamp, X-Rankwell-Nonce, X-Rankwell-Signature'
+      'Content-Type, X-OpenRole-Key, X-OpenRole-Timestamp, X-OpenRole-Nonce, X-OpenRole-Signature'
   );
 
   // Cache preflight for 24 hours
@@ -72,7 +72,7 @@ export function buildSuccessHeaders(origin?: string | null): Headers {
   headers.set('Content-Type', 'application/ld+json; charset=utf-8');
 
   // Version header for debugging
-  headers.set('X-Rankwell-Version', '1.0');
+  headers.set('X-OpenRole-Version', '1.0');
 
   if (origin) {
     const corsHeaders = buildCorsHeaders(origin);

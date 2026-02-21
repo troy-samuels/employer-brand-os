@@ -57,9 +57,9 @@ export async function GET(
     }
 
     const keyResult = await requireApiKey(
-      request.headers.get("X-Rankwell-Key") ??
-        request.headers.get("X-Rankwell-Pixel-ID") ??
-        request.headers.get("X-BrandOS-Pixel-ID") ??
+      request.headers.get("X-OpenRole-Key") ??
+        request.headers.get("X-OpenRole-Pixel-ID") ??
+        request.headers.get("X-OpenRole-Pixel-ID") ??
         new URL(request.url).searchParams.get("key"),
       request,
       "pixel.companies.employment-data",

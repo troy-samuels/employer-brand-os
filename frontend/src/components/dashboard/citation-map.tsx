@@ -553,7 +553,7 @@ export default function CitationMap({ report = MOCK_REPORT }: CitationMapProps) 
             Take control of your citations
           </h3>
           <p className="text-sm text-neutral-400">
-            Install the Rankwell pixel to serve verified data directly to AI models —
+            Install the OpenRole pixel to serve verified data directly to AI models —
             replace Reddit threads and outdated Glassdoor reviews with your own facts.
           </p>
         </div>
@@ -561,7 +561,7 @@ export default function CitationMap({ report = MOCK_REPORT }: CitationMapProps) 
           href="/pricing"
           className="inline-flex items-center gap-1.5 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-neutral-950 hover:bg-neutral-100 transition-colors shrink-0"
         >
-          Install the Rankwell pixel
+          Install the OpenRole pixel
           <ArrowRight className="h-3.5 w-3.5" />
         </Link>
       </div>

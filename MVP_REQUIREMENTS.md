@@ -1,4 +1,4 @@
-# BrandOS MVP Requirements
+# OpenRole MVP Requirements
 **Date:** 7 February 2026
 **Goal:** Ship in 2 weeks. Prove the value proposition. Get the first 10 paying customers.
 
@@ -20,7 +20,7 @@ Everything else waits.
 
 ### What it does
 - Employer enters their company name
-- BrandOS queries ChatGPT, Claude, and Perplexity with 5 standardised prompts:
+- OpenRole queries ChatGPT, Claude, and Perplexity with 5 standardised prompts:
   - "What does [Company] pay a [common role] in [location]?"
   - "What is it like to work at [Company]?"
   - "What benefits does [Company] offer?"
@@ -79,10 +79,10 @@ Everything else waits.
   - Open roles (add multiple: title, department, location, salary range, remote/hybrid/onsite)
   - Benefits (checkboxes: pension, private healthcare, equity, remote work, flexible hours, learning budget, gym, etc.)
   - Culture statement (text area, 500 chars max)
-- From this, BrandOS auto-generates:
+- From this, OpenRole auto-generates:
 
 ### Hosted Profile
-`brandos.ai/company/[slug]`
+`openrole.co.uk/company/[slug]`
 
 A public page containing:
 - Clean, professional employer profile (company info, roles, benefits, culture)
@@ -91,7 +91,7 @@ A public page containing:
 - Individual llms.txt for the employer
 
 ### Public API Endpoint
-`brandos.ai/api/v1/employers/[slug]`
+`openrole.co.uk/api/v1/employers/[slug]`
 
 Returns structured JSON:
 ```json
@@ -121,16 +121,16 @@ Returns structured JSON:
 ```
 
 ### Master llms.txt
-`brandos.ai/llms.txt`
+`openrole.co.uk/llms.txt`
 
 Indexes every employer on the platform:
 ```
-# BrandOS — Verified Employer Data for AI
-> BrandOS provides verified, structured employer data for AI agents.
+# OpenRole — Verified Employer Data for AI
+> OpenRole provides verified, structured employer data for AI agents.
 
 ## Employers
-- [Acme Corp](https://brandos.ai/company/acme-corp)
-- [Example Ltd](https://brandos.ai/company/example-ltd)
+- [Acme Corp](https://openrole.co.uk/company/acme-corp)
+- [Example Ltd](https://openrole.co.uk/company/example-ltd)
 ...
 ```
 
@@ -342,7 +342,7 @@ Two tiers. No decision paralysis.
 
 | User | Why they sign up | Path |
 |---|---|---|
-| **Small employer, no website** | Posts to Indeed/LinkedIn which blocks AI. BrandOS IS their AI presence. | Free → Pro when they hit 4+ roles or want monitoring |
+| **Small employer, no website** | Posts to Indeed/LinkedIn which blocks AI. OpenRole IS their AI presence. | Free → Pro when they hit 4+ roles or want monitoring |
 | **Employer with careers page** | Site exists but AI can't read it. Needs structured data + monitoring. | Free audit → Pro for embed snippet + ongoing monitoring |
 | **Brand-focused employer** | Cares what AI says about reputation, culture, compensation. May not be actively hiring. | Free audit → Pro for weekly brand tracking + sentiment alerts |
 
@@ -356,7 +356,7 @@ Two tiers. No decision paralysis.
 - [ ] Perplexity API key configured
 - [ ] Resend account + API key
 - [ ] Stripe payment links (Starter + Growth)
-- [ ] Domain: brandos.ai or employer-brand-os.com
+- [ ] Domain: openrole.co.uk or employer-openrole.com
 - [ ] Free audit tool live
 - [ ] Onboarding flow working
 - [ ] Hosted profiles generating

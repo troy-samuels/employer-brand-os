@@ -13,22 +13,22 @@ import { Footer } from '@/components/shared/footer';
 export const metadata: Metadata = {
   title: 'Security',
   description:
-    'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+    'How OpenRole protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
   openGraph: {
-    title: 'Security | Rankwell',
+    title: 'Security | OpenRole',
     description:
-      'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
-    url: 'https://rankwell.io/security',
+      'How OpenRole protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+    url: 'https://openrole.co.uk/security',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Security | Rankwell',
+    title: 'Security | OpenRole',
     description:
-      'How Rankwell protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
+      'How OpenRole protects your data. Infrastructure, encryption, compliance, and our commitment to enterprise-grade security.',
   },
   alternates: {
-    canonical: 'https://rankwell.io/security',
+    canonical: 'https://openrole.co.uk/security',
   },
   robots: {
     index: true,
@@ -71,7 +71,7 @@ export default function SecurityPage() {
             </p>
           </div>
           <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
-            Security at Rankwell
+            Security at OpenRole
           </h1>
           <p className="mt-6 text-lg leading-relaxed text-slate-500 max-w-2xl">
             You&apos;re trusting us with your employer brand data. We take that
@@ -203,7 +203,7 @@ export default function SecurityPage() {
       <section className="border-b border-neutral-100 bg-white">
         <div className="mx-auto max-w-4xl px-6 py-16">
           <h2 className="text-2xl font-semibold text-slate-900 mb-2">
-            The Rankwell Pixel
+            The OpenRole Pixel
           </h2>
           <p className="text-slate-600 mb-8">
             When you add our pixel to your careers page, here&apos;s exactly
@@ -222,7 +222,7 @@ export default function SecurityPage() {
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5">✓</span>
-                  Communicates only with Rankwell API endpoints
+                  Communicates only with OpenRole API endpoints
                 </li>
                 <li className="flex items-start gap-2">
                   <span className="mt-0.5">✓</span>
@@ -489,10 +489,10 @@ export default function SecurityPage() {
             <p className="text-sm text-neutral-700 leading-relaxed">
               Email{' '}
               <a
-                href="mailto:security@rankwell.io"
+                href="mailto:security@openrole.co.uk"
                 className="font-medium text-teal-700 underline underline-offset-2"
               >
-                security@rankwell.io
+                security@openrole.co.uk
               </a>{' '}
               with details of the vulnerability. We commit to acknowledging
               reports within 24 hours, providing an initial assessment within 72
@@ -515,7 +515,7 @@ export default function SecurityPage() {
             additional documentation, or arrange a call with our team.
           </p>
           <a
-            href="mailto:hello@rankwell.io"
+            href="mailto:hello@openrole.co.uk"
             className="inline-flex items-center justify-center rounded-lg bg-teal-600 px-6 py-3 text-sm font-medium text-white hover:bg-teal-700 transition-colors"
           >
             Get in touch

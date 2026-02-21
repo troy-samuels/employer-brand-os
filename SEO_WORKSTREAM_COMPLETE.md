@@ -1,7 +1,7 @@
 # SEO Workstream 4: COMPLETE ✅
 
 **Completion Date:** 20 February 2026, 00:15 GMT  
-**Agent:** rankwell-seo subagent  
+**Agent:** openrole-seo subagent  
 **Status:** All deliverables complete and committed to git
 
 ---
@@ -28,7 +28,7 @@
 - Blog posts exist but hardcoded in TSX (should be markdown)
 - Company pages need Organization schema
 - Missing canonical URLs
-- llms.txt guidance needs rewrite (per RANKWELL_RECALIBRATION.md)
+- llms.txt guidance needs rewrite (per OPENROLE_RECALIBRATION.md)
 
 ---
 
@@ -43,7 +43,7 @@ All posts saved to `/content/blog/` as markdown with frontmatter:
 - Research: 10.2M AI crawler requests, zero llms.txt requests
 - 300K+ domains studied, no citation impact
 - Evidence-based contrarian piece
-- Cites RANKWELL_RECALIBRATION.md research
+- Cites OPENROLE_RECALIBRATION.md research
 - Includes FAQ section
 - Internal links to audit tool, JSON-LD generator
 
@@ -186,7 +186,7 @@ All blog posts meet requirements:
 title: "Post Title"
 description: "Meta description (150-160 chars)"
 date: "2026-02-20"
-author: "Rankwell Research Team"
+author: "OpenRole Research Team"
 category: "Research|Guide|Technical|Analysis|Education"
 readTime: "X min"
 tags: ["tag1", "tag2", "tag3"]
@@ -343,7 +343,7 @@ Based on research and benchmarks:
 
 **Week 4:**
 1. Content distribution (social, email, communities)
-2. Monitor AI visibility changes (weekly Rankwell audits)
+2. Monitor AI visibility changes (weekly OpenRole audits)
 3. Track metrics (search console, analytics)
 4. Iterate based on data
 
@@ -358,7 +358,7 @@ Based on research and benchmarks:
 - Domain authority: +5-8 points
 
 **AI Visibility:**
-- Rankwell Score: 34 → 75+ (from Poor to Good)
+- OpenRole Score: 34 → 75+ (from Poor to Good)
 - Citation accuracy: <50% → 85%+
 - Salary hallucinations: -80%
 

@@ -2,7 +2,7 @@
 title: "How AI Models Really Decide What to Say About Your Company"
 description: "A technical deep-dive into the architecture behind ChatGPT, Claude, and Perplexity's employer responses — and where you can intervene to control the narrative."
 date: "2026-02-21"
-author: "Rankwell Research Team"
+author: "OpenRole Research Team"
 category: "Technical"
 readTime: "15 min"
 tags: ["AI architecture", "RAG", "embeddings", "citations", "technical"]
@@ -648,7 +648,7 @@ A: Possibly, if you're famous enough (like Glassdoor). But for most employers, b
 A: Indirectly. User feedback influences future training data, but individual conversations don't immediately update the model.
 
 **Q: What's the best way to monitor what AI says about me?**  
-A: [Run a Rankwell audit](https://rankwell.io) monthly. Track changes over time. Alert on major inaccuracies.
+A: [Run a OpenRole audit](https://openrole.co.uk) monthly. Track changes over time. Alert on major inaccuracies.
 
 ---
 
@@ -661,4 +661,4 @@ A: [Run a Rankwell audit](https://rankwell.io) monthly. Track changes over time.
 ---
 
 **Want to see how AI retrieves information about your company?**  
-[Run a free Rankwell audit](https://rankwell.io) — shows you which sources ChatGPT, Google AI, and Perplexity actually cite when asked about you.
+[Run a free OpenRole audit](https://openrole.co.uk) — shows you which sources ChatGPT, Google AI, and Perplexity actually cite when asked about you.

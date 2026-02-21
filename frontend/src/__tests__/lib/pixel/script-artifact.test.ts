@@ -29,7 +29,7 @@ describe("pixel script artifact", () => {
   });
 
   it("sends API keys via request headers rather than query-string params", () => {
-    expect(PIXEL_SCRIPT_BODY).toContain("\"X-Rankwell-Key\": config.apiKey");
+    expect(PIXEL_SCRIPT_BODY).toContain("\"X-OpenRole-Key\": config.apiKey");
     expect(PIXEL_SCRIPT_BODY).not.toContain("factsUrl.searchParams.set(\"key\"");
   });
 });

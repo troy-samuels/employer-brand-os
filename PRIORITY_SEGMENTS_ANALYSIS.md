@@ -1,4 +1,4 @@
-# Rankwell Priority Segments — Targeting Analysis
+# OpenRole Priority Segments — Targeting Analysis
 
 **2.5M Contact Database Breakdown for GTM Strategy**
 
@@ -554,5 +554,5 @@ Contacts whose **job titles** mention AI/automation:
 
 **Document Version:** 1.0  
 **Created:** 2025-02-19  
-**For:** Troy Goldman / Rankwell  
+**For:** Troy Goldman / OpenRole  
 **Purpose:** Segment targeting strategy for 2.5M contact database

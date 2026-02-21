@@ -94,9 +94,9 @@
 
 ---
 
-## 📊 BRANDOS CLAIMS vs RESEARCH EVIDENCE
+## 📊 OPENROLE CLAIMS vs RESEARCH EVIDENCE
 
-| BrandOS Claim | Evidence Quality | Supporting Research |
+| OpenRole Claim | Evidence Quality | Supporting Research |
 |---------------|------------------|-------------------|
 | **AI agents cite outdated sources** | ✅ STRONG | CiteGuard: "78-90% fabricated citations" |
 | **LLMs struggle with unstructured data** | ✅ STRONG | RAG Survey: "retrieval noise degrades quality" |
@@ -133,7 +133,7 @@ where P(di|x) = relevance score + authority signals
 ```json
 {
   "@type": "JobPosting",
-  "dateModified": "2026-02-06T14:38:30.401Z",  // BrandOS freshness signal
+  "dateModified": "2026-02-06T14:38:30.401Z",  // OpenRole freshness signal
   "datePosted": "2026-01-15",
   "validThrough": "2026-03-15"
 }
@@ -157,7 +157,7 @@ where P(di|x) = relevance score + authority signals
 
 ---
 
-## 🎯 VALIDATION FOR BRANDOS BUSINESS MODEL
+## 🎯 VALIDATION FOR OPENROLE BUSINESS MODEL
 
 ### **STRONGLY SUPPORTED CLAIMS:**
 1. **LLMs have major citation accuracy problems** (78-90% error rate)
@@ -172,7 +172,7 @@ where P(di|x) = relevance score + authority signals
 
 ### **COMPETITIVE ADVANTAGE CONFIRMED:**
 - **No existing solutions address citation quality** in employment context
-- **Academic research shows RAG limitations** that BrandOS directly addresses
+- **Academic research shows RAG limitations** that OpenRole directly addresses
 - **Technical implementation** matches how LLMs actually work
 
 ---
@@ -203,12 +203,12 @@ where P(di|x) = relevance score + authority signals
 
 ---
 
-## 💡 KEY INSIGHTS FOR BRANDOS
+## 💡 KEY INSIGHTS FOR OPENROLE
 
 ### **What the Research Confirms:**
 1. **LLMs are terrible at citation accuracy** - massive business opportunity
 2. **Structured data demonstrably outperforms unstructured** - technical approach validated
-3. **Retrieval quality is the bottleneck** - BrandOS addresses the core problem
+3. **Retrieval quality is the bottleneck** - OpenRole addresses the core problem
 4. **Authority and freshness signals matter** - competitive differentiation possible
 
 ### **Technical Implementation Guidance:**

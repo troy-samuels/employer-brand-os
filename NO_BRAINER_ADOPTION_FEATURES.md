@@ -1,5 +1,5 @@
 # NO BRAINER ADOPTION: AI-ENHANCED FEATURE STRATEGY
-**Context:** How AI agent emergence transforms BrandOS features from "nice-to-have" to "business critical"  
+**Context:** How AI agent emergence transforms OpenRole features from "nice-to-have" to "business critical"  
 **Goal:** Create irresistible value proposition that makes adoption inevitable  
 **Timeline:** Immediate feature prioritization for competitive dominance
 
@@ -57,7 +57,7 @@ const hallucinationCheck = async (companyName) => {
 
 ```html
 <!-- Single line implementation -->
-<script src="https://brandos.com/pixel.js" data-company-id="abc123"></script>
+<script src="https://openrole.com/pixel.js" data-company-id="abc123"></script>
 
 <!-- Automatically generates -->
 <script type="application/ld+json">
@@ -142,7 +142,7 @@ const LocationManager = {
 
 #### 5. AI Recruiting Integration Hub (ECOSYSTEM PLAY)
 **What it does:** Native integrations with AI recruiting tools (Paradox, Olivia, etc.)
-**Why it's no-brainer:** Makes BrandOS the infrastructure layer everyone needs
+**Why it's no-brainer:** Makes OpenRole the infrastructure layer everyone needs
 
 **Integration Examples:**
 - **Paradox Olivia:** Feed structured data directly to chatbot responses
@@ -361,7 +361,7 @@ const AIIntelligence = {
 - **Category Creation:** Own "AI recruiting infrastructure" search results
 - **Competitive Displacement:** Win 85% of deals against DIY/ATS solutions
 - **Viral Coefficient:** 1.3 (customers refer other companies organically)
-- **Market Share:** 25% of Fortune 1000 using BrandOS within 18 months
+- **Market Share:** 25% of Fortune 1000 using OpenRole within 18 months
 
 ---
 
@@ -377,6 +377,6 @@ const AIIntelligence = {
 ### The No Brainer Formula:
 **Immediate Pain Relief** + **Simple Implementation** + **Measurable ROI** + **Competitive Advantage** = **Inevitable Adoption**
 
-**Result:** BrandOS becomes essential infrastructure that no modern recruiting team can operate without.
+**Result:** OpenRole becomes essential infrastructure that no modern recruiting team can operate without.
 
 The AI revolution doesn't just validate our product - it makes adoption practically mandatory for any company serious about talent acquisition in the AI age.

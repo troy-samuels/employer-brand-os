@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rankwell Smart Pixel - Security Test Page</title>
+  <title>OpenRole Smart Pixel - Security Test Page</title>
   
   <!-- Content Security Policy test -->
   <meta http-equiv="Content-Security-Policy" content="
@@ -214,13 +214,13 @@
 <body>
   <div class="container">
     <div class="header">
-      <h1>🔒 Rankwell Smart Pixel - Security Test</h1>
+      <h1>🔒 OpenRole Smart Pixel - Security Test</h1>
       <p>Testing JSON-LD injection, CORS, CSP, and security hardening</p>
     </div>
     
     <div class="content">
       <div class="alert info">
-        <strong>⚙️ Test Mode:</strong> This page simulates a real employer careers page with the Rankwell pixel installed.
+        <strong>⚙️ Test Mode:</strong> This page simulates a real employer careers page with the OpenRole pixel installed.
         It tests security controls including CSP, CORS, rate limiting, and XSS prevention.
       </div>
       
@@ -280,7 +280,7 @@
           <h3>Developer Advocate</h3>
           <div class="meta">📍 Remote · 💰 $90k-$130k · ⏰ Full-time</div>
           <div class="description">
-            Help developers integrate Rankwell into their careers pages.
+            Help developers integrate OpenRole into their careers pages.
             Create documentation, demos, and build relationships with the dev community.
           </div>
         </div>
@@ -299,7 +299,7 @@
   </div>
 
   <!-- 
-    RANKWELL SMART PIXEL 
+    OPENROLE SMART PIXEL 
     Replace with your actual API key for testing
   -->
   <script 
@@ -340,7 +340,7 @@
       const jsonldStatus = document.getElementById('jsonld-status');
       const jsonldOutput = document.getElementById('jsonld-output');
       
-      const jsonldElement = document.getElementById('rankwell-pixel-jsonld');
+      const jsonldElement = document.getElementById('openrole-pixel-jsonld');
       
       if (jsonldElement) {
         try {
@@ -403,7 +403,7 @@
       });
       
       // Test 5: Check nonce attribute
-      const jsonldElement = document.getElementById('rankwell-pixel-jsonld');
+      const jsonldElement = document.getElementById('openrole-pixel-jsonld');
       const hasNonce = jsonldElement && jsonldElement.hasAttribute('nonce');
       tests.push({
         name: 'CSP Nonce',
@@ -493,7 +493,7 @@
     }, 2000);
     
     // Log to console
-    console.log('%c🔒 Rankwell Smart Pixel Security Test Page', 'font-size: 20px; color: #667eea; font-weight: bold');
+    console.log('%c🔒 OpenRole Smart Pixel Security Test Page', 'font-size: 20px; color: #667eea; font-weight: bold');
     console.log('This page tests pixel security including XSS, CORS, CSP, and rate limiting.');
     console.log('Check the Network tab to see pixel API requests and responses.');
   </script>

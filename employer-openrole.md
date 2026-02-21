@@ -1,4 +1,4 @@
-# BrandOS: Take Back Your Reputation from AI
+# OpenRole: Take Back Your Reputation from AI
 
 > **In 2026, AI answers questions about your company before you do. If you're not controlling that answer, someone else is — and they're getting it wrong.**
 
@@ -26,7 +26,7 @@ The result: **you're losing candidates before they ever visit your careers page*
 
 Glassdoor built a business on a simple exchange: employees share anonymous salary data, and in return they get access to everyone else's. It was the best candidates had.
 
-But Glassdoor has three fundamental problems that BrandOS solves:
+But Glassdoor has three fundamental problems that OpenRole solves:
 
 **1. The data is self-reported and unverified.**
 Anyone can submit a salary. There's no check against reality. A bitter leaver submitting £45k for a role that actually pays £70k looks identical to an accurate submission. AI agents don't know the difference — they just average it all together.
@@ -37,24 +37,24 @@ Glassdoor has no freshness mechanism. A salary submitted in 2022 carries the sam
 **3. Companies have no voice.**
 Glassdoor gives employers a response feature for reviews, but no way to publish verified compensation data that overrides outdated submissions. The company that raised salaries 30% last year looks identical to the one that didn't.
 
-**BrandOS flips this entirely.** We give employers a verified channel to publish their own data — not on Glassdoor's platform, but directly into the AI data stream. When AI agents look for information about your company, they find your verified facts first.
+**OpenRole flips this entirely.** We give employers a verified channel to publish their own data — not on Glassdoor's platform, but directly into the AI data stream. When AI agents look for information about your company, they find your verified facts first.
 
 ---
 
-## How BrandOS Works
+## How OpenRole Works
 
-BrandOS is a lightweight tool that sits on your careers page and feeds verified company data directly to AI agents. No developers needed. No IT tickets. Your marketing or HR team can set it up in under five minutes.
+OpenRole is a lightweight tool that sits on your careers page and feeds verified company data directly to AI agents. No developers needed. No IT tickets. Your marketing or HR team can set it up in under five minutes.
 
-### What happens when you install BrandOS:
+### What happens when you install OpenRole:
 
 **Step 1: You tell us the truth.**
 Through a simple dashboard, your HR team enters verified company information — salary ranges (as broad or specific as you choose), benefits, culture details, working policies. Think of it as your company's official fact sheet.
 
 **Step 2: We translate it for AI.**
-BrandOS converts your facts into structured data that AI agents are built to read. It's the difference between handing someone a neatly organised folder versus throwing a stack of papers at them.
+OpenRole converts your facts into structured data that AI agents are built to read. It's the difference between handing someone a neatly organised folder versus throwing a stack of papers at them.
 
 **Step 3: AI agents find your facts first.**
-Every piece of data from BrandOS carries a verification badge and a freshness timestamp. When ChatGPT or Claude looks for information about your company, they prioritise this — it's newer, it's verified, and it's in the exact format they prefer.
+Every piece of data from OpenRole carries a verification badge and a freshness timestamp. When ChatGPT or Claude looks for information about your company, they prioritise this — it's newer, it's verified, and it's in the exact format they prefer.
 
 **Step 4: You see what's working.**
 Every Monday morning, you receive a report showing exactly where AI cited your company, what it got right, what it corrected, and how your visibility compares to last week.
@@ -93,16 +93,16 @@ The result is what we call a **Shadow Salary** — the number AI thinks you pay,
 
 This is happening to thousands of companies right now. The only question is whether you can see it.
 
-**BrandOS shows you your Shadow Salary** — the exact numbers AI agents are giving candidates about you — and gives you the tools to correct the record with verified data.
+**OpenRole shows you your Shadow Salary** — the exact numbers AI agents are giving candidates about you — and gives you the tools to correct the record with verified data.
 
 ---
 
 ## You Choose How Much to Share
 
-Not every company wants to publish exact salary figures. That's fine. BrandOS gives you four levels of disclosure — you pick what suits your culture and legal requirements:
+Not every company wants to publish exact salary figures. That's fine. OpenRole gives you four levels of disclosure — you pick what suits your culture and legal requirements:
 
 ### Level 1 — Verified Employer
-*"We've verified our data with BrandOS."*
+*"We've verified our data with OpenRole."*
 
 No salary information required. You're simply telling AI agents: "This company actively manages its employment data. Our facts are current." This alone puts you ahead of the 95% of companies that give AI nothing to work with.
 
@@ -118,7 +118,7 @@ You share broad salary bands (e.g., "£60k–£100k for engineering roles") and 
 ### Level 3 — Full Transparency
 *"Here's exactly what we pay, by role, level, and location."*
 
-Detailed salary ranges for every position. This is where companies in New York, California, Colorado, and (from June 2026) the EU will need to be. BrandOS automates the compliance — it knows which jurisdictions require what, and formats your data accordingly.
+Detailed salary ranges for every position. This is where companies in New York, California, Colorado, and (from June 2026) the EU will need to be. OpenRole automates the compliance — it knows which jurisdictions require what, and formats your data accordingly.
 
 **Best for:** Companies in regulated markets, or those using transparency as a competitive advantage.
 
@@ -147,7 +147,7 @@ Think of it as a credit score for employer reputation. Candidates see it and kno
 
 ## What AI Gets Wrong (And Why It Matters)
 
-To understand why BrandOS matters, you need to understand how AI agents construct answers about your company.
+To understand why OpenRole matters, you need to understand how AI agents construct answers about your company.
 
 When someone asks ChatGPT about working at your company, it doesn't have a file on you. It assembles an answer in real-time from whatever data it can find. It prioritises:
 
@@ -158,11 +158,11 @@ When someone asks ChatGPT about working at your company, it doesn't have a file 
 
 The problem: **most companies provide nothing in category 1**, so AI falls back to categories 2–4, which are unreliable, outdated, and often hostile.
 
-BrandOS puts you squarely in **category 1**. Your verified, structured, timestamped data becomes the primary source. Everything else becomes secondary — or irrelevant.
+OpenRole puts you squarely in **category 1**. Your verified, structured, timestamped data becomes the primary source. Everything else becomes secondary — or irrelevant.
 
-### What BrandOS corrects:
+### What OpenRole corrects:
 
-| What AI says today | What BrandOS injects | Impact |
+| What AI says today | What OpenRole injects | Impact |
 |---|---|---|
 | Salary from a 2022 Glassdoor review | Your verified 2026 salary range or Compensation Confidence Score | Candidates see accurate compensation |
 | "Hybrid working" based on a 2023 policy | Your current flexible working arrangement | Candidates know your actual policy |
@@ -177,31 +177,31 @@ BrandOS puts you squarely in **category 1**. Your verified, structured, timestam
 Every week, your leadership team receives a one-page report showing:
 
 - **AI Visibility Score:** How often AI agents cited your company this week, and where
-- **Corrections Made:** Data points where BrandOS overrode outdated or inaccurate AI sources
+- **Corrections Made:** Data points where OpenRole overrode outdated or inaccurate AI sources
 - **Shadow Salary Check:** What AI is currently telling candidates about your compensation
 - **Compliance Status:** Which of your postings meet pay transparency requirements (by jurisdiction)
 - **Competitor Comparison:** How your AI visibility stacks up against companies hiring for similar roles
 
-This is designed for executives who need to see results, not dashboards. One page. Every Monday. Clear proof that BrandOS is working.
+This is designed for executives who need to see results, not dashboards. One page. Every Monday. Clear proof that OpenRole is working.
 
 ---
 
-## Who BrandOS Is For
+## Who OpenRole Is For
 
 ### HR and Talent Teams
 *"We're losing candidates and we can't figure out why."*
 
-BrandOS shows you the invisible problem — AI misinformation driving candidates away before they ever see your careers page. Your team manages the facts through a simple dashboard. No technical skills required. Set it up in minutes, update it whenever your data changes.
+OpenRole shows you the invisible problem — AI misinformation driving candidates away before they ever see your careers page. Your team manages the facts through a simple dashboard. No technical skills required. Set it up in minutes, update it whenever your data changes.
 
 ### Marketing and Employer Brand Teams
 *"We spend six figures on employer branding, then AI tells a different story."*
 
-You've invested in EVP work, careers content, and brand campaigns. BrandOS ensures that when AI agents talk about your company, they tell the story you've built — not one assembled from anonymous reviews and outdated data.
+You've invested in EVP work, careers content, and brand campaigns. OpenRole ensures that when AI agents talk about your company, they tell the story you've built — not one assembled from anonymous reviews and outdated data.
 
 ### C-Suite and Management
 *"How do we govern our reputation across AI platforms?"*
 
-BrandOS is reputation governance infrastructure. The Monday Morning Report gives you a single view of how AI represents your company, what's been corrected, and where you stand versus competitors. One subscription. Zero IT overhead. Measurable results every week.
+OpenRole is reputation governance infrastructure. The Monday Morning Report gives you a single view of how AI represents your company, what's been corrected, and where you stand versus competitors. One subscription. Zero IT overhead. Measurable results every week.
 
 ---
 
@@ -216,7 +216,7 @@ BrandOS is reputation governance infrastructure. The Monday Morning Report gives
 
 ### For agencies managing multiple clients:
 
-BrandOS offers wholesale pricing for recruitment marketing agencies. One partnership gives you a new recurring revenue stream and a tool your clients genuinely need. You handle the relationships; we handle the infrastructure.
+OpenRole offers wholesale pricing for recruitment marketing agencies. One partnership gives you a new recurring revenue stream and a tool your clients genuinely need. You handle the relationships; we handle the infrastructure.
 
 ---
 
@@ -229,7 +229,7 @@ BrandOS offers wholesale pricing for recruitment marketing agencies. One partner
 | **Agency** | £150/month per location | Wholesale rate for agencies managing 10+ client locations, bulk dashboard, white-label reporting |
 | **Enterprise** | From £2,999/month | All features, custom AI training on your company data, dedicated support, multi-location management |
 
-**The maths:** One bad hire costs £15,000+ in lost productivity and replacement fees. If BrandOS prevents even one candidate from ruling you out based on wrong AI data, it's paid for itself for the year.
+**The maths:** One bad hire costs £15,000+ in lost productivity and replacement fees. If OpenRole prevents even one candidate from ruling you out based on wrong AI data, it's paid for itself for the year.
 
 ---
 
@@ -242,9 +242,9 @@ Even if salary disclosure feels optional today, regulation is moving fast:
 - **Colorado** — Statewide mandatory salary posting (active now)
 - **European Union** — Pay Transparency Directive takes effect June 2026, covering all EU member states
 
-Companies operating across jurisdictions face a patchwork of rules that change constantly. BrandOS tracks these automatically — it knows which of your roles need salary ranges, in which locations, and formats the data accordingly.
+Companies operating across jurisdictions face a patchwork of rules that change constantly. OpenRole tracks these automatically — it knows which of your roles need salary ranges, in which locations, and formats the data accordingly.
 
-For companies already in regulated markets, BrandOS turns a compliance headache into a competitive advantage. For those in unregulated markets, it's preparation for what's coming — and in the meantime, it solves the AI visibility problem that's costing you candidates today.
+For companies already in regulated markets, OpenRole turns a compliance headache into a competitive advantage. For those in unregulated markets, it's preparation for what's coming — and in the meantime, it solves the AI visibility problem that's costing you candidates today.
 
 ---
 
@@ -254,7 +254,7 @@ We're in the early days of a fundamental shift in how people find jobs. The old 
 
 Companies that structure their data for this new reality will attract better candidates, faster. Companies that don't will watch their talent pipeline shrink without understanding why.
 
-Glassdoor built the last generation's solution: crowdsourced salary data for a world where candidates did their own research. BrandOS builds this generation's solution: **verified employer data for a world where AI does the research for them.**
+Glassdoor built the last generation's solution: crowdsourced salary data for a world where candidates did their own research. OpenRole builds this generation's solution: **verified employer data for a world where AI does the research for them.**
 
 The question isn't whether to manage your AI reputation. It's whether you start now — while you can shape the narrative — or later, when the narrative has already been written for you.
 
@@ -262,14 +262,14 @@ The question isn't whether to manage your AI reputation. It's whether you start 
 
 ## The Network Effect
 
-Every company that joins BrandOS makes the platform more valuable for everyone:
+Every company that joins OpenRole makes the platform more valuable for everyone:
 
 - **Better benchmarking.** More verified salary data means more accurate market comparisons. HR teams can see how they stack up — based on real, employer-verified numbers, not Glassdoor's guesswork.
-- **Stronger AI trust signals.** As more companies publish verified data through BrandOS, AI agents learn to treat it as a primary source. The network becomes the standard.
-- **Smarter compliance.** Patterns across thousands of companies help BrandOS predict regulatory changes, flag emerging risks, and refine its automation.
+- **Stronger AI trust signals.** As more companies publish verified data through OpenRole, AI agents learn to treat it as a primary source. The network becomes the standard.
+- **Smarter compliance.** Patterns across thousands of companies help OpenRole predict regulatory changes, flag emerging risks, and refine its automation.
 
-Over time, BrandOS becomes the most accurate real-time employment data source in existence — verified by employers, not estimated by algorithms or reported by anonymous individuals. That's the future Glassdoor can't build, because their model depends on employees, not employers.
+Over time, OpenRole becomes the most accurate real-time employment data source in existence — verified by employers, not estimated by algorithms or reported by anonymous individuals. That's the future Glassdoor can't build, because their model depends on employees, not employers.
 
 ---
 
-*BrandOS — Because if AI doesn't know the truth about your company, it'll make something up.*
+*OpenRole — Because if AI doesn't know the truth about your company, it'll make something up.*

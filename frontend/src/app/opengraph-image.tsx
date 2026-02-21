@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-export const alt = "Rankwell — Is AI telling the truth about your company?";
+export const alt = "OpenRole — Is AI telling the truth about your company?";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -31,7 +31,7 @@ export default function OgImage() {
             letterSpacing: "-0.02em",
           }}
         >
-          Rankwell
+          OpenRole
         </div>
         <div
           style={{
@@ -70,7 +70,7 @@ export default function OgImage() {
             borderRadius: 12,
           }}
         >
-          rankwell.io
+          openrole.co.uk
         </div>
       </div>
     ),

@@ -153,7 +153,7 @@ export default function MonitorPreview() {
                 <div className="flex items-center gap-2 mb-6">
                   <span className="h-2 w-2 rounded-full bg-brand-accent" />
                   <span className="text-xs text-neutral-500 font-medium">
-                    Rankwell · Monday 9:00 AM
+                    OpenRole · Monday 9:00 AM
                   </span>
                 </div>
 

@@ -7,7 +7,7 @@
  * JSON-LD Generator
  * Builds schema.org compliant JSON-LD from employer facts
  *
- * This is the core value proposition of Rankwell:
+ * This is the core value proposition of OpenRole:
  * Transform verified employer data into structured data that
  * AI agents and search engines can consume accurately.
  */

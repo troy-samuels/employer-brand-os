@@ -9,8 +9,8 @@ import type { Metadata } from "next";
 /* Constants                                                           */
 /* ------------------------------------------------------------------ */
 
-export const BASE_URL = "https://rankwell.io";
-export const SITE_NAME = "Rankwell";
+export const BASE_URL = "https://openrole.co.uk";
+export const SITE_NAME = "OpenRole";
 export const DEFAULT_OG_IMAGE = "/opengraph-image";
 
 /* ------------------------------------------------------------------ */
@@ -104,7 +104,7 @@ export function generateOrganizationSchema({
     logo: logo || `${url}/logo.png`,
     description:
       description ||
-      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+      "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
     sameAs,
   };
 }

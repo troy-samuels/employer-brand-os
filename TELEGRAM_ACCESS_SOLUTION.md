@@ -1,10 +1,10 @@
-# 🚀 BRANDOS LANDING PAGE - TELEGRAM ACCESS SOLUTION
+# 🚀 OPENROLE LANDING PAGE - TELEGRAM ACCESS SOLUTION
 
 ## IMMEDIATE ACCESS OPTIONS FOR TROY:
 
 ### ⚡ OPTION 1: COPY HTML TO PUBLIC HOSTING (2 minutes)
 
-**Step 1:** Copy this file: `/Desktop/employer-brand-os/public-landing.html`
+**Step 1:** Copy this file: `/Desktop/employer-openrole/public-landing.html`
 **Step 2:** Go to: https://netlify.com/drop  
 **Step 3:** Drag and drop the HTML file
 **Step 4:** Get instant public URL
@@ -12,23 +12,23 @@
 ### 🎯 OPTION 2: VIEW SOURCE CODE DIRECTLY
 
 The complete landing page HTML is ready at:
-`/Users/t.samuels/Desktop/employer-brand-os/public-landing.html`
+`/Users/t.samuels/Desktop/employer-openrole/public-landing.html`
 
 ### 📱 OPTION 3: QUICK GITHUB PAGES SETUP
 
 ```bash
 # Navigate to project
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 
 # Copy landing page as index.html
 cp public-landing.html index.html
 
 # Manual GitHub setup:
 # 1. Go to GitHub.com
-# 2. Create new repository "brandos-landing"
+# 2. Create new repository "openrole-landing"
 # 3. Upload index.html file
 # 4. Enable Pages in Settings
-# 5. Get URL: https://username.github.io/brandos-landing
+# 5. Get URL: https://username.github.io/openrole-landing
 ```
 
 ---

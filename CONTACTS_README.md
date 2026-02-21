@@ -1,4 +1,4 @@
-# 📂 Rankwell Contacts Database — Complete Package
+# 📂 OpenRole Contacts Database — Complete Package
 
 **Status:** ✅ Ready for Execution  
 **Database:** 2,492,915 contacts  
@@ -20,7 +20,7 @@
 
 ### 3. After Import Complete
 1. Sign up for Resend.com → Get API key
-2. Configure sending domain (`mail.rankwell.ai`)
+2. Configure sending domain (`mail.openrole.ai`)
 3. Malcolm builds webhook handler + campaign dashboard (4 hours)
 4. Start domain warm-up (7 days)
 5. Launch Tier 1 campaign (18K UK decision makers)
@@ -30,7 +30,7 @@
 ## 📁 File Structure
 
 ```
-employer-brand-os/
+employer-openrole/
 ├── CONTACTS_DATABASE_SUMMARY.md    ← START HERE
 ├── PRIORITY_SEGMENTS_ANALYSIS.md   ← Targeting strategy
 ├── GTM_STRATEGY.md                 ← Full GTM plan (24KB)
@@ -119,7 +119,7 @@ employer-brand-os/
   - Verify tables exist
 
 - [ ] **Run test import** (1 min)
-  - `cd ~/Desktop/employer-brand-os`
+  - `cd ~/Desktop/employer-openrole`
   - `npx tsx scripts/import-contacts.ts "" 100`
   - Check output: ~95 contacts inserted
 
@@ -134,7 +134,7 @@ employer-brand-os/
   - Add to `frontend/.env.local`: `RESEND_API_KEY=re_...`
 
 - [ ] **Configure sending domain** (30 min setup, 24h DNS propagation)
-  - Add `mail.rankwell.ai` to Resend
+  - Add `mail.openrole.ai` to Resend
   - Copy DNS records (SPF, DKIM, DMARC)
   - Add to DNS provider (Cloudflare/Vercel/etc)
   - Wait for verification
@@ -396,7 +396,7 @@ Before launching any campaigns:
 - [ ] Migration applied (tables exist in Supabase)
 - [ ] Full import complete (2.45M+ contacts)
 - [ ] Resend account set up + billing enabled
-- [ ] Sending domain verified (`mail.rankwell.ai`)
+- [ ] Sending domain verified (`mail.openrole.ai`)
 - [ ] DNS records configured (SPF, DKIM, DMARC)
 - [ ] Webhook handler deployed and tested
 - [ ] Unsubscribe page live
@@ -436,8 +436,8 @@ The data is ready. The strategy is documented. The infrastructure is built.
 
 **Status:** 🟢 **READY FOR LAUNCH**  
 **Last Updated:** 2025-02-19 23:55 GMT  
-**Agent:** Malcolm (Subagent: rankwell-contacts)  
-**For:** Troy Goldman / Rankwell
+**Agent:** Malcolm (Subagent: openrole-contacts)  
+**For:** Troy Goldman / OpenRole
 
 ---
 

@@ -27,7 +27,7 @@ export function DashboardHeader() {
   return (
     <div className="flex items-center justify-between w-full">
       <div>
-        <p className="text-xs uppercase tracking-widest text-gray-400">Rankwell</p>
+        <p className="text-xs uppercase tracking-widest text-gray-400">OpenRole</p>
         <h1 className="text-lg font-semibold text-gray-900">{title}</h1>
       </div>
       <div className="text-sm text-gray-500">Last updated just now</div>

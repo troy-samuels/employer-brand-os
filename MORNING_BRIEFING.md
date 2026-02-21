@@ -1,4 +1,4 @@
-# ☕ Rankwell Morning Briefing — 20 February 2026
+# ☕ OpenRole Morning Briefing — 20 February 2026
 *Malcolm's overnight shift report*
 
 ---
@@ -79,7 +79,7 @@
 
 2. **Provide Resend API key** → Put in `frontend/.env.local` as `RESEND_API_KEY=xxx`
    - This enables email outreach to the 2.5M contacts
-   - Set up a sending domain (e.g., `mail@rankwell.io`)
+   - Set up a sending domain (e.g., `mail@openrole.co.uk`)
 
 3. **Run Supabase migration** → Open Supabase SQL Editor, paste contents of `supabase/migrations/20250218000000_create_contacts_system.sql` and run
    - Creates the tables needed for the contacts import
@@ -89,7 +89,7 @@
 
 4. **Review the GTM strategy** — `GTM_STRATEGY.md` — approve the segmentation and messaging
 5. **Review email sequences** — `outreach/email-sequences.md` — approve copy before sending
-6. **Verify rankwell.io domain** — is it live? DNS pointing to Vercel?
+6. **Verify openrole.co.uk domain** — is it live? DNS pointing to Vercel?
 7. **Push to production** — `cd frontend && vercel --prod`
 
 ### 🟢 CAN WAIT

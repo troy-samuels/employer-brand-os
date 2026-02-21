@@ -3,7 +3,7 @@
  * Smart Pixel Facts API Endpoint
  * GET /api/pixel/v1/facts
  *
- * This is the core API that powers the Rankwell Smart Pixel.
+ * This is the core API that powers the OpenRole Smart Pixel.
  * It returns verified employer facts as JSON-LD for injection into client websites.
  *
  * Security layers:
@@ -102,7 +102,7 @@ export async function GET(request: NextRequest): Promise<Response> {
   try {
     const url = new URL(request.url);
     const rawKey =
-      request.headers.get("x-rankwell-key") ??
+      request.headers.get("x-openrole-key") ??
       url.searchParams.get("key");
     const rawLocation = url.searchParams.get('location');
     const keyResult = await requireApiKey(

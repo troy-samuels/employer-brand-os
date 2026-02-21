@@ -1,4 +1,4 @@
-# COMPETITIVE INTELLIGENCE ANALYSIS: BrandOS
+# COMPETITIVE INTELLIGENCE ANALYSIS: OpenRole
 **Framework:** Reid Hoffman Network Effects + Andy Grove Paranoid Survival  
 **Focus:** Market gaps, competitive positioning, and strategic threats  
 **Date:** February 2, 2026
@@ -25,7 +25,7 @@
 - Strong brand recognition and market share
 - Robust reporting and analytics
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Focus on internal workflows, not external discovery
 - No JSON-LD structured data support
 - Limited pay transparency automation
@@ -40,7 +40,7 @@
 
 **Threat Level:** LOW (different market focus)
 **Response Timeline:** 18-24 months to add structured data features
-**BrandOS Advantage:** SMB market + compliance automation + AI optimization
+**OpenRole Advantage:** SMB market + compliance automation + AI optimization
 
 #### Greenhouse
 **Market Position:** Mid-market ATS leader ($100M+ revenue)
@@ -50,7 +50,7 @@
 - Modern user interface and workflow
 - Good customer satisfaction ratings
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Internal recruitment optimization focus
 - No structured data output
 - Limited compliance automation
@@ -64,17 +64,17 @@
 
 **Threat Level:** LOW-MEDIUM (could add features)
 **Response Timeline:** 12-18 months for basic structured data
-**BrandOS Advantage:** Compliance focus + agency partnerships + AI-first design
+**OpenRole Advantage:** Compliance focus + agency partnerships + AI-first design
 
 #### BambooHR
 **Market Position:** SMB HR platform ($200M+ estimated revenue)
 **Strengths:**
-- SMB market focus (overlap with BrandOS target)
+- SMB market focus (overlap with OpenRole target)
 - Easy implementation and user experience
 - Comprehensive HR feature set
 - Strong customer support reputation
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Basic recruiting features (not ATS-focused)
 - No structured data capabilities
 - Limited compliance automation
@@ -88,7 +88,7 @@
 
 **Threat Level:** MEDIUM (right market, missing features)
 **Response Timeline:** 6-12 months to add compliance features
-**BrandOS Advantage:** AI-first approach + advanced compliance + agency model
+**OpenRole Advantage:** AI-first approach + advanced compliance + agency model
 
 ### CATEGORY 2: COMPLIANCE SOFTWARE (Adjacent Competition)
 
@@ -100,7 +100,7 @@
 - Multi-state law tracking
 - HR professional customer base
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Manual compliance processes (not automated)
 - No job posting optimization
 - No AI discovery features
@@ -114,7 +114,7 @@
 
 **Threat Level:** MEDIUM (compliance expertise, missing tech)
 **Response Timeline:** 12-18 months to add automation
-**BrandOS Advantage:** Automated deployment + AI optimization + lower pricing
+**OpenRole Advantage:** Automated deployment + AI optimization + lower pricing
 
 #### Insperity/ADP Compliance Modules
 **Market Position:** Payroll + compliance services
@@ -124,7 +124,7 @@
 - Professional services support
 - Multi-state operation experience
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Service-heavy model (not technology-focused)
 - No job posting technology
 - No AI discovery optimization
@@ -132,7 +132,7 @@
 
 **Threat Level:** LOW (service model, not technology)
 **Response Timeline:** 24+ months to build technology platform
-**BrandOS Advantage:** Technology-first + automation + cost efficiency
+**OpenRole Advantage:** Technology-first + automation + cost efficiency
 
 ### CATEGORY 3: SEO/STRUCTURED DATA TOOLS (Technology Overlap)
 
@@ -146,7 +146,7 @@
 - Google integration and validation
 - Wide web developer adoption
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Generic solutions (not employment-specific)
 - No compliance intelligence
 - No pay transparency automation
@@ -154,7 +154,7 @@
 
 **Threat Level:** LOW (too generic)
 **Response Timeline:** N/A (different focus)
-**BrandOS Advantage:** Employment specialization + compliance automation + no-code deployment
+**OpenRole Advantage:** Employment specialization + compliance automation + no-code deployment
 
 #### JSON-LD Generators
 **Market Position:** Developer tools for structured data
@@ -166,7 +166,7 @@
 - Developer tool ecosystem integration
 - Basic JSON-LD output capability
 
-**Weaknesses for BrandOS Market:**
+**Weaknesses for OpenRole Market:**
 - Manual implementation required
 - No employment law knowledge
 - No compliance automation
@@ -174,7 +174,7 @@
 
 **Threat Level:** VERY LOW (manual tools)
 **Response Timeline:** N/A (different approach)
-**BrandOS Advantage:** Automated + intelligent + compliant + managed
+**OpenRole Advantage:** Automated + intelligent + compliant + managed
 
 ---
 
@@ -193,7 +193,7 @@
 - SEO consulting for job postings: $2,000-8,000 monthly
 - No automated solutions available
 
-**BrandOS Market Opportunity:**
+**OpenRole Market Opportunity:**
 - Addressable market: 47,500 companies without AI optimization
 - Average willingness to pay: $300-900/month (estimated)
 - Total market opportunity: $171M+ annually
@@ -212,7 +212,7 @@
 - HR consulting: $150-300/hour
 - No automated solutions at scale
 
-**BrandOS Market Opportunity:**
+**OpenRole Market Opportunity:**
 - Addressable market: 171,000+ companies needing automation
 - Cost savings potential: $10,000-40,000 per company annually
 - Total market opportunity: $1.7B+ annually
@@ -231,7 +231,7 @@
 - Compliance consulting: $5,000-25,000 per audit
 - No scalable automation available
 
-**BrandOS Market Opportunity:**
+**OpenRole Market Opportunity:**
 - Addressable locations: 500,000+ (conservative)
 - Cost reduction potential: $200-800 per location monthly  
 - Total market opportunity: $2.4B+ annually
@@ -242,19 +242,19 @@
 
 ### UNIQUE VALUE PROPOSITION MATRIX
 
-**BrandOS vs ATS Vendors:**
+**OpenRole vs ATS Vendors:**
 - **Focus:** External AI discovery vs internal recruitment workflow
 - **Implementation:** No-code pixel vs enterprise software deployment
 - **Compliance:** Automated real-time vs manual periodic audits
 - **Scale:** Instant multi-location vs location-by-location setup
 
-**BrandOS vs Compliance Consultants:**
+**OpenRole vs Compliance Consultants:**
 - **Delivery:** Automated technology vs manual professional services
 - **Cost:** $299-899/month vs $15,000-50,000 per engagement
 - **Speed:** 24-hour deployment vs 6-12 week implementation
 - **Maintenance:** Automatic updates vs periodic re-auditing
 
-**BrandOS vs SEO Tools:**
+**OpenRole vs SEO Tools:**
 - **Specialization:** Employment law expertise vs generic schema
 - **Intelligence:** Compliance automation vs static markup
 - **Management:** Ongoing optimization vs one-time implementation
@@ -264,22 +264,22 @@
 
 #### 1. No-Code Deployment Advantage
 **Market Gap:** Technical barrier between HR needs and developer implementation
-**BrandOS Solution:** Google Tag Manager deployment (marketing can install)
+**OpenRole Solution:** Google Tag Manager deployment (marketing can install)
 **Competitive Barrier:** Requires both HR and technical expertise to replicate
 
 #### 2. Compliance Intelligence Automation  
 **Market Gap:** Manual compliance management across changing laws
-**BrandOS Solution:** Automated rule engine with legal requirement updates
+**OpenRole Solution:** Automated rule engine with legal requirement updates
 **Competitive Barrier:** Requires deep employment law knowledge + technology
 
 #### 3. Agency Partnership Channel
 **Market Gap:** No scalable solution for managing multiple clients
-**BrandOS Solution:** Multi-client dashboard with revenue sharing
+**OpenRole Solution:** Multi-client dashboard with revenue sharing
 **Competitive Barrier:** Requires agency relationship building + technology
 
 #### 4. Network Effect Data Platform
 **Market Gap:** No aggregated employment data for benchmarking
-**BrandOS Solution:** Anonymized salary/benefit data across customer network
+**OpenRole Solution:** Anonymized salary/benefit data across customer network
 **Competitive Barrier:** Requires scale + trust + data science capability
 
 ---
@@ -302,7 +302,7 @@
 - No direct customer relationship with HR professionals
 - Focus on search optimization, not compliance automation
 
-**BrandOS Defense Strategy:**
+**OpenRole Defense Strategy:**
 - Establish compliance expertise moat (Google won't prioritize)
 - Build agency partnerships with switching costs
 - Focus on HR customer experience vs technical features
@@ -324,7 +324,7 @@
 - Enterprise focus excludes SMB market opportunity
 - No agency partnership model or multi-client expertise
 
-**BrandOS Defense Strategy:**
+**OpenRole Defense Strategy:**
 - Target SMB market ATS vendors don't serve effectively
 - Build agency partnerships that create switching costs
 - Focus on compliance intelligence depth vs basic JSON-LD
@@ -346,7 +346,7 @@
 - High-cost structure incompatible with SMB market
 - Manual process focus vs automation-first approach
 
-**BrandOS Defense Strategy:**
+**OpenRole Defense Strategy:**
 - Technology-first approach with superior automation
 - Cost advantage through software vs services
 - Agency partnership channel consultants can't replicate
@@ -415,7 +415,7 @@
 - API access to anonymized employment data
 - Third-party integrations with HR tools
 - White-label opportunities for consultants
-- Platform effect where others build value on BrandOS infrastructure
+- Platform effect where others build value on OpenRole infrastructure
 
 ### Switching Cost Development
 
@@ -426,16 +426,16 @@
 - Historical data and reporting dependencies
 
 **Operational Switching Costs:**
-- Training and process adaptation around BrandOS workflows
+- Training and process adaptation around OpenRole workflows
 - Compliance confidence and risk management processes
-- Relationship development with BrandOS support and success teams
+- Relationship development with OpenRole support and success teams
 - Performance baselines and measurement systems
 
 **Strategic Switching Costs:**
 - Agency partnerships with revenue sharing and certification
 - Multi-location coordination and management complexity
 - Brand association with compliance leadership and innovation
-- Customer testimonials and case studies featuring BrandOS
+- Customer testimonials and case studies featuring OpenRole
 
 ---
 

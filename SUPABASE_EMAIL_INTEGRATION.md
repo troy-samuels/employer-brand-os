@@ -737,7 +737,7 @@ USING (true);
 #!/bin/bash
 # Supabase Email Marketing Setup Script
 
-echo "Setting up BrandOS Email Marketing Database..."
+echo "Setting up OpenRole Email Marketing Database..."
 
 # 1. Create database schema
 supabase db push

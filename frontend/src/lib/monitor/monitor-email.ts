@@ -221,7 +221,7 @@ function renderRecommendations(recs: MonitorRecommendation[]): string {
 }
 
 function renderCta(companySlug: string): string {
-  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://rankwell.io"}/dashboard?company=${encodeURIComponent(companySlug)}`;
+  const dashboardUrl = `${process.env.NEXT_PUBLIC_APP_URL ?? "https://openrole.co.uk"}/dashboard?company=${encodeURIComponent(companySlug)}`;
 
   return `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation"
@@ -282,7 +282,7 @@ export function generateMonitorEmail(
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Rankwell — Weekly AI Reputation Report</title>
+  <title>OpenRole — Weekly AI Reputation Report</title>
 </head>
 <body style="margin:0;padding:0;background:${COLOR.bg};font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased;">
   <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:${COLOR.bg};">
@@ -294,7 +294,7 @@ export function generateMonitorEmail(
           <tr>
             <td style="padding:0 0 32px;">
               <p style="margin:0 0 4px;font-size:18px;font-weight:700;color:${COLOR.text};">
-                Rankwell
+                OpenRole
               </p>
               <p style="margin:0;font-size:13px;color:${COLOR.muted};">
                 Weekly AI Reputation Report — ${dateStr}
@@ -328,8 +328,8 @@ export function generateMonitorEmail(
           <tr>
             <td style="padding:24px 0 0;border-top:1px solid ${COLOR.border};">
               <p style="margin:0;font-size:12px;color:${COLOR.muted};line-height:1.6;">
-                You're receiving this because your company is monitored by Rankwell.
-                <a href="${process.env.NEXT_PUBLIC_APP_URL ?? "https://rankwell.io"}/unsubscribe" style="color:${COLOR.accent};text-decoration:none;">Unsubscribe</a>
+                You're receiving this because your company is monitored by OpenRole.
+                <a href="${process.env.NEXT_PUBLIC_APP_URL ?? "https://openrole.co.uk"}/unsubscribe" style="color:${COLOR.accent};text-decoration:none;">Unsubscribe</a>
               </p>
             </td>
           </tr>

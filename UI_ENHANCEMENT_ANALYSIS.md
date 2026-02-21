@@ -1,4 +1,4 @@
-# BRANDOS DEMO SITE UI ENHANCEMENT ANALYSIS
+# OPENROLE DEMO SITE UI ENHANCEMENT ANALYSIS
 **Current State Analysis + Codex 5.2 Enhancement Prompts**
 
 ---
@@ -61,7 +61,7 @@ Transform from basic SaaS demo to **premium product showcase** that makes compet
 ### 🚀 **PROMPT 1: HERO SECTION TRANSFORMATION**
 
 ```
-BUILD AN AWARD-WINNING HERO SECTION FOR BRANDOS
+BUILD AN AWARD-WINNING HERO SECTION FOR OPENROLE
 
 Create a hero section that would win the Awwwards Site of the Day. Requirements:
 
@@ -188,7 +188,7 @@ Quality bar: Looks more expensive than Salesforce or HubSpot dashboards.
 ```
 BUILD A COHESIVE MODERN BRANDING SYSTEM
 
-Create a brand identity that positions BrandOS as the premium choice in employer branding.
+Create a brand identity that positions OpenRole as the premium choice in employer branding.
 
 VISUAL IDENTITY:
 - **Sophisticated color palette**: Deep purples, electric blues, crisp whites
@@ -306,4 +306,4 @@ Target: 40%+ improvement in demo signup conversion rate.
 - **Accessibility score**: 95+ on Lighthouse
 - **Mobile experience**: Perfect on all screen sizes
 
-**The goal: Transform BrandOS demo from "nice SaaS tool" to "must-have premium solution" through world-class design execution.**
+**The goal: Transform OpenRole demo from "nice SaaS tool" to "must-have premium solution" through world-class design execution.**

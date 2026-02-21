@@ -66,8 +66,8 @@ export async function GET(
         headers: {
           "Cache-Control": "public, max-age=300, s-maxage=300",
           ETag: PIXEL_SCRIPT_ETAG,
-          "X-Rankwell-SRI": PIXEL_SCRIPT_SRI,
-          "X-Rankwell-Script-Version": PIXEL_SCRIPT_VERSION,
+          "X-OpenRole-SRI": PIXEL_SCRIPT_SRI,
+          "X-OpenRole-Script-Version": PIXEL_SCRIPT_VERSION,
         },
       },
     );

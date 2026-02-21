@@ -433,7 +433,7 @@ export default async function TruthPage({ params }: PageProps) {
               href="/"
               className="text-xs font-medium text-slate-400 hover:text-slate-600 transition-colors"
             >
-              Powered by Rankwell
+              Powered by OpenRole
             </Link>
           </div>
         </header>
@@ -562,7 +562,7 @@ export default async function TruthPage({ params }: PageProps) {
             <div className="mt-4 flex items-center justify-center gap-1">
               <span className="w-1.5 h-1.5 bg-teal-600 rounded-full" />
               <span className="text-[10px] uppercase tracking-widest text-slate-400 font-medium">
-                Rankwell Verified
+                OpenRole Verified
               </span>
             </div>
           </div>

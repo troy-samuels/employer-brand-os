@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-BrandOS: Execute SQL via Supabase REST API
+OpenRole: Execute SQL via Supabase REST API
 Uses the pg_meta API endpoint to run raw SQL
 """
 
@@ -28,7 +28,7 @@ def execute_sql():
         sql = f.read()
 
     print("=" * 60)
-    print("BrandOS: Execute SQL via Supabase")
+    print("OpenRole: Execute SQL via Supabase")
     print("=" * 60)
     print(f"\nProject URL: {url}")
     print(f"SQL File: {SQL_FILE}")

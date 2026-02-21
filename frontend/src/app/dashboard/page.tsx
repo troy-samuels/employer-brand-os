@@ -34,7 +34,7 @@ export default function DashboardPage() {
           <p className="overline mb-2">AI Corrections This Week</p>
           <p className="text-3xl font-bold text-neutral-950">14</p>
           <p className="text-sm text-neutral-500 mt-1">
-            Times Rankwell data overrode outdated or inaccurate sources
+            Times OpenRole data overrode outdated or inaccurate sources
           </p>
         </Card>
         <Card variant="bordered" padding="md">

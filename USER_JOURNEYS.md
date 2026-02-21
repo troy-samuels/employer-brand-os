@@ -1,4 +1,4 @@
-# Rankwell — User Journeys
+# OpenRole — User Journeys
 *Last updated: 2026-02-11*
 
 ---
@@ -9,7 +9,7 @@
 **Emotional arc:** Curiosity → Shock → Urgency → Relief → Loyalty
 
 ### Step 1: Landing Page (30 seconds)
-Sarah lands on rankwell.io. She sees the hero: a simulated ChatGPT response about a company — wrong salary, stale reviews, entity confusion. Underneath: "What does AI say about YOUR company?"
+Sarah lands on openrole.co.uk. She sees the hero: a simulated ChatGPT response about a company — wrong salary, stale reviews, entity confusion. Underneath: "What does AI say about YOUR company?"
 
 **She feels:** "I've never even thought about this."
 
@@ -168,7 +168,7 @@ She's manually published 3 pages. Her score went from 8 → 34. But she has 47 o
 
 > "You've improved 3 of 8 categories. To optimise all 47 active roles with always-fresh structured data, upgrade to the Smart Pixel."
 >
-> **Rankwell Pro — £299/month**
+> **OpenRole Pro — £299/month**
 > ✓ Smart Pixel (auto-generates JSON-LD for all roles)
 > ✓ Weekly monitoring across 6 AI models
 > ✓ Competitor benchmarking
@@ -183,7 +183,7 @@ She's manually published 3 pages. Her score went from 8 → 34. But she has 47 o
 
 ## Journey 2: "The Paranoid General Counsel"
 **Persona:** David, General Counsel at a 2,000-person company called "Liberty Financial"
-**Entry:** The Head of TA forwards David the Rankwell audit. One line highlighted: "AI models are conflating Liberty Financial with Liberty Mutual, Liberty Tax, and Liberty University."
+**Entry:** The Head of TA forwards David the OpenRole audit. One line highlighted: "AI models are conflating Liberty Financial with Liberty Mutual, Liberty Tax, and Liberty University."
 **Emotional arc:** Alarm → Investigation → Budget justification → Procurement
 
 ### Step 1: The Forward
@@ -248,7 +248,7 @@ This is the enterprise door. No self-serve. No freemium. Direct to sales because
 
 ## Journey 3: "The Data-Driven CFO"
 **Persona:** Maria, CFO at a Series B startup burning £180K/month on hiring
-**Entry:** VP Engineering shares the Rankwell audit in a leadership Slack channel, highlighting the Trust Delta: "AI is underquoting our engineers by £25K."
+**Entry:** VP Engineering shares the OpenRole audit in a leadership Slack channel, highlighting the Trust Delta: "AI is underquoting our engineers by £25K."
 **Emotional arc:** Scepticism → Calculation → Conviction → Approval
 
 ### Step 1: The Number That Catches Her Eye
@@ -282,7 +282,7 @@ Conservative estimate:
 
 £ 51,000 / month in wasted recruiting spend
 
-Rankwell Pro: £299/month
+OpenRole Pro: £299/month
 ROI: 170x
 ```
 
@@ -302,11 +302,11 @@ The checkout flow lets her adjust the inputs (actual roles, actual salary ranges
 
 ## Journey 4: "The Employer Brand Builder"
 **Persona:** James, newly hired Employer Brand Manager at a 600-person company
-**Entry:** Googles "how to improve employer brand AI" — finds a Rankwell blog post
+**Entry:** Googles "how to improve employer brand AI" — finds a OpenRole blog post
 **Emotional arc:** Discovery → Education → Empowerment → Advocacy
 
 ### Step 1: The Blog Post
-James is 3 weeks into his new role. He's been asked to "improve employer branding" but the company has no strategy. He searches for modern approaches and finds a Rankwell article: "The New Employer Brand Battleground: What AI Says About You When You're Not in the Room."
+James is 3 weeks into his new role. He's been asked to "improve employer branding" but the company has no strategy. He searches for modern approaches and finds a OpenRole article: "The New Employer Brand Battleground: What AI Says About You When You're Not in the Room."
 
 The article explains the citation chain, shows real examples, and ends with: "Check what AI says about your company — free, 30 seconds."
 
@@ -321,7 +321,7 @@ He downloads the PDF report and brings it to his next leadership meeting:
 
 > "I ran an AI reputation audit. When candidates ask ChatGPT about us, 92% of the information comes from 3-year-old Glassdoor reviews. Our own website isn't cited at all. Here's what AI is getting wrong, and here's the 8-step fix."
 
-**He feels:** "Rankwell just gave me my first 90-day plan and the data to back it up."
+**He feels:** "OpenRole just gave me my first 90-day plan and the data to back it up."
 
 ### Step 3: The Workflow
 James doesn't need convincing. He needs tools. He signs up for the Monitor (free 30 days) and starts using the Content Generator to build the missing pages:
@@ -338,7 +338,7 @@ He screenshots each Monday email and posts it in the leadership Slack: "Week 4 u
 **He feels:** "I'm the person who fixed a problem nobody knew existed. I look like a genius."
 
 ### Step 4: The Internal Champion
-James becomes the internal advocate. He brings Rankwell into the annual budget. He requests the Smart Pixel because manually updating 30+ roles is unsustainable. He refers two other Employer Brand Managers in his network.
+James becomes the internal advocate. He brings OpenRole into the annual budget. He requests the Smart Pixel because manually updating 30+ roles is unsustainable. He refers two other Employer Brand Managers in his network.
 
 **He feels:** "This is MY tool. It makes me indispensable."
 
@@ -361,7 +361,7 @@ James becomes the internal advocate. He brings Rankwell into the annual budget. 
 >
 > The fix takes about 4 weeks. Happy to walk you through it if useful.
 >
-> — Troy, Rankwell
+> — Troy, OpenRole
 
 Attached: 2-page PDF with Citation Score, top-level Source Gap Matrix, and Trust Delta for 3 key roles.
 
@@ -370,7 +370,7 @@ Attached: 2-page PDF with Citation Score, top-level Source Gap Matrix, and Trust
 ### Step 2: The Delegation
 Rachel forwards to her Employer Brand team and TA Ops lead: "Has anyone seen this? Look into it and report back."
 
-The team runs the full audit on rankwell.io. They confirm the findings independently. They present back to Rachel with the full report + competitor comparison showing two competitors scoring 30+.
+The team runs the full audit on openrole.co.uk. They confirm the findings independently. They present back to Rachel with the full report + competitor comparison showing two competitors scoring 30+.
 
 ### Step 3: The Enterprise Conversation
 Rachel's team requests a call. This isn't self-serve anymore — it's enterprise sales:

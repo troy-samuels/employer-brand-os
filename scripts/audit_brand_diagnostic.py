@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
-BrandOS - Diagnostic Audit Script (Balanced Option A)
+OpenRole - Diagnostic Audit Script (Balanced Option A)
 Two-phase approach:
 1. Research: Perplexity Sonar for live web search with citations
-2. Diagnosis: GPT-4o-mini to map pain points to BrandOS products
+2. Diagnosis: GPT-4o-mini to map pain points to OpenRole products
 
 Outputs ready-to-use email hooks for outreach.
 """
@@ -85,7 +85,7 @@ If no recent complaints found, state "No significant complaints found in 2024-20
 
 def diagnose_pain(company_name: str, research_text: str) -> dict:
     """
-    Analyze research findings and map to BrandOS product solutions.
+    Analyze research findings and map to OpenRole product solutions.
     Returns a structured diagnosis with email hook.
     """
     if "[RESEARCH ERROR]" in research_text or "No significant complaints" in research_text:
@@ -96,9 +96,9 @@ def diagnose_pain(company_name: str, research_text: str) -> dict:
             "confidence": "low"
         }
 
-    system_prompt = """You are a Sales Strategist for 'BrandOS', an employer branding platform.
+    system_prompt = """You are a Sales Strategist for 'OpenRole', an employer branding platform.
 
-Map the research findings to the correct BrandOS Product:
+Map the research findings to the correct OpenRole Product:
 - Salary/Pay/Compensation complaints → Assign 'BrandGraph' (Verified data layer)
 - Toxicity/Management/Culture complaints → Assign 'BrandSignal' (Reputation monitoring)
 - Competitors being better employers → Assign 'BrandSpy' (Competitive intelligence)
@@ -217,7 +217,7 @@ def run_batch_audit(csv_path: str = None):
             df.to_csv(default_path, index=False)
 
     print(f"\n{'='*60}")
-    print(f"  BRANDOS DIAGNOSTIC AUDIT")
+    print(f"  OPENROLE DIAGNOSTIC AUDIT")
     print(f"  Companies to process: {len(df)}")
     print(f"{'='*60}")
 
@@ -300,7 +300,7 @@ def main():
         sys.exit(1)
 
     print("\n" + "="*60)
-    print("  BRANDOS - DIAGNOSTIC AUDIT (Balanced Option A)")
+    print("  OPENROLE - DIAGNOSTIC AUDIT (Balanced Option A)")
     print("  Research: Perplexity Sonar | Diagnosis: GPT-4o-mini")
     print("="*60)
 

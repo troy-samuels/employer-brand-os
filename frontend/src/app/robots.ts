@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://rankwell.io/sitemap.xml",
+    sitemap: "https://openrole.co.uk/sitemap.xml",
   };
 }

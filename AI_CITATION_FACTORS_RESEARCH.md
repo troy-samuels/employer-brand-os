@@ -2,7 +2,7 @@
 ## How to Get Cited by GPT, Claude, Perplexity, Gemini & Copilot
 
 **Research Date:** 19 February 2026
-**Compiled by:** Malcolm (BrandOS Research)
+**Compiled by:** Malcolm (OpenRole Research)
 **Sources:** 25+ unique sources including academic papers, industry studies, and platform analyses
 **Quality Level:** VC due-diligence grade — every claim sourced, evidence strength rated
 
@@ -920,7 +920,7 @@ Based on general citation format data applied to employer context:
 
 ### 5.6 The Information Vacuum Opportunity
 
-**Key strategic insight for BrandOS:**
+**Key strategic insight for OpenRole:**
 
 There is a growing **information vacuum** about employer quality and culture in AI responses because:
 
@@ -936,7 +936,7 @@ There is a growing **information vacuum** about employer quality and culture in 
 - Generate Reddit-worthy employer brand content
 - Get included in industry comparison articles
 
-**BrandOS can be the platform that fills this gap systematically.**
+**OpenRole can be the platform that fills this gap systematically.**
 
 ---
 
@@ -1038,4 +1038,4 @@ This research was conducted on 19 February 2026 using:
 
 ---
 
-*Research compiled for BrandOS Employer Brand Intelligence Platform. Last updated: 19 February 2026.*
+*Research compiled for OpenRole Employer Brand Intelligence Platform. Last updated: 19 February 2026.*

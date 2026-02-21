@@ -1,7 +1,7 @@
-# AI READINESS AUDIT FRAMEWORK FOR BRANDOS
+# AI READINESS AUDIT FRAMEWORK FOR OPENROLE
 **Purpose:** Lead generation tool that proves employer websites are invisible to AI agents  
 **Target:** HR teams, talent acquisition leaders, marketing directors  
-**Outcome:** Generate urgency for BrandOS implementation
+**Outcome:** Generate urgency for OpenRole implementation
 
 ---
 
@@ -23,7 +23,7 @@
 ### **Automated Technical Checks**
 
 ```python
-# BrandOS Audit Engine (Python)
+# OpenRole Audit Engine (Python)
 def technical_audit(domain):
     results = {
         'robots_txt': check_robots_txt(domain),
@@ -282,7 +282,7 @@ COMPLIANCE VIOLATIONS DETECTED:
 
 TOTAL COMPLIANCE RISK: $35,100-$6,240,000
 
-AUTOMATED BRANDOS SOLUTION VALUE:
+AUTOMATED OPENROLE SOLUTION VALUE:
 ✅ Eliminate compliance violations in 24 hours
 ✅ Ongoing monitoring and updates
 ✅ ROI: Prevent $35K+ in minimum fines
@@ -312,7 +312,7 @@ def calculate_overall_score(audit_results):
         'overall_score': weighted_score,
         'grade': assign_letter_grade(weighted_score),
         'priority_fixes': identify_critical_issues(audit_results),
-        'estimated_roi': calculate_brandos_roi(audit_results)
+        'estimated_roi': calculate_openrole_roi(audit_results)
     }
 ```
 
@@ -349,7 +349,7 @@ CRITICAL ACTIONS NEEDED:
 4. Add real-time salary compliance
 5. Optimize for AI job search queries
 
-ESTIMATED BRANDOS ROI:
+ESTIMATED OPENROLE ROI:
 💰 Compliance savings: $35,100+ (avoid minimum fines)
 📈 Visibility improvement: 6.2x increase in AI job discovery
 ⚡ Implementation time: 24 hours vs 6-18 months internal development
@@ -359,13 +359,13 @@ ESTIMATED BRANDOS ROI:
 
 ## 🛠️ IMPLEMENTATION: AUDIT AUTOMATION TOOL
 
-### **BrandOS Audit Platform Architecture**
+### **OpenRole Audit Platform Architecture**
 
 ```
 Lead Generation Flow:
 1. Prospect enters company domain on audit landing page
 2. Automated audit runs (5-10 minutes)  
-3. PDF report generated with findings + BrandOS solution
+3. PDF report generated with findings + OpenRole solution
 4. Email delivered with "Schedule consultation" CTA
 5. Sales team follows up with detailed ROI discussion
 ```
@@ -374,7 +374,7 @@ Lead Generation Flow:
 
 ```python
 # audit-engine/main.py
-class BrandOSAudit:
+class OpenRoleAudit:
     def __init__(self, domain, company_name):
         self.domain = domain
         self.company_name = company_name
@@ -438,7 +438,7 @@ AI discovery.</p>
 
 **1. Lead Capture (Audit Request)**
 - Prospect gets immediate value (free audit)
-- BrandOS captures contact information
+- OpenRole captures contact information
 - Automated audit builds trust and authority
 
 **2. Problem Validation (Audit Results)**
@@ -446,8 +446,8 @@ AI discovery.</p>
 - Competitive disadvantage clearly shown
 - Compliance risk quantified in dollars
 
-**3. Solution Presentation (BrandOS Demo)**
-- "Here's what your audit results would look like with BrandOS..."
+**3. Solution Presentation (OpenRole Demo)**
+- "Here's what your audit results would look like with OpenRole..."
 - Before/after visibility comparison
 - ROI calculation based on audit findings
 
@@ -480,7 +480,7 @@ The full report is attached, but here's what this means:
 2. Qualified candidates find competitors first
 3. Potential fines for pay transparency violations
 
-GOOD NEWS: This is fixable in 24 hours with BrandOS.
+GOOD NEWS: This is fixable in 24 hours with OpenRole.
 
 I've included a "before/after" comparison showing how your visibility 
 would improve with our Smart Pixel solution.
@@ -510,13 +510,13 @@ They're capturing candidates who should be finding you.
 ### **Positioning vs Competitors:**
 
 **Traditional SEO audits:** Generic website analysis  
-**BrandOS audit:** Employment-specific AI visibility analysis
+**OpenRole audit:** Employment-specific AI visibility analysis
 
 **HR consulting:** Theoretical best practices  
-**BrandOS audit:** Real AI agent testing with concrete results
+**OpenRole audit:** Real AI agent testing with concrete results
 
 **ATS vendors:** Internal process optimization  
-**BrandOS audit:** External visibility and compliance focus
+**OpenRole audit:** External visibility and compliance focus
 
 ---
 
@@ -542,8 +542,8 @@ They're capturing candidates who should be finding you.
 
 **Target:** 100 audits/month → 20 qualified leads → 5 customers
 
-This audit approach transforms BrandOS from "another HR tech tool" into **"the solution to a critical problem you didn't know you had."**
+This audit approach transforms OpenRole from "another HR tech tool" into **"the solution to a critical problem you didn't know you had."**
 
 ---
 
-**The audit becomes both lead generation AND product validation - proving the BrandOS value proposition with every single prospect interaction.**
+**The audit becomes both lead generation AND product validation - proving the OpenRole value proposition with every single prospect interaction.**

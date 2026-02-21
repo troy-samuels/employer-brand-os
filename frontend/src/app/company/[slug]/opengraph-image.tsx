@@ -11,7 +11,7 @@ import { ImageResponse } from "next/og";
 import { untypedTable } from "@/lib/supabase/untyped-table";
 
 export const runtime = "edge";
-export const alt = "Rankwell AI Visibility Score";
+export const alt = "OpenRole AI Visibility Score";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -66,7 +66,7 @@ export default async function Image({ params }: PageProps) {
             fontFamily: "system-ui, sans-serif",
           }}
         >
-          <div style={{ fontSize: 48, fontWeight: 700 }}>Rankwell</div>
+          <div style={{ fontSize: 48, fontWeight: 700 }}>OpenRole</div>
           <div style={{ fontSize: 24, color: "#a3a3a3", marginTop: 12 }}>
             AI Visibility Score
           </div>
@@ -117,7 +117,7 @@ export default async function Image({ params }: PageProps) {
         >
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
             <div style={{ fontSize: 28, fontWeight: 700, color: "#fff" }}>
-              Rankwell
+              OpenRole
             </div>
           </div>
           <div style={{ fontSize: 16, color: "#a3a3a3" }}>
@@ -265,7 +265,7 @@ export default async function Image({ params }: PageProps) {
                 color: "#737373",
               }}
             >
-              How does your company score? → rankwell.io
+              How does your company score? → openrole.co.uk
             </div>
           </div>
         </div>

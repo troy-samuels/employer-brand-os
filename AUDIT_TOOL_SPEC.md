@@ -1,4 +1,4 @@
-# BrandOS: Free Audit Tool — Product Specification
+# OpenRole: Free Audit Tool — Product Specification
 **Date:** 7 February 2026
 **Status:** Definitive spec. Supersedes audit sections in AI_READINESS_AUDIT_FRAMEWORK.md and MVP_REQUIREMENTS.md.
 
@@ -6,11 +6,11 @@
 
 ## What This Is
 
-The free audit tool is the entire top of funnel for BrandOS. It proves the problem, captures leads, seeds the competitive benchmark database, and pre-builds the conversion path — all in one experience.
+The free audit tool is the entire top of funnel for OpenRole. It proves the problem, captures leads, seeds the competitive benchmark database, and pre-builds the conversion path — all in one experience.
 
 **Designed for:** HR directors, marketing leads, C-suite. Non-technical people who need to see a problem and a fix, not a technical report.
 
-**Lives at:** `brandos.ai` — the audit IS the homepage. Not buried behind a nav link. The first thing anyone sees is a single input field.
+**Lives at:** `openrole.co.uk` — the audit IS the homepage. Not buried behind a nav link. The first thing anyone sees is a single input field.
 
 ---
 
@@ -36,7 +36,7 @@ The audit runs in two phases. Phase 1 is free and instant. Phase 2 is gated behi
 The homepage is one thing:
 
 ```
-brandos.ai
+openrole.co.uk
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   What does AI tell candidates
   about your company?
@@ -122,7 +122,7 @@ Each check item has a **hover/tap tooltip** explaining it in plain English:
 
 ### Results URL
 
-Results live at `brandos.ai/audit/[company-slug]`
+Results live at `openrole.co.uk/audit/[company-slug]`
 
 This URL is shareable. HR director runs the audit, copies the link, drops it in Slack to their CMO or Head of Talent. The URL is the sales pitch.
 
@@ -342,7 +342,7 @@ If there's a traffic spike, Phase 2 queries queue server-side. The user sees the
 
 ## The Knowledge Database
 
-**Every audit — Phase 1 and Phase 2 — feeds the database. This is the most valuable asset BrandOS builds.**
+**Every audit — Phase 1 and Phase 2 — feeds the database. This is the most valuable asset OpenRole builds.**
 
 ### What Gets Stored (Phase 1 — every visit)
 
@@ -427,29 +427,29 @@ The audit isn't the end — it's the beginning of a pre-built onboarding path.
 
 **During Phase 2 (while AI queries run):**
 - In the background, we scrape the employer's own website for any careers/about data
-- Pre-populate a draft BrandOS profile: company name, detected industry, location, any benefits/roles found
+- Pre-populate a draft OpenRole profile: company name, detected industry, location, any benefits/roles found
 - This draft is stored but NOT shown yet
 
 **After results display:**
 - CTA: "Fix this in 5 minutes → Create your verified AI employer profile"
 - Click-through lands on a **pre-filled onboarding form** — not a blank form
 - The employer verifies what we detected, adds salary ranges, fills gaps, publishes
-- Their profile goes live at `brandos.ai/company/[slug]`
+- Their profile goes live at `openrole.co.uk/company/[slug]`
 
 **4–6 weeks later (automated):**
-- BrandOS re-runs the Phase 2 audit automatically
+- OpenRole re-runs the Phase 2 audit automatically
 - If AI responses have improved (because structured data has been crawled), send an email:
   "Your Shadow Salary Gap dropped from 28% to 9%. Here's what changed."
-- That's the free-to-paid conversion trigger: proof that BrandOS works
+- That's the free-to-paid conversion trigger: proof that OpenRole works
 
 ### From Audit to Share
 
-The results URL (`brandos.ai/audit/[company-slug]`) is designed to be shared:
+The results URL (`openrole.co.uk/audit/[company-slug]`) is designed to be shared:
 - HR director → CMO: "Look what AI says about us"
 - HR director → CEO: "We need to fix this"
 - Recruiter → HR director: "I keep getting asked about salaries AI is making up"
 
-Every share is a potential new lead seeing the BrandOS brand for the first time.
+Every share is a potential new lead seeing the OpenRole brand for the first time.
 
 ---
 

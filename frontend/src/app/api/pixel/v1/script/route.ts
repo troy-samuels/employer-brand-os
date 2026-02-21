@@ -76,8 +76,8 @@ export async function GET(
       "X-Content-Type-Options": "nosniff",
       "Cache-Control": "public, max-age=300, s-maxage=300, immutable",
       ETag: PIXEL_SCRIPT_ETAG,
-      "X-Rankwell-SRI": PIXEL_SCRIPT_SRI,
-      "X-Rankwell-Script-Version": PIXEL_SCRIPT_VERSION,
+      "X-OpenRole-SRI": PIXEL_SCRIPT_SRI,
+      "X-OpenRole-Script-Version": PIXEL_SCRIPT_VERSION,
     });
 
     if (request.headers.get("if-none-match") === PIXEL_SCRIPT_ETAG) {

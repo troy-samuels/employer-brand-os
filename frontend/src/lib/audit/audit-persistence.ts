@@ -22,7 +22,7 @@ import { createHash } from "node:crypto";
  */
 function hashIp(ip: string): string {
   return createHash("sha256")
-    .update(`rankwell-audit:${ip}`)
+    .update(`openrole-audit:${ip}`)
     .digest("hex")
     .slice(0, 16);
 }

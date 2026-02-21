@@ -12,7 +12,7 @@ import {
 } from "@/lib/audit/brand-reputation";
 
 const FETCH_TIMEOUT_MS = 5000;
-const AUDIT_USER_AGENT = "RankwellAuditBot/1.1 (+https://rankwell.ai/audit)";
+const AUDIT_USER_AGENT = "OpenRoleAuditBot/1.1 (+https://openrole.ai/audit)";
 const HEADLESS_FALLBACK_MAX_TEXT_CHARS = 500;
 const HEADLESS_FALLBACK_MIN_HTML_BYTES = 5000;
 const HEADLESS_FALLBACK_EXTENDED_TEXT_CHARS = 1200;

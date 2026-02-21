@@ -1,4 +1,4 @@
-# BrandOS Project Constitution & Coding Standards
+# OpenRole Project Constitution & Coding Standards
 
 ## 1. Tech Stack & Architecture
 - **Framework:** Next.js 15+ (App Router)

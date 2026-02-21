@@ -1,7 +1,7 @@
-# BRANDOS: 2.5M CONTACT EMAIL MARKETING STRATEGY
+# OPENROLE: 2.5M CONTACT EMAIL MARKETING STRATEGY
 **Asset:** 2.5 million contact database  
 **Platform:** Supabase integration  
-**Goal:** Systematic conversion to BrandOS customers  
+**Goal:** Systematic conversion to OpenRole customers  
 **Timeline:** 90-day aggressive campaign + ongoing nurture
 
 ---
@@ -163,8 +163,8 @@ CREATE TABLE gdpr_consent (
 ```
 // DNS Records Required
 TXT record: v=spf1 include:_spf.google.com ~all
-DKIM: brandos._domainkey.brandos.com (1024-bit key)
-DMARC: v=DMARC1; p=quarantine; rua=mailto:dmarc@brandos.com
+DKIM: openrole._domainkey.openrole.com (1024-bit key)
+DMARC: v=DMARC1; p=quarantine; rua=mailto:dmarc@openrole.com
 ```
 
 #### IP Warming Strategy
@@ -216,11 +216,11 @@ Content Focus:
 
 #### Week 3-4: Solution Introduction Campaign  
 **Theme:** "The Infrastructure Solution"  
-**Goal:** BrandOS awareness + lead qualification
+**Goal:** OpenRole awareness + lead qualification
 
 **Email 3: The Smart Pixel Solution**
 ```
-Subject: How Stripe solved payments, BrandOS solves employer data
+Subject: How Stripe solved payments, OpenRole solves employer data
 Preview: One line of code. Instant AI compliance. See the demo...
 
 Content Focus:
@@ -279,14 +279,14 @@ CTA: "Request franchise demo"
 
 **Email 9: Social Proof Surge**
 ```
-Subject: 127 companies chose BrandOS this month. Here's why...
+Subject: 127 companies chose OpenRole this month. Here's why...
 Content Focus: Customer logos, testimonials, usage statistics
-CTA: "Join 500+ companies using BrandOS"
+CTA: "Join 500+ companies using OpenRole"
 ```
 
 **Email 10: Limited Time Offer**
 ```
-Subject: 50% off first year ends Friday (BrandOS Early Adopter)
+Subject: 50% off first year ends Friday (OpenRole Early Adopter)
 Content Focus: Limited time pricing, early adopter benefits, urgency
 CTA: "Claim early adopter discount"
 ```
@@ -320,7 +320,7 @@ WHERE lead_score IS NULL OR lead_score < 100;
 **Competitor Mention Tracking**
 - Trigger: Opens emails mentioning Workday/Greenhouse
 - Action: Competitive comparison content series
-- Goal: Highlight BrandOS advantages vs ATS platforms
+- Goal: Highlight OpenRole advantages vs ATS platforms
 
 ---
 
@@ -337,7 +337,7 @@ WHERE lead_score IS NULL OR lead_score < 100;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{subject_line}}</title>
     <style>
-        /* BrandOS Email Styles */
+        /* OpenRole Email Styles */
         .brand-header { background: linear-gradient(135deg, #1e293b, #7c3aed, #1e293b); }
         .glass-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
         .cta-button { background: #7c3aed; color: white; padding: 12px 24px; border-radius: 8px; }
@@ -345,7 +345,7 @@ WHERE lead_score IS NULL OR lead_score < 100;
 </head>
 <body>
     <div class="brand-header">
-        <img src="https://brandos.com/logo-white.png" alt="BrandOS" width="120">
+        <img src="https://openrole.com/logo-white.png" alt="OpenRole" width="120">
     </div>
     
     <div class="email-content">
@@ -368,12 +368,12 @@ WHERE lead_score IS NULL OR lead_score < 100;
     </div>
     
     <footer>
-        <p>© 2026 BrandOS - The SSL Certificate of Employer Branding</p>
+        <p>© 2026 OpenRole - The SSL Certificate of Employer Branding</p>
         <a href="{{unsubscribe_url}}">Unsubscribe</a> | <a href="{{preference_center_url}}">Update Preferences</a>
     </footer>
     
     <!-- Tracking Pixel -->
-    <img src="https://track.brandos.com/open/{{contact_id}}/{{campaign_id}}" width="1" height="1">
+    <img src="https://track.openrole.com/open/{{contact_id}}/{{campaign_id}}" width="1" height="1">
 </body>
 </html>
 ```
@@ -436,7 +436,7 @@ CREATE TABLE subject_line_tests (
 ### Landing Page Strategy (Email Traffic)
 
 #### Segmented Landing Pages
-**URL Structure:** `brandos.com/email/{segment}/{campaign}`
+**URL Structure:** `openrole.com/email/{segment}/{campaign}`
 
 **CHRO Landing Page (`/email/chro/compliance`)**
 - Headline: "Protect Your Company from $300K Compliance Violations"
@@ -597,7 +597,7 @@ ORDER BY annual_recurring_revenue DESC;
 # Dynamic Email Content Generation
 def generate_personalized_email(contact_data, campaign_theme):
     prompt = f"""
-    Generate email content for BrandOS marketing campaign.
+    Generate email content for OpenRole marketing campaign.
     
     Contact: {contact_data['first_name']} {contact_data['last_name']}
     Title: {contact_data['job_title']}
@@ -750,7 +750,7 @@ Franchises (200K contacts):     800 customers @ $299/month =  $2.9M ARR
 Total Target:                 4,650 customers               = $28.9M ARR
 ```
 
-**The 2.5M contact database represents a $50M+ marketing asset that could accelerate BrandOS to market leadership within 12 months.**
+**The 2.5M contact database represents a $50M+ marketing asset that could accelerate OpenRole to market leadership within 12 months.**
 
 ---
 
@@ -765,7 +765,7 @@ Total Target:                 4,650 customers               = $28.9M ARR
 - Sales Development: $500-1,200 per customer
 - **Average CAC: $400-600 per customer**
 
-**BrandOS Email Marketing CAC:**
+**OpenRole Email Marketing CAC:**
 - Email platform costs: $2,000/month
 - Content creation: $5,000/month  
 - Landing page optimization: $3,000/month
@@ -795,7 +795,7 @@ CREATE TABLE competitor_mentions (
 
 ## CONCLUSION: THE EMAIL MULTIPLIER EFFECT
 
-The 2.5M contact database transforms BrandOS from a startup into a company with enterprise-level marketing reach from Day 1. This asset provides:
+The 2.5M contact database transforms OpenRole from a startup into a company with enterprise-level marketing reach from Day 1. This asset provides:
 
 1. **Immediate Market Access:** No customer acquisition ramp-up period
 2. **Rapid Validation:** Real customer feedback within weeks, not months  
@@ -805,6 +805,6 @@ The 2.5M contact database transforms BrandOS from a startup into a company with 
 
 **Strategic Recommendation:** This email database should be the primary go-to-market channel, with all other marketing efforts (paid ads, content, partnerships) serving as supplementary channels.**
 
-**Expected Impact:** The combination of product-market fit (validated through research) + massive distribution advantage (2.5M contacts) + market timing (AI + regulatory tailwinds) creates a potential "blitzscaling" scenario where BrandOS could achieve market dominance within 12-18 months.**
+**Expected Impact:** The combination of product-market fit (validated through research) + massive distribution advantage (2.5M contacts) + market timing (AI + regulatory tailwinds) creates a potential "blitzscaling" scenario where OpenRole could achieve market dominance within 12-18 months.**
 
-The email marketing strategy outlined above provides the systematic framework to convert this database into the customer acquisition engine that accelerates BrandOS to market leadership.
+The email marketing strategy outlined above provides the systematic framework to convert this database into the customer acquisition engine that accelerates OpenRole to market leadership.

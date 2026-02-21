@@ -1,5 +1,5 @@
-# BRANDOS COMPETITIVE MOAT ANALYSIS
-**Strategic Question:** What prevents competitors from copying BrandOS?  
+# OPENROLE COMPETITIVE MOAT ANALYSIS
+**Strategic Question:** What prevents competitors from copying OpenRole?  
 **Analysis Framework:** 7 types of business moats applied to employment AI optimization  
 **Date:** February 6, 2026
 
@@ -12,7 +12,7 @@
 **Moat Strength:** **Medium-High** (defensible for 2-3 years)  
 **Competitive Window:** **12-18 months** before significant threats
 
-**Key Insight:** BrandOS creates a **"employment data flywheel"** where more customers = better compliance intelligence = stronger competitive advantage.
+**Key Insight:** OpenRole creates a **"employment data flywheel"** where more customers = better compliance intelligence = stronger competitive advantage.
 
 ---
 
@@ -51,7 +51,7 @@ More Clients → More Job Data → Better Benchmarking → More Accurate Complia
 
 **Salary Intelligence:**
 ```python
-# BrandOS Advantage Example
+# OpenRole Advantage Example
 "Based on 2,847 similar companies, software engineers in SF 
 should be paid $185,000-$220,000 to remain compliant and competitive.
 Your current range of $160,000-$180,000 puts you at legal risk 
@@ -88,7 +88,7 @@ in California and 15% below market rate."
 
 ### **Deep Employment Law Specialization**
 
-**BrandOS develops expertise that's difficult to replicate:**
+**OpenRole develops expertise that's difficult to replicate:**
 
 **Multi-Jurisdiction Knowledge:**
 - NYC Local Law 144 implementation nuances
@@ -106,7 +106,7 @@ in California and 15% below market rate."
 ### **Technical Compliance Engine:**
 
 ```python
-# BrandOS Compliance Intelligence
+# OpenRole Compliance Intelligence
 class ComplianceEngine:
     def __init__(self):
         self.laws = load_employment_laws()  # 247 jurisdictions
@@ -193,7 +193,7 @@ Total switching cost: $25,000+ per major client
 **Agency Partnership Model Creates Barriers:**
 
 **Revenue Dependency:**
-- **Agency earns 30%** of client revenue through BrandOS
+- **Agency earns 30%** of client revenue through OpenRole
 - **$50,000+ annual income** from typical agency partnership
 - **Switching means giving up established revenue stream**
 - **Training new agencies** takes 3-6 months
@@ -202,25 +202,25 @@ Total switching cost: $25,000+ per major client
 - **40+ hours training** per agency partnership
 - **Certification programs** create specialized knowledge
 - **White-label materials** customized per agency
-- **Client relationships** built around BrandOS expertise
+- **Client relationships** built around OpenRole expertise
 
 **Territory Exclusivity:**
 - **Geographic exclusivity** prevents agency switching
 - **Industry specialization** creates niche expertise
-- **Client contract terms** reference BrandOS specifically
+- **Client contract terms** reference OpenRole specifically
 - **Marketing materials** co-branded with agency
 
 ### **Network Effects Within Agencies:**
 
 ```
-Agency A (20 clients) → Recommends BrandOS to Agency B → 
+Agency A (20 clients) → Recommends OpenRole to Agency B → 
 Agency B (15 clients) → Joint marketing efforts → 
 Agency C wants to join → Network of 55 locations total
 ```
 
 **Competitive Barrier:**
 - **Competitor** would need to rebuild entire agency network
-- **Revenue sharing** terms must match or exceed BrandOS
+- **Revenue sharing** terms must match or exceed OpenRole
 - **Agencies resist change** once revenue streams established
 - **Geographic coverage** takes years to replicate
 
@@ -332,7 +332,7 @@ Agency C wants to join → Network of 55 locations total
 
 **Advanced Employment Intelligence:**
 ```python
-# Example: Advanced BrandOS Intelligence 
+# Example: Advanced OpenRole Intelligence 
 "Based on 10,000+ job postings analyzed, software engineer 
 roles with these 3 keywords get 40% more AI visibility:
 
@@ -398,13 +398,13 @@ these exact phrases, giving them 2.3x better AI visibility."
 1. **Revenue sharing** creates switching costs
 2. **Territory exclusivity** prevents competitive recruitment  
 3. **Certification programs** build specialized knowledge
-4. **Co-marketing** increases agency investment in BrandOS success
+4. **Co-marketing** increases agency investment in OpenRole success
 
 ### **Long-term Vision: Employment AI Intelligence Platform (Years 3-5)**
 
 **Ultimate Moat:**
 ```
-BrandOS becomes the "Bloomberg Terminal for Employment Data"
+OpenRole becomes the "Bloomberg Terminal for Employment Data"
 - Real-time compliance intelligence across all jurisdictions
 - Predictive AI behavior modeling for job visibility  
 - Market-leading salary and benefits benchmarking
@@ -449,7 +449,7 @@ BrandOS becomes the "Bloomberg Terminal for Employment Data"
 
 ## 🚨 CRITICAL INSIGHT: TIME-LIMITED OPPORTUNITY
 
-**The BrandOS moat window is FINITE:**
+**The OpenRole moat window is FINITE:**
 
 **Months 1-12:** Build foundational moats (data + distribution)  
 **Months 12-24:** Strengthen against ATS vendor competition  
@@ -461,6 +461,6 @@ BrandOS becomes the "Bloomberg Terminal for Employment Data"
 
 ---
 
-**Bottom Line:** BrandOS has **multiple defendable moats** but must build them **quickly and deliberately**. The combination of data network effects + regulatory expertise + distribution lock-in creates a **2-3 year defensive advantage** with proper execution.
+**Bottom Line:** OpenRole has **multiple defendable moats** but must build them **quickly and deliberately**. The combination of data network effects + regulatory expertise + distribution lock-in creates a **2-3 year defensive advantage** with proper execution.
 
 **The business is defensible, but the window to build defenses is limited.**

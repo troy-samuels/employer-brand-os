@@ -1,5 +1,5 @@
 """
-BrandOS Company Auditor
+OpenRole Company Auditor
 Forensic tool to analyze how AI agents view a company's career data.
 Uses Perplexity API (sonar-reasoning-pro) for real-time web search.
 """

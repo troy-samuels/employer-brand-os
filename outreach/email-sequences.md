@@ -1,4 +1,4 @@
-# Rankwell Email Sequences — Enterprise GTM
+# OpenRole Email Sequences — Enterprise GTM
 *Ready for Resend integration*
 
 ---
@@ -53,13 +53,13 @@ The results were interesting. {company_name}'s own careers page wasn't cited onc
 
 We built a free tool that shows you exactly what AI tells candidates about your company, and where it's getting its information from. Takes 30 seconds.
 
-→ Run your free audit: https://rankwell.io/audit?company={company_slug}
+→ Run your free audit: https://openrole.co.uk/audit?company={company_slug}
 
 800 million people use ChatGPT every week. If you're spending money on employer branding, it's worth knowing what the AI is actually saying.
 
 Best,
 Troy Samuels
-Rankwell
+OpenRole
 ```
 
 ### Email 2: "The data gap" (Day 3)
@@ -78,7 +78,7 @@ The fix is surprisingly straightforward — it's a structured data problem, not 
 
 If you're curious what specifically needs fixing for {company_name}:
 
-→ See your full audit results: https://rankwell.io/audit?company={company_slug}
+→ See your full audit results: https://openrole.co.uk/audit?company={company_slug}
 
 Troy
 ```
@@ -99,7 +99,7 @@ Companies in {industry} that have optimised their structured data and careers co
 
 The gap is fixable in under a week with the right approach.
 
-→ See the full comparison: https://rankwell.io/compare?companies={company_slug},{competitor_slug}
+→ See the full comparison: https://openrole.co.uk/compare?companies={company_slug},{competitor_slug}
 
 Troy
 ```
@@ -117,7 +117,7 @@ I've sent a few emails about what AI is telling candidates about {company_name}.
 But if the timing is just off, here's what's worth bookmarking: we recently published research showing that 85% of job seekers now use AI to research employers before applying. The employers who show up accurately in AI responses are seeing 30-40% better application rates.
 
 The free audit is always there if you want to check:
-→ https://rankwell.io
+→ https://openrole.co.uk
 
 Either way, all the best with hiring this year.
 
@@ -148,12 +148,12 @@ Key findings:
 • Glassdoor and Indeed dominate 80%+ of what AI says about employers
 • The average employer's own content doesn't appear in AI results at all
 
-Full report: https://rankwell.io/blog/what-ai-tells-candidates-about-your-company
+Full report: https://openrole.co.uk/blog/what-ai-tells-candidates-about-your-company
 
 If you're working on employer brand at {company_name}, this data might be useful for making the case internally for AI visibility optimisation.
 
 Troy Samuels
-Rankwell — AI Reputation Intelligence
+OpenRole — AI Reputation Intelligence
 ```
 
 ### Email 2: "The myth" (Day 5)
@@ -169,7 +169,7 @@ You might have seen advice about creating an "llms.txt" file — a file that sup
 We analysed 300,000 domains and 10 million bot requests. The result: zero AI crawlers read llms.txt files. Not one.
 
 Every consultant and blog recommending this is wrong. Here's what actually works:
-→ https://rankwell.io/blog/llms-txt-myth
+→ https://openrole.co.uk/blog/llms-txt-myth
 
 The short version: structured data (JSON-LD), FAQ-formatted content, and multi-platform presence are what drive AI citations. Not a text file that nobody reads.
 
@@ -193,7 +193,7 @@ Troy
 ```
 {first_name},
 
-I run Rankwell — we map how AI models describe employers to candidates.
+I run OpenRole — we map how AI models describe employers to candidates.
 
 I audited {company_name} this morning. Most of the results were typical for {industry}: AI pulls heavily from Glassdoor and LinkedIn data, your careers site barely gets cited.
 
@@ -218,7 +218,7 @@ const sendSequenceEmail = async (contact: Contact, sequence: string, step: numbe
   const personalised = personaliseEmail(template, contact);
   
   const result = await resend.emails.send({
-    from: 'Troy <troy@rankwell.io>',
+    from: 'Troy <troy@openrole.co.uk>',
     to: contact.email,
     subject: personalised.subject,
     html: personalised.body,

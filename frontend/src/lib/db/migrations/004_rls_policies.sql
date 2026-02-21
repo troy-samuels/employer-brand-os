@@ -1,4 +1,4 @@
--- Row Level Security policies for Rankwell
+-- Row Level Security policies for OpenRole
 -- Run with service role (bypasses RLS by default)
 -- These policies restrict anon/authenticated access per table
 

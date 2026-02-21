@@ -6,9 +6,9 @@
 import { createHash, createHmac, timingSafeEqual } from "node:crypto";
 import type { NextRequest } from "next/server";
 
-const SIGNATURE_HEADER = "x-rankwell-signature";
-const TIMESTAMP_HEADER = "x-rankwell-timestamp";
-const NONCE_HEADER = "x-rankwell-nonce";
+const SIGNATURE_HEADER = "x-openrole-signature";
+const TIMESTAMP_HEADER = "x-openrole-timestamp";
+const NONCE_HEADER = "x-openrole-nonce";
 const DEFAULT_ALLOWED_DRIFT_SECONDS = 300;
 const DEFAULT_MAX_NONCE_STORE_ENTRIES = 10000;
 

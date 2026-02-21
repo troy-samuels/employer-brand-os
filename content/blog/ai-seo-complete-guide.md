@@ -2,7 +2,7 @@
 title: "AI SEO for Employer Branding: The Complete Guide to Generative Engine Optimisation"
 description: "The definitive guide to optimising your employer brand for AI visibility. Based on analysis of 680M citations across ChatGPT, Google AI, Perplexity, and Claude."
 date: "2026-02-20"
-author: "Rankwell Research Team"
+author: "OpenRole Research Team"
 category: "Guide"
 readTime: "18 min"
 tags: ["GEO", "AI SEO", "employer branding", "ChatGPT", "citations"]
@@ -572,7 +572,7 @@ Submit to Google Search Console.
 
 #### Day 29-30: First Measurement
 
-- Run a [Rankwell audit](https://rankwell.io) to baseline your AI visibility score
+- Run a [OpenRole audit](https://openrole.co.uk) to baseline your AI visibility score
 - Manually check ChatGPT: "What's it like to work at [Your Company]?"
 - Check Google AI: Search "What does [Your Company] pay for [Role]?"
 - Check Perplexity: "Tell me about [Your Company]'s culture"
@@ -591,7 +591,7 @@ You can't improve what you don't measure. Here's how to track AI visibility:
 #### 1. AI Visibility Score
 **What it is:** Composite score of how accurately AI represents you.
 
-**How to measure:** Use [Rankwell's free audit tool](https://rankwell.io) — tracks accuracy across ChatGPT, Google AI, and Perplexity.
+**How to measure:** Use [OpenRole's free audit tool](https://openrole.co.uk) — tracks accuracy across ChatGPT, Google AI, and Perplexity.
 
 **Target:** 70+ out of 100
 
@@ -637,7 +637,7 @@ You can't improve what you don't measure. Here's how to track AI visibility:
 - One spot check (ask ChatGPT about you, screenshot the response)
 
 **Monthly:**
-- Full Rankwell audit
+- Full OpenRole audit
 - Citation accuracy check
 - Competitor comparison
 
@@ -781,7 +781,7 @@ The research is clear. The tools are available. The opportunity is massive.
 
 **Start today:**
 
-1. [Run a free Rankwell audit](https://rankwell.io) to see what AI says about you now
+1. [Run a free OpenRole audit](https://openrole.co.uk) to see what AI says about you now
 2. Implement Organization and FAQPage schema this week
 3. Rewrite your careers page in FAQ format this month
 4. Measure again in 30 days
@@ -795,15 +795,15 @@ The zero-click candidate is already here. The question is whether your employer 
 ### Validation Tools
 - [Schema.org Validator](https://validator.schema.org/) — Check your structured data
 - [Google Rich Results Test](https://search.google.com/test/rich-results) — See how Google reads your markup
-- [Rankwell Audit](https://rankwell.io) — Check AI visibility across ChatGPT, Google AI, Perplexity
+- [OpenRole Audit](https://openrole.co.uk) — Check AI visibility across ChatGPT, Google AI, Perplexity
 
 ### Schema Generators
-- [Rankwell JSON-LD Generator](https://rankwell.io/tools/employer-schema) — Free employer schema builder
+- [OpenRole JSON-LD Generator](https://openrole.co.uk/tools/employer-schema) — Free employer schema builder
 - [Schema Markup Generator](https://technicalseo.com/tools/schema-markup-generator/) — Multi-type schema tool
 
 ### Monitoring Tools
 - [Google Search Console](https://search.google.com/search-console) — Track search performance
-- [Rankwell Monitor](https://rankwell.io/pricing) — Weekly AI visibility reports
+- [OpenRole Monitor](https://openrole.co.uk/pricing) — Weekly AI visibility reports
 
 ### Further Reading
 - [The llms.txt Myth](/blog/llms-txt-myth) — Why the file everyone's creating doesn't work
@@ -813,6 +813,6 @@ The zero-click candidate is already here. The question is whether your employer 
 ---
 
 **Questions? Corrections? Success stories?**  
-Email us: research@rankwell.io
+Email us: research@openrole.co.uk
 
 We're actively studying AI employer branding and publish all findings publicly. If you've got data or case studies to share, we'd love to hear from you.

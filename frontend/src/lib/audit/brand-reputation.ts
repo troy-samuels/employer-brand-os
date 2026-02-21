@@ -99,7 +99,7 @@ interface BraveSearchResult {
 }
 
 const BRAVE_SEARCH_TIMEOUT_MS = 8_000;
-const BRAVE_SEARCH_USER_AGENT = "RankwellAuditBot/1.1 (+https://rankwell.ai/audit)";
+const BRAVE_SEARCH_USER_AGENT = "OpenRoleAuditBot/1.1 (+https://openrole.ai/audit)";
 const BRAVE_SEARCH_MAX_HTML_RESULTS = 20;
 const BRAVE_SEARCH_IGNORED_HOSTS = new Set([
   "search.brave.com",

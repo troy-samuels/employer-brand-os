@@ -1,6 +1,6 @@
 /**
  * @module app/api/pixel/v1/crawl-log
- * Logs AI crawler visits detected by the Rankwell pixel.
+ * Logs AI crawler visits detected by the OpenRole pixel.
  * POST /api/pixel/v1/crawl-log
  */
 
@@ -90,7 +90,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
     const url = new URL(request.url);
     const rawKey =
-      request.headers.get("x-rankwell-key") ??
+      request.headers.get("x-openrole-key") ??
       url.searchParams.get("key");
 
     const keyResult = await requireApiKey(

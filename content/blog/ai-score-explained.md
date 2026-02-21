@@ -1,8 +1,8 @@
 ---
 title: "AI Employer Brand Audit: What Your Score Really Means"
-description: "A detailed breakdown of how Rankwell calculates your AI Visibility Score, what each factor measures, and what score you need to be competitive."
+description: "A detailed breakdown of how OpenRole calculates your AI Visibility Score, what each factor measures, and what score you need to be competitive."
 date: "2026-02-22"
-author: "Rankwell Product Team"
+author: "OpenRole Product Team"
 category: "Education"
 readTime: "10 min"
 tags: ["AI score", "audit", "metrics", "benchmarking", "product"]
@@ -11,7 +11,7 @@ featured: false
 
 # AI Employer Brand Audit: What Your Score Really Means
 
-You ran the [free Rankwell audit](https://rankwell.io). You got a score. Maybe it was 34/100. Maybe it was 67. Maybe it was 12.
+You ran the [free OpenRole audit](https://openrole.co.uk). You got a score. Maybe it was 34/100. Maybe it was 67. Maybe it was 12.
 
 **What does that number actually mean?**
 
@@ -421,14 +421,14 @@ The gap between **what AI could say** (if you give it good data) and **what AI a
 ---
 
 **Want to check your score?**  
-[Run a free Rankwell audit](https://rankwell.io) — takes 30 seconds, shows your score and the exact factors bringing it down.
+[Run a free OpenRole audit](https://openrole.co.uk) — takes 30 seconds, shows your score and the exact factors bringing it down.
 
 Then use this guide to prioritize your fixes. Check back in 30 days and see the improvement.
 
 ---
 
 **Sources:**
-- Rankwell audit data: 500 UK employers (Feb 2026)
+- OpenRole audit data: 500 UK employers (Feb 2026)
 - Profound: 680M LLM citation analysis (2024-2025)
 - Schema.org impact study: 300K domains (2025)
-- Industry benchmarks: Internal Rankwell data (2024-2026)
+- Industry benchmarks: Internal OpenRole data (2024-2026)

@@ -1,5 +1,5 @@
 # AI STRATEGY REFINEMENT ANALYSIS
-**Context:** Clawdbot emergence + AI agent adoption impact on BrandOS positioning  
+**Context:** Clawdbot emergence + AI agent adoption impact on OpenRole positioning  
 **Analysis:** Strategic positioning refinement for 2.5M email marketing campaign  
 **Timeline:** Immediate tactical adjustments needed
 
@@ -12,7 +12,7 @@
 **Original Problem:** ATS outputs messy HTML that AI can't read  
 **Amplified Problem:** AI agents now make 40%+ of job discovery decisions with incomplete data
 
-**This makes BrandOS 10x more critical, not less relevant.**
+**This makes OpenRole 10x more critical, not less relevant.**
 
 ---
 
@@ -20,7 +20,7 @@
 
 ### Current: "The SSL Certificate of Employer Branding"  
 **Assessment:** STRONGER than ever - SSL analogy perfect for AI age
-- SSL solved browser trust → BrandOS solves AI agent trust
+- SSL solved browser trust → OpenRole solves AI agent trust
 - Essential infrastructure layer → More essential with AI adoption
 - One-line implementation → Perfect for rapid AI integration
 
@@ -77,8 +77,8 @@
 **Original:** "New pay transparency laws: Are you compliant?"  
 **Refined:** "AI agents need salary data. Is yours readable?"
 
-**Original:** "How Stripe solved payments, BrandOS solves employer data"  
-**Refined:** "Stripe for payments, BrandOS for AI recruiting infrastructure"
+**Original:** "How Stripe solved payments, OpenRole solves employer data"  
+**Refined:** "Stripe for payments, OpenRole for AI recruiting infrastructure"
 
 ### Content Block Enhancements
 
@@ -156,7 +156,7 @@ Your structured data determines what they see"
 **Timeline:** Month 2  
 **Target:** HR Managers & Directors  
 **Format:** Interactive assessment tool
-**Result:** Personalized AI readiness score + BrandOS recommendation
+**Result:** Personalized AI readiness score + OpenRole recommendation
 
 ---
 
@@ -260,7 +260,7 @@ Your structured data determines what they see"
 
 ## CONCLUSION
 
-**The emergence of AI agents doesn't threaten BrandOS - it validates and amplifies our entire value proposition.**
+**The emergence of AI agents doesn't threaten OpenRole - it validates and amplifies our entire value proposition.**
 
 ### Strategic Recommendations:
 1. **Embrace AI-first messaging** while keeping infrastructure positioning

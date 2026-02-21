@@ -2,7 +2,7 @@
 title: "The llms.txt Myth: Why the File Every Employer Is Creating Doesn't Work"
 description: "New research studying 10M+ AI crawler requests and 300K domains reveals llms.txt has zero measurable impact on AI citations. Here's what actually works."
 date: "2026-02-20"
-author: "Rankwell Research Team"
+author: "OpenRole Research Team"
 category: "Research"
 readTime: "12 min"
 tags: ["llms.txt", "AI SEO", "GEO", "citations", "research"]
@@ -163,7 +163,7 @@ Yes, Glassdoor gets cited despite blocking. But Glassdoor has 1.2 billion page v
 
 ## What We Got Wrong (And What We're Doing Now)
 
-At Rankwell, we recommended llms.txt files to hundreds of employers. We built a generator tool. We wrote a guide.
+At OpenRole, we recommended llms.txt files to hundreds of employers. We built a generator tool. We wrote a guide.
 
 We were wrong.
 
@@ -230,7 +230,7 @@ Claim and fully populate:
 Cross-reference matters. The more platforms that verify the same facts about you, the more AI trusts those facts.
 
 ### Step 5: Monitor What AI Actually Says
-You can't fix what you don't measure. [Run a free Rankwell audit](https://rankwell.io) to see what ChatGPT, Google AI, and Perplexity actually say about your company right now.
+You can't fix what you don't measure. [Run a free OpenRole audit](https://openrole.co.uk) to see what ChatGPT, Google AI, and Perplexity actually say about your company right now.
 
 Then check again in 30 days after implementing structured data. You should see measurable improvement in accuracy.
 
@@ -279,6 +279,6 @@ All research sources are publicly available and peer-reviewed.
 ---
 
 **Want to see what AI actually says about your company?**  
-[Run a free Rankwell audit](https://rankwell.io) — it takes 30 seconds and shows you exactly what ChatGPT, Google AI, and Perplexity tell candidates about you.
+[Run a free OpenRole audit](https://openrole.co.uk) — it takes 30 seconds and shows you exactly what ChatGPT, Google AI, and Perplexity tell candidates about you.
 
-We've also built a [free JSON-LD generator](https://rankwell.io/tools/employer-schema) that creates the structured data AI actually reads. No llms.txt required.
+We've also built a [free JSON-LD generator](https://openrole.co.uk/tools/employer-schema) that creates the structured data AI actually reads. No llms.txt required.

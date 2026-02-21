@@ -1,6 +1,6 @@
 /**
  * @module app/page
- * Rankwell landing page — premium, minimalist design.
+ * OpenRole landing page — premium, minimalist design.
  */
 
 "use client";
@@ -36,7 +36,7 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "AI is telling candidates the wrong things about your company. Rankwell gives you verified employer data that AI agents trust — so you control the narrative.",
+      "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
   });
 
   const websiteSchema = generateWebsiteSchema({

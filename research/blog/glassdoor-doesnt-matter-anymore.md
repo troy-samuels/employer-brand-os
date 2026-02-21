@@ -104,4 +104,4 @@ That's the new game. And the first step to playing it is finding out what AI is 
 
 ---
 
-*Curious what AI tells candidates about your company? [Run a free Rankwell audit](#) — it takes sixty seconds, and the results might surprise you.*
+*Curious what AI tells candidates about your company? [Run a free OpenRole audit](#) — it takes sixty seconds, and the results might surprise you.*

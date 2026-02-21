@@ -182,7 +182,7 @@ export async function POST(
 
     // ── Auth ──────────────────────────────────────────────────────────
     const headerSecret =
-      request.headers.get("x-rankwell-cron-secret")
+      request.headers.get("x-openrole-cron-secret")
       ?? request.headers.get("x-cron-secret")
       ?? undefined;
     const providedSecret = headerSecret ?? cronSecret;

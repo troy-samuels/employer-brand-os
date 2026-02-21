@@ -1,4 +1,4 @@
-# 📊 Rankwell Contacts Database — Executive Summary
+# 📊 OpenRole Contacts Database — Executive Summary
 
 **For:** Troy Goldman  
 **From:** Malcolm (AI Agent)  
@@ -57,7 +57,7 @@
 
 ### Step 2: Import Contacts (45 min)
 ```bash
-cd ~/Desktop/employer-brand-os
+cd ~/Desktop/employer-openrole
 npx tsx scripts/import-contacts.ts
 ```
 (Leave terminal open, script will complete in ~45 min)
@@ -65,7 +65,7 @@ npx tsx scripts/import-contacts.ts
 ### Step 3: Set Up Resend (20 min)
 1. Sign up at resend.com
 2. Add API key to `.env.local`
-3. Configure sending domain (`mail.rankwell.ai`)
+3. Configure sending domain (`mail.openrole.ai`)
 4. Add DNS records (SPF, DKIM, DMARC)
 
 ### Step 4: Wait 7-14 Days (Automated)

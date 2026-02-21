@@ -1,4 +1,4 @@
-# Rankwell: Executive Research Summary
+# OpenRole: Executive Research Summary
 
 > Compiled 12 Feb 2026 by Malcolm
 
@@ -12,9 +12,9 @@ When candidates ask ChatGPT "What's it like to work at [Company]?" they get synt
 
 ## The Opportunity
 
-**Rankwell owns the whitespace between employer branding and AI search optimisation.**
+**OpenRole owns the whitespace between employer branding and AI search optimisation.**
 
-| What Exists | What's Missing (Rankwell) |
+| What Exists | What's Missing (OpenRole) |
 |-------------|--------------------------|
 | Glassdoor monitors *reviews* | Nobody monitors *AI outputs* |
 | LinkedIn manages *profiles* | Nobody tracks *what AI synthesises* |
@@ -25,7 +25,7 @@ When candidates ask ChatGPT "What's it like to work at [Company]?" they get synt
 - Employer branding market: $6-8B globally (12-15% CAGR)
 - Recruitment marketing: ~$2.7B
 - GEO market: Nascent but emerging from $80B SEO market
-- **Rankwell's initial SOM:** 500 UK companies × £500/mo = **£3M ARR**
+- **OpenRole's initial SOM:** 500 UK companies × £500/mo = **£3M ARR**
 
 ## Key Research Findings
 
@@ -37,7 +37,7 @@ When candidates ask ChatGPT "What's it like to work at [Company]?" they get synt
 5. **The problem is getting worse** — AI adoption is growing while accuracy isn't improving
 
 ### Competitive Landscape
-- **No direct competitor** does what Rankwell does
+- **No direct competitor** does what OpenRole does
 - **Emerge Tech** and **MyMarky AI** do AI employer content creation (not monitoring)
 - **The Martec** does employee advocacy (not AI output tracking)
 - **Otterly.ai** and **Profound** do generic AI brand monitoring (not employer-specific)
@@ -51,7 +51,7 @@ When candidates ask ChatGPT "What's it like to work at [Company]?" they get synt
 ## What's Been Built
 
 ### Already Complete ✅
-- **Landing page** — rankwell.io with value prop, social proof, audit CTA
+- **Landing page** — openrole.co.uk with value prop, social proof, audit CTA
 - **Free audit tool** — enter domain, get AI visibility score across 6 models
 - **AI Employer Index** — live leaderboard at /index ranking companies by score
 - **Company profiles** — /company/[slug] with detailed breakdown per company
@@ -65,7 +65,7 @@ When candidates ask ChatGPT "What's it like to work at [Company]?" they get synt
 - GitHub push (need CLI auth)
 - Brave Search API key (for ongoing research)
 - OpenAI/Anthropic keys (for audit engine)
-- Domain setup (rankwell.io)
+- Domain setup (openrole.co.uk)
 
 ## Strategic Recommendations
 

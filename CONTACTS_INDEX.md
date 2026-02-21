@@ -1,4 +1,4 @@
-# 📚 Rankwell Contacts Database — Master Index
+# 📚 OpenRole Contacts Database — Master Index
 
 **All deliverables from Workstream 3: 2.5M Contacts Strategy**
 
@@ -79,7 +79,7 @@
 - Next steps checklist
 - FAQ section
 
-**SESSION_SUMMARY_RANKWELL_CONTACTS.md** (15KB)
+**SESSION_SUMMARY_OPENROLE_CONTACTS.md** (15KB)
 - Session log (what was built)
 - Deliverables summary
 - Key insights from analysis
@@ -105,7 +105,7 @@
 | **GTM_STRATEGY.md** | 24KB | Strategy | Full GTM plan | Before campaigns |
 | **PRIORITY_SEGMENTS_ANALYSIS.md** | 15KB | Strategy | Segment targeting | Before campaigns |
 | **CONTACTS_README.md** | 14KB | Reference | Navigation guide | For orientation |
-| **SESSION_SUMMARY_RANKWELL_CONTACTS.md** | 15KB | Reference | Session log | For context |
+| **SESSION_SUMMARY_OPENROLE_CONTACTS.md** | 15KB | Reference | Session log | For context |
 | **CONTACTS_INDEX.md** | This file | Reference | Master index | For navigation |
 
 ### Code Files (3 files, 51KB total)
@@ -143,7 +143,7 @@
 1. scripts/analyze-contacts.ts (review code)
 2. scripts/import-contacts.ts (review code)
 3. supabase/migrations/20250218000000_create_contacts_system.sql (review schema)
-4. SESSION_SUMMARY_RANKWELL_CONTACTS.md (understand decisions made)
+4. SESSION_SUMMARY_OPENROLE_CONTACTS.md (understand decisions made)
 
 ---
 
@@ -167,7 +167,7 @@
 → Read: CONTACTS_README.md
 
 #### "Understand the work"
-→ Read: SESSION_SUMMARY_RANKWELL_CONTACTS.md
+→ Read: SESSION_SUMMARY_OPENROLE_CONTACTS.md
 
 #### "Navigate files"
 → Read: CONTACTS_INDEX.md (this file)
@@ -212,7 +212,7 @@ Before launching campaigns, verify:
 - [ ] Migration applied (tables exist in Supabase)
 - [ ] Import complete (2.4M+ contacts in database)
 - [ ] Resend account created + billing enabled
-- [ ] Sending domain verified (`mail.rankwell.ai`)
+- [ ] Sending domain verified (`mail.openrole.ai`)
 - [ ] DNS records configured (SPF, DKIM, DMARC)
 - [ ] Webhook handler deployed
 - [ ] Unsubscribe page live
@@ -246,7 +246,7 @@ Before launching campaigns, verify:
 → Follow QUICK_START.md
 
 **Technical debugging**
-→ Check SESSION_SUMMARY_RANKWELL_CONTACTS.md for context  
+→ Check SESSION_SUMMARY_OPENROLE_CONTACTS.md for context  
 → Review code in scripts/ folder  
 → Ask Malcolm
 
@@ -263,7 +263,7 @@ Before launching campaigns, verify:
 ## 📞 Contact
 
 **Agent:** Malcolm (AI Agent)  
-**Session:** Subagent: rankwell-contacts  
+**Session:** Subagent: openrole-contacts  
 **Status:** Ready for Troy's decision  
 **Next Step:** Troy applies migration or asks questions
 

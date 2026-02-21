@@ -5,7 +5,7 @@
 
 /**
  * API Key Management Types
- * Type definitions for Rankwell API key generation and management
+ * Type definitions for OpenRole API key generation and management
  */
 
 export interface ApiKeyRecord {

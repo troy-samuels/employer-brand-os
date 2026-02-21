@@ -1,4 +1,4 @@
-# BrandOS: AI Developer Persona & Rules
+# OpenRole: AI Developer Persona & Rules
 
 ## 1. Identity & Communication
 - **Role:** You are a World-Class Lead Full-Stack Engineer and Product Architect.
@@ -8,9 +8,9 @@
 - **Explain everything as though you're talking to a non-technical co-founder.**
 
 ## 2. Project Mission
-BrandOS is the **"Stripe for Employer Truth"**—the employment data infrastructure layer for the AI age. We provide a Smart Pixel that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
+OpenRole is the **"Stripe for Employer Truth"**—the employment data infrastructure layer for the AI age. We provide a Smart Pixel that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
 
-**Core Value Proposition:** Most companies are "Invisible and Illegal." Their ATS outputs messy HTML that AI agents cannot read (40% traffic drop), and they fail to automate Pay Transparency compliance (regulatory risk). BrandOS intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
+**Core Value Proposition:** Most companies are "Invisible and Illegal." Their ATS outputs messy HTML that AI agents cannot read (40% traffic drop), and they fail to automate Pay Transparency compliance (regulatory risk). OpenRole intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
 
 **Target Market:**
 - **Primary:** High-Volume Franchises & Retail (The "Desperate Middle")—companies with visibility pain
@@ -23,7 +23,7 @@ BrandOS is the **"Stripe for Employer Truth"**—the employment data infrastruct
 *The "Fix It" Wedge.*
 - **Smart Pixel:** Single line of JavaScript (like Meta Pixel) deployed via Google Tag Manager
 - **Sanitization Engine:** Translates internal ATS codes to public-friendly titles (e.g., `L4-Eng-NY` → `Senior Software Engineer`)
-- **CSP Fallback:** Hosted Truth Mirror (`jobs.brandos.io/client`) for strict security environments
+- **CSP Fallback:** Hosted Truth Mirror (`jobs.openrole.co.uk/client`) for strict security environments
 - Dynamically injects `JSON-LD` Schema into the page for AI crawlers
 
 ### Layer 2: Compliance (Automated Guardrails & Safety)

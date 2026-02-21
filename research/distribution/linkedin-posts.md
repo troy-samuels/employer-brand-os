@@ -1,4 +1,4 @@
-# LinkedIn Distribution Posts — Rankwell
+# LinkedIn Distribution Posts — OpenRole
 
 > Created 12 Feb 2026 by Malcolm
 > Rule: Professional but not corporate. Data-led. Every post should make readers think "I need to check what AI says about MY company."

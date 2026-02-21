@@ -1,6 +1,6 @@
-# AI SEO Landscape Research: Comprehensive Market Analysis for Rankwell
+# AI SEO Landscape Research: Comprehensive Market Analysis for OpenRole
 
-**Prepared for:** Rankwell (rankwell.io)  
+**Prepared for:** OpenRole (openrole.co.uk)  
 **Date:** 19 February 2026  
 **Classification:** Internal — Product Strategy  
 **Research Standard:** Institutional-grade, fully sourced
@@ -13,11 +13,11 @@ The AI SEO market — encompassing tools and services that optimise brand visibi
 
 **The seismic shift:** Search behaviour is fragmenting. Google AI Overviews now reach **2 billion monthly users**. ChatGPT has **700 million weekly active users**. ~60% of searches now end without a click. AI Overviews reduce organic CTR for position-one content by **58%** (Ahrefs, Feb 2026). Yet AI search visitors are **4.4x more valuable** than traditional organic visitors (Semrush, 2025).
 
-**Rankwell's unique position:** No other tool in the market specifically combines **employer brand monitoring** with **AI search optimisation** for the talent acquisition use case. Competitors like Profound, Otterly.ai, and Peec AI serve general brand/marketing teams. Traditional employer brand platforms (Glassdoor for Employers, LinkedIn Talent Solutions, Comparably) have no AI search optimisation capability. PerceptionX is the closest competitor but focuses on measurement rather than optimisation.
+**OpenRole's unique position:** No other tool in the market specifically combines **employer brand monitoring** with **AI search optimisation** for the talent acquisition use case. Competitors like Profound, Otterly.ai, and Peec AI serve general brand/marketing teams. Traditional employer brand platforms (Glassdoor for Employers, LinkedIn Talent Solutions, Comparably) have no AI search optimisation capability. PerceptionX is the closest competitor but focuses on measurement rather than optimisation.
 
-**The opportunity:** Candidates are rapidly shifting to AI tools for company research, with AI-driven traffic to career sites surging **1,300%** recently (PerceptionX, 2025). 80% of job seekers now use ChatGPT, Claude, and Gemini to research companies (PerceptionX). Yet TA teams lack the tools, training, and budgets to manage AI-driven employer reputation — a gap Rankwell is positioned to fill.
+**The opportunity:** Candidates are rapidly shifting to AI tools for company research, with AI-driven traffic to career sites surging **1,300%** recently (PerceptionX, 2025). 80% of job seekers now use ChatGPT, Claude, and Gemini to research companies (PerceptionX). Yet TA teams lack the tools, training, and budgets to manage AI-driven employer reputation — a gap OpenRole is positioned to fill.
 
-**Key recommendation:** Rankwell should aggressively build its GEO (Generative Engine Optimisation) capabilities for employer brand, establish thought leadership in the "AI Employer Brand" category, and expand from monitoring to active optimisation tools within the next 90 days.
+**Key recommendation:** OpenRole should aggressively build its GEO (Generative Engine Optimisation) capabilities for employer brand, establish thought leadership in the "AI Employer Brand" category, and expand from monitoring to active optimisation tools within the next 90 days.
 
 ---
 
@@ -52,7 +52,7 @@ The market also divides by **application:**
 - **Content Optimisation:** Tools that help create content ranking well in both traditional and AI search
 - **AI Visibility Monitoring:** Tools that track how brands appear in AI-generated responses
 - **AI Brand Management:** Platforms that help brands influence what AI says about them
-- **Employer Brand AI Optimisation:** Rankwell's niche — optimising how AI portrays companies to job candidates
+- **Employer Brand AI Optimisation:** OpenRole's niche — optimising how AI portrays companies to job candidates
 
 > Source: MktClarity, "The AI SEO Market in 2025," Nov 2025 — https://mktclarity.com/blogs/news/ai-seo-market (accessed 19 Feb 2026)
 
@@ -216,7 +216,7 @@ AI-generated answers pull from multiple sources:
    - Semantic depth and topical authority
    - AI-optimised content sees **30% improvement in search rankings within 6 months**
 
-**Key insight for Rankwell:** Content with transparent, structured employer data (salary bands, benefits, culture details) with strong E-E-A-T signals will be preferentially cited by AI systems when candidates ask about companies.
+**Key insight for OpenRole:** Content with transparent, structured employer data (salary bands, benefits, culture details) with strong E-E-A-T signals will be preferentially cited by AI systems when candidates ask about companies.
 
 > Sources:
 > - Semrush, "We Studied the Impact of AI Search on SEO Traffic" — https://www.semrush.com/blog/ai-search-seo-traffic-study/
@@ -382,7 +382,7 @@ AI-generated answers pull from multiple sources:
 - **Strengths:** Purpose-built for employer brand AI visibility, strong domain expertise, comprehensive theme framework (15 dimensions)
 - **Weaknesses:** Measurement-focused (less optimisation tooling), newer company, limited public traction data
 
-**⚠️ This is Rankwell's closest competitor.** Both target employer brand + AI search. Key differences: Rankwell offers a free instant audit and structured pricing (£49–£399/mo); PerceptionX appears more consultancy-driven with unbiased measurement positioning.
+**⚠️ This is OpenRole's closest competitor.** Both target employer brand + AI search. Key differences: OpenRole offers a free instant audit and structured pricing (£49–£399/mo); PerceptionX appears more consultancy-driven with unbiased measurement positioning.
 
 > Source: https://www.perceptionx.ai (accessed 19 Feb 2026)
 
@@ -436,7 +436,7 @@ AI-generated answers pull from multiple sources:
 | **Indeed Employer** | Reviews, employer profile | None | $$ |
 | **Universum** | Employer brand research and strategy | None | $$$ (consultancy) |
 
-**Critical gap:** None of the traditional employer brand platforms offer any AI search monitoring or optimisation. LinkedIn is a closed platform that AI tools cannot crawl. This is Rankwell's strongest competitive advantage.
+**Critical gap:** None of the traditional employer brand platforms offer any AI search monitoring or optimisation. LinkedIn is a closed platform that AI tools cannot crawl. This is OpenRole's strongest competitive advantage.
 
 > Source: Rally Recruitment Marketing, Jan 2026 — "For TA, there's really only one built specifically for this [AI employer brand]. So the gap isn't just knowledge — it's infrastructure."
 
@@ -446,7 +446,7 @@ AI-generated answers pull from multiple sources:
 
 ### 5.1 Feature Matrix
 
-| Feature | Surfer | Clearscope | Frase | Profound | Otterly | Peec | Ahrefs BR | PerceptionX | **Rankwell** |
+| Feature | Surfer | Clearscope | Frase | Profound | Otterly | Peec | Ahrefs BR | PerceptionX | **OpenRole** |
 |---------|--------|-----------|-------|----------|---------|------|-----------|-------------|------------|
 | Traditional SEO optimisation | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ (parent) | ❌ | ❌ |
 | AI visibility monitoring | ❌ | ✅ (new) | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -478,9 +478,9 @@ AI-generated answers pull from multiple sources:
 7. **HR/TA Team Dashboards:** All existing tools assume marketing/SEO users; none are designed for HR/talent acquisition workflows
 8. **Cost-of-Hire Impact Modelling:** No tool connects AI employer brand visibility to recruiting outcomes (cost per hire, application quality, offer acceptance rate)
 
-### 5.3 Where Rankwell Is Uniquely Positioned
+### 5.3 Where OpenRole Is Uniquely Positioned
 
-Rankwell occupies a unique intersection that no competitor covers:
+OpenRole occupies a unique intersection that no competitor covers:
 
 ```
                     AI SEARCH OPTIMISATION
@@ -499,9 +499,9 @@ Rankwell occupies a unique intersection that no competitor covers:
                     TRADITIONAL SEO/REVIEWS
 ```
 
-**Rankwell sits squarely in the top-right quadrant:** AI Search Optimisation × Employer Brand. No other tool fully occupies this space.
+**OpenRole sits squarely in the top-right quadrant:** AI Search Optimisation × Employer Brand. No other tool fully occupies this space.
 
-### 5.4 What Rankwell Should Build Next (Based on Gaps)
+### 5.4 What OpenRole Should Build Next (Based on Gaps)
 
 **Priority 1 (Critical):**
 - Structured employer data publishing (machine-readable)
@@ -547,21 +547,21 @@ Rankwell occupies a unique intersection that no competitor covers:
 | MarketMuse | Free (limited) | Undisclosed | Undisclosed |
 | Profound | Custom only | Custom | Custom |
 | Peec AI | Undisclosed | Undisclosed | Undisclosed |
-| **Rankwell** | **£49/mo** | **£149/mo** | **£399/mo** |
+| **OpenRole** | **£49/mo** | **£149/mo** | **£399/mo** |
 | PerceptionX | Undisclosed | Undisclosed | Undisclosed |
 
 ### 6.3 Free Tier Strategies
 
 | Approach | Examples | Notes |
 |----------|----------|-------|
-| Free instant audit/scan | **Rankwell** (free AI reputation audit) | Powerful conversion tool — immediate value |
+| Free instant audit/scan | **OpenRole** (free AI reputation audit) | Powerful conversion tool — immediate value |
 | Limited free plan | MarketMuse (10 queries/mo), Frase (7-day trial) | Traditional SaaS approach |
 | Free trial (time-limited) | Otterly.ai (14 days), Frase (7 days) | Requires sign-up, credit card sometimes |
 | No free option | Profound, Clearscope, Ahrefs BR | Enterprise gate — reduces tire-kickers |
 
-### 6.4 Pricing Recommendation for Rankwell
+### 6.4 Pricing Recommendation for OpenRole
 
-Rankwell's current pricing (£49/£149/£399) is well-positioned:
+OpenRole's current pricing (£49/£149/£399) is well-positioned:
 - **Below** Clearscope ($129), Brand24 ($149), Ahrefs Brand Radar ($199)
 - **Competitive with** Frase ($39–$239), Otterly.ai ($29+)
 - **Free audit** is a major competitive advantage — no competitor offers instant, free employer brand AI auditing
@@ -586,7 +586,7 @@ AI agents (autonomous AI systems that act on behalf of users) are emerging as th
 
 **Impact for employer brand:** Companies will need machine-readable, structured employer data that AI agents can reliably parse. Profound already has "Agent Analytics" as a feature category. This is an early signal of where the market is heading.
 
-**Rankwell opportunity:** Build "Agent-Ready Employer Profiles" — structured data packages that AI agents can consume to accurately represent companies to candidates.
+**OpenRole opportunity:** Build "Agent-Ready Employer Profiles" — structured data packages that AI agents can consume to accurately represent companies to candidates.
 
 ### 7.2 Structured Data / Schema Markup for AI
 
@@ -604,7 +604,7 @@ A growing number of publishers are blocking AI crawlers:
 - For employer brand: NOT blocking AI crawlers is critical — you *want* AI to cite your career pages
 - Profound's "Agent Analytics" feature tracks which AI bots access your content and how often
 
-**Rankwell opportunity:** Guide employers on optimal AI crawl settings. Many companies may inadvertently block AI crawlers on their career sites.
+**OpenRole opportunity:** Guide employers on optimal AI crawl settings. Many companies may inadvertently block AI crawlers on their career sites.
 
 ### 7.4 Brand Entity Optimisation
 
@@ -669,7 +669,7 @@ These are not replacing SEO but adding a parallel discipline. 63% of marketers n
 | **SEO Agencies** | Surfer, Clearscope, Frase | $100–$1K/mo per client | Client deliverables, scale |
 | **Content Teams** | Frase, Clearscope, MarketMuse | $100–$400/mo | Content quality, ranking improvement |
 | **E-commerce** | Profound (Shopping), Semrush | $500–$5K/mo | Product visibility in ChatGPT Shopping |
-| **HR/TA Teams** | **Rankwell**, PerceptionX, Built In | £49–£399/mo (Rankwell) | Employer brand in AI |
+| **HR/TA Teams** | **OpenRole**, PerceptionX, Built In | £49–£399/mo (OpenRole) | Employer brand in AI |
 
 ### 8.2 Top Pain Points
 
@@ -693,7 +693,7 @@ These are not replacing SEO but adding a parallel discipline. 63% of marketers n
 
 | Dimension | Enterprise | SMB |
 |-----------|-----------|-----|
-| Tool preference | Custom/enterprise platforms (Profound, Semrush Enterprise) | Self-serve, affordable (Frase, Otterly, Rankwell) |
+| Tool preference | Custom/enterprise platforms (Profound, Semrush Enterprise) | Self-serve, affordable (Frase, Otterly, OpenRole) |
 | Budget | $5K–$100K+/year | $500–$5K/year |
 | Team | Dedicated employer brand / GEO specialists | HR generalists wearing multiple hats |
 | Pain point | "Maintain visibility at scale across markets" | "Understand what AI says about us at all" |
@@ -723,7 +723,7 @@ Based on the Rally Recruitment Marketing webinar (Jan 2026) and employer brandin
 
 ### 9.1 Content Pillars
 
-Based on the research, Rankwell should organise content around four pillars:
+Based on the research, OpenRole should organise content around four pillars:
 
 | Pillar | Theme | Audience |
 |--------|-------|----------|
@@ -738,18 +738,18 @@ Based on the research, Rankwell should organise content around four pillars:
 
 | # | Working Title | Target Keyword | Intent | Difficulty | Content Angle |
 |---|---------------|---------------|--------|------------|---------------|
-| 1 | "What Does ChatGPT Say About Your Company? A Free Guide to Finding Out" | chatgpt employer brand | Informational | Low | Step-by-step audit guide, leads to free Rankwell audit |
-| 2 | "The AI Employer Brand Score: Why Every HR Leader Needs One in 2026" | AI employer brand score | Informational | Very Low (blue ocean) | Define the category, position Rankwell as creator |
+| 1 | "What Does ChatGPT Say About Your Company? A Free Guide to Finding Out" | chatgpt employer brand | Informational | Low | Step-by-step audit guide, leads to free OpenRole audit |
+| 2 | "The AI Employer Brand Score: Why Every HR Leader Needs One in 2026" | AI employer brand score | Informational | Very Low (blue ocean) | Define the category, position OpenRole as creator |
 | 3 | "AI Is Hallucinating Your Salary Data — Here's How to Fix It" | AI salary hallucination employer | Problem-aware | Low | Specific, urgent problem + solution |
 | 4 | "The 1,300% Surge: Why AI-Driven Traffic to Career Sites Changes Everything" | AI traffic career sites | Informational | Low | Data-driven, cite PerceptionX data + add original analysis |
-| 5 | "AI Employer Brand Benchmarks 2026: How 500 Companies Score" | employer brand AI benchmarks | Informational/Commercial | Medium | Original research — run Rankwell audits on 500 companies and publish results |
+| 5 | "AI Employer Brand Benchmarks 2026: How 500 Companies Score" | employer brand AI benchmarks | Informational/Commercial | Medium | Original research — run OpenRole audits on 500 companies and publish results |
 
 #### Pillar 2: GEO for Talent Acquisition
 
 | # | Working Title | Target Keyword | Intent | Difficulty | Content Angle |
 |---|---------------|---------------|--------|------------|---------------|
 | 6 | "GEO for Employer Branding: The Complete Guide" | GEO employer branding | Informational | Low | Comprehensive guide — own the long-tail category term |
-| 7 | "How to Get Your Company Recommended by ChatGPT to Job Candidates" | get recommended by ChatGPT employer | How-to | Very Low (blue ocean) | Practical guide with Rankwell as the tool |
+| 7 | "How to Get Your Company Recommended by ChatGPT to Job Candidates" | get recommended by ChatGPT employer | How-to | Very Low (blue ocean) | Practical guide with OpenRole as the tool |
 | 8 | "Schema Markup for Employer Brand: The Technical Guide HR Teams Actually Need" | schema markup employer brand | Technical/How-to | Low | Technical differentiation, actionable schema examples |
 | 9 | "Why Your Career Site Is Invisible to AI (And 7 Fixes)" | career site AI visibility | Problem-aware | Low | Audit-style content, drive to free tool |
 | 10 | "The Employer Brand GEO Checklist: 25 Things to Optimise Today" | employer brand GEO checklist | How-to | Low | Downloadable asset / lead magnet |
@@ -761,7 +761,7 @@ Based on the research, Rankwell should organise content around four pillars:
 | 11 | "80% of Candidates Now Use AI to Research Employers. Is Yours Ready?" | candidates using AI research employers | Informational | Low | Stats-driven, fear-of-missing-out angle for HR leaders |
 | 12 | "From Glassdoor to ChatGPT: The New Candidate Journey in 2026" | candidate journey AI 2026 | Thought leadership | Low | Original framework — the "AI-first candidate journey" |
 | 13 | "Gen Z Doesn't Google Your Company — They Ask AI About It" | gen z AI employer research | Informational | Very Low | Generational angle, urgency for companies hiring Gen Z |
-| 14 | "What Happens When AI Agents Start Applying for Jobs: The Employer Brand Implications" | AI agents job applications employer brand | Thought leadership | Very Low (blue ocean) | Forward-looking piece positioning Rankwell for the future |
+| 14 | "What Happens When AI Agents Start Applying for Jobs: The Employer Brand Implications" | AI agents job applications employer brand | Thought leadership | Very Low (blue ocean) | Forward-looking piece positioning OpenRole for the future |
 
 #### Pillar 4: AI Reputation Management
 
@@ -776,7 +776,7 @@ Based on the research, Rankwell should organise content around four pillars:
 
 These topics have virtually no competition because the category is so new:
 
-1. **"AI employer brand score"** — Rankwell can define this term and own it
+1. **"AI employer brand score"** — OpenRole can define this term and own it
 2. **"GEO for recruitment"** — No content exists specifically for TA teams
 3. **"AI career site optimisation"** — Intersection of two large audiences, zero existing content
 4. **"Employer brand hallucination"** — Specific, memorable, shareable problem
@@ -785,7 +785,7 @@ These topics have virtually no competition because the category is so new:
 
 ### 9.4 Thought Leadership Strategy
 
-To establish Rankwell as the definitive voice in AI employer brand:
+To establish OpenRole as the definitive voice in AI employer brand:
 
 1. **Publish original research monthly** — Run free audits on 100+ companies per month and publish aggregate insights
 2. **Create the "AI Employer Brand Index"** — A public benchmark that becomes an industry standard
@@ -812,9 +812,9 @@ To establish Rankwell as the definitive voice in AI employer brand:
 | 9 | **AI Agent Readiness Score** — Evaluate how prepared the employer is for AI agents researching on candidates' behalf | 🟢 Medium | Medium | P2 | Build |
 | 10 | **ATS Integration** — Connect with Greenhouse, Lever, Workday to correlate AI reputation with recruiting outcomes | 🟢 Medium | Hard | P3 | Partner |
 
-### 10.2 Features That Would Differentiate Rankwell
+### 10.2 Features That Would Differentiate OpenRole
 
-1. **The Free Instant Audit** — Already exists and is Rankwell's strongest competitive weapon. No competitor offers this. Guard it fiercely.
+1. **The Free Instant Audit** — Already exists and is OpenRole's strongest competitive weapon. No competitor offers this. Guard it fiercely.
 2. **The Monday Report** — Weekly email delivery is a unique retention mechanism. Expand it with actionable "fix this week" recommendations.
 3. **Verification Pages** — The concept of a "verified" employer data page that AI models can reference is novel and powerful. Make it the employer's "source of truth" that AI cites.
 4. **Hallucination Alerts** — Real-time alerts when AI starts saying something factually wrong about the employer. No competitor has this.
@@ -895,7 +895,7 @@ All sources accessed 19 February 2026 unless otherwise noted.
 | Otterly.ai | https://otterly.ai | Accessed Feb 2026 |
 | Peec AI | https://peec.ai | Accessed Feb 2026 |
 | Ahrefs Brand Radar | https://ahrefs.com/brand-radar | Accessed Feb 2026 |
-| Rankwell | https://rankwell.io | Accessed Feb 2026 |
+| OpenRole | https://openrole.co.uk | Accessed Feb 2026 |
 | Clearscope Pricing | https://www.clearscope.io/pricing | Accessed Feb 2026 |
 | Frase Pricing | https://www.frase.io/pricing | Accessed Feb 2026 |
 | MarketMuse Pricing | https://www.marketmuse.com/pricing/ | Accessed Feb 2026 |

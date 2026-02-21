@@ -33,10 +33,10 @@ export const metadata: Metadata = {
   description:
     "See exactly what ChatGPT, Perplexity, and Gemini tell candidates about your company. Side-by-side AI responses — the truth about your AI employer reputation.",
   openGraph: {
-    title: "What Does AI Say About You? | Rankwell",
+    title: "What Does AI Say About You? | OpenRole",
     description:
       "See what AI tells candidates about your company. Side-by-side comparison across ChatGPT, Perplexity, and Gemini.",
-    url: "https://rankwell.io/compare",
+    url: "https://openrole.co.uk/compare",
     type: "website",
     images: [
       {
@@ -49,13 +49,13 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "What Does AI Say About You? | Rankwell",
+    title: "What Does AI Say About You? | OpenRole",
     description:
       "See exactly what ChatGPT, Perplexity, and Gemini tell candidates about your company. Side-by-side AI responses — the truth about your AI employer reputation.",
     images: ["/opengraph-image"],
   },
   alternates: {
-    canonical: "https://rankwell.io/compare",
+    canonical: "https://openrole.co.uk/compare",
   },
 };
 

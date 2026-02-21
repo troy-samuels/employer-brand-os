@@ -1,4 +1,4 @@
-# Rankwell Smart Pixel - Security Audit Report
+# OpenRole Smart Pixel - Security Audit Report
 
 **Audit Date:** 2025-01-30  
 **Auditor:** Malcolm (AI Security Engineer)  
@@ -9,7 +9,7 @@
 
 ## Executive Summary
 
-The Rankwell Smart Pixel is a JavaScript snippet that employers embed on their careers pages to inject structured data (JSON-LD) for AI visibility. This audit identified **9 security vulnerabilities** ranging from Critical to Low severity.
+The OpenRole Smart Pixel is a JavaScript snippet that employers embed on their careers pages to inject structured data (JSON-LD) for AI visibility. This audit identified **9 security vulnerabilities** ranging from Critical to Low severity.
 
 **Critical findings:**
 - ❌ Rate limiting bypass in serverless environments (CRITICAL)
@@ -322,7 +322,7 @@ resetAuthFailures(ip);
 **Status:** ✅ Fixed
 
 #### Description
-The CSRF validator accepts both `same-origin` and `same-site` in the `Sec-Fetch-Site` header. This allows subdomain attacks where `attacker.rankwell.io` can make requests to `api.rankwell.io`.
+The CSRF validator accepts both `same-origin` and `same-site` in the `Sec-Fetch-Site` header. This allows subdomain attacks where `attacker.openrole.co.uk` can make requests to `api.openrole.co.uk`.
 
 #### Impact
 - Subdomain takeover enables CSRF
@@ -392,7 +392,7 @@ GET /api/pixel/v1/integrity
 ```html
 <!-- Secure pixel installation with SRI -->
 <script 
-  src="https://app.rankwell.io/api/pixel/v1/script"
+  src="https://app.openrole.co.uk/api/pixel/v1/script"
   integrity="sha384-abc123..."
   crossorigin="anonymous"
   data-key="bos_live_..."
@@ -684,7 +684,7 @@ Created comprehensive test page at `/public/pixel-test.html`:
 
 ## Conclusion
 
-This audit identified and remediated **9 security vulnerabilities** in the Rankwell Smart Pixel implementation. All critical and high-severity issues have been fixed with production-grade solutions.
+This audit identified and remediated **9 security vulnerabilities** in the OpenRole Smart Pixel implementation. All critical and high-severity issues have been fixed with production-grade solutions.
 
 **Key Improvements:**
 - ✅ Distributed rate limiting prevents serverless bypass
