@@ -43,18 +43,13 @@ interface Token {
 }
 
 const WITHOUT_TOKENS: Token[] = tokensFrom([
-  { text: "Here's a general picture of " },
+  { text: "Here's what I found about " },
   { text: "Meridian Tech", className: "font-semibold text-neutral-900" },
-  { text: " based on employee reviews:\n\n" },
+  { text: " based on available sources:\n\n" },
   { text: "👩‍💼 Culture\n", className: "font-semibold text-neutral-900" },
   { text: "• Described as " },
   { text: "\"decent work culture\"", className: "italic" },
   { text: " with mixed management experiences. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
-  { text: "\n" },
-  { text: "• Compensation described as " },
-  { text: "\"average\"", className: "italic" },
-  { text: " — not exceptional. " },
   { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
   { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
@@ -65,35 +60,46 @@ const WITHOUT_TOKENS: Token[] = tokensFrom([
   { text: " " },
   { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
-  { text: "❌ £20K below actual range", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
+  { text: "🏠 Remote Policy\n", className: "font-semibold text-neutral-900" },
+  { text: "• I couldn't find confirmed details about their remote work policy.\n\n" },
+  { text: "🎁 Benefits\n", className: "font-semibold text-neutral-900" },
+  { text: "• No specific benefits information available beyond " },
+  { text: "\"standard UK package.\"", className: "italic" },
+  { text: " " },
+  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "\n\n" },
+  { text: "❌ Salary £20K below actual", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
   { text: "  " },
-  { text: "❌ No verified sources", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
+  { text: "❌ 2 gaps AI can't answer", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
 ]);
 
 const WITH_TOKENS: Token[] = tokensFrom([
   { text: "Here's a detailed overview of " },
   { text: "Meridian Tech", className: "font-semibold text-neutral-900" },
-  { text: " based on verified employer data:\n\n" },
+  { text: " based on their careers page and company site:\n\n" },
   { text: "👩‍💼 Culture\n", className: "font-semibold text-neutral-900" },
   { text: "• " },
-  { text: "Remote-first", className: "font-semibold text-neutral-900" },
-  { text: " with optional London office. Strong autonomy, transparent leadership. " },
-  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
-  { text: "\n" },
-  { text: "• Benefits: " },
-  { text: "private healthcare, £2K learning budget, 30 days holiday", className: "font-semibold text-neutral-900" },
-  { text: ". " },
-  { text: "✓ meridiantech.com", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
-  { text: "\n\n" },
-  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
-  { text: "• Published range: " },
-  { text: "£75,000 – £95,000", className: "font-semibold text-neutral-900" },
-  { text: " base + equity + bonus. " },
+  { text: "Hybrid working", className: "font-semibold text-neutral-900" },
+  { text: " — 3 days remote, optional London office. Strong autonomy and transparent leadership. " },
   { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
   { text: "\n\n" },
-  { text: "✓ Verified 2 days ago", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
+  { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
+  { text: "• " },
+  { text: "£75,000 – £95,000", className: "font-semibold text-neutral-900" },
+  { text: " base + equity + 15% bonus. " },
+  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
+  { text: "\n\n" },
+  { text: "🏠 Remote Policy\n", className: "font-semibold text-neutral-900" },
+  { text: "• 3 days remote, 2 in-office (London Bridge). Fully remote roles available in engineering. " },
+  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
+  { text: "\n\n" },
+  { text: "🎁 Benefits\n", className: "font-semibold text-neutral-900" },
+  { text: "• Private healthcare, £2K learning budget, 30 days holiday + bank holidays, enhanced parental leave. " },
+  { text: "✓ meridiantech.com/careers", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] text-emerald-600 font-medium" },
+  { text: "\n\n" },
+  { text: "✓ Source: careers page", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
   { text: "  " },
-  { text: "✓ Employer confirmed", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
+  { text: "✓ Updated Feb 2026", className: "text-[11px] px-2 py-1 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-600 font-medium inline-block" },
 ]);
 
 /** Split compound tokens into individual words for streaming. */
@@ -252,8 +258,8 @@ function ChatGPTInputBar() {
 
 export default function BeforeAfter() {
   const [mode, setMode] = useState<Mode>("without");
-  const [phase, setPhase] = useState<"idle" | "thinking" | "streaming" | "done">("idle");
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
+  const [phase, setPhase] = useState<"idle" | "thinking" | "streaming" | "done">("thinking");
+  const [hasBeenVisible, setHasBeenVisible] = useState(true);
   const sectionRef = useRef<HTMLElement>(null);
 
   const tokens = mode === "without" ? WITHOUT_TOKENS : WITH_TOKENS;
@@ -271,7 +277,7 @@ export default function BeforeAfter() {
           setPhase("thinking");
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.05 }
     );
 
     observer.observe(el);
@@ -308,20 +314,20 @@ export default function BeforeAfter() {
         {/* Section header */}
         <motion.div
           className="mb-14 lg:mb-16"
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
           <p className="overline text-brand-accent mb-3">
-            The difference
+            The information gap
           </p>
           <h2 className="text-3xl lg:text-4xl font-medium text-neutral-950 max-w-2xl" style={{ letterSpacing: "-0.03em" }}>
-            What candidates see when they ask AI about you
+            Same question. Completely different answer.
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
             A candidate asks ChatGPT about working at your company.
-            Here&apos;s what changes when OpenRole is active.
+            On the left, you haven&apos;t published your facts. On the right, you have.
           </p>
         </motion.div>
 
@@ -366,9 +372,9 @@ export default function BeforeAfter() {
         {/* ChatGPT interface — single panel */}
         <motion.div
           className="max-w-2xl mx-auto"
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div
@@ -390,7 +396,7 @@ export default function BeforeAfter() {
               {phase === "thinking" && (
                 <motion.div
                   key="thinking"
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: 1 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
@@ -401,7 +407,7 @@ export default function BeforeAfter() {
               {(phase === "streaming" || phase === "done") && (
                 <motion.div
                   key={`stream-${mode}`}
-                  initial={{ opacity: 0 }}
+                  initial={{ opacity: 1 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.15 }}
@@ -424,7 +430,7 @@ export default function BeforeAfter() {
           {phase === "done" && mode === "without" && (
             <motion.p
               className="text-center text-sm text-neutral-500 mt-6"
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
@@ -442,12 +448,12 @@ export default function BeforeAfter() {
           {phase === "done" && mode === "with" && (
             <motion.p
               className="text-center text-sm text-emerald-600/70 mt-6"
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 1, y: 0 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.4, delay: 0.3 }}
             >
-              Verified data. Correct salary. Your story — told by AI. ✓
+              Your facts. Your careers page. Cited by AI. ✓
             </motion.p>
           )}
         </AnimatePresence>

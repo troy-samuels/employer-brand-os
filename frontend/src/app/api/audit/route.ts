@@ -29,7 +29,7 @@ export const runtime = "nodejs";
 
 const AUDIT_RESOURCE = "api.audit";
 const AUDIT_RATE_LIMIT_SCOPE = "audit-phase1";
-const AUDIT_RATE_LIMIT_LIMIT = 50;
+const AUDIT_RATE_LIMIT_LIMIT = 500;
 const AUDIT_RATE_LIMIT_WINDOW_SECONDS = 3600;
 
 const rateLimiter = new RateLimiter();

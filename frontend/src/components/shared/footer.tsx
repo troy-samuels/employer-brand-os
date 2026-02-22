@@ -20,7 +20,7 @@ export function Footer() {
               OpenRole
             </Link>
             <span className="text-slate-400 max-w-xs leading-relaxed">
-              Verified employer data for the AI age. Control what AI tells candidates about your company.
+              See what AI tells your candidates. Find the gaps. Take control.
             </span>
           </div>
 

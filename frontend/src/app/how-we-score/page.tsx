@@ -1,31 +1,28 @@
 /**
  * @module app/how-we-score/page
- * Module implementation for page.tsx.
+ * How we measure AI employer visibility — 8 factual themes.
  */
 
 import type { Metadata } from "next";
 import Link from "next/link";
 import { generateHowToSchema, JsonLd } from "@/lib/seo";
 
-/**
- * Exposes exported value(s): metadata.
- */
 export const metadata: Metadata = {
-  title: "How We Score Your AI Visibility",
+  title: "How We Measure Your AI Employer Visibility",
   description:
-    "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+    "Your AI Visibility Score measures how accurately AI represents your company to candidates — scored across 8 factual themes based on what candidates actually ask.",
   openGraph: {
-    title: "How We Score Your AI Visibility | OpenRole",
+    title: "How We Measure Your AI Employer Visibility | OpenRole",
     description:
-      "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+      "Your AI Visibility Score measures how accurately AI represents your company to candidates — scored across 8 factual themes based on what candidates actually ask.",
     url: "https://openrole.co.uk/how-we-score",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "How We Score Your AI Visibility | OpenRole",
+    title: "How We Measure Your AI Employer Visibility | OpenRole",
     description:
-      "Understand the six checks behind your OpenRole AI Visibility Score — evidence-based scoring aligned with peer-reviewed research on what actually drives AI citations.",
+      "Your AI Visibility Score measures how accurately AI represents your company to candidates — scored across 8 factual themes based on what candidates actually ask.",
   },
   alternates: {
     canonical: "https://openrole.co.uk/how-we-score",
@@ -34,52 +31,60 @@ export const metadata: Metadata = {
 
 const CHECKS = [
   {
-    name: "Structured Data (JSON-LD)",
-    weight: 28,
-    what: "We scan your website for schema.org markup — machine-readable facts about your organisation, job listings, salary ranges, and employer ratings.",
-    why: "Research shows structured data improves AI citation accuracy by 30–40% (Princeton GEO Study, 2024). It's the single most impactful technical signal for AI visibility. We look for Organization, JobPosting, EmployerAggregateRating, and FAQPage schemas.",
+    name: "Salary Accuracy",
+    weight: 20,
+    what: "We compare what AI says you pay against published salary data on your careers page, job listings, and industry benchmarks.",
+    why: "\"How much does [company] pay?\" is the #1 question candidates ask AI. When AI guesses wrong — and the average error is £18K — candidates either don't apply or negotiate based on fiction.",
   },
   {
-    name: "AI Crawler Access",
-    weight: 17,
-    what: "We check your robots.txt to see which AI crawlers (GPTBot, ClaudeBot, PerplexityBot) can access your site, plus sitemap availability.",
-    why: "87% of ChatGPT citations correlate with Bing indexation. If AI crawlers can't reach your content, everything else becomes irrelevant.",
+    name: "Benefits Completeness",
+    weight: 15,
+    what: "We check whether AI can list your specific benefits — healthcare, pension, parental leave, L&D budget, equity — or defaults to generic phrases like \"standard UK package.\"",
+    why: "Benefits are the second most-searched employer topic. Glassdoor rarely has specifics. If your careers page doesn't list them, AI can't either.",
   },
   {
-    name: "Careers Page Quality",
-    weight: 17,
-    what: "We look for a careers page and assess whether it has substantive content about roles, culture, and benefits that AI can reference.",
-    why: "Your careers page is the primary employer content AI draws from — but only if it's structured, accessible, and rich enough to cite.",
+    name: "Remote & Hybrid Policy",
+    weight: 15,
+    what: "We test whether AI can accurately describe your working model — fully remote, hybrid, office-based — including specifics like days in office and location requirements.",
+    why: "Post-pandemic, remote policy is a dealbreaker for most candidates. When AI says \"unable to confirm\" or gets it wrong, you lose applicants before they even see the job.",
   },
   {
-    name: "Brand Reputation & Presence",
-    weight: 17,
-    what: "We measure your presence across employer review platforms and assess public sentiment. Brands on 4+ platforms get significantly more AI citations.",
-    why: "Multi-platform presence is among the strongest predictors of AI citation. AI cross-references multiple sources — the more places you appear, the more likely you are to be mentioned.",
-  },
-  {
-    name: "Salary Transparency",
+    name: "Interview Process Transparency",
     weight: 12,
-    what: "We check whether salary information is visible on your careers or job pages in a machine-readable format (especially JSON-LD JobPosting with baseSalary).",
-    why: '"How much does [company] pay?" is the #1 question candidates ask AI about employers. Published salary data reduces AI hallucination from £18K average error to £3K.',
+    what: "We check whether AI can describe your interview stages, timeline, and what candidates should expect. Most companies have zero public content on this.",
+    why: "\"Help me prepare for an interview at [company]\" is one of the fastest-growing AI prompts. Companies with published interview guides dominate these results.",
   },
   {
-    name: "Content Format & Structure",
-    weight: 9,
-    what: "We assess whether your content uses formats AI prefers to cite: FAQ schema, semantic heading hierarchy (h1→h2→h3), answer-first paragraph structure, structured tables, definition lists, and ARIA/role attributes.",
-    why: "AI models disproportionately cite content in FAQ, comparative, and tabular formats. Answer-first structures increase AI citation by up to 39% (Princeton GEO study). Proper semantic HTML helps AI parse and extract your information accurately.",
+    name: "Career Growth Pathways",
+    weight: 10,
+    what: "We assess whether AI can describe progression, promotion frameworks, L&D programmes, and growth opportunities at your company.",
+    why: "Career development is consistently a top-3 factor in employer choice. If AI can't describe your growth story, candidates assume there isn't one.",
+  },
+  {
+    name: "Tech Stack & Tools",
+    weight: 8,
+    what: "For technical roles, we check whether AI can describe your engineering environment — languages, frameworks, infrastructure, development practices.",
+    why: "Engineers choose employers based on tech stack. If this information isn't published, AI either guesses or says nothing — and the candidate applies somewhere else.",
+  },
+  {
+    name: "Culture Specificity",
+    weight: 10,
+    what: "We measure whether AI describes your culture with specifics (\"transparent leadership, quarterly all-hands, 4-day work week trials\") or vague generics (\"good culture, nice people\").",
+    why: "Vague culture descriptions come from Glassdoor reviews. Specific ones come from your own content. The more specific AI can be, the more trustworthy the answer feels to candidates.",
+  },
+  {
+    name: "DEI & Inclusion",
+    weight: 10,
+    what: "We check whether AI can reference your diversity commitments, ERGs, inclusion initiatives, pay gap reporting, or accessibility policies.",
+    why: "Increasingly important to candidates, especially under-30s. Published DEI data on your domain gives AI concrete facts instead of silence.",
   },
 ];
 
-/**
- * Executes HowWeScorePage.
- * @returns The resulting value.
- */
 export default function HowWeScorePage() {
   const howToSchema = generateHowToSchema({
-    name: "How to Calculate Your AI Visibility Score",
+    name: "How We Measure Your AI Employer Visibility",
     description:
-      "Learn how OpenRole calculates your AI Visibility Score using six evidence-based checks weighted according to peer-reviewed research.",
+      "Learn how OpenRole calculates your AI Visibility Score using eight factual themes based on what candidates actually ask AI about employers.",
     steps: CHECKS.map((check) => ({
       name: check.name,
       text: `${check.what} ${check.why}`,
@@ -101,12 +106,12 @@ export default function HowWeScorePage() {
             ← Back to audit
           </Link>
           <h1 className="text-3xl lg:text-4xl font-bold text-slate-900 tracking-tight">
-            How we calculate your score
+            How we measure your AI employer visibility
           </h1>
           <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-            Your AI Visibility Score is based on six evidence-based checks — each weighted
-            according to peer-reviewed research on what actually drives AI
-            citations across ChatGPT, Claude, Perplexity, and Google AI.
+            Your AI Visibility Score measures how accurately AI represents your
+            company to candidates — scored across 8 factual themes based on what
+            candidates actually ask.
           </p>
         </div>
       </div>
@@ -127,11 +132,15 @@ export default function HowWeScorePage() {
               </span>
             </div>
             <p className="text-[13px] leading-relaxed text-slate-600 mb-2">
-              <span className="font-medium text-slate-700">What we check: </span>
+              <span className="font-medium text-slate-700">
+                What we check:{" "}
+              </span>
               {check.what}
             </p>
             <p className="text-[13px] leading-relaxed text-slate-500">
-              <span className="font-medium text-neutral-700">Why it matters: </span>
+              <span className="font-medium text-neutral-700">
+                Why it matters:{" "}
+              </span>
               {check.why}
             </p>
           </div>
@@ -142,11 +151,11 @@ export default function HowWeScorePage() {
       <div className="max-w-2xl mx-auto px-6 pb-20">
         <div className="rounded-2xl bg-slate-900 p-8 text-center">
           <h2 className="text-xl font-bold text-white mb-2">
-            Ready to fix your score?
+            See where your gaps are
           </h2>
           <p className="text-sm text-slate-400 mb-6 max-w-md mx-auto">
-            OpenRole automatically optimises your employer brand for AI — so when
-            candidates ask about you, the answers are yours.
+            Run a free audit to see exactly what AI says about your company —
+            and which questions it can&apos;t answer. Takes 30 seconds.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link

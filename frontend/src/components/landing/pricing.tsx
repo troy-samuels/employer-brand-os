@@ -16,18 +16,18 @@ const plans = [
   {
     name: "Starter",
     price: "£49",
-    features: ["3 AI model checks", "Verification page", "Monthly snapshot"],
+    features: ["4 AI model monitoring", "Weekly gap alerts", "5 content templates/month", "Email notifications"],
   },
   {
     name: "Growth",
     price: "£149",
     highlighted: true,
-    features: ["4 AI model checks", "Weekly Monday Report", "Hallucination alerts"],
+    features: ["Everything in Starter", "Full Content Playbook", "Competitor benchmarking ×2", "Interview prep monitoring"],
   },
   {
     name: "Scale",
     price: "£399",
-    features: ["6 AI models", "Competitor benchmarks", "Unlimited locations"],
+    features: ["Everything in Growth", "Unlimited competitors", "Done-for-you content drafts", "API + ATS integration"],
   },
 ];
 
@@ -37,19 +37,19 @@ export default function Pricing() {
       <div className="max-w-[960px] mx-auto px-6 lg:px-12">
         <motion.div
           className="text-center mb-16"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={spring}
         >
           <h2
             className="text-3xl lg:text-4xl font-medium text-neutral-950"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Cheaper than one bad hire
+            One wrong salary in ChatGPT costs you a hire
           </h2>
           <p className="text-neutral-400 mt-3 max-w-md mx-auto text-sm">
-            The free audit is always free. Plans start when you want weekly monitoring.
+            The free audit is always free. Plans start when you want the playbook.
           </p>
         </motion.div>
 
@@ -57,9 +57,9 @@ export default function Pricing() {
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 1, y: 0 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.05 }}
               transition={{ ...spring, delay: i * 0.08 }}
               className={cn(
                 "relative rounded-2xl p-7 transition-all duration-300",
@@ -124,9 +124,9 @@ export default function Pricing() {
 
         <motion.div
           className="mt-10 text-center"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ delay: 0.3 }}
         >
           <Link

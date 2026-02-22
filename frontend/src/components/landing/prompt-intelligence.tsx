@@ -94,29 +94,29 @@ export default function PromptIntelligence() {
         <motion.h2
           className="text-2xl lg:text-3xl font-medium text-neutral-950 text-center mb-3"
           style={{ letterSpacing: "-0.03em" }}
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
-          What candidates ask AI about you
+          Every candidate. Every question. Every AI model.
         </motion.h2>
         <motion.p
           className="text-sm text-neutral-400 text-center mb-12"
-          initial={{ opacity: 0 }}
+          initial={{ opacity: 1 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ delay: 0.1 }}
         >
-          Millions of prompts every week. Is AI getting yours right?
+          These are the real questions asked millions of times a week. Is AI getting yours right?
         </motion.p>
 
         {/* Mock AI chat — Claude style */}
         <motion.div
           className="mx-auto max-w-md"
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 20 }}
         >
           <div className="rounded-2xl border border-neutral-200 bg-[#FAF9F7] overflow-hidden" style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>

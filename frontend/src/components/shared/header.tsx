@@ -10,11 +10,11 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "/index", label: "Index" },
-  { href: "/blog", label: "Blog" },
-  { href: "/how-we-score", label: "How we score" },
+  { href: "/index", label: "UK Index" },
+  { href: "/#audit", label: "Free Audit" },
+  { href: "/#how-it-works", label: "How It Works" },
   { href: "/pricing", label: "Pricing" },
-  { href: "/security", label: "Security" },
+  { href: "/blog", label: "Blog" },
 ];
 
 export function Header() {

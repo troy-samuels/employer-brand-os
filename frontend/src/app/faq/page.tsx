@@ -13,21 +13,21 @@ import { Footer } from "@/components/shared/footer";
 import { generateFAQSchema, JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "FAQ — AI Visibility Questions Answered",
+  title: "FAQ — AI Employer Visibility Questions Answered",
   description:
-    "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
+    "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
   openGraph: {
-    title: "FAQ — AI Visibility Questions Answered | OpenRole",
+    title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
+      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
     url: "https://openrole.co.uk/faq",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FAQ — AI Visibility Questions Answered | OpenRole",
+    title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI visibility, employer brand in LLMs, structured data, the OpenRole pixel, and how scoring works.",
+      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
   },
   alternates: { canonical: "https://openrole.co.uk/faq" },
 };
@@ -42,83 +42,83 @@ interface FaqEntry {
 const faqs: FaqEntry[] = [
   // Understanding the Problem
   {
-    slug: "what-is-ai-visibility",
-    question: "What is AI visibility and why should employers care?",
+    slug: "what-does-ai-say-about-employers",
+    question: "What does AI actually say about employers?",
     summary:
-      "800M people use ChatGPT weekly. When candidates ask AI about your company, the answer shapes their perception — often with wrong information. AI visibility is whether you control that narrative or not.",
-    category: "Understanding AI Visibility",
+      "We tested ChatGPT, Claude, Perplexity and Gemini on hundreds of UK companies. They get salaries wrong by an average of £18K, miss benefits entirely, and cite 2-3 year old Glassdoor reviews as current fact. See real examples.",
+    category: "Understanding the Problem",
   },
   {
-    slug: "what-do-llms-say-about-employers",
-    question: "What do AI models actually say about employers?",
+    slug: "why-candidates-use-ai",
+    question: "How many candidates use AI to research employers?",
     summary:
-      "We tested 6 AI models on hundreds of companies. They hallucinate salaries, invent benefits, use outdated policies, and cite Reddit threads as sources. See real examples.",
-    category: "Understanding AI Visibility",
+      "80% of candidates under 30 use ChatGPT, Claude or Perplexity to research companies before applying. 38% use it as their primary research tool. That AI answer is their first impression — and you didn't get a say in it.",
+    category: "Understanding the Problem",
   },
   {
-    slug: "which-ai-models-matter",
-    question: "Which AI models matter for employer brand?",
+    slug: "what-are-information-gaps",
+    question: "What are employer information gaps?",
     summary:
-      "ChatGPT (800M users), Google AI Overviews (built into search), Meta AI (1B users in WhatsApp/Instagram), Perplexity, Copilot, and Claude. Each reaches different candidate demographics.",
-    category: "Understanding AI Visibility",
+      "Information gaps are specific factual questions AI can't answer about your company — your actual salary bands, specific benefits, remote policy, interview process, tech stack. Glassdoor has opinions, not facts. When AI hits a gap, it guesses. OpenRole finds those gaps.",
+    category: "Understanding the Problem",
   },
   // How OpenRole Works
+  {
+    slug: "how-the-audit-works",
+    question: "How does the free audit work?",
+    summary:
+      "Enter your company name. We query ChatGPT, Claude, Perplexity and Gemini with the exact questions candidates ask. You see the actual AI responses word for word, where they sourced the information, and which questions AI couldn't answer.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "what-is-the-content-playbook",
+    question: "What's in the Content Playbook?",
+    summary:
+      "For each information gap, you get: what content to publish, where to publish it on your domain, how to format it for AI, and a ready-to-edit template. Most gaps take 20 minutes to fill. We track whether AI starts citing your content.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "how-long-to-see-results",
+    question: "How quickly do AI answers change after publishing content?",
+    summary:
+      "Typically 2-4 weeks. AI models regularly refresh their knowledge. When you publish specific, dated, well-structured content on your careers page, AI preferences it over vague aggregator data. We track this weekly in your Monday Report.",
+    category: "How OpenRole Works",
+  },
   {
     slug: "how-scoring-works",
     question: "How does the AI Visibility Score work?",
     summary:
-      "Your score (0-100) measures how accurately AI can represent your company. We check 6 dimensions: structured data (JSON-LD), bot access, careers page, brand reputation, salary transparency, and content format.",
-    category: "How OpenRole Works",
-  },
-  {
-    slug: "what-is-llms-txt",
-    question: "Does llms.txt help with AI visibility?",
-    summary:
-      "Research shows llms.txt has zero measurable impact on AI citations. Senthor analysed 10M+ AI requests and found 0 major bots reading it. Structured data (JSON-LD) is what actually works — proven to boost AI visibility by 30–40%.",
-    category: "How OpenRole Works",
-  },
-  {
-    slug: "what-is-the-pixel",
-    question: "What does the OpenRole pixel do?",
-    summary:
-      "A lightweight script on your careers page that makes your employer data available to AI crawlers — even if your ATS normally blocks them. Open-source, SRI-verified, GDPR compliant.",
-    category: "How OpenRole Works",
-  },
-  {
-    slug: "how-often-are-audits-updated",
-    question: "How often is AI monitoring updated?",
-    summary:
-      "Free audits are point-in-time snapshots. Paid plans include weekly monitoring with a Monday email report showing what changed, your score trend, and specific recommendations.",
+      "Your score (0-100) measures how accurately AI represents your company across 8 factual themes: salary accuracy, benefits completeness, remote policy clarity, interview process transparency, tech stack discoverability, career growth pathways, DEI commitments, and culture specificity.",
     category: "How OpenRole Works",
   },
   // Security & Privacy
   {
-    slug: "pixel-security",
-    question: "Is the pixel safe to install? What data does it collect?",
+    slug: "data-handling",
+    question: "How does OpenRole handle our data?",
     summary:
-      "The pixel collects zero personal data. It serves structured employer facts (company info, job listings, benefits) to AI crawlers. Open-source, SRI-verified, SOC 2 aligned infrastructure.",
+      "We only process publicly available information — your website, careers page, and what AI models say publicly about your company. All data encrypted at rest and in transit. EU-hosted infrastructure. GDPR compliant. We never access anything behind authentication.",
     category: "Security & Privacy",
   },
   {
-    slug: "data-handling",
-    question: "How does OpenRole handle our company data?",
+    slug: "is-it-safe",
+    question: "Do we need to install anything?",
     summary:
-      "All data encrypted at rest and in transit. EU-hosted infrastructure. GDPR compliant. We only process publicly available website data — nothing behind authentication, nothing private.",
+      "No. OpenRole works entirely from the outside — we query AI models and analyse your public web presence. There's nothing to install, no code snippet, no pixel. Your IT team doesn't need to be involved.",
     category: "Security & Privacy",
   },
   // Pricing & Plans
   {
     slug: "free-vs-paid",
-    question: "What's included in the free audit vs paid plans?",
+    question: "What's included free vs paid plans?",
     summary:
-      "The free audit gives you a full AI Visibility Score with 6 checks. Paid plans add per-LLM response monitoring, weekly reports, hallucination alerts, and tools to fix what's wrong.",
+      "The free audit gives you a full AI scan with gap summary. Paid plans add weekly monitoring, the full Information Gap Report with content templates, competitor benchmarking, and the Content Playbook that tells you exactly what to publish.",
     category: "Pricing & Plans",
   },
   {
-    slug: "which-plan-do-i-need",
-    question: "Which plan is right for my company?",
+    slug: "which-plan",
+    question: "Which plan is right for us?",
     summary:
-      "Starter (1-50 employees, 3 LLMs), Growth (51-500, 4 LLMs + weekly reports), Scale (500+, 6 LLMs + competitor benchmarking). Most companies start with Growth.",
+      "Starter (£49/mo) if you want to monitor and get templates. Growth (£149/mo) if you're actively hiring and want the full Content Playbook plus competitor intel. Scale (£399/mo) if you want done-for-you content drafts and board reporting.",
     category: "Pricing & Plans",
   },
 ];
@@ -148,9 +148,7 @@ export default function FaqPage() {
           <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24">
             <div className="flex items-start gap-3 mb-5">
               <HelpCircle className="h-6 w-6 text-brand-accent mt-0.5" />
-              <p className="overline">
-                FAQ
-              </p>
+              <p className="overline">FAQ</p>
             </div>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
               Questions about AI employer visibility
@@ -205,7 +203,8 @@ export default function FaqPage() {
               Still have questions?
             </h2>
             <p className="text-sm text-slate-500 mb-6">
-              Run a free audit to see exactly what AI says about your company, or get in touch.
+              Run a free audit to see exactly what AI says about your company,
+              or get in touch.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

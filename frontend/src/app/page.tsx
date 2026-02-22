@@ -11,6 +11,7 @@ import { CompanySearch } from "@/components/audit/company-search";
 import { AuditProgress } from "@/components/audit/audit-progress";
 import { AuditResults } from "@/components/audit/audit-results";
 import { AuditGate } from "@/components/audit/audit-gate";
+import ProblemStats from "@/components/landing/problem-stats";
 import Features from "@/components/landing/features";
 import BeforeAfter from "@/components/landing/testimonials";
 import PromptIntelligence from "@/components/landing/prompt-intelligence";
@@ -36,13 +37,13 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "AI is telling candidates the wrong things about your company. OpenRole gives you verified employer data that AI agents trust — so you control the narrative.",
+      "Candidates ask AI about you before applying. OpenRole shows you what they hear, finds the gaps, and gives you the content playbook to take control.",
   });
 
   const websiteSchema = generateWebsiteSchema({
     name: SITE_NAME,
     url: BASE_URL,
-    description: "Take back your reputation from AI. Free employer brand audit in 30 seconds.",
+    description: "Take control of what AI tells your candidates. Free employer brand audit across ChatGPT, Claude, Perplexity and Gemini.",
   });
 
   return (
@@ -68,12 +69,12 @@ export default function Home() {
                   className="mb-12 max-w-3xl text-center"
                 >
                   <h1 className="mb-5 text-5xl font-medium leading-[1.04] text-neutral-950 sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.04em' }}>
-                    Is AI telling the truth
+                    Take control of what AI tells
                     <br />
-                    <span className="text-brand-accent">about your company?</span>
+                    <span className="text-brand-accent">your candidates</span>
                   </h1>
                   <p className="text-lg text-neutral-400 max-w-md mx-auto">
-                    Find out in 30 seconds. Completely free.
+                    80% of candidates ask AI about you before applying. See what they hear — free.
                   </p>
                 </motion.div>
               )}
@@ -91,6 +92,9 @@ export default function Home() {
                   className="w-full max-w-lg"
                 >
                   <CompanySearch onSubmit={runAudit} isLoading={isLoading} />
+                  <p className="mt-4 text-center text-xs text-neutral-400">
+                    340+ UK employers tracked · Average AI accuracy score: <span className="font-semibold text-neutral-500">32/100</span> · <span className="font-semibold text-status-critical">68%</span> have wrong salary data in ChatGPT
+                  </p>
                   {error && (
                     <motion.p
                       initial={{ opacity: 0 }}
@@ -216,6 +220,7 @@ export default function Home() {
         </section>
 
         {/* ── Sections ────────────────────────────────── */}
+        <ProblemStats />
         <Features />
         <BeforeAfter />
         <PromptIntelligence />

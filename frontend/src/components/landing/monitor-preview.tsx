@@ -101,22 +101,21 @@ export default function MonitorPreview() {
         <div className="grid gap-12 lg:gap-20 lg:grid-cols-2 items-center">
           {/* Left — text */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ type: "spring", stiffness: 200, damping: 20 }}
           >
             <h2
               className="text-3xl lg:text-4xl font-medium text-neutral-950 mb-4"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Know where you stand.
+              Your AI reputation.
               <br />
               Every Monday.
             </h2>
             <p className="text-neutral-400 leading-relaxed max-w-sm">
-              A weekly email with your AI reputation score, what changed,
-              and exactly what to fix next.
+              Weekly report: what AI says about your salary, benefits, culture — what changed, what&apos;s still wrong, what to fix next.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
@@ -142,9 +141,9 @@ export default function MonitorPreview() {
 
           {/* Right — 3D tilt score card */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 1, y: 0 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true, amount: 0.05 }}
             transition={{ type: "spring", stiffness: 200, damping: 20, delay: 0.1 }}
           >
             <TiltCard>

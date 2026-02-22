@@ -228,3 +228,12 @@
   from { height: var(--radix-accordion-content-height); }
   to { height: 0; }
 }
+
+/* Hide Vercel deployment badge on Hobby plan */
+[data-testid="vc-feedback-widget"],
+a[aria-label="Vercel Logo"],
+#vercel-live-feedback,
+.vercel-live-feedback-wrapper,
+img[alt="Vercel"] {
+  display: none !important;
+}

@@ -31,11 +31,11 @@ import { Footer } from "@/components/shared/footer";
 export const metadata: Metadata = {
   title: "AI Employer Visibility Index | OpenRole",
   description:
-    "The definitive ranking of how accurately AI represents UK employers. See which companies are visible to ChatGPT, Google AI, Perplexity, and more — and which are invisible.",
+    "The definitive ranking of UK employer visibility in AI. Which companies control their narrative — and which are invisible to the candidates asking about them?",
   openGraph: {
     title: "AI Employer Visibility Index | OpenRole",
     description:
-      "Which companies are AI-visible? The live leaderboard of employer brand scores across 6 AI models.",
+      "The definitive ranking of UK employer visibility in AI. Which companies control their narrative — and which are invisible to the candidates asking about them?",
     type: "website",
   },
   alternates: {
@@ -74,6 +74,7 @@ async function getIndexData(): Promise<{
     pctNoSalary: number;
     topScore: number;
     bottomScore: number;
+    pctInfoGaps: number;
   };
 }> {
   // Get all public audits, deduplicated by company (latest only)
@@ -95,6 +96,7 @@ async function getIndexData(): Promise<{
         pctNoSalary: 0,
         topScore: 0,
         bottomScore: 0,
+        pctInfoGaps: 0,
       },
     };
   }
@@ -121,6 +123,12 @@ async function getIndexData(): Promise<{
   const pctNoSalary = Math.round(
     (deduped.filter((c) => !c.has_salary_data).length / total) * 100
   );
+  // Companies with gaps in salary, benefits (proxy: jsonld), or remote (proxy: careers_page_status)
+  const pctInfoGaps = Math.round(
+    (deduped.filter(
+      (c) => !c.has_salary_data || !c.has_jsonld || c.careers_page_status !== "full"
+    ).length / total) * 100
+  );
 
   return {
     companies: deduped,
@@ -132,6 +140,7 @@ async function getIndexData(): Promise<{
       pctNoSalary,
       topScore: scores[0] ?? 0,
       bottomScore: scores[scores.length - 1] ?? 0,
+      pctInfoGaps,
     },
   };
 }
@@ -155,11 +164,10 @@ function rankMedal(rank: number): string | null {
 
 function checkCount(c: IndexCompany): number {
   let count = 0;
-  if (c.has_jsonld) count++;
   if (c.has_salary_data) count++;
+  if (c.has_jsonld) count++;
   if (c.careers_page_status === "full") count++;
   if (c.robots_txt_status === "allows") count++;
-  // Content format: proxy using careers + jsonld presence
   if (c.has_jsonld && c.careers_page_status === "full") count++;
   return count;
 }
@@ -187,17 +195,15 @@ export default async function IndexPage() {
           <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-20 lg:py-24">
             <div className="flex items-start gap-3 mb-5">
               <Trophy className="h-6 w-6 text-brand-accent mt-0.5" />
-              <p className="overline">
-                AI Employer Index
-              </p>
+              <p className="overline">AI Employer Index</p>
             </div>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight max-w-2xl">
               Which employers are visible to AI — and which are invisible?
             </h1>
             <p className="mt-5 text-lg text-slate-500 max-w-2xl leading-relaxed">
-              The live ranking of how accurately AI models represent employers
-              to job seekers. Based on real audits across ChatGPT, Google AI,
-              Perplexity, and more.
+              The definitive ranking of UK employer visibility in AI. Which
+              companies control their narrative — and which are invisible to the
+              candidates asking about them?
             </p>
 
             {/* Stats bar */}
@@ -206,19 +212,26 @@ export default async function IndexPage() {
                 <div className="flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-slate-400" />
                   <span className="text-sm text-slate-600">
-                    <strong className="text-slate-900">{stats.total}</strong> companies ranked
+                    <strong className="text-slate-900">{stats.total}</strong>{" "}
+                    companies ranked
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4 text-slate-400" />
                   <span className="text-sm text-slate-600">
-                    Average score: <strong className="text-slate-900">{stats.avgScore}/100</strong>
+                    Average score:{" "}
+                    <strong className="text-slate-900">
+                      {stats.avgScore}/100
+                    </strong>
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <TrendingUp className="h-4 w-4 text-slate-400" />
                   <span className="text-sm text-slate-600">
-                    <strong className="text-slate-900">{stats.pctNoJsonld}%</strong> have no structured data
+                    <strong className="text-slate-900">
+                      {stats.pctInfoGaps}%
+                    </strong>{" "}
+                    have information gaps
                   </span>
                 </div>
               </div>
@@ -231,9 +244,12 @@ export default async function IndexPage() {
           <section className="border-b border-slate-200 bg-slate-900">
             <div className="mx-auto max-w-[1200px] px-6 lg:px-12 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
               <p className="text-sm text-slate-300">
-                <span className="text-white font-semibold">{stats.pctNoSalary}%</span> of
-                audited companies have no salary data visible to AI.
-                Candidates asking about pay get guesses, not facts.
+                <span className="text-white font-semibold">
+                  {stats.pctInfoGaps}%
+                </span>{" "}
+                of audited UK companies have information gaps in salary,
+                benefits, or remote policy. When candidates ask AI, they get
+                guesses instead of facts.
               </p>
               <Link
                 href="/#audit"
@@ -257,8 +273,8 @@ export default async function IndexPage() {
                   The Index is building
                 </h2>
                 <p className="text-slate-500 max-w-md mx-auto mb-8">
-                  Every free audit adds a company to the ranking. Be one of the first
-                  to see where you stand.
+                  Every free audit adds a company to the ranking. Be one of the
+                  first to see where you stand.
                 </p>
                 <Link
                   href="/#audit"
@@ -279,7 +295,9 @@ export default async function IndexPage() {
                         className="group rounded-2xl bg-white border border-slate-200 p-6 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
                       >
                         <div className="flex items-center justify-between mb-3">
-                          <span className="text-2xl">{rankMedal(i + 1)}</span>
+                          <span className="text-2xl">
+                            {rankMedal(i + 1)}
+                          </span>
                           <span
                             className={`text-2xl font-bold tabular-nums ${scoreColor(company.score)}`}
                           >
@@ -290,7 +308,8 @@ export default async function IndexPage() {
                           {company.company_name}
                         </h3>
                         <p className="text-xs text-slate-400 mt-1">
-                          {company.company_domain} · {checkCount(company)}/5 checks
+                          {company.company_domain} · {checkCount(company)}/5
+                          themes
                         </p>
                       </Link>
                     ))}
@@ -303,11 +322,15 @@ export default async function IndexPage() {
                   <div className="grid grid-cols-[3rem_1fr_4rem] gap-2 px-4 py-3 border-b border-neutral-100 bg-slate-50/80 text-xs font-semibold text-slate-500 sm:grid-cols-[3rem_1fr_5rem_5rem_5rem_5rem_5rem_4rem] sm:px-5">
                     <span>#</span>
                     <span>Company</span>
-                    <span className="text-center hidden sm:block">Careers</span>
-                    <span className="text-center hidden sm:block">Data</span>
                     <span className="text-center hidden sm:block">Salary</span>
-                    <span className="text-center hidden sm:block">Bots</span>
-                    <span className="text-center hidden sm:block">Format</span>
+                    <span className="text-center hidden sm:block">
+                      Benefits
+                    </span>
+                    <span className="text-center hidden sm:block">Remote</span>
+                    <span className="text-center hidden sm:block">
+                      Culture
+                    </span>
+                    <span className="text-center hidden sm:block">Growth</span>
                     <span className="text-right">Score</span>
                   </div>
 
@@ -329,20 +352,7 @@ export default async function IndexPage() {
                           {company.company_domain}
                         </p>
                       </div>
-                      <span className="text-center hidden sm:block">
-                        {company.careers_page_status === "full" ? (
-                          <span className="text-teal-500 text-sm">✓</span>
-                        ) : (
-                          <span className="text-red-400 text-sm">✗</span>
-                        )}
-                      </span>
-                      <span className="text-center hidden sm:block">
-                        {company.has_jsonld ? (
-                          <span className="text-teal-500 text-sm">✓</span>
-                        ) : (
-                          <span className="text-red-400 text-sm">✗</span>
-                        )}
-                      </span>
+                      {/* Salary — uses has_salary_data */}
                       <span className="text-center hidden sm:block">
                         {company.has_salary_data ? (
                           <span className="text-teal-500 text-sm">✓</span>
@@ -350,6 +360,23 @@ export default async function IndexPage() {
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
+                      {/* Benefits — proxy: has_jsonld */}
+                      <span className="text-center hidden sm:block">
+                        {company.has_jsonld ? (
+                          <span className="text-teal-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      {/* Remote — proxy: careers_page_status === "full" */}
+                      <span className="text-center hidden sm:block">
+                        {company.careers_page_status === "full" ? (
+                          <span className="text-teal-500 text-sm">✓</span>
+                        ) : (
+                          <span className="text-red-400 text-sm">✗</span>
+                        )}
+                      </span>
+                      {/* Culture — proxy: robots_txt_status */}
                       <span className="text-center hidden sm:block">
                         {company.robots_txt_status === "allows" ? (
                           <span className="text-teal-500 text-sm">✓</span>
@@ -357,8 +384,10 @@ export default async function IndexPage() {
                           <span className="text-red-400 text-sm">✗</span>
                         )}
                       </span>
+                      {/* Growth — proxy: has_jsonld && careers_page_status */}
                       <span className="text-center hidden sm:block">
-                        {company.has_jsonld && company.careers_page_status === "full" ? (
+                        {company.has_jsonld &&
+                        company.careers_page_status === "full" ? (
                           <span className="text-teal-500 text-sm">✓</span>
                         ) : (
                           <span className="text-red-400 text-sm">✗</span>
@@ -376,13 +405,13 @@ export default async function IndexPage() {
                 {/* Table footer */}
                 <div className="mt-4 text-center">
                   <p className="text-xs text-slate-400">
-                    Rankings update hourly based on the latest audit data.
-                    Scores calculated using the{" "}
+                    Rankings update from the latest audit data. Scores calculated
+                    using the{" "}
                     <Link
                       href="/how-we-score"
                       className="underline hover:text-slate-600"
                     >
-                      OpenRole methodology
+                      OpenRole 8-theme methodology
                     </Link>
                     .
                   </p>
@@ -399,8 +428,8 @@ export default async function IndexPage() {
               Don&apos;t see your company?
             </h2>
             <p className="text-sm text-slate-500 mb-6 max-w-md mx-auto">
-              Run a free audit and your company joins the index automatically.
-              30 seconds, no signup required.
+              Run a free audit and join the UK Visibility Index. See what AI
+              tells candidates about you — 30 seconds, no signup.
             </p>
             <Link
               href="/#audit"

@@ -7,23 +7,23 @@
 
 import { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Wrench, BarChart3 } from "lucide-react";
+import { Search, FileSearch, BarChart3 } from "lucide-react";
 
 const steps = [
   {
     icon: Search,
-    label: "See your score",
-    detail: "Instant AI reputation audit across every model.",
+    label: "See what AI says",
+    detail: "Real responses from ChatGPT, Claude, Perplexity and Gemini — word for word.",
   },
   {
-    icon: Wrench,
-    label: "Fix the gaps",
-    detail: "Publish verified data that AI prioritises.",
+    icon: FileSearch,
+    label: "Find what's missing",
+    detail: "Your Information Gap Report shows what AI can't answer about your salary, benefits, and culture.",
   },
   {
     icon: BarChart3,
-    label: "Prove it weekly",
-    detail: "Monday report, delivered to your inbox.",
+    label: "Fill the gaps",
+    detail: "Content Playbook with templates. Publish on your site this week, see results within days.",
   },
 ];
 
@@ -53,9 +53,9 @@ function SpotlightCard({
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 1, y: 0 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{ ...spring, delay: index * 0.1 }}
       className="group relative overflow-hidden rounded-2xl border border-neutral-100 bg-white p-8 transition-colors duration-300 hover:border-neutral-200"
     >
@@ -87,12 +87,12 @@ export default function Features() {
         <motion.h2
           className="text-3xl lg:text-4xl font-medium text-neutral-950 text-center mb-16 lg:mb-20"
           style={{ letterSpacing: "-0.03em" }}
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 1, y: 0 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
+          viewport={{ once: true, amount: 0.05 }}
           transition={spring}
         >
-          Three steps. Full control.
+          See it. Find the gaps. Fix them.
         </motion.h2>
 
         <div className="grid gap-5 md:grid-cols-3">

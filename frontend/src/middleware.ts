@@ -30,8 +30,8 @@ const csrfExemptApiRoutes = [
   "/api/monitor/weekly", // Cron/scheduler trigger (server-to-server)
   "/api/pixel/v1/crawl-log", // Authenticated via key + signature
 ];
-const API_LIMIT_PER_MINUTE = 60;
-const AUDIT_LIMIT_PER_MINUTE = 10;
+const API_LIMIT_PER_MINUTE = 600;
+const AUDIT_LIMIT_PER_MINUTE = 200;
 const RATE_WINDOW_MS = 60_000;
 
 type RateLimitBucket = {

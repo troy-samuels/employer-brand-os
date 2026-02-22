@@ -6,6 +6,7 @@
 import type { MetadataRoute } from "next";
 import { untypedTable } from "@/lib/supabase/untyped-table";
 import { getAllPosts } from "@/lib/blog";
+import { industries } from "@/data/industries";
 
 const BASE_URL = "https://openrole.co.uk";
 
@@ -75,6 +76,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
+  // Industry index pages
+  const industryPages: MetadataRoute.Sitemap = [
+    { url: `${BASE_URL}/index`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    ...industries.map((industry) => ({
+      url: `${BASE_URL}/index/${industry.slug}`,
+      lastModified: new Date(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+    })),
+  ];
+
   // Dynamic company pages
   const companyPages: MetadataRoute.Sitemap = [];
 
@@ -98,5 +110,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Sitemap still works with just static pages if DB is unavailable
   }
 
-  return [...staticPages, ...blogPages, ...companyPages];
+  return [...staticPages, ...industryPages, ...blogPages, ...companyPages];
 }
