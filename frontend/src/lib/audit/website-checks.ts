@@ -1875,6 +1875,8 @@ export async function runWebsiteChecks(
   let robotsTxtAllowedBots: string[] = [];
   let robotsTxtBlockedBots: string[] = [];
 
+  let brandReputation: BrandReputation | null = null;
+
   if (!normalizedDomain) {
     auditStatus = "no_website";
   } else {
@@ -1882,6 +1884,10 @@ export async function runWebsiteChecks(
     const careersCheckPromise = careersUrlOverride
       ? runCareersOverrideCheck(careersUrlOverride, normalizedDomain)
       : runCareersCheck(normalizedDomain);
+
+    // Brand reputation is independent of crawl — run in parallel with initial fetches
+    const brandReputationPromise = checkBrandReputation(companyName);
+
     const [llmsResponse, homepageResponse, careersCheck, robotsResponse, sitemapResponse] = await Promise.all([
       fetchSafe(`https://${normalizedDomain}/llms.txt`),
       fetchSafe(homepageUrl, true),
@@ -1906,17 +1912,35 @@ export async function runWebsiteChecks(
     }
 
     const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
-    let bestCareersCheck = careersCheck;
 
-    if (homepageHtml && !careersUrlOverride) {
-      const crossDomainCareersCheck = await runCrossDomainCareersCheck(
-        homepageHtml,
-        homepageUrl,
+    // Cross-domain careers check overlaps with job listing fetches below
+    const crossDomainPromise = (homepageHtml && !careersUrlOverride)
+      ? runCrossDomainCareersCheck(homepageHtml, homepageUrl, normalizedDomain)
+      : Promise.resolve(null);
+
+    // Fetch job listing pages ONCE — reuse HTML for both salary and JSON-LD analysis
+    let jobListingHtmlSamples: string[] = [];
+    if (careersCheck.html && careersCheck.url) {
+      const jobListingLinks = extractJobListingLinks(
+        careersCheck.html,
+        careersCheck.url,
         normalizedDomain,
       );
-      if (isBetterCareersResult(crossDomainCareersCheck, bestCareersCheck)) {
-        bestCareersCheck = crossDomainCareersCheck;
+      if (jobListingLinks.length > 0) {
+        const sampledResponses = await Promise.all(
+          jobListingLinks.slice(0, MAX_SAMPLED_JOB_LISTING_PAGES).map((link) => fetchSafe(link))
+        );
+        jobListingHtmlSamples = sampledResponses
+          .filter((r) => r.ok && r.status === 200 && r.text)
+          .map((r) => r.text);
       }
+    }
+
+    // Merge cross-domain careers result (already running in parallel)
+    const crossDomainCareersCheck = await crossDomainPromise;
+    let bestCareersCheck = careersCheck;
+    if (crossDomainCareersCheck && isBetterCareersResult(crossDomainCareersCheck, bestCareersCheck)) {
+      bestCareersCheck = crossDomainCareersCheck;
     }
 
     careersPageStatus = bestCareersCheck.status;
@@ -1940,41 +1964,17 @@ export async function runWebsiteChecks(
       }
     }
 
-    const salaryDetection = await analyzeSalaryAcrossCareersAndJobListings(
-      bestCareersCheck.html,
-      bestCareersCheck.url,
-      normalizedDomain,
-    );
+    // Salary analysis — reuse already-fetched job listing HTML (no double fetch)
+    const salaryHtmlSamples = [bestCareersCheck.html, ...jobListingHtmlSamples].filter(Boolean);
+    const salaryDetections = salaryHtmlSamples.map((html) => analyzeSalaryTransparency(html));
+    const salaryDetection = selectHighestConfidenceSalaryDetection(salaryDetections);
     hasSalaryData = salaryDetection.hasSalaryData;
     salaryConfidence = salaryDetection.salaryConfidence;
     salaryScore = salaryDetection.score;
     detectedCurrency = salaryDetection.detectedCurrency;
 
-    // Collect JSON-LD schemas from multiple pages: homepage, careers page, and job listings
-    const htmlSamplesToScan = [homepageHtml];
-    
-    if (bestCareersCheck.html) {
-      htmlSamplesToScan.push(bestCareersCheck.html);
-    }
-
-    // Also get job listing pages for JSON-LD checking
-    if (bestCareersCheck.html && bestCareersCheck.url) {
-      const jobListingLinks = extractJobListingLinks(
-        bestCareersCheck.html,
-        bestCareersCheck.url,
-        normalizedDomain,
-      );
-      if (jobListingLinks.length > 0) {
-        const sampledResponses = await Promise.all(
-          jobListingLinks.slice(0, 3).map((link) => fetchSafe(link))
-        );
-        for (const response of sampledResponses) {
-          if (response.ok && response.status === 200 && response.text) {
-            htmlSamplesToScan.push(response.text);
-          }
-        }
-      }
-    }
+    // JSON-LD schemas — reuse already-fetched job listing HTML (no double fetch)
+    const htmlSamplesToScan = [homepageHtml, bestCareersCheck.html, ...jobListingHtmlSamples];
 
     const schemas = new Set<string>();
     for (const html of htmlSamplesToScan) {
@@ -2009,10 +2009,15 @@ export async function runWebsiteChecks(
       const sitemapText = sitemapResponse.text;
       hasSitemap = sitemapText.includes("<urlset") || sitemapText.includes("<sitemapindex");
     }
+
+    // Await brand reputation (started in parallel at the top of crawl)
+    brandReputation = await brandReputationPromise;
   }
 
-  // Brand reputation check (runs in parallel-safe position — all other data collected)
-  const brandReputation = await checkBrandReputation(companyName);
+  // Brand reputation fallback for no-website case
+  if (!brandReputation) {
+    brandReputation = await checkBrandReputation(companyName);
+  }
 
   // Content format scoring uses the careers page HTML collected during the crawl.
   // careersPageHtml is set inside the crawl block; it's null if the site is unreachable.

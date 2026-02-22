@@ -116,9 +116,11 @@ export function analyzeClientSubmittedHtml(
   let careersPageStatus: "full" | "partial" | "none";
   let careersScore: number;
 
+  // Scoring weights aligned with evidence-based model in website-checks.ts
+  // (Princeton GEO study, Digital Bloom 7K-citation analysis, Feb 2026)
   if (textLength > 1000) {
     careersPageStatus = "full";
-    careersScore = 15;
+    careersScore = 17;
   } else if (textLength >= 200) {
     careersPageStatus = "partial";
     careersScore = 8;
@@ -127,19 +129,20 @@ export function analyzeClientSubmittedHtml(
     careersScore = 0;
   }
 
-  // Salary detection
+  // Salary detection — max 12 points (aligned with website-checks.ts)
   const salary = detectSalary(textContent);
   let salaryScore = 0;
-  if (salary.confidence === "multiple_ranges") salaryScore = 20;
-  else if (salary.confidence === "single_range") salaryScore = 10;
-  else if (salary.confidence === "mention_only") salaryScore = 5;
+  if (salary.confidence === "multiple_ranges") salaryScore = 10;
+  else if (salary.confidence === "single_range") salaryScore = 6;
+  else if (salary.confidence === "mention_only") salaryScore = 3;
 
-  // JSON-LD schemas
+  // JSON-LD schemas — max 28 points (aligned with website-checks.ts)
   const jsonldSchemasFound = extractJsonLdSchemas(html);
   const hasJsonld = jsonldSchemasFound.length > 0;
   let jsonldScore = 0;
-  if (jsonldSchemasFound.includes("JobPosting")) jsonldScore = 25;
-  else if (hasJsonld) jsonldScore = 12;
+  if (jsonldSchemasFound.includes("JobPosting") || jsonldSchemasFound.includes("EmployerAggregateRating")) jsonldScore = 28;
+  else if (jsonldSchemasFound.includes("Organization")) jsonldScore = 16;
+  else if (hasJsonld) jsonldScore = 7;
 
   return {
     careersPageStatus,

@@ -18,6 +18,12 @@ import { LoadingTheatre } from "@/components/audit/loading-theatre";
  */
 const MIN_LOADING_TIME_MS = 4_000;
 
+/**
+ * Maximum time to wait for the audit API before showing a timeout error.
+ * Set slightly above the server-side 45s hard timeout to account for network latency.
+ */
+const CLIENT_FETCH_TIMEOUT_MS = 50_000;
+
 interface AuditApiError {
   error?: string;
 }
@@ -67,6 +73,9 @@ export default function AuditSlugPage() {
       setPageState({ status: "loading" });
       const startedAt = Date.now();
 
+      // Client-side timeout — fires if server doesn't respond within limit
+      const timeoutId = window.setTimeout(() => abortController.abort(), CLIENT_FETCH_TIMEOUT_MS);
+
       try {
         const response = await fetch("/api/audit/citation-chain", {
           method: "POST",
@@ -90,6 +99,8 @@ export default function AuditSlugPage() {
           throw new Error("Received an incomplete audit response.");
         }
 
+        window.clearTimeout(timeoutId);
+
         // Only pad loading time on success so the animation feels intentional.
         const elapsedMs = Date.now() - startedAt;
         if (elapsedMs < MIN_LOADING_TIME_MS) {
@@ -100,7 +111,16 @@ export default function AuditSlugPage() {
           setPageState({ status: "success", data: payload });
         }
       } catch (error) {
+        window.clearTimeout(timeoutId);
+
         if (isAbortError(error)) {
+          // If aborted by our timeout (not by unmount), show timeout error
+          if (isMounted) {
+            setPageState({
+              status: "error",
+              message: "The audit took too long to complete. This can happen with large or bot-protected websites. Please try again.",
+            });
+          }
           return;
         }
 
@@ -120,6 +140,7 @@ export default function AuditSlugPage() {
       isMounted = false;
       abortController.abort();
     };
+    // Note: timeoutId is scoped inside runAudit and cleared on success/error.
   }, [slug, companyName, companyDomain, refreshCount]);
 
   if (pageState.status === "loading") {
