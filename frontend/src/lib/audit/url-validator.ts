@@ -8,6 +8,9 @@ import { isIP } from "node:net";
 
 const URL_SCHEME_REGEX = /^[a-z][a-z0-9+.-]*:\/\//i;
 const ALLOWED_PROTOCOLS = new Set(["http:", "https:"]);
+const DNS_LOOKUP_TIMEOUT_MS = 3_000;
+const HOST_RESOLUTION_CACHE_TTL_MS = 5 * 60 * 1_000;
+const HOST_RESOLUTION_CACHE_MAX_ENTRIES = 500;
 
 const BLOCKED_IPV4_CIDRS: Array<[string, number]> = [
   ["0.0.0.0", 8],
@@ -33,6 +36,14 @@ const BLOCKED_LOCAL_HOSTNAMES = new Set([
 ]);
 
 const CLOUD_METADATA_IPV4 = "169.254.169.254";
+
+type HostResolutionCacheEntry = {
+  expiresAt: number;
+  addresses: string[] | null;
+};
+
+const hostResolutionCache = new Map<string, HostResolutionCacheEntry>();
+const hostResolutionInFlight = new Map<string, Promise<string[] | null>>();
 
 type UrlValidationFailureReason =
   | "invalid_url"
@@ -68,6 +79,44 @@ function parseUrlCandidate(input: string): URL | null {
     return new URL(candidate);
   } catch {
     return null;
+  }
+}
+
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new Error("timeout"));
+    }, timeoutMs);
+
+    operation.then(
+      (result) => {
+        clearTimeout(timer);
+        resolve(result);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
+
+function setHostResolutionCache(hostname: string, addresses: string[] | null): void {
+  if (hostResolutionCache.has(hostname)) {
+    hostResolutionCache.delete(hostname);
+  }
+
+  hostResolutionCache.set(hostname, {
+    addresses,
+    expiresAt: Date.now() + HOST_RESOLUTION_CACHE_TTL_MS,
+  });
+
+  while (hostResolutionCache.size > HOST_RESOLUTION_CACHE_MAX_ENTRIES) {
+    const oldestKey = hostResolutionCache.keys().next().value;
+    if (!oldestKey) {
+      break;
+    }
+    hostResolutionCache.delete(oldestKey);
   }
 }
 
@@ -270,12 +319,40 @@ async function resolveHostname(hostname: string): Promise<string[] | null> {
     return [normalized];
   }
 
-  try {
-    const resolved = await dns.lookup(normalized, { all: true, verbatim: true });
-    return resolved.map((entry) => entry.address);
-  } catch {
-    return null;
+  const cached = hostResolutionCache.get(normalized);
+  if (cached) {
+    if (cached.expiresAt > Date.now()) {
+      return cached.addresses;
+    }
+    hostResolutionCache.delete(normalized);
   }
+
+  const inFlight = hostResolutionInFlight.get(normalized);
+  if (inFlight) {
+    return inFlight;
+  }
+
+  const lookupPromise = (async () => {
+    try {
+      const resolved = await withTimeout(
+        dns.lookup(normalized, { all: true, verbatim: true }),
+        DNS_LOOKUP_TIMEOUT_MS,
+      );
+      const dedupedAddresses = Array.from(new Set(resolved.map((entry) => entry.address)));
+      const result = dedupedAddresses.length > 0 ? dedupedAddresses : null;
+      setHostResolutionCache(normalized, result);
+      return result;
+    } catch {
+      setHostResolutionCache(normalized, null);
+      return null;
+    } finally {
+      hostResolutionInFlight.delete(normalized);
+    }
+  })();
+
+  hostResolutionInFlight.set(normalized, lookupPromise);
+
+  return lookupPromise;
 }
 
 /**

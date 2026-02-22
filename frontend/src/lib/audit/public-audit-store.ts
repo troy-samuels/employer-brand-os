@@ -33,10 +33,8 @@ export async function upsertPublicAudit(result: WebsiteCheckResult): Promise<voi
       },
       {
         onConflict: "company_slug",
-      }
-    )
-    .select()
-    .single();
+      },
+    );
 
   if (error) {
     console.error("[public-audit-store] Upsert failed:", error.message);

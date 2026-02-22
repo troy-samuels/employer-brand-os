@@ -31,8 +31,35 @@ const AUDIT_RESOURCE = "api.audit";
 const AUDIT_RATE_LIMIT_SCOPE = "audit-phase1";
 const AUDIT_RATE_LIMIT_LIMIT = 500;
 const AUDIT_RATE_LIMIT_WINDOW_SECONDS = 3600;
+const AUDIT_EXECUTION_TIMEOUT_MS = 45_000;
 
 const rateLimiter = new RateLimiter();
+
+class AuditExecutionTimeoutError extends Error {
+  constructor() {
+    super("Audit execution timed out");
+    this.name = "AuditExecutionTimeoutError";
+  }
+}
+
+function withTimeout<T>(operation: Promise<T>, timeoutMs: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      reject(new AuditExecutionTimeoutError());
+    }, timeoutMs);
+
+    operation.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (error) => {
+        clearTimeout(timer);
+        reject(error);
+      },
+    );
+  });
+}
 
 const urlFieldSchema = z
   .string({ error: "Missing or invalid 'url' field." })
@@ -184,7 +211,12 @@ export async function POST(
 
     const input = parsedBody.data.url;
     const careersUrlInput = parsedBody.data.careersUrl;
-    const preflightValidation = await validateUrl(input);
+
+    const [preflightValidation, careersValidation] = await Promise.all([
+      validateUrl(input),
+      careersUrlInput ? validateUrl(careersUrlInput) : Promise.resolve(null),
+    ]);
+
     if (!preflightValidation.ok) {
       void logAuditRequest({
         actor: clientIp,
@@ -203,8 +235,7 @@ export async function POST(
     }
 
     let validatedCareersUrl: string | undefined;
-    if (careersUrlInput) {
-      const careersValidation = await validateUrl(careersUrlInput);
+    if (careersUrlInput && careersValidation) {
       if (!careersValidation.ok) {
         void logAuditRequest({
           actor: clientIp,
@@ -229,7 +260,11 @@ export async function POST(
     const domain = resolved.url ?? preflightValidation.normalizedUrl.hostname;
     const companyName = resolved.name || preflightValidation.normalizedUrl.hostname;
 
-    const result = await runWebsiteChecks(domain, companyName, validatedCareersUrl);
+    const result = await withTimeout(
+      runWebsiteChecks(domain, companyName, validatedCareersUrl),
+      AUDIT_EXECUTION_TIMEOUT_MS,
+    );
+
     void logAuditRequest({
       actor: clientIp,
       result: "success",
@@ -247,6 +282,20 @@ export async function POST(
 
     return apiSuccessResponse<WebsiteCheckResult>(result);
   } catch (error) {
+    if (error instanceof AuditExecutionTimeoutError) {
+      void logAuditRequest({
+        actor: clientIp,
+        result: "failure",
+        resource: AUDIT_RESOURCE,
+        metadata: { reason: "audit_timeout" },
+      });
+      return apiErrorResponse({
+        error: "Audit timed out. Please try again.",
+        code: API_ERROR_CODE.internal,
+        status: 504,
+      });
+    }
+
     console.error("Audit API error:", error);
     void logAuditRequest({
       actor: clientIp,
