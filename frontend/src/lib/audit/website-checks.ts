@@ -1679,11 +1679,14 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
 
   const detectedCurrency = detectCurrency(careersText);
 
+  // Salary transparency: max 10 points (v2 scoring model).
+  // Scored as bonus, not penalty — 0 base if no data, not a deduction.
+  // Reduced from v1 due to regional variation and lack of direct AI citation evidence.
   if (hasJsonLdBaseSalary) {
     return {
       hasSalaryData: true,
       salaryConfidence: "jsonld_base_salary",
-      score: 12,
+      score: 10,
       detectedCurrency,
     };
   }
@@ -1692,7 +1695,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "multiple_ranges",
-      score: 10,
+      score: 8,
       detectedCurrency,
     };
   }
@@ -1701,7 +1704,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "single_range",
-      score: 6,
+      score: 5,
       detectedCurrency,
     };
   }
@@ -1710,7 +1713,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
     return {
       hasSalaryData: true,
       salaryConfidence: "mention_only",
-      score: 3,
+      score: 2,
       detectedCurrency,
     };
   }
@@ -1724,18 +1727,26 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
 }
 
 /**
- * Scoring weights (total: 100)
+ * Scoring weights v2 (total: 100)
  *
- * Evidence-based model (Feb 2026) — aligned with Princeton GEO study,
- * Digital Bloom 7K-citation analysis, and Senthor/SE Ranking llms.txt studies.
+ * Evidence-based model — see docs/scoring-research.md for full citations.
+ * Every weight is traceable to at least one study or platform guideline.
  *
- *   Structured data ........ 28  (JSON-LD: proven 30-40% citation boost)
- *   Bot access ............. 17  (foundational: AI crawlers must reach your content)
- *   Careers page ........... 17  (content quality + format for AI citation)
- *   Brand reputation ....... 17  (multi-platform presence: 4+ platforms = 2.8x citations)
- *   Salary transparency .... 12  (key candidate query; machine-readable ranges matter)
- *   Content format ......... 9   (FAQ schema, semantic HTML, answer-first structure)
+ * Sources: Princeton GEO study (KDD 2024), Microsoft AEO/GEO guidelines,
+ * Semrush GEO analysis, Moz/Exposure Ninja practice, Senthor/SE Ranking studies.
+ *
+ *   Content accessibility ... 20  (bot access + SSR + sitemap — foundational gate)
+ *   Structured data ........ 20  (JSON-LD: GEO study + Microsoft guidelines)
+ *   Careers content ........ 20  (content quality + richness — GEO study)
+ *   Content format ......... 15  (FAQ, semantic HTML, answer-first — GEO study + Microsoft)
+ *   Brand presence ......... 15  (multi-platform mentions — Semrush + Moz; capped at 3 for fairness)
+ *   Salary transparency .... 10  (candidate-value signal; reduced due to regional variation)
  *   llms.txt ............... 0   (proven zero impact — Senthor 10M+ requests, SE Ranking 300K domains)
+ *
+ * Fairness mechanisms:
+ *   - Brand presence capped at 3 platforms (startup on Glassdoor+LinkedIn+own site = full marks)
+ *   - Salary scored as bonus, not penalty (0 base if no data, not a deduction)
+ *   - No company size proxy signals (headcount, revenue, listing count)
  */
 
 function scoreLlmsCheck(_hasLlmsTxt: boolean, _llmsTxtHasEmployment: boolean): number {
@@ -1745,58 +1756,65 @@ function scoreLlmsCheck(_hasLlmsTxt: boolean, _llmsTxtHasEmployment: boolean): n
 }
 
 function scoreJsonLdCheck(schemas: string[]): number {
-  // Upgraded: Structured data proven to improve AI citation likelihood by 30-40%
-  // (Princeton GEO study, Digital Bloom report). Most impactful technical signal.
+  // GEO study: structured data with citations/statistics boosts visibility 30-40%.
+  // Microsoft AEO guidelines: "make catalogs machine-readable."
+  // Max: 20 points.
   const hasJobSchema = schemas.includes("JobPosting") || schemas.includes("EmployerAggregateRating");
   if (hasJobSchema) {
-    return 28;
+    return 20;
   }
 
   if (schemas.includes("Organization")) {
-    return 16;
+    return 12;
   }
 
   if (schemas.length > 0) {
-    return 7;
+    return 5;
   }
 
   return 0;
 }
 
 function scoreCareersCheck(status: CareersPageStatus): number {
-  // Adjusted: Still important as the primary employer content source,
-  // but AI citation depends more on content format and structure than existence alone.
+  // GEO study: content quality and structure matter more than existence alone.
+  // Moz: "extreme close matching" — rich, direct content gets cited.
+  // Max: 20 points.
   if (status === "full") {
-    return 17;
+    return 20;
   }
   if (status === "partial") {
-    return 8;
+    return 10;
   }
   return 0;
 }
 
-function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number): number {
-  // Upgraded: Foundational gate — if AI crawlers can't reach you, nothing else matters.
-  // 87% of ChatGPT citations correlate with Bing indexation (Digital Bloom).
+function scoreRobotsCheck(status: RobotsTxtStatus, allowedBotsCount: number, hasSitemap: boolean): number {
+  // Combined "Content Accessibility" dimension — can AI crawlers reach and parse your content?
+  // Semrush: SSR matters, AI crawlers can't execute JS.
+  // Moz: organic visibility is prerequisite for AI citation.
+  // Max: 20 points (robots: 14, sitemap: 6).
+  let robotsScore = 0;
+
   if (status === "allows") {
-    return 17;
+    robotsScore = 14;
+  } else if (status === "partial") {
+    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 5);
+    robotsScore = 6 + partialBonus;
+  } else if (status === "no_rules") {
+    robotsScore = 8;
   }
-  if (status === "partial") {
-    const partialBonus = Math.round((allowedBotsCount / AI_BOTS.length) * 7);
-    return 7 + partialBonus;
-  }
-  if (status === "no_rules") {
-    return 9;
-  }
-  return 0;
+
+  const sitemapScore = hasSitemap ? 6 : 0;
+
+  return Math.min(robotsScore + sitemapScore, 20);
 }
 
 /**
  * Score content format signals that AI models prefer to cite.
- * Based on Princeton GEO study: content with citations, statistics, quotations,
- * and structured Q&A format sees up to 40% visibility boost.
+ * Princeton GEO study: citations, statistics, Q&A format → up to 40% visibility boost.
+ * Microsoft AEO guidelines: "structure content to answer real questions."
  *
- * Max: 9 points.
+ * Max: 15 points.
  */
 function scoreContentFormat(careersHtml: string | null): number {
   if (!careersHtml) return 0;
@@ -1804,32 +1822,32 @@ function scoreContentFormat(careersHtml: string | null): number {
   let score = 0;
   const html = careersHtml.toLowerCase();
 
-  // FAQ schema or FAQ-like structure (AI prefers Q&A format) — 2 pts
+  // FAQ schema or FAQ-like structure (AI prefers Q&A format) — 3 pts
   if (html.includes('"faqpage"') || html.includes('"question"') ||
       (html.includes('<details') && html.includes('<summary'))) {
-    score += 2;
+    score += 3;
   }
 
-  // Semantic heading structure (proper h1→h2→h3 hierarchy helps AI parse) — 2 pts
+  // Semantic heading structure (proper h1→h2→h3 hierarchy helps AI parse) — 3 pts
   const hasH1 = /<h1[\s>]/i.test(careersHtml);
   const hasH2 = /<h2[\s>]/i.test(careersHtml);
   if (hasH1 && hasH2) {
+    score += 3;
+  }
+
+  // Tables or definition lists (AI prefers tabular/structured data) — 2 pts
+  if (html.includes('<table') || html.includes('<dl')) {
     score += 2;
   }
 
-  // Tables or definition lists (AI prefers tabular/structured data) — 1 pt
-  if (html.includes('<table') || html.includes('<dl')) {
-    score += 1;
-  }
-
-  // Answer-first paragraph structure: short opening paragraphs <60 words — 2 pts
-  // Checks the first <p> tag after the first <h1> or <h2>
+  // Answer-first paragraph structure: short opening paragraphs <60 words — 3 pts
+  // GEO study: direct, concise answers get cited over verbose content
   const firstParaMatch = careersHtml.match(/<(?:h[12])[^>]*>[\s\S]*?<p[^>]*>([\s\S]*?)<\/p>/i);
   if (firstParaMatch?.[1]) {
     const plainText = firstParaMatch[1].replace(/<[^>]+>/g, ' ').trim();
     const wordCount = plainText.split(/\s+/).filter(Boolean).length;
     if (wordCount > 0 && wordCount < 60) {
-      score += 2;
+      score += 3;
     }
   }
 
@@ -1839,7 +1857,13 @@ function scoreContentFormat(careersHtml: string | null): number {
     score += 2;
   }
 
-  return Math.min(score, 9);
+  // Lists (ordered or unordered) — AI models extract list content effectively — 2 pts
+  const listCount = (html.match(/<(?:ul|ol)[\s>]/gi) ?? []).length;
+  if (listCount >= 2) {
+    score += 2;
+  }
+
+  return Math.min(score, 15);
 }
 
 /**
@@ -2025,10 +2049,10 @@ export async function runWebsiteChecks(
 
   const scoreBreakdown = {
     jsonld: scoreJsonLdCheck(jsonldSchemasFound),
-    robotsTxt: scoreRobotsCheck(robotsTxtStatus, robotsTxtAllowedBots.length),
+    robotsTxt: scoreRobotsCheck(robotsTxtStatus, robotsTxtAllowedBots.length, hasSitemap),
     careersPage: scoreCareersCheck(careersPageStatus),
     brandReputation: scoreBrandReputation(brandReputation),
-    salaryData: salaryScore,
+    salaryData: Math.min(salaryScore, 10),
     contentFormat: scoreContentFormat(careersHtml),
     llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
   };

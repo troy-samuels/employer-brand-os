@@ -344,14 +344,14 @@ export async function checkBrandReputation(
 export function scoreBrandReputation(reputation: BrandReputation): number {
   const { sourceCount, sentiment } = reputation;
 
-  // Evidence: Brands present on 4+ platforms get 2.8x more AI citations
-  // (Digital Bloom 2025 AI Citation Report). Multi-platform presence is
-  // among the strongest predictors of LLM citation alongside brand search volume.
+  // Semrush: unlinked brand mentions carry weight in AI visibility.
+  // Moz: consistent brand positioning across platforms drives AI citation.
+  // Fairness: capped at 3 platforms for full base marks — a 20-person startup
+  // on Glassdoor + LinkedIn + their own site scores the same as a Fortune 500.
+  // Max: 15 points.
   let score = 0;
 
-  if (sourceCount >= 5) {
-    score = 12;
-  } else if (sourceCount >= 4) {
+  if (sourceCount >= 3) {
     score = 10;
   } else if (sourceCount >= 2) {
     score = 7;
@@ -360,9 +360,9 @@ export function scoreBrandReputation(reputation: BrandReputation): number {
   }
   // 0 platforms = 0 base score
 
-  // Sentiment modifier
+  // Sentiment modifier (±5 max)
   if (sentiment === "positive" && score > 0) {
-    score = Math.min(score + 5, 17);
+    score = Math.min(score + 5, 15);
   } else if (sentiment === "negative" && score > 0) {
     score = Math.max(score - 3, 0);
   }

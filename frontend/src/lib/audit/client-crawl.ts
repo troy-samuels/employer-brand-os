@@ -116,33 +116,33 @@ export function analyzeClientSubmittedHtml(
   let careersPageStatus: "full" | "partial" | "none";
   let careersScore: number;
 
-  // Scoring weights aligned with evidence-based model in website-checks.ts
-  // (Princeton GEO study, Digital Bloom 7K-citation analysis, Feb 2026)
+  // Scoring weights v2 — aligned with website-checks.ts evidence-based model.
+  // See docs/scoring-research.md for full citations.
   if (textLength > 1000) {
     careersPageStatus = "full";
-    careersScore = 17;
+    careersScore = 20;
   } else if (textLength >= 200) {
     careersPageStatus = "partial";
-    careersScore = 8;
+    careersScore = 10;
   } else {
     careersPageStatus = "none";
     careersScore = 0;
   }
 
-  // Salary detection — max 12 points (aligned with website-checks.ts)
+  // Salary detection — max 10 points (v2: reduced due to regional variation)
   const salary = detectSalary(textContent);
   let salaryScore = 0;
-  if (salary.confidence === "multiple_ranges") salaryScore = 10;
-  else if (salary.confidence === "single_range") salaryScore = 6;
-  else if (salary.confidence === "mention_only") salaryScore = 3;
+  if (salary.confidence === "multiple_ranges") salaryScore = 8;
+  else if (salary.confidence === "single_range") salaryScore = 5;
+  else if (salary.confidence === "mention_only") salaryScore = 2;
 
-  // JSON-LD schemas — max 28 points (aligned with website-checks.ts)
+  // JSON-LD schemas — max 20 points (v2: down from 28, evidence-proportional)
   const jsonldSchemasFound = extractJsonLdSchemas(html);
   const hasJsonld = jsonldSchemasFound.length > 0;
   let jsonldScore = 0;
-  if (jsonldSchemasFound.includes("JobPosting") || jsonldSchemasFound.includes("EmployerAggregateRating")) jsonldScore = 28;
-  else if (jsonldSchemasFound.includes("Organization")) jsonldScore = 16;
-  else if (hasJsonld) jsonldScore = 7;
+  if (jsonldSchemasFound.includes("JobPosting") || jsonldSchemasFound.includes("EmployerAggregateRating")) jsonldScore = 20;
+  else if (jsonldSchemasFound.includes("Organization")) jsonldScore = 12;
+  else if (hasJsonld) jsonldScore = 5;
 
   return {
     careersPageStatus,
