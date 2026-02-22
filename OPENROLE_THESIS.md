@@ -27,7 +27,7 @@
 
 OpenRole helps employers understand and control what AI tells candidates about them.
 
-The original thesis — "Glassdoor blocks AI crawlers, creating a data vacuum BrandOS fills" — was invalidated through live testing on 22 Feb 2026. AI search tools (ChatGPT, Perplexity, Claude) access Glassdoor and Indeed freely through browser-based search, not training crawlers. The robots.txt argument is irrelevant to search-mode AI.
+The original thesis — "Glassdoor blocks AI crawlers, creating a data vacuum OpenRole fills" — was invalidated through live testing on 22 Feb 2026. AI search tools (ChatGPT, Perplexity, Claude) access Glassdoor and Indeed freely through browser-based search, not training crawlers. The robots.txt argument is irrelevant to search-mode AI.
 
 **The revised thesis is built on a different, validated insight:**
 
@@ -185,7 +185,7 @@ Glassdoor often has thin or outdated answers. Indeed has generic listings. Reddi
 
 ### The Old Thesis (Invalidated)
 
-> "Glassdoor and Indeed block AI crawlers via robots.txt, creating a data vacuum. BrandOS provides verified employer data that AI can access, filling the gap."
+> "Glassdoor and Indeed block AI crawlers via robots.txt, creating a data vacuum. OpenRole provides verified employer data that AI can access, filling the gap."
 
 **Why it failed:** AI search uses browser-based access (like a user), not training crawlers. robots.txt blocks don't apply. Glassdoor data is fully visible to ChatGPT, Perplexity, etc.
 
