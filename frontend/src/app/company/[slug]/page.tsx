@@ -231,6 +231,93 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
   ];
 }
 
+/* ------------------------------------------------------------------ */
+/* JSON-LD builder                                                     */
+/* ------------------------------------------------------------------ */
+
+function buildJsonLd(audit: StoredAuditResult, slug: string) {
+  const companyUrl = `https://${audit.company_domain}`;
+  const pageUrl = `https://openrole.co.uk/company/${slug}`;
+  const score = audit.score;
+
+  // Organization schema for the audited company
+  const organization: Record<string, unknown> = {
+    "@type": "Organization",
+    name: audit.company_name,
+    url: companyUrl,
+    sameAs: [companyUrl],
+  };
+
+  // AggregateRating — maps our 0-100 audit score to a schema.org rating
+  if (score > 0) {
+    organization.aggregateRating = {
+      "@type": "AggregateRating",
+      ratingValue: (score / 20).toFixed(1), // 0-100 → 0-5 scale
+      bestRating: "5",
+      worstRating: "0",
+      ratingCount: 1,
+      reviewCount: 1,
+    };
+  }
+
+  // EmployerAggregateRating (schema.org extension for employer brand)
+  const employerRating: Record<string, unknown> | null =
+    score > 0
+      ? {
+          "@type": "EmployerAggregateRating",
+          "@id": `${pageUrl}#employer-rating`,
+          itemReviewed: {
+            "@type": "Organization",
+            name: audit.company_name,
+          },
+          ratingValue: (score / 20).toFixed(1),
+          bestRating: "5",
+          worstRating: "0",
+          ratingCount: 1,
+        }
+      : null;
+
+  // Article schema for the report page itself
+  const article: Record<string, unknown> = {
+    "@type": "Article",
+    "@id": pageUrl,
+    headline: `${audit.company_name} AI Visibility Score: ${score}/100`,
+    description: scoreMessage(score, audit.company_name),
+    url: pageUrl,
+    author: {
+      "@type": "Organization",
+      name: "OpenRole",
+      url: "https://openrole.co.uk",
+      logo: "https://openrole.co.uk/logo.png",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "OpenRole",
+      url: "https://openrole.co.uk",
+    },
+    datePublished: audit.created_at,
+    dateModified: audit.updated_at,
+    about: organization,
+  };
+
+  // ProfilePage wrapping the organization
+  const profilePage: Record<string, unknown> = {
+    "@type": "ProfilePage",
+    "@id": `${pageUrl}#profile`,
+    mainEntity: organization,
+    dateModified: audit.updated_at,
+  };
+
+  // Compose the graph
+  const graph = [article, profilePage];
+  if (employerRating) graph.push(employerRating);
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": graph,
+  };
+}
+
 function StatusIcon({ status }: { status: CheckStatus }) {
   switch (status) {
     case "pass":
@@ -483,45 +570,11 @@ export default async function CompanyPage({ params }: PageProps) {
         </div>
       </div>
 
-      {/* ── JSON-LD for SEO ─────────────────────────── */}
+      {/* ── JSON-LD structured data ──────────────────── */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Article",
-            headline: `${audit.company_name} AI Visibility Score: ${audit.score}/100`,
-            description: scoreMessage(audit.score, audit.company_name),
-            author: {
-              "@type": "Organization",
-              name: "OpenRole",
-              url: "https://openrole.co.uk",
-            },
-            datePublished: audit.created_at,
-            dateModified: audit.updated_at,
-            about: {
-              "@type": "Organization",
-              name: audit.company_name,
-              url: `https://${audit.company_domain}`,
-            },
-          }),
-        }}
-      />
-      {/* ── Organization + ProfilePage JSON-LD for the audited company ── */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ProfilePage",
-            mainEntity: {
-              "@type": "Organization",
-              name: audit.company_name,
-              url: `https://${audit.company_domain}`,
-              sameAs: `https://${audit.company_domain}`,
-            },
-            dateModified: audit.updated_at,
-          }),
+          __html: JSON.stringify(buildJsonLd(audit, slug)),
         }}
       />
     </main>

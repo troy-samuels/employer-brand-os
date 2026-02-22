@@ -199,6 +199,18 @@ async function getChromiumOptions(): Promise<{
   }
 }
 
+/* ── Abort-signal helpers ────────────────────────── */
+
+/** Options bag for render functions that accept an external abort signal. */
+export interface RenderOptions {
+  /** If provided, the render will abort when this signal fires. */
+  signal?: AbortSignal;
+}
+
+function throwIfAborted(signal?: AbortSignal): void {
+  if (signal?.aborted) throw new Error("Render aborted by caller");
+}
+
 /* ── Helpers ─────────────────────────────────────── */
 
 type RenderResult = { html: string; url: string };
@@ -217,16 +229,23 @@ function isChallengePage(html: string): boolean {
 
 /* ── Layer 1: Basic render ───────────────────────── */
 
-export async function renderPage(url: string): Promise<RenderResult> {
+export async function renderPage(
+  url: string,
+  { signal }: RenderOptions = {},
+): Promise<RenderResult> {
   let browser: Awaited<ReturnType<typeof playwrightChromium.launch>> | null = null;
 
   try {
+    throwIfAborted(signal);
+
     const opts = await getChromiumOptions();
     browser = await playwrightChromium.launch({
       args: opts.args,
       executablePath: opts.executablePath,
       headless: true,
     });
+
+    throwIfAborted(signal);
 
     const page = await browser.newPage();
 
@@ -238,6 +257,8 @@ export async function renderPage(url: string): Promise<RenderResult> {
     } catch {
       // Best effort: continue with whatever the page rendered before timeout/error.
     }
+
+    throwIfAborted(signal);
 
     const html = await page.content();
     const finalUrl = page.url();
@@ -257,10 +278,15 @@ export async function renderPage(url: string): Promise<RenderResult> {
 
 /* ── Layer 2: Stealth render ─────────────────────── */
 
-export async function renderPageStealth(url: string): Promise<RenderResult> {
+export async function renderPageStealth(
+  url: string,
+  { signal }: RenderOptions = {},
+): Promise<RenderResult> {
   let browser: Awaited<ReturnType<typeof playwrightChromium.launch>> | null = null;
 
   try {
+    throwIfAborted(signal);
+
     const localeProfile = getRenderLocaleProfile(url);
     const opts = await getChromiumOptions();
     const stealthArgs = [
@@ -296,6 +322,8 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
         "Upgrade-Insecure-Requests": "1",
       },
     });
+
+    throwIfAborted(signal);
 
     const page = await context.newPage();
 
@@ -344,6 +372,8 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
       html = await page.content();
     }
 
+    throwIfAborted(signal);
+
     const finalUrl = page.url();
 
     // If we still got a challenge page, return empty (let ScrapingBee handle it)
@@ -366,13 +396,18 @@ export async function renderPageStealth(url: string): Promise<RenderResult> {
 
 /* ── Layer 3: ScrapingBee ────────────────────────── */
 
-export async function renderPageScrapingBee(url: string): Promise<RenderResult> {
+export async function renderPageScrapingBee(
+  url: string,
+  { signal }: RenderOptions = {},
+): Promise<RenderResult> {
   const apiKey = process.env.SCRAPINGBEE_API_KEY;
   if (!apiKey) {
     return EMPTY_RESULT(url);
   }
 
   try {
+    throwIfAborted(signal);
+
     const localeProfile = getRenderLocaleProfile(url);
     const params = new URLSearchParams({
       api_key: apiKey,
@@ -389,6 +424,14 @@ export async function renderPageScrapingBee(url: string): Promise<RenderResult> 
       () => controller.abort(),
       SCRAPINGBEE_TIMEOUT_MS + 5_000,
     );
+
+    // If the parent signal fires, abort the fetch too
+    const onParentAbort = signal
+      ? () => controller.abort()
+      : undefined;
+    if (signal && onParentAbort) {
+      signal.addEventListener("abort", onParentAbort, { once: true });
+    }
 
     try {
       const response = await fetch(
@@ -420,15 +463,19 @@ export async function renderPageScrapingBee(url: string): Promise<RenderResult> 
 
 export async function renderBotProtectedPage(
   url: string,
+  { signal }: RenderOptions = {},
 ): Promise<RenderResult> {
   // Layer 2: Stealth browser
-  const stealthResult = await renderPageStealth(url);
+  const stealthResult = await renderPageStealth(url, { signal });
   if (stealthResult.html && stealthResult.html.length > 500) {
     return stealthResult;
   }
 
+  // Bail early if parent has already timed out
+  if (signal?.aborted) return EMPTY_RESULT(url);
+
   // Layer 3: ScrapingBee (if API key configured)
-  const scrapingBeeResult = await renderPageScrapingBee(url);
+  const scrapingBeeResult = await renderPageScrapingBee(url, { signal });
   if (scrapingBeeResult.html && scrapingBeeResult.html.length > 500) {
     return scrapingBeeResult;
   }

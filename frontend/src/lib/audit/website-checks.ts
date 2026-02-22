@@ -123,6 +123,7 @@ const MAX_SAMPLED_JOB_LISTING_PAGES = 12;
 const CAREERS_SUBDOMAIN_PREFIXES = ["careers", "jobs"] as const;
 const MAX_META_REFRESH_REDIRECT_HOPS = 2;
 const CAREERS_PROBE_CONCURRENCY = 4;
+const CAREERS_PROBE_TIMEOUT_MS = 35_000;
 
 const ATS_HOST_SUFFIXES = [
   "boards.greenhouse.io",
@@ -1937,35 +1938,60 @@ export async function runWebsiteChecks(
 
     const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
 
-    // Cross-domain careers check overlaps with job listing fetches below
-    const crossDomainPromise = (homepageHtml && !careersUrlOverride)
-      ? runCrossDomainCareersCheck(homepageHtml, homepageUrl, normalizedDomain)
-      : Promise.resolve(null);
+    // ── Careers probe phase (timeout-capped) ────────────────────────
+    // The careers probe can involve multiple network hops (cross-domain
+    // checks, bot-protection fallbacks, job listing sampling). Cap the
+    // entire phase so it can't stall the audit indefinitely.
+    type CareersProbeResult = {
+      bestCareersCheck: CareersCheckResult;
+      jobListingHtmlSamples: string[];
+    };
 
-    // Fetch job listing pages ONCE — reuse HTML for both salary and JSON-LD analysis
-    let jobListingHtmlSamples: string[] = [];
-    if (careersCheck.html && careersCheck.url) {
-      const jobListingLinks = extractJobListingLinks(
-        careersCheck.html,
-        careersCheck.url,
-        normalizedDomain,
-      );
-      if (jobListingLinks.length > 0) {
-        const sampledResponses = await Promise.all(
-          jobListingLinks.slice(0, MAX_SAMPLED_JOB_LISTING_PAGES).map((link) => fetchSafe(link))
+    const careersProbeWork = async (): Promise<CareersProbeResult> => {
+      // Cross-domain careers check overlaps with job listing fetches below
+      const crossDomainPromise = (homepageHtml && !careersUrlOverride)
+        ? runCrossDomainCareersCheck(homepageHtml, homepageUrl, normalizedDomain)
+        : Promise.resolve(null);
+
+      // Fetch job listing pages ONCE — reuse HTML for both salary and JSON-LD analysis
+      let samples: string[] = [];
+      if (careersCheck.html && careersCheck.url) {
+        const jobListingLinks = extractJobListingLinks(
+          careersCheck.html,
+          careersCheck.url,
+          normalizedDomain,
         );
-        jobListingHtmlSamples = sampledResponses
-          .filter((r) => r.ok && r.status === 200 && r.text)
-          .map((r) => r.text);
+        if (jobListingLinks.length > 0) {
+          const sampledResponses = await Promise.all(
+            jobListingLinks.slice(0, MAX_SAMPLED_JOB_LISTING_PAGES).map((link) => fetchSafe(link))
+          );
+          samples = sampledResponses
+            .filter((r) => r.ok && r.status === 200 && r.text)
+            .map((r) => r.text);
+        }
       }
-    }
 
-    // Merge cross-domain careers result (already running in parallel)
-    const crossDomainCareersCheck = await crossDomainPromise;
-    let bestCareersCheck = careersCheck;
-    if (crossDomainCareersCheck && isBetterCareersResult(crossDomainCareersCheck, bestCareersCheck)) {
-      bestCareersCheck = crossDomainCareersCheck;
-    }
+      // Merge cross-domain careers result (already running in parallel)
+      const crossDomainCareersCheck = await crossDomainPromise;
+      let best = careersCheck;
+      if (crossDomainCareersCheck && isBetterCareersResult(crossDomainCareersCheck, best)) {
+        best = crossDomainCareersCheck;
+      }
+
+      return { bestCareersCheck: best, jobListingHtmlSamples: samples };
+    };
+
+    const careersProbeTimeout = new Promise<CareersProbeResult>((resolve) => {
+      setTimeout(() => {
+        // Timeout: return whatever the initial careers check found (no cross-domain or job samples)
+        resolve({ bestCareersCheck: careersCheck, jobListingHtmlSamples: [] });
+      }, CAREERS_PROBE_TIMEOUT_MS);
+    });
+
+    const { bestCareersCheck, jobListingHtmlSamples } = await Promise.race([
+      careersProbeWork(),
+      careersProbeTimeout,
+    ]);
 
     careersPageStatus = bestCareersCheck.status;
     careersPageUrl = bestCareersCheck.url;
