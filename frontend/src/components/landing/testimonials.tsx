@@ -258,8 +258,8 @@ function ChatGPTInputBar() {
 
 export default function BeforeAfter() {
   const [mode, setMode] = useState<Mode>("without");
-  const [phase, setPhase] = useState<"idle" | "thinking" | "streaming" | "done">("thinking");
-  const [hasBeenVisible, setHasBeenVisible] = useState(true);
+  const [phase, setPhase] = useState<"idle" | "thinking" | "streaming" | "done">("idle");
+  const [hasBeenVisible, setHasBeenVisible] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   const tokens = mode === "without" ? WITHOUT_TOKENS : WITH_TOKENS;
@@ -327,7 +327,7 @@ export default function BeforeAfter() {
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
             A candidate asks ChatGPT about working at your company.
-            On the left, you haven&apos;t published your facts. On the right, you have.
+            Toggle between the two to see what changes when you publish your facts.
           </p>
         </motion.div>
 
@@ -372,68 +372,88 @@ export default function BeforeAfter() {
         {/* ChatGPT interface — single panel */}
         <motion.div
           className="max-w-2xl mx-auto"
-          initial={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.05 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
           <div
             className={cn(
-              "rounded-2xl bg-white overflow-hidden transition-all duration-500",
+              "rounded-2xl bg-white overflow-hidden transition-all duration-500 shadow-[0_2px_20px_rgba(0,0,0,0.06)]",
               mode === "with"
-                ? "border border-emerald-200"
+                ? "border-2 border-emerald-300 shadow-emerald-100/50"
                 : "border border-neutral-200"
             )}
           >
             <ChatGPTHeader />
             <UserMessage text={USER_QUESTION} />
 
-            {/* Response area */}
-            <AnimatePresence mode="wait">
-              {phase === "idle" && (
-                <div key="idle" className="h-10" />
-              )}
-              {phase === "thinking" && (
-                <motion.div
-                  key="thinking"
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ThinkingDots />
-                </motion.div>
-              )}
-              {(phase === "streaming" || phase === "done") && (
-                <motion.div
-                  key={`stream-${mode}`}
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                >
-                  <StreamingResponse
-                    key={tokensKey}
-                    tokens={tokens}
-                    onComplete={handleStreamComplete}
+            {/* Response area — smooth height transitions */}
+            <div className="min-h-[120px]">
+              <AnimatePresence mode="wait">
+                {phase === "idle" && (
+                  <motion.div
+                    key="idle"
+                    className="h-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                   />
-                </motion.div>
-              )}
-            </AnimatePresence>
+                )}
+                {phase === "thinking" && (
+                  <motion.div
+                    key={`thinking-${mode}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ThinkingDots />
+                  </motion.div>
+                )}
+                {(phase === "streaming" || phase === "done") && (
+                  <motion.div
+                    key={`stream-${mode}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <StreamingResponse
+                      key={tokensKey}
+                      tokens={tokens}
+                      onComplete={handleStreamComplete}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             <ChatGPTInputBar />
           </div>
+
+          {/* Mode indicator bar below chat */}
+          <motion.div
+            className={cn(
+              "mt-3 h-1 rounded-full mx-auto transition-all duration-500",
+              mode === "with"
+                ? "bg-emerald-400 w-full"
+                : "bg-red-300 w-2/3"
+            )}
+            layout
+          />
         </motion.div>
 
         {/* Hint text after streaming completes */}
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {phase === "done" && mode === "without" && (
             <motion.p
-              className="text-center text-sm text-neutral-500 mt-6"
-              initial={{ opacity: 1, y: 0 }}
+              key="hint-without"
+              className="text-center text-sm text-neutral-500 mt-5"
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
             >
               Now tap{" "}
               <button
@@ -447,11 +467,12 @@ export default function BeforeAfter() {
           )}
           {phase === "done" && mode === "with" && (
             <motion.p
-              className="text-center text-sm text-emerald-600/70 mt-6"
-              initial={{ opacity: 1, y: 0 }}
+              key="hint-with"
+              className="text-center text-sm text-emerald-600 font-medium mt-5"
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.3, delay: 0.4 }}
             >
               Your facts. Your careers page. Cited by AI. ✓
             </motion.p>

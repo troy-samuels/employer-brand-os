@@ -1,6 +1,8 @@
 /**
  * @module components/landing/cta
  * Floating dock CTA — fixed pill at bottom of viewport.
+ * Hides when interactive sections (testimonials/before-after) are in view
+ * to avoid overlapping the chat demo.
  */
 
 "use client";
@@ -13,13 +15,33 @@ export default function CTA() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
+    let sectionInView = false;
+
+    // Track the testimonials section so we can hide the CTA when it overlaps
+    const testimonialsEl = document.getElementById("testimonials");
+    let sectionObserver: IntersectionObserver | null = null;
+
+    if (testimonialsEl) {
+      sectionObserver = new IntersectionObserver(
+        ([entry]) => {
+          sectionInView = entry.isIntersecting;
+          // Re-evaluate visibility
+          setVisible(window.scrollY > 400 && !sectionInView);
+        },
+        { threshold: 0.05 }
+      );
+      sectionObserver.observe(testimonialsEl);
+    }
+
     const handleScroll = () => {
-      // Show after scrolling past the hero (400px)
-      setVisible(window.scrollY > 400);
+      setVisible(window.scrollY > 400 && !sectionInView);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      sectionObserver?.disconnect();
+    };
   }, []);
 
   return (
