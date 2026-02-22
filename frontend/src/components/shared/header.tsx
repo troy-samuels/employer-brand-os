@@ -10,7 +10,7 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
 const NAV_LINKS = [
-  { href: "/index", label: "UK Index" },
+  { href: "/uk-index", label: "UK Index" },
   { href: "/#audit", label: "Free Audit" },
   { href: "/#how-it-works", label: "How It Works" },
   { href: "/pricing", label: "Pricing" },

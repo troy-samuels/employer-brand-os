@@ -78,9 +78,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Industry index pages
   const industryPages: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/index`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
+    { url: `${BASE_URL}/uk-index`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.9 },
     ...industries.map((industry) => ({
-      url: `${BASE_URL}/index/${industry.slug}`,
+      url: `${BASE_URL}/uk-index/${industry.slug}`,
       lastModified: new Date(),
       changeFrequency: "monthly" as const,
       priority: 0.8,

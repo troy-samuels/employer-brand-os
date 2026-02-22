@@ -23,6 +23,11 @@ const nextConfig: NextConfig = {
         destination: "/tools/employer-schema",
         permanent: true,
       },
+      {
+        source: "/index/:path*",
+        destination: "/uk-index/:path*",
+        permanent: true,
+      },
     ];
   },
   async headers() {

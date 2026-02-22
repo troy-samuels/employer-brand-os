@@ -56,7 +56,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `${title} | OpenRole`,
       description,
-      url: `https://openrole.co.uk/index/${slug}`,
+      url: `https://openrole.co.uk/uk-index/${slug}`,
       type: "website",
     },
     twitter: {
@@ -65,7 +65,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
     },
     alternates: {
-      canonical: `https://openrole.co.uk/index/${slug}`,
+      canonical: `https://openrole.co.uk/uk-index/${slug}`,
     },
   };
 }
@@ -96,7 +96,7 @@ export default async function IndustryIndexPage({ params }: PageProps) {
           <div className="relative mx-auto max-w-[1200px] px-6 lg:px-12 py-20 lg:py-24">
             {/* Breadcrumb */}
             <Link
-              href="/index"
+              href="/uk-index"
               className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors mb-6"
             >
               <ArrowLeft className="h-3.5 w-3.5" />

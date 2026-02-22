@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   alternates: {
-    canonical: "https://openrole.co.uk/index",
+    canonical: "https://openrole.co.uk/uk-index",
   },
 };
 
