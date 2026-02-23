@@ -1,6 +1,6 @@
 /**
  * @module app/pricing/page
- * Pricing page — Two tiers (Free + Pro) + Enterprise
+ * Pricing page — Company-size tiers (Free + Startup + Growth + Scale + Enterprise)
  * Legal-compliant framing: "maximize probability", never "guarantee"
  */
 
@@ -12,9 +12,12 @@ import {
   Check,
   ArrowRight,
   Zap,
+  Rocket,
   Building2,
+  TrendingUp,
   Shield,
   Lock,
+  Users,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -35,9 +38,10 @@ const plans = [
     name: "Free",
     icon: Zap,
     price: 0,
-    audience: "Lead generation & visibility audits",
+    size: "Any size",
+    audience: "See what AI says about you",
     description:
-      "Perfect for agencies and HR consultants who want to audit clients and demonstrate value.",
+      "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. No signup needed.",
     features: [
       "Unlimited AI visibility audits",
       "PDF audit report download",
@@ -51,53 +55,95 @@ const plans = [
     priceId: null,
   },
   {
-    name: "Pro",
-    icon: Building2,
-    monthlyPrice: 99,
-    annualPrice: 79,
-    audience: "For employers who want to influence AI",
+    name: "Startup",
+    icon: Rocket,
+    monthlyPrice: 49,
+    annualPrice: 39,
+    size: "1–50 employees",
+    audience: "Small teams ready to control their AI narrative",
     description:
-      "The complete solution. Maximize the probability that AI represents your employer brand accurately.",
+      "Full audit suite with monthly monitoring — everything you need to start influencing what AI tells candidates.",
     features: [
       "Everything in Free",
       "Employer questionnaire (self-serve data input)",
       "Auto-generated AEO content (llms.txt, Schema.org, Markdown)",
       "Embeddable JS snippet for careers page",
-      "AI monitoring dashboard (weekly score tracking)",
-      "Competitor displacement reports (3 competitors)",
+      "AI monitoring dashboard (monthly score tracking)",
+      "1 competitor benchmark",
+      "Email reports & alerts",
+      "Email support",
+    ],
+    cta: "Start 14-day trial",
+    href: "/signup?plan=startup",
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTUP ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTUP_ANNUAL ?? null,
+  },
+  {
+    name: "Growth",
+    icon: Building2,
+    monthlyPrice: 99,
+    annualPrice: 79,
+    size: "51–250 employees",
+    audience: "Scaling teams competing for talent",
+    description:
+      "Weekly monitoring, competitor intelligence, and a full content playbook to close every gap AI finds.",
+    features: [
+      "Everything in Startup",
+      "Weekly monitoring (vs monthly)",
+      "3 competitor benchmarks",
+      "Competitor displacement reports",
       "Brand defence alerts (negative third-party content)",
       "Content playbook with templates",
       "ATS integration (Greenhouse, Lever, Ashby)",
       "Proof tracking (before/after case studies)",
-      "Email support",
+      "Priority email support",
     ],
     badge: "🔒 Founding rate — £99/mo locked for first 20 customers",
     cta: "Start 14-day trial",
-    href: "/signup?plan=pro",
+    href: "/signup?plan=growth",
     highlighted: true,
     monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? null,
     annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? null,
+  },
+  {
+    name: "Scale",
+    icon: TrendingUp,
+    monthlyPrice: 249,
+    annualPrice: 199,
+    size: "250+ employees",
+    audience: "Mid-market employers with serious hiring volume",
+    description:
+      "Daily monitoring, unlimited competitors, and dedicated snippet optimisation for maximum AI visibility.",
+    features: [
+      "Everything in Growth",
+      "Daily monitoring (vs weekly)",
+      "Unlimited competitor benchmarks",
+      "Dedicated snippet optimisation",
+      "Custom branded reports",
+      "Priority support",
+    ],
+    cta: "Start 14-day trial",
+    href: "/signup?plan=scale",
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? null,
   },
 ];
 
 const enterprise = {
   name: "Enterprise",
-  audience: "Multi-brand or custom requirements",
+  audience: "1,000+ employees — multi-brand or custom requirements",
   icon: Shield,
   price: "From £800/month",
   description:
-    "For organisations that need multi-brand support, API access, and SLA-backed accuracy.",
+    "For large organisations that need multi-brand support, API access, and SLA-backed accuracy.",
   features: [
-    "Everything in Pro",
-    "Unlimited competitors",
+    "Everything in Scale",
+    "Multi-brand/division support",
     "API access",
-    "Custom branded reports",
-    "Dedicated CSM",
+    "Dedicated account management",
     "SSO/SAML",
     "SLA",
     "Quarterly strategy calls",
-    "Priority support",
-    "Multi-brand support",
   ],
   cta: "Book a demo",
 };
@@ -120,9 +166,9 @@ const anchors = [
     note: "One-off. No ongoing monitoring or content system.",
   },
   {
-    name: "OpenRole Pro",
-    cost: "£948/year",
-    note: "Weekly AI monitoring + content playbook across 4 models.",
+    name: "OpenRole",
+    cost: "From £468/year",
+    note: "AI monitoring + content playbook across 4 models. Plans from £39/mo.",
     highlight: true,
   },
 ];
@@ -133,16 +179,20 @@ const faqs = [
     a: "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. You see the actual AI responses about your company, a gap summary showing what AI can't answer, and your overall score. You also get access to basic tools like llms.txt and Schema.org generators. No signup needed for audits.",
   },
   {
+    q: "How do I know which plan is right for my company?",
+    a: "Plans are based on company size: Startup (1–50 employees), Growth (51–250), Scale (250+), and Enterprise (1,000+). Larger companies typically have more roles, more candidates, and a bigger AI footprint to manage — so higher tiers include more frequent monitoring, more competitor benchmarks, and deeper integrations.",
+  },
+  {
     q: "Can I upgrade later?",
-    a: "Yes. You can upgrade from Free to Pro at any time. Your account transitions immediately and you gain access to all Pro features. Changes take effect on your next billing cycle when downgrading.",
+    a: "Yes. You can upgrade at any time and your account transitions immediately. If your company grows past the employee threshold for your current plan, we'll work with you on timing — no surprise charges.",
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes — 14-day money-back guarantee on all Pro subscriptions. If you're not satisfied within the first 14 days, we'll refund you in full. No questions asked.",
+    a: "Yes — 14-day money-back guarantee on all paid subscriptions. If you're not satisfied within the first 14 days, we'll refund you in full. No questions asked.",
   },
   {
     q: "What's a 'founding member' rate?",
-    a: "Early customers get £99/mo (normally £149/mo) locked in forever. You keep this rate as long as you remain a customer — even when we increase prices later. It's our way of rewarding early adopters who help us refine the product.",
+    a: "Early Growth plan customers get £99/mo locked in forever — even as your company grows past 250 employees. You keep this rate as long as you remain a customer. It's our way of rewarding early adopters who help us refine the product.",
   },
   {
     q: "How does the embeddable snippet work?",
@@ -164,12 +214,14 @@ export default function PricingPage() {
   const productSchema = generateProductSchema({
     name: `${SITE_NAME} — AI Employer Visibility Platform`,
     description:
-      "Maximize the probability that AI tells candidates the truth about your company. Weekly monitoring across ChatGPT, Claude, Perplexity and Gemini.",
+      "Maximize the probability that AI tells candidates the truth about your company. Plans based on company size — from startups to enterprise.",
     url: `${BASE_URL}/pricing`,
     offers: [
       { name: "Free Plan", price: "0", priceCurrency: "GBP" },
-      { name: "Pro Plan", price: "99", priceCurrency: "GBP" },
-      { name: "Enterprise Plan", price: "800", priceCurrency: "GBP" },
+      { name: "Startup Plan (1-50 employees)", price: "49", priceCurrency: "GBP" },
+      { name: "Growth Plan (51-250 employees)", price: "99", priceCurrency: "GBP" },
+      { name: "Scale Plan (250+ employees)", price: "249", priceCurrency: "GBP" },
+      { name: "Enterprise Plan (1000+ employees)", price: "800", priceCurrency: "GBP" },
     ],
   });
 
@@ -246,7 +298,7 @@ export default function PricingPage() {
         {/* ── Plan cards ─────────────────────────────── */}
         <section className="py-20 lg:py-24">
           <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
-            <div className="grid gap-6 md:grid-cols-3 items-start">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 items-start">
               {plans.map((plan) => {
                 const price =
                   plan.name === "Free"
@@ -268,9 +320,9 @@ export default function PricingPage() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
-                    className={`relative rounded-2xl bg-white p-7 lg:p-8 border transition-all duration-300 ${
+                    className={`relative rounded-2xl bg-white p-6 lg:p-7 border transition-all duration-300 ${
                       plan.highlighted
-                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated md:scale-[1.05]"
+                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated lg:scale-[1.03]"
                         : "border-slate-200 hover:shadow-card-hover hover:border-neutral-300"
                     }`}
                   >
@@ -281,7 +333,7 @@ export default function PricingPage() {
                     )}
 
                     <div className="mb-6">
-                      <div className="flex items-center gap-2.5 mb-4">
+                      <div className="flex items-center gap-2.5 mb-3">
                         <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100">
                           <Icon
                             className="h-4 w-4 text-slate-600"
@@ -292,11 +344,17 @@ export default function PricingPage() {
                           <h3 className="text-base font-semibold text-slate-900">
                             {plan.name}
                           </h3>
-                          <p className="text-xs text-slate-400">
-                            {plan.audience}
-                          </p>
                         </div>
                       </div>
+
+                      {plan.size && (
+                        <div className="flex items-center gap-1.5 mb-3">
+                          <Users className="h-3.5 w-3.5 text-slate-400" strokeWidth={2} />
+                          <span className="text-xs font-medium text-slate-500">
+                            {plan.size}
+                          </span>
+                        </div>
+                      )}
 
                       <div className="flex items-baseline gap-1">
                         {plan.name !== "Free" &&
@@ -316,17 +374,17 @@ export default function PricingPage() {
                             transition={{ duration: 0.2 }}
                             className="text-3xl font-bold text-slate-900 tabular-nums"
                           >
-                            £{price}
+                            {plan.name === "Free" ? "Free" : `£${price}`}
                           </motion.span>
                         </AnimatePresence>
                         {plan.name !== "Free" && (
-                          <span className="text-slate-500 text-sm">/month</span>
+                          <span className="text-slate-500 text-sm">/mo</span>
                         )}
                       </div>
 
                       {plan.name !== "Free" && annual && (
                         <p className="text-xs text-slate-400 mt-1">
-                          Billed annually (£{(price ?? 0) * 12}/year)
+                          Billed annually (£{(price ?? 0) * 12}/yr)
                         </p>
                       )}
                       {plan.name !== "Free" &&
@@ -348,16 +406,16 @@ export default function PricingPage() {
                         </div>
                       )}
 
-                      <p className="text-slate-600 text-sm mt-3 leading-relaxed">
+                      <p className="text-slate-500 text-sm mt-3 leading-relaxed">
                         {plan.description}
                       </p>
                     </div>
 
-                    <ul className="space-y-3 mb-6">
+                    <ul className="space-y-2.5 mb-6">
                       {plan.features.map((feature) => (
                         <li
                           key={feature}
-                          className="flex items-start gap-2.5 text-sm text-slate-600"
+                          className="flex items-start gap-2 text-sm text-slate-600"
                         >
                           <Check
                             className="h-4 w-4 text-teal-500 mt-0.5 shrink-0"
@@ -406,9 +464,12 @@ export default function PricingPage() {
                     <h3 className="text-base font-semibold text-slate-900">
                       {enterprise.name}
                     </h3>
-                    <span className="text-xs font-medium text-slate-400">
-                      {enterprise.audience}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <Users className="h-3.5 w-3.5 text-slate-400" strokeWidth={2} />
+                      <span className="text-xs font-medium text-slate-400">
+                        {enterprise.audience}
+                      </span>
+                    </div>
                   </div>
                   <p className="text-sm text-slate-500 max-w-lg mb-4">
                     {enterprise.description}
@@ -528,7 +589,7 @@ export default function PricingPage() {
                 </div>
               </div>
               <p className="text-sm text-slate-500">
-                OpenRole Pro costs £948/year. Most companies pay more than that for a
+                OpenRole starts at £468/year. Most companies pay more than that for a
                 single LinkedIn Recruiter seat.
               </p>
             </div>

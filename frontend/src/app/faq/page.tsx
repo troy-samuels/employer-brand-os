@@ -132,7 +132,7 @@ const faqs: FaqEntry[] = [
     slug: "which-plan-do-i-need",
     question: "Which plan is right for my company?",
     summary:
-      "Starter (£49/mo) if you want llms.txt and weekly monitoring. Growth (£149/mo) if you're actively hiring and want the JavaScript snippet plus competitor benchmarking. Scale (£399/mo) for done-for-you structured data updates, priority support, and board reporting.",
+      "Plans are based on company size. Startup (£49/mo, 1–50 employees) gives you the full audit suite with monthly monitoring and 1 competitor benchmark. Growth (£99/mo, 51–250 employees) adds weekly monitoring, 3 competitor benchmarks, ATS integration, and the content playbook. Scale (£249/mo, 250+ employees) includes daily monitoring, unlimited competitors, and dedicated snippet optimisation.",
     category: "Pricing & Plans",
   },
 ];

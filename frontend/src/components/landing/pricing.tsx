@@ -1,33 +1,51 @@
 /**
  * @module components/landing/pricing
- * Ghost tiers with hero middle card.
+ * Company-size pricing tiers with highlighted Growth card.
  */
 
 "use client";
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const spring = { type: "spring" as const, stiffness: 200, damping: 20 };
 
 const plans = [
   {
-    name: "Starter",
+    name: "Startup",
+    size: "1–50 employees",
     price: "£49",
-    features: ["Employer brand score tracking", "Weekly monitoring across 4 AI models", "5 content templates/month", "Email alerts when your score changes"],
+    features: [
+      "Full audit suite + AEO content",
+      "Monthly monitoring across 4 AI models",
+      "1 competitor benchmark",
+      "Email reports & alerts",
+    ],
   },
   {
     name: "Growth",
-    price: "£149",
+    size: "51–250 employees",
+    price: "£99",
     highlighted: true,
-    features: ["Everything in Starter", "Full Content Playbook with ROI tracking", "Competitor benchmarking ×2", "Candidate experience + interview monitoring"],
+    features: [
+      "Everything in Startup",
+      "Weekly monitoring + content playbook",
+      "3 competitor benchmarks",
+      "ATS integration + proof tracking",
+    ],
   },
   {
     name: "Scale",
-    price: "£399",
-    features: ["Everything in Growth", "Unlimited competitor benchmarking", "Done-for-you content drafts", "API + ATS integration"],
+    size: "250+ employees",
+    price: "£249",
+    features: [
+      "Everything in Growth",
+      "Daily monitoring",
+      "Unlimited competitor benchmarks",
+      "Dedicated snippet optimisation",
+    ],
   },
 ];
 
@@ -46,10 +64,11 @@ export default function Pricing() {
             className="text-3xl lg:text-4xl font-medium text-neutral-950"
             style={{ letterSpacing: "-0.03em" }}
           >
-            From audit to strategy to measurable ROI
+            Priced for your company size
           </h2>
           <p className="text-neutral-400 mt-3 max-w-md mx-auto text-sm">
-            The free employer brand audit is always free. Plans add ongoing employer brand monitoring, competitor benchmarking, and the content playbook to close every gap.
+            The free audit is always free. Paid plans add ongoing AI monitoring,
+            competitor benchmarking, and the content playbook to close every gap.
           </p>
         </motion.div>
 
@@ -80,7 +99,16 @@ export default function Pricing() {
               )}>
                 {plan.name}
               </h3>
-              <div className="mt-3 flex items-baseline gap-1">
+
+              <div className={cn(
+                "flex items-center gap-1.5 mt-1.5",
+                plan.highlighted ? "text-neutral-400" : "text-neutral-400"
+              )}>
+                <Users className="h-3 w-3 shrink-0" strokeWidth={2.5} />
+                <span className="text-xs font-medium">{plan.size}</span>
+              </div>
+
+              <div className="mt-4 flex items-baseline gap-1">
                 <span
                   className={cn(
                     "text-3xl font-medium",
