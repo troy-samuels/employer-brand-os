@@ -16,6 +16,7 @@ import Features from "@/components/landing/features";
 import BeforeAfter from "@/components/landing/testimonials";
 import PromptIntelligence from "@/components/landing/prompt-intelligence";
 import MonitorPreview from "@/components/landing/monitor-preview";
+import EvidenceBar from "@/components/landing/evidence-bar";
 import Pricing from "@/components/landing/pricing";
 import CTA from "@/components/landing/cta";
 import { Header } from "@/components/shared/header";
@@ -225,6 +226,7 @@ export default function Home() {
         <BeforeAfter />
         <PromptIntelligence />
         <MonitorPreview />
+        <EvidenceBar />
         <Pricing />
         <CTA />
       </main>

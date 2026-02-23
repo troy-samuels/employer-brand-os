@@ -12,7 +12,7 @@ import { Menu, X } from "lucide-react";
 const NAV_LINKS = [
   { href: "/uk-index", label: "UK Index" },
   { href: "/#audit", label: "Free Audit" },
-  { href: "/#how-it-works", label: "How It Works" },
+  { href: "/sample-report", label: "Sample Report" },
   { href: "/pricing", label: "Pricing" },
   { href: "/blog", label: "Blog" },
 ];
