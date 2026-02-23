@@ -98,6 +98,16 @@ function generateEmbedCode(
 </a>`;
 }
 
+function generateSimpleEmbedCode(
+  company: string,
+  slug: string,
+): string {
+  return `<!-- OpenRole AI Score Badge (auto-updating) -->
+<a href="https://openrole.co.uk/company/${slug}" target="_blank" rel="noopener">
+  <img src="https://openrole.co.uk/api/badge/${slug}" alt="AI Visibility Score - ${company} - OpenRole" />
+</a>`;
+}
+
 /* ------------------------------------------------------------------ */
 /* Page                                                                */
 /* ------------------------------------------------------------------ */
@@ -109,6 +119,7 @@ export default function BadgePage() {
   const [style, setStyle] = useState<BadgeStyle>("detailed");
   const [theme, setTheme] = useState<BadgeTheme>("light");
   const [copied, setCopied] = useState(false);
+  const [copiedSimple, setCopiedSimple] = useState(false);
 
   const handleCompanyChange = (value: string) => {
     setCompany(value);
@@ -125,6 +136,9 @@ export default function BadgePage() {
     : null;
   const embedCode = company
     ? generateEmbedCode(company, slug, score, style, theme)
+    : null;
+  const simpleEmbed = company
+    ? generateSimpleEmbedCode(company, slug)
     : null;
 
   const handleCopy = async () => {
@@ -310,6 +324,40 @@ export default function BadgePage() {
                   </div>
                 )}
 
+                {/* Simple API badge */}
+                {simpleEmbed && (
+                  <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                    <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100 bg-slate-50/80">
+                      <span className="text-xs font-mono text-slate-500">
+                        Simple badge (auto-updating)
+                      </span>
+                      <button
+                        onClick={async () => {
+                          await navigator.clipboard.writeText(simpleEmbed);
+                          setCopiedSimple(true);
+                          setTimeout(() => setCopiedSimple(false), 2000);
+                        }}
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-600 hover:text-slate-900 transition-colors"
+                      >
+                        {copiedSimple ? (
+                          <Check className="h-3.5 w-3.5 text-teal-500" />
+                        ) : (
+                          <Copy className="h-3.5 w-3.5" />
+                        )}
+                        {copiedSimple ? "Copied" : "Copy code"}
+                      </button>
+                    </div>
+                    <pre className="p-4 text-xs font-mono text-neutral-700 whitespace-pre-wrap overflow-auto max-h-[200px]">
+                      {simpleEmbed}
+                    </pre>
+                    <div className="px-4 py-3 border-t border-neutral-100 bg-slate-50/60">
+                      <p className="text-xs text-slate-500">
+                        This version fetches your score automatically from the OpenRole API — it always stays up to date.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
                 {/* Installation */}
                 {embedCode && (
                   <div className="rounded-2xl border border-slate-200 bg-white p-5">
@@ -318,7 +366,7 @@ export default function BadgePage() {
                     </h3>
                     <ol className="space-y-2 text-sm text-slate-600">
                       <li>
-                        <strong>1.</strong> Copy the embed code above
+                        <strong>1.</strong> Copy either embed code above
                       </li>
                       <li>
                         <strong>2.</strong> Paste into your careers page HTML

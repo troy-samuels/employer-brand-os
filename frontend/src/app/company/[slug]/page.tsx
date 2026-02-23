@@ -22,10 +22,12 @@ import {
   Shield,
   ExternalLink,
   Search,
+  Building2,
 } from "lucide-react";
 
 import { untypedTable } from "@/lib/supabase/untyped-table";
 import { serializeJsonForHtml } from "@/lib/utils/safe-json";
+import { ShareButtons } from "./share-buttons";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -93,17 +95,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const name = audit.company_name;
   const score = audit.score;
+  const pageUrl = `https://openrole.co.uk/company/${slug}`;
 
   return {
     title: `${name} AI Visibility Score: ${score}/100 | OpenRole`,
-    description: `How well does AI represent ${name} to job seekers? ${name} scored ${score}/100 on the OpenRole AI Visibility audit. See the full breakdown.`,
+    description: `${name} scores ${score}/100 on AI Employer Visibility. See what AI tells candidates about them.`,
     openGraph: {
-      title: `${name} scores ${score}/100 on AI Visibility | OpenRole`,
-      description: `When candidates ask AI about ${name}, how accurate are the answers? See the full report.`,
+      title: `${name} scores ${score}/100 on AI Visibility`,
+      description: `When candidates ask AI about ${name}, how accurate are the answers? See the full breakdown.`,
       type: "article",
+      url: pageUrl,
+      siteName: "OpenRole",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${name} scores ${score}/100 on AI Visibility`,
+      description: `${name} scores ${score}/100 on AI Employer Visibility. See what AI tells candidates about them.`,
     },
     alternates: {
-      canonical: `https://openrole.co.uk/company/${slug}`,
+      canonical: pageUrl,
     },
   };
 }
@@ -425,6 +435,15 @@ export default async function CompanyPage({ params }: PageProps) {
               <p className="text-sm text-slate-600 leading-relaxed max-w-lg">
                 {scoreMessage(audit.score, audit.company_name)}
               </p>
+
+              {/* Share buttons */}
+              <div className="mt-4">
+                <ShareButtons
+                  url={`https://openrole.co.uk/company/${slug}`}
+                  title={`${audit.company_name} scores ${audit.score}/100 on AI Employer Visibility. See what AI tells candidates about them.`}
+                  description={scoreMessage(audit.score, audit.company_name)}
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -521,23 +540,28 @@ export default async function CompanyPage({ params }: PageProps) {
 
       {/* ── Claim banner ────────────────────────────── */}
       <div className="max-w-3xl mx-auto px-6 pb-10">
-        <div className="rounded-xl bg-white border border-slate-200 p-6 flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <div className="flex-1">
-            <h3 className="text-[15px] font-semibold text-slate-900 mb-1">
-              Is this your company?
-            </h3>
-            <p className="text-sm text-slate-500">
-              Claim your profile to update your information, install the OpenRole pixel,
-              and control how AI represents your employer brand.
-            </p>
+        <div className="rounded-xl bg-gradient-to-br from-teal-50 to-white border border-teal-200 p-6 lg:p-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-start gap-3 flex-1">
+              <Building2 className="h-6 w-6 text-teal-600 shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-[15px] font-semibold text-slate-900 mb-1">
+                  Is this your company?
+                </h3>
+                <p className="text-sm text-slate-500 leading-relaxed">
+                  Claim your profile to update your information and improve your score.
+                  Control how AI represents your employer brand to candidates.
+                </p>
+              </div>
+            </div>
+            <Link
+              href="/#audit"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors shrink-0"
+            >
+              Claim profile
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
-          <Link
-            href={`/signup?ref=claim&company=${audit.company_slug}`}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-teal-600 px-5 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors shrink-0"
-          >
-            Claim profile
-            <ExternalLink className="h-3.5 w-3.5" />
-          </Link>
         </div>
       </div>
 
