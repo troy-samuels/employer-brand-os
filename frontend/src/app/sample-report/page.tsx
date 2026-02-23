@@ -13,22 +13,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
-  BarChart3,
   CheckCircle2,
   XCircle,
   AlertTriangle,
   TrendingUp,
-  TrendingDown,
-  Minus,
   FileText,
-  Download,
-  Lock,
   ExternalLink,
-  Quote,
   Target,
   Lightbulb,
   Calendar,
-  Building2,
 } from "lucide-react";
 
 import { Header } from "@/components/shared/header";
@@ -227,12 +220,6 @@ function statusColor(status: string): string {
   if (status === "pass" || status === "green") return "text-teal-600";
   if (status === "partial" || status === "amber") return "text-amber-600";
   return "text-red-500";
-}
-
-function statusBg(status: string): string {
-  if (status === "pass" || status === "green") return "bg-teal-50 border-teal-200";
-  if (status === "partial" || status === "amber") return "bg-amber-50 border-amber-200";
-  return "bg-red-50 border-red-200";
 }
 
 function statusIcon(status: string) {

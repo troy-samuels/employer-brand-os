@@ -59,20 +59,6 @@ async function tableExists(tableName: string): Promise<boolean> {
   return response.ok;
 }
 
-async function runSqlViaRpc(sql: string): Promise<boolean> {
-  // Try the Supabase query endpoint (newer feature)
-  const response = await fetch(`${supabaseUrl}/rest/v1/rpc/exec_sql`, {
-    method: 'POST',
-    headers: {
-      apikey: serviceRoleKey,
-      Authorization: `Bearer ${serviceRoleKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ sql }),
-  });
-  return response.ok;
-}
-
 async function main() {
   console.log('Checking which tables exist...');
   

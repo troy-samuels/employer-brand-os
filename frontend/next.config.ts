@@ -13,6 +13,9 @@ import type { NextConfig } from "next";
  * that lack CORS headers. The proxy sets COEP only where needed.
  */
 const nextConfig: NextConfig = {
+  turbopack: {
+    root: process.cwd(),
+  },
   async redirects() {
     return [
       {

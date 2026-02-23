@@ -104,6 +104,7 @@ employer-openrole/
 - [Business Plan](./BUSINESS_PLAN.md) - 2026 Strategic Roadmap
 - [Tech Stack](./tech-stack.md) - Architecture Decisions
 - [Design System](./design-system.md) - Visual Identity Guidelines
+- [Frontend Setup](./frontend/README.md) - Local runbook, environment variables, release gate
 - [Guardrails](./do_do_not.md) - Do's and Don'ts
 
 ---

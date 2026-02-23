@@ -12,13 +12,11 @@ import {
   ArrowRight,
   Search,
   FileSearch,
-  BarChart3,
   Repeat,
   CheckCircle2,
   XCircle,
   Brain,
   Globe,
-  MessageSquare,
   Lightbulb,
   Zap,
   TrendingUp,
@@ -97,7 +95,7 @@ export default function HowItWorksPage() {
                   <li>• Interview prep comes from 2-year-old Reddit threads</li>
                   <li>• Benefits description is generic industry defaults</li>
                   <li>• Candidates make decisions based on wrong information</li>
-                  <li>• You never know what they saw or why they didn't apply</li>
+                  <li>• You never know what they saw or why they didn&apos;t apply</li>
                 </ul>
               </div>
 

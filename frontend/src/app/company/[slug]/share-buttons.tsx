@@ -12,7 +12,6 @@ import { Check, Copy, Linkedin } from "lucide-react";
 interface ShareButtonsProps {
   url: string;
   title: string;
-  description: string;
 }
 
 function XIcon({ className }: { className?: string }) {
@@ -28,7 +27,7 @@ function XIcon({ className }: { className?: string }) {
   );
 }
 
-export function ShareButtons({ url, title, description }: ShareButtonsProps) {
+export function ShareButtons({ url, title }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
 
   const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;

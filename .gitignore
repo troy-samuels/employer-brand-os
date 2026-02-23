@@ -1,2 +1,18 @@
 node_modules/
 .vercel
+
+# Build / cache artifacts
+.next/
+frontend/.next/
+dist/
+coverage/
+*.tsbuildinfo
+
+# OS/editor noise
+.DS_Store
+
+# Local secrets
+.env
+.env.local
+.env.*
+!.env.example

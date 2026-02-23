@@ -17,11 +17,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   ArrowRight,
-  CheckCircle2,
-  XCircle,
   AlertTriangle,
   Shield,
-  Search,
   Building2,
   Globe,
   TrendingUp,
@@ -245,12 +242,6 @@ function scoreColor(score: number): string {
   return "text-red-600";
 }
 
-function scoreBg(score: number): string {
-  if (score >= 70) return "bg-teal-50 border-teal-200";
-  if (score >= 40) return "bg-amber-50 border-amber-200";
-  return "bg-red-50 border-red-200";
-}
-
 function scoreMessage(score: number, name: string): string {
   if (score >= 70) {
     return `${name} has strong AI visibility. Most AI models can accurately describe this employer to candidates.`;
@@ -445,28 +436,6 @@ function buildJsonLd(audit: StoredAuditResult, slug: string) {
   };
 }
 
-function StatusIcon({ status }: { status: CheckStatus }) {
-  switch (status) {
-    case "pass":
-      return <CheckCircle2 className="h-5 w-5 text-teal-500 shrink-0" strokeWidth={2} />;
-    case "partial":
-      return <AlertTriangle className="h-5 w-5 text-amber-500 shrink-0" strokeWidth={2} />;
-    case "fail":
-      return <XCircle className="h-5 w-5 text-red-400 shrink-0" strokeWidth={2} />;
-  }
-}
-
-function statusDot(status: CheckStatus): string {
-  switch (status) {
-    case "pass":
-      return "bg-teal-500";
-    case "partial":
-      return "bg-amber-400";
-    case "fail":
-      return "bg-red-400";
-  }
-}
-
 /* ------------------------------------------------------------------ */
 /* Page component                                                      */
 /* ------------------------------------------------------------------ */
@@ -570,7 +539,6 @@ export default async function CompanyPage({ params }: PageProps) {
                   <ShareButtons
                     url={`https://openrole.co.uk/company/${slug}`}
                     title={`${displayName} scores ${audit.score}/100 on AI Employer Visibility`}
-                    description={scoreMessage(audit.score, displayName)}
                   />
                 </div>
               </div>

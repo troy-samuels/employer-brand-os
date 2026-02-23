@@ -1267,29 +1267,6 @@ function selectHighestConfidenceSalaryDetection(
   return detections.reduce((best, current) => (current.score > best.score ? current : best));
 }
 
-async function analyzeSalaryAcrossCareersAndJobListings(
-  careersHtml: string,
-  careersUrl: string | null,
-  domain: string,
-): Promise<SalaryDetectionResult> {
-  const htmlSamples = [careersHtml];
-
-  if (careersHtml && careersUrl) {
-    const jobListingLinks = extractJobListingLinks(careersHtml, careersUrl, domain);
-    if (jobListingLinks.length > 0) {
-      const sampledResponses = await Promise.all(jobListingLinks.map((link) => fetchSafe(link)));
-      for (const response of sampledResponses) {
-        if (response.ok && response.status === 200 && response.text) {
-          htmlSamples.push(response.text);
-        }
-      }
-    }
-  }
-
-  const detections = htmlSamples.map((html) => analyzeSalaryTransparency(html));
-  return selectHighestConfidenceSalaryDetection(detections);
-}
-
 type RobotsRule = {
   type: "allow" | "disallow";
   path: string;
@@ -1782,7 +1759,7 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
  *   - No company size proxy signals (headcount, revenue, listing count)
  */
 
-function scoreLlmsCheck(_hasLlmsTxt: boolean, _llmsTxtHasEmployment: boolean): number {
+function scoreLlmsCheck(): number {
   // Zeroed: Senthor (10M+ requests) and SE Ranking (300K domains) studies
   // found zero measurable impact on AI citations. Kept for backward compatibility.
   return 0;
@@ -2112,7 +2089,7 @@ export async function runWebsiteChecks(
     brandReputation: scoreBrandReputation(brandReputation),
     salaryData: Math.min(salaryScore, 10),
     contentFormat: scoreContentFormat(careersHtml),
-    llmsTxt: scoreLlmsCheck(hasLlmsTxt, llmsTxtHasEmployment),
+    llmsTxt: scoreLlmsCheck(),
   };
 
   const score =

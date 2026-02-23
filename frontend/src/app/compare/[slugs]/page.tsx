@@ -16,7 +16,6 @@ import {
   CheckCircle2,
   XCircle,
   Trophy,
-  TrendingUp,
   Building2,
   BarChart3,
   Scale,
@@ -91,12 +90,6 @@ function scoreColor(score: number): string {
   if (score >= 70) return "text-teal-600";
   if (score >= 40) return "text-amber-600";
   return "text-red-600";
-}
-
-function scoreBg(score: number): string {
-  if (score >= 70) return "bg-teal-50 border-teal-200";
-  if (score >= 40) return "bg-amber-50 border-amber-200";
-  return "bg-red-50 border-red-200";
 }
 
 function scoreLabel(score: number): string {

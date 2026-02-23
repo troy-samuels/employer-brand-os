@@ -9,7 +9,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, FileText, Calculator, TrendingUp, Building2, Quote } from "lucide-react";
+import { ArrowRight, FileText, Calculator } from "lucide-react";
 
 const spring = { type: "spring" as const, stiffness: 200, damping: 20 };
 

@@ -41,7 +41,6 @@ export function ScoreGauge({ score, size = 160 }: ScoreGaugeProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = Math.PI * radius; // half circle
   const progress = (animatedScore / 100) * circumference;
-  const center = size / 2;
 
   return (
     <div className="flex flex-col items-center">

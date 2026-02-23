@@ -3,7 +3,7 @@
  * Tests for the v2 scoring model to verify weights sum correctly
  * and individual scoring functions return expected values.
  */
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it } from "vitest";
 
 // We need to test scoring functions that are internal to website-checks.
 // Since they're not exported, we test them indirectly through runWebsiteChecks

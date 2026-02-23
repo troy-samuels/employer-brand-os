@@ -14,7 +14,6 @@
  * - Alert on suspicious patterns
  */
 
-import { supabaseAdmin } from '@/lib/supabase/admin';
 import { untypedTable } from '@/lib/supabase/untyped-table';
 
 type FailureType =

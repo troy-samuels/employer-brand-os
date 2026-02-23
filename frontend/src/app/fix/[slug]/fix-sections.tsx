@@ -725,7 +725,33 @@ function buildFixItems(audit: StoredAuditResult): FixItem[] {
     alreadyDone: audit.has_jsonld,
   });
 
-  // Priority 3: Content Format & Structure
+  // Priority 3: llms.txt (reference guide for AI models)
+  if (!audit.has_llms_txt) {
+    items.push({
+      id: "llms-txt",
+      icon: <FileText className="h-5 w-5" />,
+      title: "llms.txt Reference File",
+      priority: "medium",
+      problem: "No llms.txt file found at your site root.",
+      why: "llms.txt does not drive rankings directly, but it gives AI models and agents a clean, canonical reference for employer details and reduces answer drift.",
+      code: generateLlmsTxt(audit),
+      language: "text",
+    });
+  } else {
+    items.push({
+      id: "llms-txt",
+      icon: <FileText className="h-5 w-5" />,
+      title: "llms.txt Reference File",
+      priority: "low",
+      problem: "",
+      why: "",
+      code: generateLlmsTxt(audit),
+      language: "text",
+      alreadyDone: true,
+    });
+  }
+
+  // Priority 4: Content Format & Structure
   items.push({
     id: "content-format",
     icon: <FileText className="h-5 w-5" />,
@@ -737,7 +763,7 @@ function buildFixItems(audit: StoredAuditResult): FixItem[] {
     language: "html",
   });
 
-  // Priority 4: robots.txt (15 points)
+  // Priority 5: robots.txt (15 points)
   if (audit.robots_txt_status !== "allows") {
     items.push({
       id: "robots",

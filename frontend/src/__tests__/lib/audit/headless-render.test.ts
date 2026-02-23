@@ -3,7 +3,7 @@
  * Tests for the headless rendering module — abort signal behavior,
  * fallback chain logic, and locale profile resolution.
  */
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 
 // We can't actually launch Playwright in CI without a browser binary,
 // so we mock playwright-core to test the logic around it.

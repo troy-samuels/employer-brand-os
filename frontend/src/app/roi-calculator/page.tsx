@@ -17,10 +17,8 @@ import {
   ArrowRight,
   Calculator,
   TrendingDown,
-  PoundSterling,
   Users,
   Clock,
-  AlertTriangle,
   BarChart3,
   Lightbulb,
 } from "lucide-react";
