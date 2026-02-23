@@ -53,7 +53,7 @@ export default function EvidenceBar() {
             The evidence is clear
           </h2>
           <p className="text-neutral-400 max-w-lg mx-auto">
-            Companies that publish targeted employer content see measurable shifts in what AI tells candidates — within weeks, not months.
+            Companies that publish targeted employer content see measurable shifts in AI citation patterns — within weeks, not months.
           </p>
         </motion.div>
 

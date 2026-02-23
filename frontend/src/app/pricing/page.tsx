@@ -1,7 +1,7 @@
 /**
  * @module app/pricing/page
- * Standalone pricing page — value-based tiers with annual toggle,
- * competitor price anchoring, and ROI framing.
+ * Pricing page — Two tiers (Free + Pro) + Enterprise
+ * Legal-compliant framing: "maximize probability", never "guarantee"
  */
 
 "use client";
@@ -12,11 +12,9 @@ import {
   Check,
   ArrowRight,
   Zap,
-  TrendingUp,
   Building2,
   Shield,
-  X,
-  Calculator,
+  Lock,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -34,154 +32,125 @@ import { BASE_URL, SITE_NAME, generateProductSchema, JsonLd } from "@/lib/seo";
 
 const plans = [
   {
-    name: "Starter",
+    name: "Free",
     icon: Zap,
-    monthlyPrice: 59,
-    annualPrice: 49,
-    audience: "Up to 100 employees",
+    price: 0,
+    audience: "Lead generation & visibility audits",
     description:
-      "See the problem. Weekly monitoring and gap alerts so you know what AI gets wrong.",
+      "Perfect for agencies and HR consultants who want to audit clients and demonstrate value.",
     features: [
-      "Weekly AI monitoring across 4 models",
-      "AI Visibility Score tracking",
-      "Top 3 information gap alerts",
-      "Email alerts when AI changes answers",
+      "Unlimited AI visibility audits",
+      "PDF audit report download",
+      "Basic llms.txt generator",
+      "Employer Schema generator",
       "Company scorecard page",
-      "PDF briefing download",
+      "Badge for your website",
     ],
-    notIncluded: [
-      "Content Playbook",
-      "Competitor benchmarks",
-      "Hallucination alerts",
-    ],
-    cta: "Start monitoring",
-    href: "/signup?plan=starter",
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? null,
+    cta: "Get started free",
+    href: "/signup?plan=free",
+    priceId: null,
   },
   {
-    name: "Growth",
-    icon: TrendingUp,
-    monthlyPrice: 179,
-    annualPrice: 149,
-    audience: "100–1,000 employees",
-    description:
-      "The full solution. See the gaps, get the playbook, track competitors, fix your AI reputation.",
-    features: [
-      "Everything in Starter",
-      "Full Content Playbook (what, where, how)",
-      "Gap-specific content templates",
-      "3 competitor benchmarks",
-      "Hallucination detection & alerts",
-      "Interview prep monitoring",
-      "Slack & email notifications",
-      "Priority UK Visibility Index listing",
-    ],
-    cta: "Get the full playbook",
-    href: "/signup?plan=growth",
-    highlighted: true,
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? null,
-  },
-  {
-    name: "Scale",
+    name: "Pro",
     icon: Building2,
-    monthlyPrice: 449,
-    annualPrice: 379,
-    audience: "1,000+ employees",
+    monthlyPrice: 99,
+    annualPrice: 79,
+    audience: "For employers who want to influence AI",
     description:
-      "Enterprise-grade monitoring with unlimited benchmarks, API access, and strategic reviews.",
+      "The complete solution. Maximize the probability that AI represents your employer brand accurately.",
     features: [
-      "Everything in Growth",
-      "Unlimited competitor benchmarks",
-      "Multi-location monitoring",
-      "ATS & careers page integration API",
-      "Custom branded PDF reports",
-      "Quarterly strategy review call",
-      "Priority support",
+      "Everything in Free",
+      "Employer questionnaire (self-serve data input)",
+      "Auto-generated AEO content (llms.txt, Schema.org, Markdown)",
+      "Embeddable JS snippet for careers page",
+      "AI monitoring dashboard (weekly score tracking)",
+      "Competitor displacement reports (3 competitors)",
+      "Brand defence alerts (negative third-party content)",
+      "Content playbook with templates",
+      "ATS integration (Greenhouse, Lever, Ashby)",
+      "Proof tracking (before/after case studies)",
+      "Email support",
     ],
-    cta: "Talk to us",
-    href: "mailto:hello@openrole.co.uk?subject=Scale%20plan%20enquiry",
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? null,
+    badge: "🔒 Founding rate — £99/mo locked for first 20 customers",
+    cta: "Start 14-day trial",
+    href: "/signup?plan=pro",
+    highlighted: true,
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? null,
   },
 ];
 
 const enterprise = {
   name: "Enterprise",
-  audience: "Multi-brand or bespoke requirements",
+  audience: "Multi-brand or custom requirements",
   icon: Shield,
+  price: "From £800/month",
+  description:
+    "For organisations that need multi-brand support, API access, and SLA-backed accuracy.",
   features: [
-    "Everything in Scale",
+    "Everything in Pro",
+    "Unlimited competitors",
+    "API access",
+    "Custom branded reports",
+    "Dedicated CSM",
+    "SSO/SAML",
+    "SLA",
+    "Quarterly strategy calls",
+    "Priority support",
     "Multi-brand support",
-    "SSO & custom integrations",
-    "Dedicated account manager",
-    "SLA on monitoring accuracy",
-    "Custom reporting & data exports",
   ],
+  cta: "Book a demo",
 };
 
 /** What employers already spend — used for price anchoring */
 const anchors = [
   {
-    name: "Glassdoor Enhanced Profile",
-    cost: "£5,000–15,000/yr",
+    name: "Glassdoor Employer Branding",
+    cost: "£5,000 - £15,000/year",
     note: "Review management for one platform. No AI monitoring.",
   },
   {
-    name: "LinkedIn Recruiter (1 seat)",
-    cost: "£8,000–15,000/yr",
-    note: "Candidate sourcing. Doesn't fix employer narrative.",
+    name: "LinkedIn Talent Insights",
+    cost: "£8,000 - £15,000/year",
+    note: "Candidate sourcing. Doesn't influence AI narratives.",
   },
   {
-    name: "Employer brand agency",
-    cost: "£15,000–50,000/project",
-    note: "One-off. No ongoing monitoring or playbook.",
+    name: "Employer Brand Agency",
+    cost: "£15,000 - £50,000/project",
+    note: "One-off. No ongoing monitoring or content system.",
   },
   {
-    name: "OpenRole Growth",
-    cost: "£1,788/yr",
-    note: "Weekly monitoring + content playbook across 4 AI models.",
+    name: "OpenRole Pro",
+    cost: "£948/year",
+    note: "Weekly AI monitoring + content playbook across 4 models.",
     highlight: true,
   },
 ];
 
 const faqs = [
   {
-    q: "What does the free audit include?",
-    a: "A full scan across ChatGPT, Claude, Perplexity and Gemini. You see the actual AI responses about your company, a gap summary showing what AI can't answer, and your overall score. No signup needed.",
+    q: "What's included in the free plan?",
+    a: "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. You see the actual AI responses about your company, a gap summary showing what AI can't answer, and your overall score. You also get access to basic tools like llms.txt and Schema.org generators. No signup needed for audits.",
   },
   {
-    q: "What's in the Content Playbook?",
-    a: "For each information gap we find, you get: what to publish (the specific content), where to publish it (your careers page, blog, FAQ section), how to format it (AI-friendly structure), and a ready-to-edit template. Most gaps take 20–30 minutes to fill.",
+    q: "Can I upgrade later?",
+    a: "Yes. You can upgrade from Free to Pro at any time. Your account transitions immediately and you gain access to all Pro features. Changes take effect on your next billing cycle when downgrading.",
   },
   {
-    q: "What's the difference between Starter and Growth?",
-    a: "Starter shows you the problem — what AI gets wrong and where the gaps are. Growth gives you the solution — a full content playbook with templates, competitor benchmarks, and hallucination detection. Most companies upgrade once they see their gaps.",
+    q: "Do you offer refunds?",
+    a: "Yes — 14-day money-back guarantee on all Pro subscriptions. If you're not satisfied within the first 14 days, we'll refund you in full. No questions asked.",
   },
   {
-    q: "Can you actually change what AI says about us?",
-    a: "Nobody can control AI outputs directly. But when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2–4 weeks of publishing.",
+    q: "What's a 'founding member' rate?",
+    a: "Early customers get £99/mo (normally £149/mo) locked in forever. You keep this rate as long as you remain a customer — even when we increase prices later. It's our way of rewarding early adopters who help us refine the product.",
   },
   {
-    q: "How is this different from Glassdoor?",
-    a: "Glassdoor handles opinions — reviews, ratings, anonymous feedback. OpenRole handles facts — salary bands, specific benefits, interview process, remote policy. These are the questions Glassdoor can't answer accurately, and they're exactly what AI struggles with.",
+    q: "How does the embeddable snippet work?",
+    a: "It's a simple JavaScript snippet you add to your careers page. It injects machine-readable data (Schema.org + llms.txt) directly into your page so AI models can discover and cite it. Takes 2 minutes to install. No visual changes to your page.",
   },
   {
-    q: "Can I switch plans?",
-    a: "Yes — upgrade or downgrade any time. Changes take effect immediately when upgrading, or at your next billing cycle when downgrading.",
-  },
-  {
-    q: "Is there a contract?",
-    a: "No long-term contracts. Monthly plans cancel anytime. Annual plans are paid upfront with a discount — no lock-in beyond what you've paid for.",
-  },
-  {
-    q: "How quickly will I see results?",
-    a: "Most companies see AI answer changes within 2–4 weeks of publishing recommended content. Your weekly report tracks exactly which gaps have been filled and which AI models are now citing your content.",
-  },
-  {
-    q: "Do you offer agency pricing?",
-    a: "Yes — if you manage employer brands for multiple clients, we offer wholesale pricing. Get in touch at hello@openrole.co.uk.",
+    q: "Will this actually change what AI says about us?",
+    a: "We build the optimal machine-readable data infrastructure to maximize the probability that AI models represent your employer brand accurately, using your verified data instead of third-party rumours. We can't control AI outputs directly — no one can — but when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2-4 weeks of publishing.",
   },
 ];
 
@@ -195,12 +164,12 @@ export default function PricingPage() {
   const productSchema = generateProductSchema({
     name: `${SITE_NAME} — AI Employer Visibility Platform`,
     description:
-      "See what AI tells your candidates. Find the information gaps. Get the content playbook to take control. Weekly monitoring across ChatGPT, Claude, Perplexity and Gemini.",
+      "Maximize the probability that AI tells candidates the truth about your company. Weekly monitoring across ChatGPT, Claude, Perplexity and Gemini.",
     url: `${BASE_URL}/pricing`,
     offers: [
-      { name: "Starter Plan", price: "59", priceCurrency: "GBP" },
-      { name: "Growth Plan", price: "179", priceCurrency: "GBP" },
-      { name: "Scale Plan", price: "449", priceCurrency: "GBP" },
+      { name: "Free Plan", price: "0", priceCurrency: "GBP" },
+      { name: "Pro Plan", price: "99", priceCurrency: "GBP" },
+      { name: "Enterprise Plan", price: "800", priceCurrency: "GBP" },
     ],
   });
 
@@ -217,11 +186,10 @@ export default function PricingPage() {
           <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24 text-center">
             <p className="overline mb-4">Pricing</p>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
-              Fix what AI tells candidates about you
+              Take control of what AI tells your candidates
             </h1>
             <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-              Plans that pay for themselves with a single better hire. The free
-              audit is always free.
+              Join 100+ UK employers already managing their AI employer brand
             </p>
 
             {/* ── Billing toggle ─────────────────────── */}
@@ -246,7 +214,7 @@ export default function PricingPage() {
               >
                 Annual
                 <span className="ml-1.5 text-xs font-semibold text-teal-600">
-                  Save 17%
+                  Save 20%
                 </span>
               </button>
             </div>
@@ -280,10 +248,18 @@ export default function PricingPage() {
           <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
             <div className="grid gap-6 md:grid-cols-3 items-start">
               {plans.map((plan) => {
-                const price = annual ? plan.annualPrice : plan.monthlyPrice;
-                const priceId = annual
-                  ? (plan.annualPriceId ?? plan.monthlyPriceId)
-                  : plan.monthlyPriceId;
+                const price =
+                  plan.name === "Free"
+                    ? 0
+                    : annual
+                    ? plan.annualPrice
+                    : plan.monthlyPrice;
+                const priceId =
+                  plan.name === "Free"
+                    ? null
+                    : annual
+                    ? (plan.annualPriceId ?? plan.monthlyPriceId)
+                    : plan.monthlyPriceId;
                 const Icon = plan.icon;
 
                 return (
@@ -294,7 +270,7 @@ export default function PricingPage() {
                     transition={{ duration: 0.35, ease: "easeOut" }}
                     className={`relative rounded-2xl bg-white p-7 lg:p-8 border transition-all duration-300 ${
                       plan.highlighted
-                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated md:scale-[1.03]"
+                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated md:scale-[1.05]"
                         : "border-slate-200 hover:shadow-card-hover hover:border-neutral-300"
                     }`}
                   >
@@ -323,11 +299,14 @@ export default function PricingPage() {
                       </div>
 
                       <div className="flex items-baseline gap-1">
-                        {annual && plan.monthlyPrice > plan.annualPrice && (
-                          <span className="text-lg text-slate-400 line-through tabular-nums mr-1">
-                            £{plan.monthlyPrice}
-                          </span>
-                        )}
+                        {plan.name !== "Free" &&
+                          annual &&
+                          plan.monthlyPrice &&
+                          plan.monthlyPrice > (plan.annualPrice ?? 0) && (
+                            <span className="text-lg text-slate-400 line-through tabular-nums mr-1">
+                              £{plan.monthlyPrice}
+                            </span>
+                          )}
                         <AnimatePresence mode="wait">
                           <motion.span
                             key={price}
@@ -340,18 +319,33 @@ export default function PricingPage() {
                             £{price}
                           </motion.span>
                         </AnimatePresence>
-                        <span className="text-slate-500 text-sm">/month</span>
+                        {plan.name !== "Free" && (
+                          <span className="text-slate-500 text-sm">/month</span>
+                        )}
                       </div>
 
-                      {annual && (
+                      {plan.name !== "Free" && annual && (
                         <p className="text-xs text-slate-400 mt-1">
-                          Billed annually (£{price * 12}/year)
+                          Billed annually (£{(price ?? 0) * 12}/year)
                         </p>
                       )}
-                      {!annual && plan.annualPrice < plan.monthlyPrice && (
-                        <p className="text-xs text-teal-600 mt-1">
-                          £{plan.annualPrice}/mo when billed annually
-                        </p>
+                      {plan.name !== "Free" &&
+                        !annual &&
+                        plan.annualPrice &&
+                        plan.monthlyPrice &&
+                        plan.annualPrice < plan.monthlyPrice && (
+                          <p className="text-xs text-teal-600 mt-1">
+                            £{plan.annualPrice}/mo when billed annually
+                          </p>
+                        )}
+
+                      {plan.badge && (
+                        <div className="mt-3 flex items-start gap-2 rounded-lg bg-teal-50 border border-teal-100 px-3 py-2">
+                          <Lock className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
+                          <p className="text-xs text-teal-700 leading-relaxed">
+                            {plan.badge}
+                          </p>
+                        </div>
                       )}
 
                       <p className="text-slate-600 text-sm mt-3 leading-relaxed">
@@ -359,7 +353,7 @@ export default function PricingPage() {
                       </p>
                     </div>
 
-                    <ul className="space-y-3 mb-4">
+                    <ul className="space-y-3 mb-6">
                       {plan.features.map((feature) => (
                         <li
                           key={feature}
@@ -374,41 +368,13 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    {/* Show what's NOT included on Starter — drives upgrade */}
-                    {plan.notIncluded && (
-                      <div className="mb-6 pt-3 border-t border-slate-100">
-                        <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">
-                          Upgrade to unlock
-                        </p>
-                        <ul className="space-y-2">
-                          {plan.notIncluded.map((item) => (
-                            <li
-                              key={item}
-                              className="flex items-start gap-2.5 text-sm text-slate-400"
-                            >
-                              <X
-                                className="h-4 w-4 text-slate-300 mt-0.5 shrink-0"
-                                strokeWidth={1.5}
-                              />
-                              <span className="line-through decoration-slate-200">
-                                {item}
-                              </span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {!plan.notIncluded && <div className="mb-6" />}
-
                     {priceId ? (
                       <CheckoutButton
                         priceId={priceId}
                         label={plan.cta}
                         highlighted={plan.highlighted}
                       />
-                    ) : plan.href.startsWith("/signup") ? (
-                      /* No Stripe price configured yet — link to signup */
+                    ) : (
                       <Link
                         href={plan.href}
                         className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
@@ -420,8 +386,6 @@ export default function PricingPage() {
                         {plan.cta}
                         <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
                       </Link>
-                    ) : (
-                      <ContactSalesButton />
                     )}
                   </motion.div>
                 );
@@ -446,10 +410,15 @@ export default function PricingPage() {
                       {enterprise.audience}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-500 max-w-lg">
-                    For organisations that need multi-brand support, SSO, custom
-                    integrations, and SLA-backed monitoring accuracy.
+                  <p className="text-sm text-slate-500 max-w-lg mb-4">
+                    {enterprise.description}
                   </p>
+                  <div className="flex items-baseline gap-2 mb-1">
+                    <span className="text-2xl font-bold text-slate-900">
+                      {enterprise.price}
+                    </span>
+                    <span className="text-sm text-slate-500">(billed annually)</span>
+                  </div>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
@@ -469,28 +438,14 @@ export default function PricingPage() {
                   </ul>
 
                   <a
-                    href="mailto:hello@openrole.co.uk"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-5 py-3 text-sm font-semibold text-slate-900 hover:bg-neutral-200 transition-colors shrink-0"
+                    href="mailto:hello@openrole.co.uk?subject=Enterprise%20plan%20enquiry"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition-colors shrink-0"
                   >
-                    Talk to us
+                    {enterprise.cta}
                     <ArrowRight className="h-3.5 w-3.5" />
                   </a>
                 </div>
               </div>
-            </div>
-
-            {/* ── Agency callout ─────────────────────── */}
-            <div className="mt-4 text-center">
-              <p className="text-sm text-slate-500">
-                Recruitment agency or consultancy?{" "}
-                <a
-                  href="mailto:hello@openrole.co.uk"
-                  className="text-brand-accent hover:underline font-medium"
-                >
-                  Ask about wholesale pricing
-                </a>{" "}
-                — from £99/month per client.
-              </p>
             </div>
           </div>
         </section>
@@ -500,11 +455,11 @@ export default function PricingPage() {
           <div className="mx-auto max-w-3xl px-6 text-center">
             <p className="overline mb-4">For context</p>
             <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight mb-3">
-              What UK employers already spend on reputation
+              What employers currently pay for employer brand management
             </h2>
             <p className="text-sm text-slate-500 mb-10 max-w-lg mx-auto">
-              These tools manage reviews and job distribution — none of them
-              monitor or fix what AI tells your candidates.
+              These tools manage reviews and job distribution — none of them monitor or
+              influence what AI tells your candidates.
             </p>
 
             <div className="grid gap-3 sm:grid-cols-2">
@@ -527,7 +482,7 @@ export default function PricingPage() {
                     </p>
                     {anchor.highlight && (
                       <span className="inline-flex items-center rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-700">
-                        You are here
+                        OpenRole
                       </span>
                     )}
                   </div>
@@ -542,44 +497,40 @@ export default function PricingPage() {
                 </div>
               ))}
             </div>
-
-            {/* ROI nudge */}
-            <div className="mt-8 flex items-center justify-center gap-2">
-              <Calculator className="h-4 w-4 text-slate-400" />
-              <Link
-                href="/roi-calculator"
-                className="text-sm font-medium text-brand-accent hover:underline"
-              >
-                Calculate your ROI →
-              </Link>
-            </div>
           </div>
         </section>
 
-        {/* ── Cost-per-employee framing ───────────────── */}
-        <section className="border-t border-slate-200 bg-slate-50 py-12">
-          <div className="mx-auto max-w-3xl px-6">
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div>
-                  <h3 className="text-base font-semibold text-slate-900 mb-1">
-                    Less than a coffee per employee per month
-                  </h3>
-                  <p className="text-sm text-slate-500">
-                    Growth plan at £149/mo for a 500-person company ={" "}
-                    <span className="font-semibold text-slate-700">
-                      £0.30 per employee
-                    </span>
-                    . One better hire pays for 16 years of OpenRole.
+        {/* ── ROI Calculator ──────────────────────────── */}
+        <section className="border-t border-slate-200 bg-slate-50 py-16">
+          <div className="mx-auto max-w-2xl px-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center">
+              <h3 className="text-xl font-bold text-slate-900 mb-4">
+                If OpenRole helps you hire just ONE candidate faster, the ROI is:
+              </h3>
+              <div className="grid gap-4 sm:grid-cols-2 mb-6">
+                <div className="rounded-lg bg-teal-50 border border-teal-100 p-5">
+                  <p className="text-sm font-medium text-teal-700 mb-1">
+                    Senior Engineer
+                  </p>
+                  <p className="text-3xl font-bold text-teal-600 mb-1">15x ROI</p>
+                  <p className="text-xs text-slate-500">
+                    £15K avg agency fee saved
                   </p>
                 </div>
-                <div className="text-right shrink-0">
-                  <p className="text-3xl font-bold text-teal-600 tabular-nums">
-                    16:1
+                <div className="rounded-lg bg-teal-50 border border-teal-100 p-5">
+                  <p className="text-sm font-medium text-teal-700 mb-1">
+                    Mid-level role
                   </p>
-                  <p className="text-xs text-slate-400">Typical ROI</p>
+                  <p className="text-3xl font-bold text-teal-600 mb-1">8x ROI</p>
+                  <p className="text-xs text-slate-500">
+                    £8K avg agency fee saved
+                  </p>
                 </div>
               </div>
+              <p className="text-sm text-slate-500">
+                OpenRole Pro costs £948/year. Most companies pay more than that for a
+                single LinkedIn Recruiter seat.
+              </p>
             </div>
           </div>
         </section>

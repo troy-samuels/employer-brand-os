@@ -26,14 +26,14 @@ function getCtaCopy(score: number) {
     return {
       headline: "You're making progress — close the gaps",
       description:
-        "A few targeted fixes will dramatically improve what AI tells candidates about you. Get the full breakdown.",
+        "A few targeted fixes will increase the probability that AI cites your verified data. Get the full breakdown.",
       button: "Get your report",
     };
   }
   return {
     headline: "Want the full picture?",
     description:
-      "See exactly what AI tells candidates about your company — and what you can do about it.",
+      "See exactly what AI says about your company — and how to provide AI with your verified data.",
     button: "Send report",
   };
 }

@@ -33,7 +33,7 @@ export async function GET() {
   <channel>
     <title>OpenRole Blog — AI Employer Visibility Insights</title>
     <link>${BASE_URL}/blog</link>
-    <description>Insights on AI employer visibility, employer branding in the age of AI, and how companies can control what AI tells candidates about them.</description>
+    <description>Insights on AI employer visibility, employer branding in the age of AI, and how companies can influence what AI says about them.</description>
     <language>en-gb</language>
     <lastBuildDate>${new Date().toUTCString()}</lastBuildDate>
     <atom:link href="${BASE_URL}/feed.xml" rel="self" type="application/rss+xml" />

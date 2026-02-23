@@ -38,13 +38,13 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "OpenRole is an AI employer branding tool that measures what ChatGPT, Claude, Perplexity and Gemini say about your company. Run a free employer brand audit, get your employer brand score, and build an employer branding strategy grounded in data.",
+      "OpenRole is an AI employer visibility platform that helps you measure and influence what AI tells candidates about your company. Run a free employer brand audit, get your visibility score, and maximize the probability that AI represents your employer brand accurately.",
   });
 
   const websiteSchema = generateWebsiteSchema({
     name: SITE_NAME,
     url: BASE_URL,
-    description: "Free employer brand audit and measurement across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, benchmark against competitors, and get a playbook to improve your employer visibility.",
+    description: "Free employer visibility audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, identify information gaps, and get a content playbook to increase the likelihood AI cites your verified data.",
   });
 
   return (
@@ -75,7 +75,7 @@ export default function Home() {
                     <span className="text-brand-accent">where candidates look first</span>
                   </h1>
                   <p className="text-lg text-neutral-400 max-w-lg mx-auto">
-                    Candidates research you in AI before they apply, engage, or accept. Run a free employer brand audit — see your score across ChatGPT, Claude, Perplexity and Gemini, find the gaps, and fix them.
+                    Candidates research you in AI before they apply, engage, or accept. Run a free employer brand audit — see your score across ChatGPT, Claude, Perplexity and Gemini, find the gaps, and provide AI with your verified data.
                   </p>
                 </motion.div>
               )}

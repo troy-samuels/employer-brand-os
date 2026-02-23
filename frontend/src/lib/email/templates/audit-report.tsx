@@ -46,8 +46,8 @@ const DEFAULT_FINDINGS: AuditFinding[] = [
 
 const DEFAULT_RECOMMENDATIONS = [
   "Add structured employer data (JSON-LD) to your careers page",
-  "Publish verified salary ranges to correct AI hallucinations",
-  "Claim your OpenRole profile to control what AI says about you",
+  "Publish verified salary ranges to maximize accuracy",
+  "Claim your OpenRole profile to provide AI with your verified data",
 ];
 
 /**

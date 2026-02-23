@@ -29,13 +29,11 @@ import { createClient } from "@/lib/supabase/client";
 
 /**
  * OpenRole plan tiers:
- *   free     — audit only, no dashboard features
- *   starter  — diagnostic: monitoring, score tracking, gap alerts
- *   growth   — full: playbook, competitors, hallucination alerts
- *   scale    — everything + API, branded reports, strategy calls
- *   enterprise — custom
+ *   free        — audit + basic tools, no paid features
+ *   pro         — full solution: monitoring, playbook, competitors, brand defence
+ *   enterprise  — everything + API, SSO, dedicated CSM
  */
-export type PlanTier = "free" | "starter" | "growth" | "scale" | "enterprise";
+export type PlanTier = "free" | "pro" | "enterprise" | "starter" | "growth" | "scale";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -47,6 +45,28 @@ interface DashboardShellProps {
 /** Feature gates per plan — true = accessible */
 const PLAN_FEATURES: Record<PlanTier, Set<string>> = {
   free: new Set(["/dashboard", "/dashboard/settings"]),
+  pro: new Set([
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/compliance",
+    "/dashboard/sanitization",
+    "/dashboard/facts",
+    "/dashboard/jobs",
+    "/dashboard/integration",
+    "/dashboard/settings",
+  ]),
+  enterprise: new Set([
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/compliance",
+    "/dashboard/sanitization",
+    "/dashboard/facts",
+    "/dashboard/jobs",
+    "/dashboard/pixel",
+    "/dashboard/integration",
+    "/dashboard/settings",
+  ]),
+  // Legacy plan names (for backward compatibility)
   starter: new Set([
     "/dashboard",
     "/dashboard/analytics",
@@ -72,17 +92,6 @@ const PLAN_FEATURES: Record<PlanTier, Set<string>> = {
     "/dashboard/integration",
     "/dashboard/settings",
   ]),
-  enterprise: new Set([
-    "/dashboard",
-    "/dashboard/analytics",
-    "/dashboard/compliance",
-    "/dashboard/sanitization",
-    "/dashboard/facts",
-    "/dashboard/jobs",
-    "/dashboard/pixel",
-    "/dashboard/integration",
-    "/dashboard/settings",
-  ]),
 };
 
 interface NavItem {
@@ -93,7 +102,7 @@ interface NavItem {
   minPlan: PlanTier;
 }
 
-const PLAN_ORDER: PlanTier[] = ["free", "starter", "growth", "scale", "enterprise"];
+const PLAN_ORDER: PlanTier[] = ["free", "starter", "growth", "pro", "scale", "enterprise"];
 
 function planIndex(p: PlanTier): number {
   return PLAN_ORDER.indexOf(p);
@@ -101,13 +110,13 @@ function planIndex(p: PlanTier): number {
 
 const navigationItems: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, minPlan: "free" },
-  { name: "AI Intelligence", href: "/dashboard/analytics", icon: Brain, minPlan: "starter" },
-  { name: "Compliance", href: "/dashboard/compliance", icon: ShieldCheck, minPlan: "growth" },
-  { name: "Content Playbook", href: "/dashboard/sanitization", icon: BarChart3, minPlan: "growth" },
-  { name: "Facts", href: "/dashboard/facts", icon: FileCheck, minPlan: "growth" },
-  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase, minPlan: "growth" },
-  { name: "Pixel", href: "/dashboard/pixel", icon: Code2, minPlan: "scale" },
-  { name: "Integration", href: "/dashboard/integration", icon: Plug, minPlan: "scale" },
+  { name: "Brand Defence", href: "/dashboard/analytics", icon: Brain, minPlan: "pro" },
+  { name: "Compliance", href: "/dashboard/compliance", icon: ShieldCheck, minPlan: "pro" },
+  { name: "Content Playbook", href: "/dashboard/sanitization", icon: BarChart3, minPlan: "pro" },
+  { name: "Facts", href: "/dashboard/facts", icon: FileCheck, minPlan: "pro" },
+  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase, minPlan: "pro" },
+  { name: "Integration", href: "/dashboard/integration", icon: Plug, minPlan: "pro" },
+  { name: "Pixel", href: "/dashboard/pixel", icon: Code2, minPlan: "enterprise" },
   { name: "Settings", href: "/dashboard/settings", icon: Settings, minPlan: "free" },
 ];
 
@@ -116,6 +125,15 @@ const planBadge: Record<string, { label: string; className: string }> = {
     label: "Free",
     className: "bg-slate-100 text-slate-600",
   },
+  pro: {
+    label: "Pro",
+    className: "bg-teal-50 text-teal-700",
+  },
+  enterprise: {
+    label: "Enterprise",
+    className: "bg-amber-50 text-amber-700",
+  },
+  // Legacy plan names (for backward compatibility)
   starter: {
     label: "Starter",
     className: "bg-blue-50 text-blue-700",
@@ -127,10 +145,6 @@ const planBadge: Record<string, { label: string; className: string }> = {
   scale: {
     label: "Scale",
     className: "bg-violet-50 text-violet-700",
-  },
-  enterprise: {
-    label: "Enterprise",
-    className: "bg-amber-50 text-amber-700",
   },
 };
 
@@ -212,13 +226,13 @@ export function DashboardShell({
 
       {/* Footer */}
       <div className="border-t border-slate-200 px-4 py-4 space-y-3">
-        {/* Upgrade CTA — shown for free and starter plans */}
-        {(plan === "free" || plan === "starter") && (
+        {/* Upgrade CTA — shown for free plan */}
+        {plan === "free" && (
           <Link
             href="/pricing"
             className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition-colors duration-200"
           >
-            {plan === "free" ? "Upgrade" : "Unlock Playbook"}
+            Upgrade to Pro
             <ArrowUpRight className="h-3.5 w-3.5" />
           </Link>
         )}

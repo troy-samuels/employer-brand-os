@@ -15,11 +15,11 @@ import { generateFAQSchema, JsonLd } from "@/lib/seo";
 export const metadata: Metadata = {
   title: "FAQ — AI Employer Visibility Questions Answered",
   description:
-    "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
+    "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you maximize the probability that AI represents your employer brand accurately.",
   openGraph: {
     title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
+      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you influence what AI says about your company.",
     url: "https://openrole.co.uk/faq",
     type: "website",
   },
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you control what AI tells your candidates.",
+      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you influence what AI says about your company.",
   },
   alternates: { canonical: "https://openrole.co.uk/faq" },
 };

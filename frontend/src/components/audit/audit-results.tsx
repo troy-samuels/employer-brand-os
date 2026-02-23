@@ -213,7 +213,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
     >
       <div className="mb-5">
         <h3 className="text-[15px] font-semibold text-slate-900 mb-1.5">
-          What AI tells candidates about {companyName}
+          What AI says about {companyName}
         </h3>
         <p className="text-[13px] text-slate-500 leading-relaxed">
           See exactly what each AI model says when candidates ask about working here.

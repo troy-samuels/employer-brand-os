@@ -232,8 +232,9 @@ export default function HowItWorksPage() {
             </h2>
             <p className="text-slate-600 leading-relaxed mb-8 max-w-2xl">
               AI models like ChatGPT use Retrieval-Augmented Generation (RAG) — they
-              search the web for current information before answering. This means the
-              content on your careers page directly influences what AI tells candidates.
+              search the web for current information before answering. Publishing structured, 
+              machine-readable content on your careers page maximizes the probability that AI 
+              models cite your verified data instead of third-party sources.
             </p>
 
             <div className="grid gap-6 md:grid-cols-3">

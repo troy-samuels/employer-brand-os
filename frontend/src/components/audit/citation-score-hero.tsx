@@ -111,7 +111,7 @@ export function CitationScoreHero({
             {companyName}
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-neutral-200 sm:text-lg">
-            {uncontrolledShare}% of what AI tells candidates about you comes from sources you
+            {uncontrolledShare}% of what AI says about you comes from sources you
             don&apos;t control.
           </p>
         </div>

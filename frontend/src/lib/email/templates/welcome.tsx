@@ -45,7 +45,7 @@ export function renderWelcomeEmail({
             <td style="padding: 32px 32px 16px;">
               <h1 style="margin: 0; font-size: 22px; font-weight: 700; color: #0f172a; line-height: 1.3;">${greeting}</h1>
               <p style="margin: 16px 0 0; font-size: 14px; color: #475569; line-height: 1.6;">
-                You&rsquo;re now set up to control what AI tells candidates about your company. Here&rsquo;s how to get started:
+                You&rsquo;re now set up to influence what AI says about your company. Here&rsquo;s how to get started:
               </p>
             </td>
           </tr>
