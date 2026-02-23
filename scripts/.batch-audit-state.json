@@ -83,7 +83,18 @@
     "dyson.com",
     "nottingham.ac.uk",
     "britishgas.co.uk",
-    "emap.com"
+    "emap.com",
+    "npbs.co.uk",
+    "clearslidemail.com",
+    "smith-nephew.com",
+    "twobirds.com",
+    "shell.com",
+    "hp.com",
+    "edenbrown.com",
+    "equiniti-ics.com",
+    "scas.nhs.uk",
+    "amey.co.uk",
+    "novartis.com"
   ],
   "failedDomains": [
     "dft.gsi.gov.uk",
@@ -98,6 +109,6 @@
     "nabarro.com",
     "justice.gsi.gov.uk"
   ],
-  "lastIndex": 123,
-  "timestamp": "2026-02-23T03:41:35.854Z"
+  "lastIndex": 134,
+  "timestamp": "2026-02-23T03:44:20.022Z"
 }

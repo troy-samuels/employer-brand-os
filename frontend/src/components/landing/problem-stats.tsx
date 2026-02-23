@@ -9,8 +9,8 @@ import { motion } from "framer-motion";
 
 const stats = [
   {
-    value: "80%",
-    label: "of candidates under 30 ask AI about employers before applying",
+    value: "800M",
+    label: "people use ChatGPT every week — and 13.5% of conversations are employer research",
   },
   {
     value: "68%",
@@ -18,7 +18,7 @@ const stats = [
   },
   {
     value: "32/100",
-    label: "average employer brand score across 340+ UK companies",
+    label: "average employer brand score across 340+ UK companies we've audited",
   },
 ];
 
