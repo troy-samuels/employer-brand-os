@@ -1,326 +1,250 @@
 /**
  * @module api/facts-page/[slug]/route
- * Standalone HTML facts page for reverse proxy deployment on client domains
- * 
- * Endpoint: GET /api/facts-page/[slug]
- * Returns: Complete HTML document with RAG-optimized employer facts
- * 
- * Purpose: Client points yourdomain.com/ai-facts to this endpoint via proxy.
- * Domain authority + verified facts = Level 3 AEO dominance.
+ * Standalone HTML facts page for reverse proxy deployment on client domains.
+ * Client points yourdomain.com/ai-facts → openrole.co.uk/api/facts-page/slug
  */
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/admin';
+import { NextRequest, NextResponse } from "next/server";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || 'https://openrole.co.uk';
+import { supabaseAdmin } from "@/lib/supabase/admin";
+
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://openrole.co.uk";
 
 interface RouteParams {
-  params: Promise<{
-    slug: string;
-  }>;
+  params: Promise<{ slug: string }>;
 }
 
-interface FactWithDefinition {
-  id: string;
-  value: unknown;
-  verification_status: string | null;
-  updated_at: string | null;
-  fact_definitions: {
-    name: string;
-    display_name: string;
-    category_id: string | null;
-    is_salary_data: boolean | null;
-    data_type: string;
-  } | null;
+/* ── helpers ───────────────────────────────────────────────── */
+
+function currency(v: string | undefined) {
+  return v === "GBP" || !v ? "£" : v === "USD" ? "$" : v === "EUR" ? "€" : v;
 }
 
-interface CategoryWithFacts {
-  name: string;
-  facts: FactWithDefinition[];
+function salaryLine(b: Record<string, unknown>): string {
+  const role = b.role || "Role";
+  const c = currency(b.currency as string | undefined);
+  const min = b.min ?? "";
+  const max = b.max ?? "";
+  const eq = b.equity ? " + equity" : "";
+  return `${role}: ${c}${min} – ${c}${max}${eq}.`;
 }
 
-/**
- * Fetch organization and facts by slug
- */
-async function fetchOrganizationFacts(slug: string) {
-  const { data: org, error: orgError } = await supabaseAdmin
-    .from('organizations')
-    .select('id, name, slug, website, logo_url, updated_at')
-    .eq('slug', slug)
+function listLines(items: unknown[], labelKey = "name", detailKey = "details"): string {
+  if (!Array.isArray(items)) return "";
+  return items
+    .map((i) => {
+      const obj = i as Record<string, unknown>;
+      const label = obj[labelKey] ?? "";
+      const detail = obj[detailKey] ?? "";
+      return detail ? `${label}: ${detail}.` : `${label}.`;
+    })
+    .join("\n");
+}
+
+/* ── data fetching ────────────────────────────────────────── */
+
+async function fetchFacts(slug: string) {
+  const { data, error } = await supabaseAdmin
+    .from("employer_facts")
+    .select("*")
+    .eq("company_slug", slug)
+    .eq("published", true)
     .single();
 
-  if (orgError || !org) {
-    return null;
-  }
-
-  const { data: facts } = await supabaseAdmin
-    .from('employer_facts')
-    .select(`
-      id,
-      value,
-      verification_status,
-      updated_at,
-      fact_definitions!inner(
-        name,
-        display_name,
-        category_id,
-        is_salary_data,
-        data_type,
-        fact_categories(name, display_name)
-      )
-    `)
-    .eq('organization_id', org.id)
-    .eq('is_current', true)
-    .eq('include_in_jsonld', true)
-    .order('fact_definitions(sort_order)', { ascending: true });
-
-  return { org, facts: facts || [] };
+  if (error || !data) return null;
+  return data;
 }
 
-/**
- * Group facts by category
- */
-function groupFactsByCategory(facts: FactWithDefinition[]): CategoryWithFacts[] {
-  const grouped = new Map<string, CategoryWithFacts>();
+/* ── html generation ──────────────────────────────────────── */
 
-  for (const fact of facts) {
-    const def = fact.fact_definitions;
-    if (!def) continue;
+function buildSections(f: Record<string, unknown>): string[] {
+  const s: string[] = [];
 
-    const categoryName = def.category_id || 'General';
-    
-    if (!grouped.has(categoryName)) {
-      grouped.set(categoryName, {
-        name: categoryName,
-        facts: [],
-      });
-    }
+  // Salary
+  const bands = f.salary_bands as Record<string, unknown>[] | null;
+  if (bands?.length) {
+    s.push(`<h2>Salary Bands</h2>\n<p>${bands.map(salaryLine).join("<br>")}</p>`);
+  }
+  if (f.bonus_structure) s.push(`<p>Bonus: ${f.bonus_structure}.</p>`);
+  if (f.pay_review_cycle) s.push(`<p>Pay review: ${f.pay_review_cycle}.</p>`);
 
-    grouped.get(categoryName)!.facts.push(fact);
+  // Benefits
+  const benefits = f.benefits as Record<string, unknown>[] | null;
+  if (benefits?.length) {
+    s.push(`<h2>Benefits</h2>\n<p>${listLines(benefits)}</p>`);
+  }
+  if (f.pension_contribution) s.push(`<p>Pension: ${f.pension_contribution}.</p>`);
+  if (f.healthcare) s.push(`<p>Healthcare: ${f.healthcare}.</p>`);
+
+  // Work policy
+  if (f.remote_policy || f.remote_details) {
+    const parts = [`Policy: ${f.remote_policy || "Not specified"}`];
+    if (f.remote_details) parts.push(String(f.remote_details));
+    if (f.flexible_hours) parts.push(`Flexible hours: Yes. ${f.flexible_hours_details || ""}`);
+    s.push(`<h2>Work Policy</h2>\n<p>${parts.join(". ").replace(/\.\./g, ".")}.</p>`);
+  }
+  const offices = f.office_locations as Record<string, unknown>[] | null;
+  if (offices?.length) {
+    s.push(`<p>Offices: ${offices.map((o) => `${o.city}, ${o.country}`).join("; ")}.</p>`);
   }
 
-  return Array.from(grouped.values());
+  // Tech stack
+  const stack = f.tech_stack as Record<string, unknown>[] | null;
+  if (stack?.length) {
+    const lines = stack.map((t) => {
+      const tools = Array.isArray(t.tools) ? (t.tools as string[]).join(", ") : t.tools;
+      return `${t.category}: ${tools}.`;
+    });
+    s.push(`<h2>Tech Stack</h2>\n<p>${lines.join("<br>")}</p>`);
+  }
+  if (f.engineering_blog_url) s.push(`<p>Engineering blog: ${f.engineering_blog_url}</p>`);
+
+  // Interview
+  const stages = f.interview_stages as Record<string, unknown>[] | null;
+  if (stages?.length) {
+    const lines = stages.map(
+      (st, i) => `Stage ${i + 1}: ${st.stage || st.name}${st.duration ? ` (${st.duration})` : ""}.${st.description ? ` ${st.description}` : ""}`
+    );
+    s.push(`<h2>Interview Process</h2>\n<p>Stages: ${stages.length}.<br>${lines.join("<br>")}</p>`);
+    if (f.interview_timeline) s.push(`<p>Timeline: ${f.interview_timeline}.</p>`);
+  }
+
+  // Culture
+  const values = f.company_values as Record<string, unknown>[] | null;
+  if (values?.length || f.culture_description) {
+    const parts: string[] = [];
+    if (values?.length) parts.push(`Values: ${values.map((v) => v.value || v.name).join(". ")}.`);
+    if (f.culture_description) parts.push(String(f.culture_description));
+    if (f.team_size) parts.push(`Team size: ${f.team_size}.`);
+    if (f.founded_year) parts.push(`Founded: ${f.founded_year}.`);
+    s.push(`<h2>Culture</h2>\n<p>${parts.join("<br>")}</p>`);
+  }
+
+  // DEI
+  if (f.dei_statement || (f.dei_initiatives as unknown[])?.length) {
+    const parts: string[] = [];
+    if (f.dei_statement) parts.push(String(f.dei_statement));
+    const inits = f.dei_initiatives as Record<string, unknown>[] | null;
+    if (inits?.length) parts.push(listLines(inits));
+    s.push(`<h2>Diversity &amp; Inclusion</h2>\n<p>${parts.join("<br>")}</p>`);
+  }
+
+  // Career growth
+  if (f.promotion_framework || f.learning_budget) {
+    const parts: string[] = [];
+    if (f.promotion_framework) parts.push(`Promotion: ${f.promotion_framework}.`);
+    if (f.learning_budget) parts.push(`Learning budget: ${f.learning_budget}.`);
+    const levels = f.career_levels as Record<string, unknown>[] | null;
+    if (levels?.length) parts.push(listLines(levels, "title", "description"));
+    s.push(`<h2>Career Growth</h2>\n<p>${parts.join("<br>")}</p>`);
+  }
+
+  // Leave
+  if (f.maternity_leave || f.paternity_leave || f.annual_leave) {
+    const parts: string[] = [];
+    if (f.annual_leave) parts.push(`Annual leave: ${f.annual_leave}.`);
+    if (f.maternity_leave) parts.push(`Maternity: ${f.maternity_leave}.`);
+    if (f.paternity_leave) parts.push(`Paternity: ${f.paternity_leave}.`);
+    if (f.parental_leave_details) parts.push(String(f.parental_leave_details));
+    s.push(`<h2>Leave &amp; Time Off</h2>\n<p>${parts.join("<br>")}</p>`);
+  }
+
+  return s;
 }
 
-/**
- * Format fact value for dense Q&A display
- */
-function formatFactValue(fact: FactWithDefinition): string {
-  const { value, fact_definitions: def } = fact;
-  
-  if (!def) return '';
-
-  // Handle salary data
-  if (def.is_salary_data && typeof value === 'object' && value !== null) {
-    const s = value as Record<string, unknown>;
-    const role = s.role || 'Position';
-    const min = s.min || '';
-    const max = s.max || '';
-    const currency = s.currency || 'GBP';
-    const equity = s.equity ? ` + ${s.equity}` : '';
-    return `${role}: ${currency === 'GBP' ? '£' : currency}${min}–${max}${equity}`;
-  }
-
-  // Handle structured data
-  if (typeof value === 'object' && value !== null) {
-    const obj = value as Record<string, unknown>;
-    
-    // Remote policy
-    if (obj.policy) {
-      const parts: string[] = [`Policy: ${obj.policy}`];
-      if (obj.office_days) parts.push(`Office days: ${obj.office_days}/week`);
-      if (obj.remote_days) parts.push(`Remote: ${obj.remote_days}/week`);
-      if (obj.timezone) parts.push(`Timezone: ${obj.timezone}`);
-      return parts.join('. ') + '.';
-    }
-    
-    // Generic object
-    return Object.entries(obj)
-      .map(([k, v]) => `${k}: ${v}`)
-      .join('. ');
-  }
-
-  // Simple types
-  return String(value);
-}
-
-/**
- * Generate Schema.org JSON-LD
- */
-function generateSchema(org: { name: string; website: string | null }, facts: FactWithDefinition[]) {
+function generateSchemaLD(name: string, bands: Record<string, unknown>[] | null) {
   const schema: Record<string, unknown> = {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: org.name,
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name,
   };
-
-  if (org.website) {
-    schema.url = org.website;
-  }
-
-  // Extract key properties
-  const salaries: unknown[] = [];
-  
-  for (const fact of facts) {
-    const def = fact.fact_definitions;
-    if (!def) continue;
-
-    if (def.is_salary_data && typeof fact.value === 'object') {
-      const s = fact.value as Record<string, unknown>;
-      if (s.min && s.max && s.role) {
-        salaries.push({
-          '@type': 'JobPosting',
-          title: s.role,
-          baseSalary: {
-            '@type': 'MonetaryAmount',
-            currency: s.currency || 'GBP',
-            value: {
-              '@type': 'QuantitativeValue',
-              minValue: s.min,
-              maxValue: s.max,
-              unitText: 'YEAR',
-            },
-          },
-        });
-      }
-    }
-  }
-
-  if (salaries.length > 0) {
+  if (bands?.length) {
     schema.hasOfferCatalog = {
-      '@type': 'OfferCatalog',
-      itemListElement: salaries,
+      "@type": "OfferCatalog",
+      itemListElement: bands.map((b) => ({
+        "@type": "JobPosting",
+        title: b.role,
+        baseSalary: {
+          "@type": "MonetaryAmount",
+          currency: b.currency || "GBP",
+          value: { "@type": "QuantitativeValue", minValue: b.min, maxValue: b.max, unitText: "YEAR" },
+        },
+      })),
     };
   }
-
   return schema;
 }
 
-/**
- * Generate complete HTML page
- */
-function generateHTML(
-  org: { name: string; website: string | null; updated_at: string | null },
-  categorizedFacts: CategoryWithFacts[],
-  schema: Record<string, unknown>
-): string {
-  const lastUpdated = org.updated_at
-    ? new Date(org.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-    : 'Recently';
-
-  const canonicalUrl = org.website ? `${org.website}/ai-facts` : `${APP_URL}/facts/${org.name.toLowerCase().replace(/\s+/g, '-')}`;
+function renderPage(f: Record<string, unknown>): string {
+  const name = f.company_name as string;
+  const slug = f.company_slug as string;
+  const updated = f.updated_at
+    ? new Date(f.updated_at as string).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })
+    : "Recently";
+  const sections = buildSections(f);
+  const schema = generateSchemaLD(name, f.salary_bands as Record<string, unknown>[] | null);
 
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${org.name} — Verified Employer Facts | AI-Readable</title>
-<meta name="description" content="Verified salary bands, benefits, remote policy, interview process, and tech stack at ${org.name}. Machine-readable employer data.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="${canonicalUrl}">
-<meta property="og:title" content="${org.name} — Verified Employer Facts">
-<meta property="og:description" content="Verified salary bands, benefits, remote policy, interview process, and tech stack at ${org.name}.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="${canonicalUrl}">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${name} — Verified Employer Facts</title>
+<meta name="description" content="Verified salary bands, benefits, remote policy, interview process and tech stack at ${name}. Machine-readable employer data.">
+<meta name="robots" content="index,follow">
+<meta property="og:title" content="${name} — Verified Employer Facts">
+<meta property="og:description" content="Verified employer data for ${name}.">
 <script type="application/ld+json">${JSON.stringify(schema)}</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;line-height:1.6;color:#1a1a1a;background:#fff;padding:2rem 1rem;max-width:800px;margin:0 auto}
-h1{font-size:1.75rem;font-weight:600;margin-bottom:0.5rem;line-height:1.2}
-h2{font-size:1.25rem;font-weight:600;margin-top:2rem;margin-bottom:0.75rem;border-bottom:2px solid #e5e5e5;padding-bottom:0.25rem}
-p{margin-bottom:1rem;color:#4a4a4a}
-.meta{color:#888;font-size:0.875rem;margin-bottom:2rem}
-.fact{margin-bottom:1rem;padding:0.75rem;background:#f9f9f9;border-left:3px solid #3b82f6;border-radius:4px}
-.fact-label{font-weight:600;color:#1a1a1a;margin-bottom:0.25rem}
-.fact-value{color:#4a4a4a}
-footer{margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e5e5e5;color:#888;font-size:0.875rem}
+body{font-family:system-ui,sans-serif;line-height:1.6;color:#1a1a1a;max-width:760px;margin:0 auto;padding:2rem 1rem}
+h1{font-size:1.6rem;margin-bottom:.4rem}
+h2{font-size:1.15rem;margin:1.8rem 0 .6rem;border-bottom:2px solid #e5e5e5;padding-bottom:.2rem}
+p{margin-bottom:.8rem;color:#333}
+.meta{color:#888;font-size:.85rem;margin-bottom:1.6rem}
+footer{margin-top:2.5rem;padding-top:1rem;border-top:1px solid #e5e5e5;color:#999;font-size:.8rem}
 footer a{color:#3b82f6;text-decoration:none}
-footer a:hover{text-decoration:underline}
-@media(max-width:640px){body{padding:1rem 0.75rem}h1{font-size:1.5rem}h2{font-size:1.125rem}}
 </style>
 </head>
 <body>
-<main>
-<h1>${org.name} — Verified Employer Facts</h1>
-<p class="meta">Last updated: ${lastUpdated} · Verified by employer</p>
-
-${categorizedFacts.map(cat => `
-<h2>${cat.name}</h2>
-${cat.facts.map(fact => {
-  const def = fact.fact_definitions;
-  if (!def) return '';
-  
-  return `<div class="fact">
-<div class="fact-label">${def.display_name}</div>
-<div class="fact-value">${formatFactValue(fact)}</div>
-</div>`;
-}).join('\n')}
-`).join('\n')}
-
-</main>
-<footer>
-<p>Employer data verified via <a href="${APP_URL}">OpenRole</a></p>
-</footer>
-<img src="${APP_URL}/api/snippet/ping?s=${org.name.toLowerCase().replace(/\s+/g, '-')}&t=facts-page" width="1" height="1" alt="" style="position:absolute;opacity:0">
+<h1>${name} — Verified Employer Facts</h1>
+<p class="meta">Updated: ${updated} · Verified by employer</p>
+${sections.join("\n")}
+<footer>Data verified via <a href="${APP_URL}">OpenRole</a></footer>
+<img src="${APP_URL}/api/snippet/ping?s=${slug}&t=facts-page" width="1" height="1" alt="" style="position:absolute;opacity:0">
 </body>
 </html>`;
 }
 
-/**
- * GET handler - serve standalone HTML facts page
- */
-export async function GET(request: NextRequest, { params }: RouteParams) {
+/* ── route handler ────────────────────────────────────────── */
+
+export async function GET(_req: NextRequest, { params }: RouteParams) {
   const { slug } = await params;
 
   try {
-    const data = await fetchOrganizationFacts(slug);
-
-    if (!data) {
-      return new NextResponse(
-        '<html><body><h1>Organization not found</h1></body></html>',
-        {
-          status: 404,
-          headers: {
-            'Content-Type': 'text/html',
-            'Cache-Control': 'public, max-age=300',
-          },
-        }
-      );
+    const facts = await fetchFacts(slug);
+    if (!facts) {
+      return new NextResponse("<html><body><h1>Not found</h1></body></html>", {
+        status: 404,
+        headers: { "Content-Type": "text/html", "Cache-Control": "public,max-age=300" },
+      });
     }
 
-    const { org, facts } = data;
-    const categorizedFacts = groupFactsByCategory(facts);
-    const schema = generateSchema(org, facts);
-    const html = generateHTML(org, categorizedFacts, schema);
-
-    // Verify size target
-    const sizeKb = new TextEncoder().encode(html).length / 1024;
-    if (sizeKb > 15) {
-      console.warn(`Facts page for ${slug} is ${sizeKb.toFixed(2)}KB (target: <15KB)`);
-    }
-
+    const html = renderPage(facts as Record<string, unknown>);
     return new NextResponse(html, {
       status: 200,
       headers: {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET',
-        'X-Content-Type-Options': 'nosniff',
+        "Content-Type": "text/html;charset=utf-8",
+        "Cache-Control": "public,max-age=3600",
+        "Access-Control-Allow-Origin": "*",
+        "X-Content-Type-Options": "nosniff",
       },
     });
-  } catch (error) {
-    console.error('Facts page generation error:', error);
-    return new NextResponse(
-      '<html><body><h1>Error loading facts page</h1></body></html>',
-      {
-        status: 500,
-        headers: {
-          'Content-Type': 'text/html',
-          'Cache-Control': 'no-cache',
-        },
-      }
-    );
+  } catch (err) {
+    console.error("Facts page error:", err);
+    return new NextResponse("<html><body><h1>Error</h1></body></html>", {
+      status: 500,
+      headers: { "Content-Type": "text/html" },
+    });
   }
 }
