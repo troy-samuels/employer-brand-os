@@ -32,7 +32,7 @@ import { Footer } from "@/components/shared/footer";
 export const metadata: Metadata = {
   title: "How It Works — RAG-Native Employer Data | OpenRole",
   description:
-    "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts. Understand how RAG works, why careers pages fail AI, and what OpenRole does (llms.txt, snippet, reverse proxy).",
+    "OpenRole publishes verified employer facts that AI models cite. Understand how RAG works, why careers pages fail AI, and how OpenRole fixes it (llms.txt, snippet, OpenRole profile).",
   openGraph: {
     title: "How OpenRole Works — RAG-Native Employer Data",
     description:
@@ -173,7 +173,7 @@ export default function HowItWorksPage() {
                 </div>
               </div>
 
-              {/* Level 3: Reverse proxy */}
+              {/* Level 3: OpenRole profile */}
               <div className="rounded-xl bg-white border border-slate-200 p-6">
                 <div className="flex items-start gap-4">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
@@ -182,17 +182,17 @@ export default function HowItWorksPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold text-slate-900">
-                        Level 3: Reverse proxy
+                        Level 3: Your OpenRole profile
                       </h3>
                       <span className="rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700">
-                        Requires DNS change
+                        Automatic
                       </span>
                     </div>
                     <p className="text-slate-600 leading-relaxed mb-3">
-                      We sit in front of your careers page and serve AI-optimised content to crawlers while humans see your normal site. Maximum control — we can A/B test what AI sees, inject real-time data, and block bad actors. Your site stays unchanged.
+                      Your verified employer facts live on your OpenRole profile — a designed, SEO-optimised page that both candidates and AI crawlers read. We control the quality, freshness, and structure. You just keep your data up to date.
                     </p>
                     <p className="text-sm text-slate-500">
-                      <strong>What it adds:</strong> Full content control, rate limiting, crawler analytics, instant updates without redeploying.
+                      <strong>What it provides:</strong> Canonical source of truth for AI, comprehensive employer facts page, weekly freshness updates, no IT work required.
                     </p>
                   </div>
                 </div>
@@ -204,7 +204,7 @@ export default function HowItWorksPage() {
                 All levels share the same principle:
               </h3>
               <p className="text-sm text-teal-800 leading-relaxed">
-                Your domain authority + our structured data = AI cites you. When candidates ask about your company, AI finds <em>your verified facts</em> on <em>your domain</em> — not third-party guesses. That's what increases the probability of accurate AI answers.
+                Your llms.txt and snippet point AI to your OpenRole profile. When candidates ask about your company, AI finds <em>your verified facts</em> — not third-party guesses. That's what increases the probability of accurate AI answers.
               </p>
             </div>
           </div>

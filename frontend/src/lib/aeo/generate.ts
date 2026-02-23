@@ -9,14 +9,15 @@ import type { EmployerFacts, AEOOutput } from '@/features/facts/types/employer-f
 /**
  * Generate all AEO content formats from employer facts
  * @param facts - Complete employer facts data
- * @returns Object containing llms.txt, Schema.org JSON-LD, Markdown, and HTML
+ * @returns Object containing llms.txt, Schema.org JSON-LD, Markdown, and profile URL
  */
 export function generateAEOContent(facts: EmployerFacts): AEOOutput {
+  const profileUrl = `https://openrole.co.uk/company/${facts.company_slug}`;
   return {
     llmsTxt: generateLlmsTxt(facts),
     schemaJsonLd: generateSchemaJsonLd(facts),
     markdownPage: generateMarkdownPage(facts),
-    factPageHtml: generateFactPageHtml(facts),
+    factPageHtml: `<!-- Employer facts are published at ${profileUrl} -->\n<p>View verified employer facts at <a href="${profileUrl}">${profileUrl}</a></p>`,
   };
 }
 
@@ -29,9 +30,10 @@ function generateLlmsTxt(facts: EmployerFacts): string {
     ? new Date(facts.updated_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
     : 'Recently';
 
-  // Header
+  // Header with canonical profile URL
   lines.push(`# ${facts.company_name} — Employer Facts`);
   lines.push(`> Source: Verified by employer via OpenRole | Updated: ${lastUpdated}`);
+  lines.push(`> Canonical profile: https://openrole.co.uk/company/${facts.company_slug}`);
   lines.push('');
 
   // Salary Bands
@@ -301,91 +303,6 @@ function generateMarkdownPage(facts: EmployerFacts): string {
   lines.push('_Data verified via [OpenRole](https://openrole.co.uk)_');
 
   return lines.join('\n');
-}
-
-/**
- * Generate HTML snippet with microdata - dense Q&A format
- */
-function generateFactPageHtml(facts: EmployerFacts): string {
-  const html: string[] = [];
-  const lastUpdated = facts.updated_at 
-    ? new Date(facts.updated_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
-    : 'Recently';
-
-  html.push('<section id="openrole-facts" style="font-family:system-ui;max-width:800px;margin:40px auto;padding:24px;background:#f8f9fa;border-radius:8px;color:#1a1a1a;font-size:14px;line-height:1.6">');
-  html.push(`  <h2 style="margin:0 0 16px;font-size:20px">${escapeHtml(facts.company_name)} — Employer Facts</h2>`);
-  html.push(`  <p style="color:#666;font-size:12px;margin:0 0 20px">Verified by employer · Updated ${lastUpdated}</p>`);
-
-  // Salary Bands
-  if (facts.salary_bands && facts.salary_bands.length > 0) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Salary Bands</h3>');
-    html.push('  <p>');
-    facts.salary_bands.forEach(band => {
-      const currency = getCurrencySymbol(band.currency);
-      const equity = band.equity ? ' + equity' : '';
-      html.push(`    ${escapeHtml(band.role)}: ${currency}${band.min.toLocaleString()} - ${currency}${band.max.toLocaleString()}${equity}.<br>`);
-    });
-    html.push('  </p>');
-  }
-
-  // Remote Work Policy
-  if (facts.remote_policy) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Remote Work Policy</h3>');
-    html.push(`  <p>Policy: ${formatRemotePolicy(facts.remote_policy)}.<br>`);
-    if (facts.remote_details) {
-      const details = facts.remote_details.split('\n').map(d => d.trim()).filter(Boolean);
-      details.forEach(detail => {
-        html.push(`    ${escapeHtml(detail)}${detail.endsWith('.') ? '' : '.'}<br>`);
-      });
-    }
-    html.push('  </p>');
-  }
-
-  // Benefits
-  if (facts.benefits && facts.benefits.length > 0) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Benefits</h3>');
-    html.push('  <p>');
-    facts.benefits.forEach(benefit => {
-      const details = benefit.details ? `: ${escapeHtml(benefit.details)}` : '';
-      html.push(`    ${escapeHtml(benefit.name)}${details}.<br>`);
-    });
-    html.push('  </p>');
-  }
-
-  // Interview Process
-  if (facts.interview_stages && facts.interview_stages.length > 0) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Interview Process</h3>');
-    html.push(`  <p>Stages: ${facts.interview_stages.length}.<br>`);
-    facts.interview_stages.forEach((stage, index) => {
-      html.push(`    Stage ${index + 1}: ${escapeHtml(stage.stage)} (${escapeHtml(stage.duration)}).<br>`);
-    });
-    if (facts.interview_timeline) {
-      html.push(`    Timeline: ${escapeHtml(facts.interview_timeline)}.<br>`);
-    }
-    html.push('  </p>');
-  }
-
-  // Tech Stack
-  if (facts.tech_stack && facts.tech_stack.length > 0) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Tech Stack</h3>');
-    html.push('  <p>');
-    facts.tech_stack.forEach(cat => {
-      html.push(`    ${escapeHtml(cat.category)}: ${cat.tools.map(t => escapeHtml(t)).join(', ')}.<br>`);
-    });
-    html.push('  </p>');
-  }
-
-  // Culture
-  if (facts.company_values && facts.company_values.length > 0) {
-    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Culture</h3>');
-    html.push('  <p>Values: ' + facts.company_values.map(v => escapeHtml(v.value)).join('. ') + '.</p>');
-  }
-
-  // Footer
-  html.push('  <p style="color:#999;font-size:11px;margin:20px 0 0">Data verified via <a href="https://openrole.co.uk" style="color:#999">OpenRole</a></p>');
-  html.push('</section>');
-
-  return html.join('\n');
 }
 
 /**

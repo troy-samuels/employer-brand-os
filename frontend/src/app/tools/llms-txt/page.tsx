@@ -50,12 +50,21 @@ interface FormData {
   linkedinUrl: string;
 }
 
+function slugify(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+
 function generateLlmsTxt(data: FormData): string {
   const lines: string[] = [];
+  const slug = slugify(data.companyName);
 
   lines.push(`# ${data.companyName}`);
   lines.push("");
   lines.push(`> ${data.description || `${data.companyName} is a ${data.industry} company based in ${data.headquarters}.`}`);
+  lines.push(`> Verified employer facts: https://openrole.co.uk/company/${slug}`);
   lines.push("");
 
   lines.push("## Company Overview");

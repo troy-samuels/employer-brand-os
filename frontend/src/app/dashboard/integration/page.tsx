@@ -134,7 +134,7 @@ export default function IntegrationPage() {
           Website Integration
         </h1>
         <p className="text-sm text-zinc-500 mt-2">
-          Add structured data to your careers page for better AI visibility
+          Add two lines to your website. We handle the rest.
         </p>
       </header>
 
@@ -312,239 +312,58 @@ export default function IntegrationPage() {
             </Card>
           </section>
 
-          {/* ========== REVERSE PROXY FACTS PAGE (NEW) ========== */}
+          {/* ========== YOUR OPENROLE PROFILE ========== */}
           <section className="pt-8 border-t border-zinc-200">
             <div className="mb-6">
               <h2 className="text-lg font-semibold text-zinc-900 mb-1">
-                AI Facts Page (Level 3 AEO)
+                Your OpenRole Profile
               </h2>
               <p className="text-sm text-zinc-500">
-                A standalone facts page served on your domain that AI crawlers will index and cite.
-                Maximum domain authority for AI-powered search.
+                Your verified employer facts are published on your OpenRole profile.
+                This is the canonical page that AI models and candidates visit.
               </p>
             </div>
 
-            {/* What it is */}
             <Card className="mb-6">
               <CardHeader className="pb-4">
                 <p className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
-                  How It Works
+                  Live Profile
                 </p>
                 <CardTitle className="text-lg font-medium text-zinc-950">
-                  Domain Authority + Verified Facts
+                  Add two lines, we handle the rest
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 text-sm text-zinc-600">
+              <CardContent className="space-y-4 text-sm text-zinc-600">
                 <p>
-                  Point a subfolder on your domain (e.g., <code className="px-1.5 py-0.5 bg-zinc-100 rounded text-xs">yourdomain.com/ai-facts</code>) to our facts page via reverse proxy.
+                  Your llms.txt and embed snippet both point to your OpenRole profile.
+                  All verified employer data — salary bands, benefits, interview process,
+                  tech stack — lives here, designed for both candidates and AI crawlers.
                 </p>
                 <p>
-                  When Bing, Google, or Perplexity crawl for employer data, they'll find <strong>your domain</strong> (high authority) serving <strong>verified facts</strong> (high quality).
+                  <strong className="text-zinc-900">No reverse proxy needed.</strong>{' '}
+                  No IT support required. Just the snippet in your &lt;head&gt; and
+                  an llms.txt at your domain root.
                 </p>
-                <p className="text-zinc-500 text-xs">
-                  Result: Your domain ranks above Glassdoor, Indeed, and anonymous review sites in AI responses.
-                </p>
-              </CardContent>
-            </Card>
-
-            {/* Preview */}
-            <Card className="mb-6">
-              <CardHeader className="pb-4">
-                <p className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
-                  Your Facts Page
-                </p>
-                <CardTitle className="text-lg font-medium text-zinc-950">
-                  Preview
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-zinc-500">
-                  See what AI crawlers will see when they visit your facts page:
-                </p>
-                <div className="flex gap-3">
+                <div className="flex gap-3 pt-2">
                   <a
-                    href={`${APP_URL}/api/facts-page/${companySlug}`}
+                    href={`${APP_URL}/company/${companySlug}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-lg hover:bg-zinc-800 transition"
                   >
-                    Open Preview →
+                    View Your Profile →
                   </a>
                   <Button
                     variant="secondary"
                     size="sm"
                     onClick={() => {
-                      navigator.clipboard.writeText(`${APP_URL}/api/facts-page/${companySlug}`);
+                      navigator.clipboard.writeText(`${APP_URL}/company/${companySlug}`);
                     }}
                     className="text-xs"
                   >
                     Copy URL
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Setup Instructions - Platform Tabs */}
-            <Card className="mb-6">
-              <CardHeader className="pb-4">
-                <p className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
-                  Setup
-                </p>
-                <CardTitle className="text-lg font-medium text-zinc-950">
-                  Reverse Proxy Configuration
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-zinc-500 mb-6">
-                  Choose your platform and add the proxy rule. IT support may be required.
-                </p>
-                
-                <Tabs defaultValue="cloudflare">
-                  <TabsList className="mb-6">
-                    <TabsTrigger value="cloudflare">☁️ Cloudflare</TabsTrigger>
-                    <TabsTrigger value="nginx">🔧 Nginx</TabsTrigger>
-                    <TabsTrigger value="vercel">▲ Vercel</TabsTrigger>
-                    <TabsTrigger value="wordpress">📝 WordPress</TabsTrigger>
-                    <TabsTrigger value="netlify">🌐 Netlify</TabsTrigger>
-                  </TabsList>
-
-                  <TabsContent value="cloudflare">
-                    <div className="space-y-3 text-sm text-zinc-600">
-                      <p className="font-medium text-zinc-900">Cloudflare Page Rule or Worker</p>
-                      <p>In your Cloudflare dashboard, add a Page Rule or Worker route:</p>
-                      <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto text-xs font-mono text-zinc-100">
-{`URL: yourdomain.com/ai-facts*
-Forward to: ${APP_URL}/api/facts-page/${companySlug}`}
-                      </pre>
-                      <p className="text-xs text-zinc-500">
-                        Cloudflare will proxy requests to our endpoint while keeping your domain in the browser.
-                      </p>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="nginx">
-                    <div className="space-y-3 text-sm text-zinc-600">
-                      <p className="font-medium text-zinc-900">Nginx Configuration</p>
-                      <p>Add this location block to your nginx config:</p>
-                      <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto text-xs font-mono text-zinc-100">
-{`location /ai-facts {
-    proxy_pass ${APP_URL}/api/facts-page/${companySlug};
-    proxy_set_header Host $host;
-    proxy_set_header X-Real-IP $remote_addr;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
-}`}
-                      </pre>
-                      <p className="text-xs text-zinc-500">
-                        Reload nginx: <code className="px-1 py-0.5 bg-zinc-100 rounded">sudo nginx -s reload</code>
-                      </p>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="vercel">
-                    <div className="space-y-3 text-sm text-zinc-600">
-                      <p className="font-medium text-zinc-900">Vercel Rewrites</p>
-                      <p>Add this to your <code className="px-1 py-0.5 bg-zinc-100 rounded">next.config.js</code>:</p>
-                      <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto text-xs font-mono text-zinc-100">
-{`async rewrites() {
-  return [
-    {
-      source: '/ai-facts',
-      destination: '${APP_URL}/api/facts-page/${companySlug}'
-    }
-  ]
-}`}
-                      </pre>
-                      <p className="text-xs text-zinc-500">
-                        Deploy to apply changes. The page will be served at yourdomain.com/ai-facts
-                      </p>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="wordpress">
-                    <div className="space-y-3 text-sm text-zinc-600">
-                      <p className="font-medium text-zinc-900">WordPress .htaccess</p>
-                      <p>Add this to your <code className="px-1 py-0.5 bg-zinc-100 rounded">.htaccess</code> file (requires mod_proxy):</p>
-                      <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto text-xs font-mono text-zinc-100">
-{`RewriteEngine On
-RewriteRule ^ai-facts$ ${APP_URL}/api/facts-page/${companySlug} [P,L]`}
-                      </pre>
-                      <p className="text-xs text-zinc-500">
-                        Alternative: Use a plugin like "Simple 301 Redirects" for easier management.
-                      </p>
-                    </div>
-                  </TabsContent>
-
-                  <TabsContent value="netlify">
-                    <div className="space-y-3 text-sm text-zinc-600">
-                      <p className="font-medium text-zinc-900">Netlify Redirects</p>
-                      <p>Add this to your <code className="px-1 py-0.5 bg-zinc-100 rounded">_redirects</code> file:</p>
-                      <pre className="p-4 bg-zinc-900 rounded-lg overflow-x-auto text-xs font-mono text-zinc-100">
-{`/ai-facts ${APP_URL}/api/facts-page/${companySlug} 200`}
-                      </pre>
-                      <p className="text-xs text-zinc-500">
-                        The <code className="px-1 py-0.5 bg-zinc-100 rounded">200</code> status code tells Netlify to proxy (not redirect).
-                      </p>
-                    </div>
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
-
-            {/* Verification Checklist */}
-            <Card>
-              <CardHeader className="pb-4">
-                <p className="text-[10px] uppercase tracking-widest text-zinc-400 font-medium">
-                  Testing
-                </p>
-                <CardTitle className="text-lg font-medium text-zinc-950">
-                  Verify Installation
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ol className="space-y-3">
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-zinc-100 rounded text-xs font-medium text-zinc-600">
-                      1
-                    </span>
-                    <span className="text-sm text-zinc-600 leading-relaxed">
-                      Add the proxy/redirect rule using one of the methods above
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-zinc-100 rounded text-xs font-medium text-zinc-600">
-                      2
-                    </span>
-                    <span className="text-sm text-zinc-600 leading-relaxed">
-                      Visit <code className="px-1.5 py-0.5 bg-zinc-100 rounded text-xs">yourdomain.com/ai-facts</code> in your browser — you should see your facts page
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-zinc-100 rounded text-xs font-medium text-zinc-600">
-                      3
-                    </span>
-                    <span className="text-sm text-zinc-600 leading-relaxed">
-                      Open Google Search Console and use the{' '}
-                      <a 
-                        href="https://search.google.com/search-console" 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-blue-600 hover:text-blue-700 hover:underline"
-                      >
-                        URL Inspection tool
-                      </a>{' '}
-                      to verify Google can crawl and index the page
-                    </span>
-                  </li>
-                  <li className="flex gap-3">
-                    <span className="flex-shrink-0 w-6 h-6 flex items-center justify-center bg-zinc-100 rounded text-xs font-medium text-zinc-600">
-                      4
-                    </span>
-                    <span className="text-sm text-zinc-600 leading-relaxed">
-                      Wait 2-4 weeks for AI systems to recrawl and update their knowledge bases
-                    </span>
-                  </li>
-                </ol>
               </CardContent>
             </Card>
           </section>

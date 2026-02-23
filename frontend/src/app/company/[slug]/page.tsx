@@ -247,6 +247,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: {
       canonical: pageUrl,
     },
+    other: {
+      "employer-data-source": "OpenRole (openrole.co.uk) — Verified Employer Data",
+    },
   };
 }
 
@@ -377,7 +380,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
 /* JSON-LD builder                                                     */
 /* ------------------------------------------------------------------ */
 
-function buildJsonLd(audit: StoredAuditResult, slug: string) {
+function buildJsonLd(audit: StoredAuditResult, slug: string, facts?: EmployerFacts | null) {
   const companyUrl = `https://${audit.company_domain}`;
   const pageUrl = `https://openrole.co.uk/company/${slug}`;
   const score = audit.score;
@@ -398,6 +401,46 @@ function buildJsonLd(audit: StoredAuditResult, slug: string) {
       ratingCount: 1,
       reviewCount: 1,
     };
+  }
+
+  // Enrich with employer facts when available
+  if (facts) {
+    if (facts.team_size) organization.numberOfEmployees = { "@type": "QuantitativeValue", value: facts.team_size };
+    if (facts.founded_year) organization.foundingDate = String(facts.founded_year);
+
+    if (facts.office_locations?.length) {
+      organization.address = facts.office_locations.map((o) => ({
+        "@type": "PostalAddress",
+        addressLocality: o.city,
+        addressCountry: o.country,
+      }));
+    }
+
+    // Add salary/job posting data
+    if (facts.salary_bands?.length) {
+      organization.hasOfferCatalog = {
+        "@type": "OfferCatalog",
+        itemListElement: facts.salary_bands.map((b) => ({
+          "@type": "JobPosting",
+          title: b.role,
+          hiringOrganization: { "@type": "Organization", name: audit.company_name },
+          baseSalary: {
+            "@type": "MonetaryAmount",
+            currency: b.currency || "GBP",
+            value: { "@type": "QuantitativeValue", minValue: b.min, maxValue: b.max, unitText: "YEAR" },
+          },
+        })),
+      };
+    }
+
+    // Benefits as text
+    if (facts.benefits?.length) {
+      organization.amenityFeature = facts.benefits.map((b) => ({
+        "@type": "LocationFeatureSpecification",
+        name: b.name,
+        value: b.details || true,
+      }));
+    }
   }
 
   const employerRating: Record<string, unknown> | null =
@@ -906,11 +949,11 @@ export default async function CompanyPage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* ── JSON-LD structured data ─────────────── */}
+        {/* ── JSON-LD structured data (enriched with employer facts) ── */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: serializeJsonForHtml(buildJsonLd(audit, slug)),
+            __html: serializeJsonForHtml(buildJsonLd(audit, slug, employerFacts)),
           }}
         />
       </main>

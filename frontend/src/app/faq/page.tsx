@@ -81,7 +81,7 @@ const faqs: FaqEntry[] = [
     slug: "do-i-need-it-involvement",
     question: "Do I need IT involvement?",
     summary:
-      "No. Level 1 (llms.txt) requires pasting one code block into your site footer. Level 2 (JavaScript snippet) requires pasting one script tag. Both take under 5 minutes. Level 3 (reverse proxy) requires a DNS change — your IT team can do this in under 10 minutes.",
+      "No. You add a text file (llms.txt) to your domain root and a script tag to your careers page. Both take under 5 minutes, no IT required. Your verified employer facts are published on your OpenRole profile automatically.",
     category: "How OpenRole Works",
   },
   {
@@ -132,7 +132,7 @@ const faqs: FaqEntry[] = [
     slug: "which-plan-do-i-need",
     question: "Which plan is right for my company?",
     summary:
-      "Starter (£49/mo) if you want llms.txt and weekly monitoring. Growth (£149/mo) if you're actively hiring and want the JavaScript snippet plus competitor benchmarking. Scale (£399/mo) for the reverse proxy, done-for-you structured data updates, and board reporting.",
+      "Starter (£49/mo) if you want llms.txt and weekly monitoring. Growth (£149/mo) if you're actively hiring and want the JavaScript snippet plus competitor benchmarking. Scale (£399/mo) for done-for-you structured data updates, priority support, and board reporting.",
     category: "Pricing & Plans",
   },
 ];

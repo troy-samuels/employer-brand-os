@@ -88,6 +88,13 @@ export const platformGuides: PlatformGuide[] = [
 ];
 
 /**
+ * Generate the OpenRole profile URL for a given slug
+ */
+export function generateProfileUrl(slug: string): string {
+  return `${APP_URL}/company/${slug}`;
+}
+
+/**
  * Verification steps for checking installation
  */
 export const verificationSteps = [
@@ -97,5 +104,6 @@ export const verificationSteps = [
   'Press Ctrl+F (Cmd+F on Mac) to search',
   'Search for "application/ld+json"',
   'Verify your company data appears in the schema',
-  'Check the "employer-data-source" meta tag is present',
+  'Check the "employer-data-source" and "employer-facts-url" meta tags are present',
+  'The employer-facts-url should point to your OpenRole profile',
 ];

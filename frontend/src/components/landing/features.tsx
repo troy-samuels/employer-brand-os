@@ -23,7 +23,7 @@ const steps = [
   {
     icon: BarChart3,
     label: "Deploy",
-    detail: "We inject it into your website as AI-readable content. Your domain, your authority, your data. Track the impact as AI starts citing your facts.",
+    detail: "Add two lines to your website. Your verified facts are published on your OpenRole profile — the canonical source AI models cite. Track the impact weekly.",
   },
 ];
 

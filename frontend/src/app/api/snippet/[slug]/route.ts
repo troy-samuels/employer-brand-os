@@ -68,10 +68,11 @@ function buildSchema(f: Record<string, unknown>) {
   return schema;
 }
 
-/** Generates the JS snippet — JSON-LD + meta tag injection only. No visible DOM changes. */
+/** Generates the JS snippet — JSON-LD + meta tags + canonical link injection. No visible DOM changes. */
 function buildSnippet(slug: string, schema: Record<string, unknown>): string {
   const schemaStr = JSON.stringify(JSON.stringify(schema));
-  return `(function(){var d=document;var s=d.createElement("script");s.type="application/ld+json";s.textContent=${schemaStr};d.head.appendChild(s);var m=d.createElement("meta");m.name="employer-data-source";m.content="OpenRole (openrole.co.uk) - Verified Employer Data";d.head.appendChild(m);new Image().src="${APP_URL}/api/snippet/ping?s=${slug}&t="+Date.now()})();`;
+  const profileUrl = `${APP_URL}/company/${slug}`;
+  return `(function(){var d=document;var h=d.head;var s=d.createElement("script");s.type="application/ld+json";s.textContent=${schemaStr};h.appendChild(s);var m=d.createElement("meta");m.name="employer-data-source";m.content="OpenRole (openrole.co.uk) - Verified Employer Data";h.appendChild(m);var f=d.createElement("meta");f.name="employer-facts-url";f.content="${profileUrl}";h.appendChild(f);var l=d.createElement("link");l.rel="canonical";l.href="${profileUrl}";h.appendChild(l);new Image().src="${APP_URL}/api/snippet/ping?s=${slug}&t="+Date.now()})();`;
 }
 
 export async function GET(_req: NextRequest, { params }: RouteParams) {
