@@ -8,6 +8,7 @@
 import { useCallback, useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { TrendingUp } from "lucide-react";
+import Image from "next/image";
 
 /* ------------------------------------------------------------------ */
 /* Sparkline                                                           */
@@ -126,12 +127,12 @@ export default function MonitorPreview() {
                 { src: "/logos/gemini-mono.svg", name: "Gemini" },
               ].map((model) => (
                 <div key={model.name} className="flex items-center gap-1.5">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
+                  <Image
                     src={model.src}
                     alt={model.name}
-                    className="h-4 w-4 text-neutral-400"
-                    style={{ opacity: 0.45 }}
+                    width={16}
+                    height={16}
+                    className="text-neutral-400 opacity-45"
                   />
                   <span className="text-xs text-neutral-400">{model.name}</span>
                 </div>
