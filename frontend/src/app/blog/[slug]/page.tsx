@@ -12,11 +12,17 @@ import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { sanitizeHtml } from "@/lib/utils/sanitize-html";
 import { serializeJsonForHtml } from "@/lib/utils/safe-json";
-import { getPostBySlug, formatDate, getAllPostSlugs } from "@/lib/blog";
+// Dynamic imports — these use `fs` which may not be available on all serverless runtimes
+// import { getPostBySlug, formatDate, getAllPostSlugs } from "@/lib/blog";
 import { MarkdownRenderer } from "@/components/blog/markdown-renderer";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
+}
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
 }
 
 /* ------------------------------------------------------------------ */
@@ -26,7 +32,8 @@ interface PageProps {
 export async function generateStaticParams() {
   let slugs: string[] = [];
   try {
-    slugs = getAllPostSlugs();
+    const blog = await import("@/lib/blog");
+    slugs = blog.getAllPostSlugs();
   } catch {
     // fs read may fail on serverless (Vercel) — that's ok
   }
@@ -1390,7 +1397,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // Only try markdown if no hardcoded content exists
   let markdownPost = null;
   try {
-    markdownPost = getPostBySlug(slug);
+    const blog = await import("@/lib/blog");
+    markdownPost = blog.getPostBySlug(slug);
   } catch {
     // fs read may fail on serverless (Vercel) — that's ok
   }
@@ -1427,7 +1435,8 @@ export default async function BlogPost({ params }: PageProps) {
   let markdownPost = null;
   if (!post) {
     try {
-      markdownPost = getPostBySlug(slug);
+      const blog = await import("@/lib/blog");
+      markdownPost = blog.getPostBySlug(slug);
     } catch {
       // fs read may fail on serverless (Vercel) — that's ok
     }
