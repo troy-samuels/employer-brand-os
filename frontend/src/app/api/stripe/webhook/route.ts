@@ -25,9 +25,37 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 /* Plan mapping                                                        */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Maps Stripe Price IDs → OpenRole plan names.
+ *
+ * Plan tiers (Feb 2026):
+ *   starter  — £59/mo (£49 annual) — diagnostic only, no playbook
+ *   growth   — £179/mo (£149 annual) — full solution + playbook + competitors
+ *   scale    — £449/mo (£379 annual) — unlimited benchmarks, API, strategy calls
+ *
+ * Env vars to set in .env.local / Vercel:
+ *   NEXT_PUBLIC_STRIPE_PRICE_STARTER   → Starter monthly price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH    → Growth monthly price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_SCALE     → Scale monthly price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL → Starter annual price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL  → Growth annual price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL   → Scale annual price ID
+ *
+ * Legacy env vars (kept for backwards compat):
+ *   NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY → maps to "starter"
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE → maps to "growth"
+ */
 const PRICE_TO_PLAN: Record<string, string> = {
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "visibility",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "compliance",
+  // New plan-specific price IDs
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? ""]: "starter",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? ""]: "growth",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? ""]: "scale",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? ""]: "starter",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? ""]: "growth",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? ""]: "scale",
+  // Legacy mappings
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "starter",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "growth",
 };
 
 function resolvePlanName(priceId: string | null | undefined): string {

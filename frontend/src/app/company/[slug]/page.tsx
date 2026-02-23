@@ -27,6 +27,7 @@ import {
   Users,
   Zap,
   MessageSquare,
+  Download,
 } from "lucide-react";
 
 import { untypedTable } from "@/lib/supabase/untyped-table";
@@ -534,12 +535,20 @@ export default async function CompanyPage({ params }: PageProps) {
                   </div>
                 </div>
 
-                {/* Share */}
-                <div className="mt-6">
+                {/* Share + Download */}
+                <div className="mt-6 flex flex-wrap items-center gap-3">
                   <ShareButtons
                     url={`https://openrole.co.uk/company/${slug}`}
                     title={`${displayName} scores ${audit.score}/100 on AI Employer Visibility`}
                   />
+                  <a
+                    href={`/api/pdf/briefing/${slug}`}
+                    download
+                    className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors shadow-sm"
+                  >
+                    <Download className="h-4 w-4" />
+                    Download PDF Briefing
+                  </a>
                 </div>
               </div>
 

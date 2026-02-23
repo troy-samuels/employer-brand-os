@@ -1,18 +1,31 @@
 /**
  * @module app/pricing/page
- * Standalone pricing page — value-based tiers with annual toggle.
+ * Standalone pricing page — value-based tiers with annual toggle,
+ * competitor price anchoring, and ROI framing.
  */
 
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
-import { Check, ArrowRight, Zap, TrendingUp, Building2, Shield } from "lucide-react";
+import {
+  Check,
+  ArrowRight,
+  Zap,
+  TrendingUp,
+  Building2,
+  Shield,
+  X,
+  Calculator,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
-import { CheckoutButton, ContactSalesButton } from "@/components/pricing/checkout-button";
+import {
+  CheckoutButton,
+  ContactSalesButton,
+} from "@/components/pricing/checkout-button";
 import { BASE_URL, SITE_NAME, generateProductSchema, JsonLd } from "@/lib/seo";
 
 /* ------------------------------------------------------------------ */
@@ -23,56 +36,74 @@ const plans = [
   {
     name: "Starter",
     icon: Zap,
-    monthlyPrice: 49,
-    annualPrice: 39,
-    description: "Weekly monitoring and templates to start filling the gaps.",
+    monthlyPrice: 59,
+    annualPrice: 49,
+    audience: "Up to 100 employees",
+    description:
+      "See the problem. Weekly monitoring and gap alerts so you know what AI gets wrong.",
     features: [
       "Weekly AI monitoring across 4 models",
-      "Full Information Gap Report",
-      "5 content templates per month",
-      "Email alerts when AI changes answers",
       "AI Visibility Score tracking",
+      "Top 3 information gap alerts",
+      "Email alerts when AI changes answers",
+      "Company scorecard page",
+      "PDF briefing download",
     ],
-    cta: "Get started",
+    notIncluded: [
+      "Content Playbook",
+      "Competitor benchmarks",
+      "Hallucination alerts",
+    ],
+    cta: "Start monitoring",
     href: "/signup?plan=starter",
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? null,
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? null,
   },
   {
     name: "Growth",
     icon: TrendingUp,
-    monthlyPrice: 149,
-    annualPrice: 119,
+    monthlyPrice: 179,
+    annualPrice: 149,
+    audience: "100–1,000 employees",
     description:
-      "The full Content Playbook — what to publish, where, and how.",
+      "The full solution. See the gaps, get the playbook, track competitors, fix your AI reputation.",
     features: [
       "Everything in Starter",
       "Full Content Playbook (what, where, how)",
-      "Competitor benchmarking vs 2 rivals",
+      "Gap-specific content templates",
+      "3 competitor benchmarks",
+      "Hallucination detection & alerts",
       "Interview prep monitoring",
+      "Slack & email notifications",
       "Priority UK Visibility Index listing",
     ],
-    cta: "Get started",
+    cta: "Get the full playbook",
     href: "/signup?plan=growth",
     highlighted: true,
-    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? null,
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? null,
   },
   {
     name: "Scale",
     icon: Building2,
-    monthlyPrice: 399,
-    annualPrice: 319,
+    monthlyPrice: 449,
+    annualPrice: 379,
+    audience: "1,000+ employees",
     description:
-      "Done-for-you content, unlimited benchmarks, and board reporting.",
+      "Enterprise-grade monitoring with unlimited benchmarks, API access, and strategic reviews.",
     features: [
       "Everything in Growth",
       "Unlimited competitor benchmarks",
-      "Done-for-you content drafts (monthly)",
-      "ATS/careers page integration API",
-      "Custom board reporting",
+      "Multi-location monitoring",
+      "ATS & careers page integration API",
+      "Custom branded PDF reports",
+      "Quarterly strategy review call",
+      "Priority support",
     ],
-    cta: "Contact sales",
-    href: "/signup?plan=scale",
-    priceId: null,
+    cta: "Talk to us",
+    href: "mailto:hello@openrole.co.uk?subject=Scale%20plan%20enquiry",
+    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? null,
+    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? null,
   },
 ];
 
@@ -83,12 +114,37 @@ const enterprise = {
   features: [
     "Everything in Scale",
     "Multi-brand support",
-    "Custom integrations",
+    "SSO & custom integrations",
     "Dedicated account manager",
     "SLA on monitoring accuracy",
     "Custom reporting & data exports",
   ],
 };
+
+/** What employers already spend — used for price anchoring */
+const anchors = [
+  {
+    name: "Glassdoor Enhanced Profile",
+    cost: "£5,000–15,000/yr",
+    note: "Review management for one platform. No AI monitoring.",
+  },
+  {
+    name: "LinkedIn Recruiter (1 seat)",
+    cost: "£8,000–15,000/yr",
+    note: "Candidate sourcing. Doesn't fix employer narrative.",
+  },
+  {
+    name: "Employer brand agency",
+    cost: "£15,000–50,000/project",
+    note: "One-off. No ongoing monitoring or playbook.",
+  },
+  {
+    name: "OpenRole Growth",
+    cost: "£1,788/yr",
+    note: "Weekly monitoring + content playbook across 4 AI models.",
+    highlight: true,
+  },
+];
 
 const faqs = [
   {
@@ -97,19 +153,31 @@ const faqs = [
   },
   {
     q: "What's in the Content Playbook?",
-    a: "For each information gap we find, you get: what to publish (the specific content), where to publish it (your careers page, blog, FAQ section), how to format it (AI-friendly structure), and a ready-to-edit template. Most gaps take 20-30 minutes to fill.",
+    a: "For each information gap we find, you get: what to publish (the specific content), where to publish it (your careers page, blog, FAQ section), how to format it (AI-friendly structure), and a ready-to-edit template. Most gaps take 20–30 minutes to fill.",
+  },
+  {
+    q: "What's the difference between Starter and Growth?",
+    a: "Starter shows you the problem — what AI gets wrong and where the gaps are. Growth gives you the solution — a full content playbook with templates, competitor benchmarks, and hallucination detection. Most companies upgrade once they see their gaps.",
   },
   {
     q: "Can you actually change what AI says about us?",
-    a: "Nobody can control AI outputs directly. But when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2-4 weeks of publishing.",
+    a: "Nobody can control AI outputs directly. But when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2–4 weeks of publishing.",
   },
   {
     q: "How is this different from Glassdoor?",
     a: "Glassdoor handles opinions — reviews, ratings, anonymous feedback. OpenRole handles facts — salary bands, specific benefits, interview process, remote policy. These are the questions Glassdoor can't answer accurately, and they're exactly what AI struggles with.",
   },
   {
+    q: "Can I switch plans?",
+    a: "Yes — upgrade or downgrade any time. Changes take effect immediately when upgrading, or at your next billing cycle when downgrading.",
+  },
+  {
     q: "Is there a contract?",
-    a: "Monthly plans cancel anytime. Annual plans are paid upfront with a 20% discount. No lock-in beyond what you've paid for.",
+    a: "No long-term contracts. Monthly plans cancel anytime. Annual plans are paid upfront with a discount — no lock-in beyond what you've paid for.",
+  },
+  {
+    q: "How quickly will I see results?",
+    a: "Most companies see AI answer changes within 2–4 weeks of publishing recommended content. Your weekly report tracks exactly which gaps have been filled and which AI models are now citing your content.",
   },
   {
     q: "Do you offer agency pricing?",
@@ -122,7 +190,7 @@ const faqs = [
 /* ------------------------------------------------------------------ */
 
 export default function PricingPage() {
-  const [annual, setAnnual] = useState(false);
+  const [annual, setAnnual] = useState(true);
 
   const productSchema = generateProductSchema({
     name: `${SITE_NAME} — AI Employer Visibility Platform`,
@@ -130,9 +198,9 @@ export default function PricingPage() {
       "See what AI tells your candidates. Find the information gaps. Get the content playbook to take control. Weekly monitoring across ChatGPT, Claude, Perplexity and Gemini.",
     url: `${BASE_URL}/pricing`,
     offers: [
-      { name: "Starter Plan", price: "49", priceCurrency: "GBP" },
-      { name: "Growth Plan", price: "149", priceCurrency: "GBP" },
-      { name: "Scale Plan", price: "399", priceCurrency: "GBP" },
+      { name: "Starter Plan", price: "59", priceCurrency: "GBP" },
+      { name: "Growth Plan", price: "179", priceCurrency: "GBP" },
+      { name: "Scale Plan", price: "449", priceCurrency: "GBP" },
     ],
   });
 
@@ -149,11 +217,11 @@ export default function PricingPage() {
           <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24 text-center">
             <p className="overline mb-4">Pricing</p>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
-              One wrong salary in ChatGPT costs you a hire
+              Fix what AI tells candidates about you
             </h1>
             <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-              The free audit is always free. Plans start when you want weekly
-              monitoring and the content playbook.
+              Plans that pay for themselves with a single better hire. The free
+              audit is always free.
             </p>
 
             {/* ── Billing toggle ─────────────────────── */}
@@ -178,7 +246,7 @@ export default function PricingPage() {
               >
                 Annual
                 <span className="ml-1.5 text-xs font-semibold text-teal-600">
-                  Save 20%
+                  Save 17%
                 </span>
               </button>
             </div>
@@ -213,6 +281,9 @@ export default function PricingPage() {
             <div className="grid gap-6 md:grid-cols-3 items-start">
               {plans.map((plan) => {
                 const price = annual ? plan.annualPrice : plan.monthlyPrice;
+                const priceId = annual
+                  ? (plan.annualPriceId ?? plan.monthlyPriceId)
+                  : plan.monthlyPriceId;
                 const Icon = plan.icon;
 
                 return (
@@ -241,9 +312,14 @@ export default function PricingPage() {
                             strokeWidth={2}
                           />
                         </div>
-                        <h3 className="text-base font-semibold text-slate-900">
-                          {plan.name}
-                        </h3>
+                        <div>
+                          <h3 className="text-base font-semibold text-slate-900">
+                            {plan.name}
+                          </h3>
+                          <p className="text-xs text-slate-400">
+                            {plan.audience}
+                          </p>
+                        </div>
                       </div>
 
                       <div className="flex items-baseline gap-1">
@@ -267,13 +343,18 @@ export default function PricingPage() {
                           Billed annually (£{price * 12}/year)
                         </p>
                       )}
+                      {!annual && plan.annualPrice < plan.monthlyPrice && (
+                        <p className="text-xs text-teal-600 mt-1">
+                          £{plan.annualPrice}/mo when billed annually
+                        </p>
+                      )}
 
                       <p className="text-slate-600 text-sm mt-3 leading-relaxed">
                         {plan.description}
                       </p>
                     </div>
 
-                    <ul className="space-y-3 mb-8">
+                    <ul className="space-y-3 mb-4">
                       {plan.features.map((feature) => (
                         <li
                           key={feature}
@@ -288,12 +369,52 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    {plan.priceId ? (
+                    {/* Show what's NOT included on Starter — drives upgrade */}
+                    {plan.notIncluded && (
+                      <div className="mb-6 pt-3 border-t border-slate-100">
+                        <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider mb-2">
+                          Upgrade to unlock
+                        </p>
+                        <ul className="space-y-2">
+                          {plan.notIncluded.map((item) => (
+                            <li
+                              key={item}
+                              className="flex items-start gap-2.5 text-sm text-slate-400"
+                            >
+                              <X
+                                className="h-4 w-4 text-slate-300 mt-0.5 shrink-0"
+                                strokeWidth={1.5}
+                              />
+                              <span className="line-through decoration-slate-200">
+                                {item}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+
+                    {!plan.notIncluded && <div className="mb-6" />}
+
+                    {priceId ? (
                       <CheckoutButton
-                        priceId={plan.priceId}
+                        priceId={priceId}
                         label={plan.cta}
                         highlighted={plan.highlighted}
                       />
+                    ) : plan.href.startsWith("/signup") ? (
+                      /* No Stripe price configured yet — link to signup */
+                      <Link
+                        href={plan.href}
+                        className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+                          plan.highlighted
+                            ? "bg-brand-accent text-white hover:bg-brand-accent-hover shadow-md shadow-brand-accent/20"
+                            : "bg-slate-100 text-slate-900 hover:bg-neutral-200"
+                        }`}
+                      >
+                        {plan.cta}
+                        <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                      </Link>
                     ) : (
                       <ContactSalesButton />
                     )}
@@ -321,7 +442,7 @@ export default function PricingPage() {
                     </span>
                   </div>
                   <p className="text-sm text-slate-500 max-w-lg">
-                    For organisations that need multi-brand support, custom
+                    For organisations that need multi-brand support, SSO, custom
                     integrations, and SLA-backed monitoring accuracy.
                   </p>
                 </div>
@@ -365,6 +486,95 @@ export default function PricingPage() {
                 </a>{" "}
                 — from £99/month per client.
               </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Competitor price anchoring ──────────────── */}
+        <section className="border-t border-slate-200 bg-white py-16 lg:py-20">
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <p className="overline mb-4">For context</p>
+            <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 tracking-tight mb-3">
+              What UK employers already spend on reputation
+            </h2>
+            <p className="text-sm text-slate-500 mb-10 max-w-lg mx-auto">
+              These tools manage reviews and job distribution — none of them
+              monitor or fix what AI tells your candidates.
+            </p>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {anchors.map((anchor) => (
+                <div
+                  key={anchor.name}
+                  className={`rounded-xl border p-5 text-left transition-all ${
+                    anchor.highlight
+                      ? "border-teal-200 bg-teal-50/50 ring-1 ring-teal-100"
+                      : "border-slate-200 bg-slate-50/50"
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <p
+                      className={`text-sm font-semibold ${
+                        anchor.highlight ? "text-teal-700" : "text-slate-900"
+                      }`}
+                    >
+                      {anchor.name}
+                    </p>
+                    {anchor.highlight && (
+                      <span className="inline-flex items-center rounded-full bg-teal-100 px-2 py-0.5 text-[10px] font-semibold text-teal-700">
+                        You are here
+                      </span>
+                    )}
+                  </div>
+                  <p
+                    className={`text-xl font-bold tabular-nums mb-1 ${
+                      anchor.highlight ? "text-teal-600" : "text-slate-900"
+                    }`}
+                  >
+                    {anchor.cost}
+                  </p>
+                  <p className="text-xs text-slate-500">{anchor.note}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* ROI nudge */}
+            <div className="mt-8 flex items-center justify-center gap-2">
+              <Calculator className="h-4 w-4 text-slate-400" />
+              <Link
+                href="/roi-calculator"
+                className="text-sm font-medium text-brand-accent hover:underline"
+              >
+                Calculate your ROI →
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Cost-per-employee framing ───────────────── */}
+        <section className="border-t border-slate-200 bg-slate-50 py-12">
+          <div className="mx-auto max-w-3xl px-6">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 lg:p-8">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-base font-semibold text-slate-900 mb-1">
+                    Less than a coffee per employee per month
+                  </h3>
+                  <p className="text-sm text-slate-500">
+                    Growth plan at £149/mo for a 500-person company ={" "}
+                    <span className="font-semibold text-slate-700">
+                      £0.30 per employee
+                    </span>
+                    . One better hire pays for 16 years of OpenRole.
+                  </p>
+                </div>
+                <div className="text-right shrink-0">
+                  <p className="text-3xl font-bold text-teal-600 tabular-nums">
+                    16:1
+                  </p>
+                  <p className="text-xs text-slate-400">Typical ROI</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
