@@ -1,7 +1,6 @@
 /**
  * @module components/landing/pricing
- * Three-tier pricing preview: Control / Compete / Command.
- * Annual prices shown by default. Compete highlighted.
+ * Clean three-tier pricing preview. Annual prices. Compete highlighted.
  */
 
 "use client";
@@ -17,22 +16,22 @@ const plans = [
   {
     name: "Control",
     price: "£119",
-    description: "Monitor & start fixing",
+    subtitle: "Monitor & start fixing",
     features: [
-      "Full audit suite + AEO content",
       "Weekly monitoring across 4 AI models",
       "Content playbook + brand defence",
+      "Embeddable JS snippet",
       "1 competitor benchmark",
     ],
   },
   {
     name: "Compete",
     price: "£239",
+    subtitle: "Outmanoeuvre competitors",
     highlighted: true,
-    description: "Outmanoeuvre competitors",
     features: [
       "Everything in Control",
-      "5 competitor benchmarks + displacement",
+      "5 competitors + displacement reports",
       "ATS integration + proof tracking",
       "Custom branded reports",
     ],
@@ -40,10 +39,10 @@ const plans = [
   {
     name: "Command",
     price: "£479",
-    description: "Full ownership + API",
+    subtitle: "Full ownership + API",
     features: [
       "Everything in Compete",
-      "Unlimited competitors + API access",
+      "Unlimited competitors + API",
       "Dedicated account manager",
       "Quarterly strategy calls",
     ],
@@ -67,13 +66,12 @@ export default function Pricing() {
           >
             Monitor. Compete. Command.
           </h2>
-          <p className="text-neutral-400 mt-3 max-w-md mx-auto text-sm">
-            Free audits forever. Paid plans to take control of what AI tells your candidates.
-            Prices shown billed annually.
+          <p className="text-neutral-400 mt-3 max-w-sm mx-auto text-sm">
+            Free audits forever. Prices shown billed annually.
           </p>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-3 items-center">
+        <div className="grid gap-5 md:grid-cols-3 items-center">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
@@ -84,29 +82,30 @@ export default function Pricing() {
               className={cn(
                 "relative rounded-2xl p-7 transition-all duration-300",
                 plan.highlighted
-                  ? "bg-neutral-950 border border-white/10 shadow-2xl shadow-black/20 md:scale-105 md:py-10"
-                  : "bg-transparent border border-neutral-200"
+                  ? "bg-neutral-950 md:scale-[1.03] md:py-9"
+                  : "bg-neutral-50 border border-neutral-200/60"
               )}
             >
               {plan.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-accent px-3 py-1 text-[10px] font-semibold text-white tracking-wide">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-brand-accent px-4 py-1 text-[10px] font-semibold text-white tracking-wide">
                   Most popular
                 </span>
               )}
 
-              <h3 className={cn(
+              <p className={cn(
                 "text-sm font-semibold",
                 plan.highlighted ? "text-white" : "text-neutral-950"
               )}>
                 {plan.name}
-              </h3>
-              <p className={cn(
-                "text-xs mt-1",
-                plan.highlighted ? "text-neutral-400" : "text-neutral-400"
-              )}>
-                {plan.description}
               </p>
-              <div className="mt-4 flex items-baseline gap-1">
+              <p className={cn(
+                "text-xs mt-0.5",
+                "text-neutral-400"
+              )}>
+                {plan.subtitle}
+              </p>
+
+              <div className="mt-5 flex items-baseline gap-1">
                 <span
                   className={cn(
                     "text-3xl font-medium",
@@ -116,19 +115,14 @@ export default function Pricing() {
                 >
                   {plan.price}
                 </span>
-                <span className={cn(
-                  "text-sm",
-                  plan.highlighted ? "text-neutral-400" : "text-neutral-400"
-                )}>
-                  /mo
-                </span>
+                <span className="text-sm text-neutral-400">/mo</span>
               </div>
 
               {plan.highlighted && (
-                <div className="mt-3 flex items-start gap-2 rounded-lg bg-white/5 border border-white/10 px-3 py-2">
-                  <Lock className="h-3 w-3 text-teal-400 mt-0.5 shrink-0" />
-                  <p className="text-[11px] text-neutral-400 leading-relaxed">
-                    Founding rate £199/mo — locked forever for first 20 customers
+                <div className="mt-3 flex items-center gap-2 rounded-lg bg-white/[0.06] border border-white/[0.08] px-3 py-2">
+                  <Lock className="h-3 w-3 text-teal-400 shrink-0" />
+                  <p className="text-[11px] text-neutral-400 leading-snug">
+                    Founding: <strong className="text-neutral-300">£199/mo</strong> locked forever
                   </p>
                 </div>
               )}
@@ -138,14 +132,14 @@ export default function Pricing() {
                   <li
                     key={f}
                     className={cn(
-                      "flex items-center gap-2 text-sm",
+                      "flex items-center gap-2 text-[13px]",
                       plan.highlighted ? "text-neutral-300" : "text-neutral-400"
                     )}
                   >
                     <Check
                       className={cn(
                         "h-3.5 w-3.5 shrink-0",
-                        plan.highlighted ? "text-brand-accent" : "text-neutral-300"
+                        plan.highlighted ? "text-teal-400" : "text-neutral-300"
                       )}
                       strokeWidth={2.5}
                     />
@@ -157,21 +151,23 @@ export default function Pricing() {
           ))}
         </div>
 
-        <motion.div
-          className="mt-10 text-center"
-          initial={{ opacity: 1 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, amount: 0.05 }}
-          transition={{ delay: 0.3 }}
-        >
+        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href="/pricing"
+            href="/#audit"
             className="inline-flex items-center gap-1.5 text-sm text-neutral-400 hover:text-neutral-950 transition-colors"
           >
-            Full pricing, comparison & FAQ
+            See what AI says about you right now
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
-        </motion.div>
+          <span className="hidden sm:block text-neutral-200">·</span>
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-neutral-950 hover:text-neutral-700 transition-colors"
+          >
+            Full pricing & FAQ
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
       </div>
     </section>
   );
