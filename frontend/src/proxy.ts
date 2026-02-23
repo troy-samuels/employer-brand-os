@@ -15,7 +15,23 @@ const publicRoutes = [
   "/auth/callback",
   "/verify",
   "/how-we-score",
+  "/how-it-works",
   "/demo",
+  "/pricing",
+  "/blog",
+  "/faq",
+  "/compare",
+  "/company",
+  "/audit",
+  "/fix",
+  "/uk-index",
+  "/sample-report",
+  "/roi-calculator",
+  "/tools",
+  "/security",
+  "/privacy",
+  "/terms",
+  "/dpa",
 ];
 
 const apiPublicRoutes = [
@@ -24,6 +40,11 @@ const apiPublicRoutes = [
   "/api/pixel",
   "/api/jobs",
   "/api/analytics",
+  "/api/badge",
+  "/api/compare",
+  "/api/nominate",
+  "/api/snippet",
+  "/api/companies/search",
 ];
 
 const mutatingMethods = new Set(["POST", "PUT", "DELETE"]);
@@ -264,6 +285,22 @@ export async function proxy(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-openrole-csp-nonce", nonce);
 
+  // ── Fast path: skip Supabase auth for public routes ──
+  // This avoids a network roundtrip to Supabase on every public page load.
+  const isPublic = publicRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
+  const isApiPublic = apiPublicRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
+  if (isPublic || isApiPublic) {
+    const response = NextResponse.next({ request: { headers: requestHeaders } });
+    return withSecurityHeaders(response, pathname, nonce);
+  }
+
+  // ── Authenticated path: refresh session via Supabase ──
   let supabaseResponse = NextResponse.next({
     request: {
       headers: requestHeaders,
@@ -298,18 +335,6 @@ export async function proxy(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const isPublic = publicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  );
-
-  const isApiPublic = apiPublicRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  );
-
-  if (isPublic || isApiPublic) {
-    return withSecurityHeaders(supabaseResponse, pathname, nonce);
-  }
 
   if (!user && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
