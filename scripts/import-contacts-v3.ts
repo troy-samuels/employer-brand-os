@@ -484,11 +484,20 @@ async function flushCompanies(stats: Stats): Promise<void> {
     return;
   }
 
+  // Deduplicate batch by company name (multiple domains can map to same company)
+  const dedupedByName = new Map<string, { name: string; domain: string }>();
+  for (const c of batch) {
+    if (!dedupedByName.has(c.name)) {
+      dedupedByName.set(c.name, c);
+    }
+  }
+  const uniqueBatch = Array.from(dedupedByName.values());
+
   // Upsert companies — ON CONFLICT (name) DO UPDATE to get back the ID and update domain
   const { data, error } = await supabase
     .from('companies')
     .upsert(
-      batch.map(c => ({ name: c.name, domain: c.domain })),
+      uniqueBatch.map(c => ({ name: c.name, domain: c.domain })),
       { onConflict: 'name', ignoreDuplicates: false }
     )
     .select('id, name, domain');
