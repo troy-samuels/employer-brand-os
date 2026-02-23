@@ -132,7 +132,7 @@ const faqs: FaqEntry[] = [
     slug: "which-plan-do-i-need",
     question: "Which plan is right for my company?",
     summary:
-      "Plans are based on company size. Startup (£49/mo, 1–50 employees) gives you the full audit suite with monthly monitoring and 1 competitor benchmark. Growth (£99/mo, 51–250 employees) adds weekly monitoring, 3 competitor benchmarks, ATS integration, and the content playbook. Scale (£249/mo, 250+ employees) includes daily monitoring, unlimited competitors, and dedicated snippet optimisation.",
+      "There are two plans: Free and Pro. Free gives you unlimited audits — run as many as you want, no signup needed. Pro (£79/mo) is everything: weekly monitoring, competitor reports, content playbook, ATS integration, embeddable snippet, brand defence alerts, and proof tracking. One plan, everything included, any company size.",
     category: "Pricing & Plans",
   },
 ];

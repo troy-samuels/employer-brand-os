@@ -245,7 +245,7 @@ function LlmTeaser({ companyName }: { companyName: string }) {
       </a>
 
       <p className="text-[11px] text-slate-400 text-center mt-2.5">
-        Full reports check {LLM_MODELS.length} AI models. Plans start at £49/mo.
+        Full reports check {LLM_MODELS.length} AI models. Pro plan £79/mo — everything included.
       </p>
     </motion.div>
   );

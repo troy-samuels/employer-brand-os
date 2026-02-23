@@ -81,8 +81,8 @@ export function renderNurtureDay7Email({
                   <td style="padding: 20px 24px; background: #f0fdfa;">
                     <p style="margin: 0 0 8px; font-size: 14px; font-weight: 700; color: #0d9488;">🚀 Founding Member Offer</p>
                     <p style="margin: 0 0 12px; font-size: 14px; color: #334155; line-height: 1.5;">
-                      We're onboarding our first 10 customers at <strong>£99/month</strong> (locked for 12 months) —
-                      that's the full Growth plan including content playbook, competitor benchmarking, and hallucination alerts.
+                      We're onboarding our first 20 customers at <strong>£79/month</strong> (locked forever, normally £99/mo) —
+                      that's the full Pro plan including content playbook, competitor benchmarking, and brand defence alerts.
                     </p>
                     <a href="${pricingUrl}?ref=founding" style="display: inline-block; padding: 10px 20px; background: #0d9488; color: #ffffff; text-decoration: none; border-radius: 6px; font-size: 13px; font-weight: 600;">Claim your founding spot →</a>
                   </td>

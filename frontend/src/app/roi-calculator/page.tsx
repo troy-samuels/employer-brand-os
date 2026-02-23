@@ -50,8 +50,8 @@ const ASSUMPTIONS = {
   pctOfferDeclineDueToResearch: 0.15,
   /** Average cost per bad hire (CIPD research) */
   avgCostBadHireMultiplier: 3.5,
-  /** Monthly cost of OpenRole Growth plan */
-  openroleMonthlyCost: 149,
+  /** Monthly cost of OpenRole Pro plan */
+  openroleMonthlyCost: 79,
 };
 
 /* ------------------------------------------------------------------ */
@@ -303,7 +303,7 @@ export default function RoiCalculatorPage() {
                         return on your OpenRole investment
                       </p>
                       <p className="text-xs text-slate-400 mt-2">
-                        Growth plan (£{ASSUMPTIONS.openroleMonthlyCost}/mo = £{results.openroleAnnualCost.toLocaleString("en-GB")}/yr) could
+                        Pro plan (£{ASSUMPTIONS.openroleMonthlyCost}/mo = £{results.openroleAnnualCost.toLocaleString("en-GB")}/yr) could
                         save £{results.potentialSavings.toLocaleString("en-GB")}/yr by closing information gaps.
                       </p>
                     </div>

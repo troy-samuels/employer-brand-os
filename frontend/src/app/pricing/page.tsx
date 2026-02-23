@@ -1,6 +1,6 @@
 /**
  * @module app/pricing/page
- * Pricing page — Company-size tiers (Free + Startup + Growth + Scale + Enterprise)
+ * Pricing page — Flat two-tier (Free + Pro) + Enterprise
  * Legal-compliant framing: "maximize probability", never "guarantee"
  */
 
@@ -12,12 +12,9 @@ import {
   Check,
   ArrowRight,
   Zap,
-  Rocket,
   Building2,
-  TrendingUp,
   Shield,
   Lock,
-  Users,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -33,117 +30,70 @@ import { BASE_URL, SITE_NAME, generateProductSchema, JsonLd } from "@/lib/seo";
 /* Data                                                                */
 /* ------------------------------------------------------------------ */
 
-const plans = [
-  {
-    name: "Free",
-    icon: Zap,
-    price: 0,
-    size: "Any size",
-    audience: "See what AI says about you",
-    description:
-      "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. No signup needed.",
-    features: [
-      "Unlimited AI visibility audits",
-      "PDF audit report download",
-      "Basic llms.txt generator",
-      "Employer Schema generator",
-      "Company scorecard page",
-      "Badge for your website",
-    ],
-    cta: "Get started free",
-    href: "/signup?plan=free",
-    priceId: null,
-  },
-  {
-    name: "Startup",
-    icon: Rocket,
-    monthlyPrice: 49,
-    annualPrice: 39,
-    size: "1–50 employees",
-    audience: "Small teams ready to control their AI narrative",
-    description:
-      "Full audit suite with monthly monitoring — everything you need to start influencing what AI tells candidates.",
-    features: [
-      "Everything in Free",
-      "Employer questionnaire (self-serve data input)",
-      "Auto-generated AEO content (llms.txt, Schema.org, Markdown)",
-      "Embeddable JS snippet for careers page",
-      "AI monitoring dashboard (monthly score tracking)",
-      "1 competitor benchmark",
-      "Email reports & alerts",
-      "Email support",
-    ],
-    cta: "Start 14-day trial",
-    href: "/signup?plan=startup",
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTUP ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTUP_ANNUAL ?? null,
-  },
-  {
-    name: "Growth",
-    icon: Building2,
-    monthlyPrice: 99,
-    annualPrice: 79,
-    size: "51–250 employees",
-    audience: "Scaling teams competing for talent",
-    description:
-      "Weekly monitoring, competitor intelligence, and a full content playbook to close every gap AI finds.",
-    features: [
-      "Everything in Startup",
-      "Weekly monitoring (vs monthly)",
-      "3 competitor benchmarks",
-      "Competitor displacement reports",
-      "Brand defence alerts (negative third-party content)",
-      "Content playbook with templates",
-      "ATS integration (Greenhouse, Lever, Ashby)",
-      "Proof tracking (before/after case studies)",
-      "Priority email support",
-    ],
-    badge: "🔒 Founding rate — £99/mo locked for first 20 customers",
-    cta: "Start 14-day trial",
-    href: "/signup?plan=growth",
-    highlighted: true,
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? null,
-  },
-  {
-    name: "Scale",
-    icon: TrendingUp,
-    monthlyPrice: 249,
-    annualPrice: 199,
-    size: "250+ employees",
-    audience: "Mid-market employers with serious hiring volume",
-    description:
-      "Daily monitoring, unlimited competitors, and dedicated snippet optimisation for maximum AI visibility.",
-    features: [
-      "Everything in Growth",
-      "Daily monitoring (vs weekly)",
-      "Unlimited competitor benchmarks",
-      "Dedicated snippet optimisation",
-      "Custom branded reports",
-      "Priority support",
-    ],
-    cta: "Start 14-day trial",
-    href: "/signup?plan=scale",
-    monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? null,
-    annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? null,
-  },
-];
+const freePlan = {
+  name: "Free",
+  icon: Zap,
+  audience: "See what AI says about you",
+  description:
+    "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. No signup, no credit card.",
+  features: [
+    "Unlimited AI visibility audits",
+    "PDF audit report download",
+    "Basic llms.txt generator",
+    "Employer Schema generator",
+    "Company scorecard page",
+    "Badge for your website",
+  ],
+  cta: "Run your free audit",
+  href: "/#audit",
+};
+
+const proPlan = {
+  name: "Pro",
+  icon: Building2,
+  monthlyPrice: 79,
+  annualPrice: 59,
+  audience: "For employers who want to influence what AI says",
+  description:
+    "The complete toolkit. Monitoring, content, competitors, integrations — everything you need to take control of your AI employer brand.",
+  features: [
+    "Everything in Free",
+    "Employer questionnaire (self-serve data input)",
+    "Auto-generated AEO content (llms.txt, Schema.org, Markdown)",
+    "Embeddable JS snippet for careers page",
+    "AI monitoring dashboard (weekly score tracking)",
+    "Competitor displacement reports (3 competitors)",
+    "Brand defence alerts (negative third-party content)",
+    "Content playbook with templates",
+    "ATS integration (Greenhouse, Lever, Ashby)",
+    "Proof tracking (before/after case studies)",
+    "Email support",
+  ],
+  badge: "🔒 Founding rate — £79/mo locked forever (normally £99/mo). First 20 customers only.",
+  cta: "Start 14-day trial",
+  href: "/signup?plan=pro",
+  monthlyPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? null,
+  annualPriceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? null,
+};
 
 const enterprise = {
   name: "Enterprise",
-  audience: "1,000+ employees — multi-brand or custom requirements",
   icon: Shield,
+  audience: "Multi-brand or custom requirements",
   price: "From £800/month",
   description:
-    "For large organisations that need multi-brand support, API access, and SLA-backed accuracy.",
+    "For large organisations that need multi-brand support, API access, and SLA-backed service.",
   features: [
-    "Everything in Scale",
+    "Everything in Pro",
+    "Unlimited competitors",
     "Multi-brand/division support",
     "API access",
+    "Custom branded reports",
     "Dedicated account management",
     "SSO/SAML",
     "SLA",
     "Quarterly strategy calls",
+    "Priority support",
   ],
   cta: "Book a demo",
 };
@@ -152,23 +102,23 @@ const enterprise = {
 const anchors = [
   {
     name: "Glassdoor Employer Branding",
-    cost: "£5,000 - £15,000/year",
+    cost: "£5,000 – £15,000/year",
     note: "Review management for one platform. No AI monitoring.",
   },
   {
     name: "LinkedIn Talent Insights",
-    cost: "£8,000 - £15,000/year",
+    cost: "£8,000 – £15,000/year",
     note: "Candidate sourcing. Doesn't influence AI narratives.",
   },
   {
     name: "Employer Brand Agency",
-    cost: "£15,000 - £50,000/project",
+    cost: "£15,000 – £50,000/project",
     note: "One-off. No ongoing monitoring or content system.",
   },
   {
-    name: "OpenRole",
-    cost: "From £468/year",
-    note: "AI monitoring + content playbook across 4 models. Plans from £39/mo.",
+    name: "OpenRole Pro",
+    cost: "£708/year",
+    note: "Weekly AI monitoring + content playbook across 4 models.",
     highlight: true,
   },
 ];
@@ -179,20 +129,20 @@ const faqs = [
     a: "Unlimited AI visibility audits across ChatGPT, Claude, Perplexity and Gemini. You see the actual AI responses about your company, a gap summary showing what AI can't answer, and your overall score. You also get access to basic tools like llms.txt and Schema.org generators. No signup needed for audits.",
   },
   {
-    q: "How do I know which plan is right for my company?",
-    a: "Plans are based on company size: Startup (1–50 employees), Growth (51–250), Scale (250+), and Enterprise (1,000+). Larger companies typically have more roles, more candidates, and a bigger AI footprint to manage — so higher tiers include more frequent monitoring, more competitor benchmarks, and deeper integrations.",
+    q: "What does Pro add?",
+    a: "Pro gives you everything you need to actually change what AI says about you: the embeddable snippet for your careers page, weekly monitoring across all 4 models, competitor displacement reports, the content playbook, ATS integration, brand defence alerts, and proof tracking. It's the full toolkit — no add-ons, no upsells.",
   },
   {
-    q: "Can I upgrade later?",
-    a: "Yes. You can upgrade at any time and your account transitions immediately. If your company grows past the employee threshold for your current plan, we'll work with you on timing — no surprise charges.",
+    q: "Can I upgrade or downgrade later?",
+    a: "Yes. Upgrade from Free to Pro at any time — your account transitions immediately. Downgrades take effect on your next billing cycle.",
   },
   {
     q: "Do you offer refunds?",
-    a: "Yes — 14-day money-back guarantee on all paid subscriptions. If you're not satisfied within the first 14 days, we'll refund you in full. No questions asked.",
+    a: "Yes — 14-day money-back guarantee on all Pro subscriptions. If you're not satisfied within the first 14 days, we'll refund you in full. No questions asked.",
   },
   {
-    q: "What's a 'founding member' rate?",
-    a: "Early Growth plan customers get £99/mo locked in forever — even as your company grows past 250 employees. You keep this rate as long as you remain a customer. It's our way of rewarding early adopters who help us refine the product.",
+    q: "What's the founding member rate?",
+    a: "The first 20 Pro customers get £79/mo locked in forever. That's the price you pay as long as you remain a customer — even when we raise prices to £99/mo for new signups. It's our way of rewarding early adopters who help us refine the product.",
   },
   {
     q: "How does the embeddable snippet work?",
@@ -200,7 +150,11 @@ const faqs = [
   },
   {
     q: "Will this actually change what AI says about us?",
-    a: "We build the optimal machine-readable data infrastructure to maximize the probability that AI models represent your employer brand accurately, using your verified data instead of third-party rumours. We can't control AI outputs directly — no one can — but when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2-4 weeks of publishing.",
+    a: "We build the optimal machine-readable data infrastructure to maximize the probability that AI models represent your employer brand accurately, using your verified data instead of third-party rumours. We can't control AI outputs directly — no one can — but when you publish clear, specific, dated content on your domain answering the questions candidates ask, AI finds it and cites it. We've seen companies shift from Glassdoor-sourced answers to careers-page-sourced answers within 2–4 weeks of publishing.",
+  },
+  {
+    q: "Is there a limit on company size or employees?",
+    a: "No. Pro works for companies of any size — from 5-person startups to 500-person scale-ups. If you're an enterprise (1,000+ employees) and need multi-brand support, API access, or SSO, get in touch about our Enterprise plan.",
   },
 ];
 
@@ -211,17 +165,20 @@ const faqs = [
 export default function PricingPage() {
   const [annual, setAnnual] = useState(true);
 
+  const proPrice = annual ? proPlan.annualPrice : proPlan.monthlyPrice;
+  const proPriceId = annual
+    ? (proPlan.annualPriceId ?? proPlan.monthlyPriceId)
+    : proPlan.monthlyPriceId;
+
   const productSchema = generateProductSchema({
     name: `${SITE_NAME} — AI Employer Visibility Platform`,
     description:
-      "Maximize the probability that AI tells candidates the truth about your company. Plans based on company size — from startups to enterprise.",
+      "Maximize the probability that AI tells candidates the truth about your company. One plan, everything included.",
     url: `${BASE_URL}/pricing`,
     offers: [
       { name: "Free Plan", price: "0", priceCurrency: "GBP" },
-      { name: "Startup Plan (1-50 employees)", price: "49", priceCurrency: "GBP" },
-      { name: "Growth Plan (51-250 employees)", price: "99", priceCurrency: "GBP" },
-      { name: "Scale Plan (250+ employees)", price: "249", priceCurrency: "GBP" },
-      { name: "Enterprise Plan (1000+ employees)", price: "800", priceCurrency: "GBP" },
+      { name: "Pro Plan", price: "79", priceCurrency: "GBP" },
+      { name: "Enterprise Plan", price: "800", priceCurrency: "GBP" },
     ],
   });
 
@@ -238,10 +195,10 @@ export default function PricingPage() {
           <div className="relative mx-auto max-w-3xl px-6 py-20 lg:py-24 text-center">
             <p className="overline mb-4">Pricing</p>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
-              Take control of what AI tells your candidates
+              One plan. Everything included.
             </h1>
             <p className="mt-5 text-lg text-slate-500 max-w-xl mx-auto leading-relaxed">
-              Join 100+ UK employers already managing their AI employer brand
+              Free audits forever. Pro when you&apos;re ready to take control.
             </p>
 
             {/* ── Billing toggle ─────────────────────── */}
@@ -266,7 +223,7 @@ export default function PricingPage() {
               >
                 Annual
                 <span className="ml-1.5 text-xs font-semibold text-teal-600">
-                  Save 20%
+                  Save 25%
                 </span>
               </button>
             </div>
@@ -297,157 +254,165 @@ export default function PricingPage() {
 
         {/* ── Plan cards ─────────────────────────────── */}
         <section className="py-20 lg:py-24">
-          <div className="mx-auto max-w-[1200px] px-6 lg:px-12">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 items-start">
-              {plans.map((plan) => {
-                const price =
-                  plan.name === "Free"
-                    ? 0
-                    : annual
-                    ? plan.annualPrice
-                    : plan.monthlyPrice;
-                const priceId =
-                  plan.name === "Free"
-                    ? null
-                    : annual
-                    ? (plan.annualPriceId ?? plan.monthlyPriceId)
-                    : plan.monthlyPriceId;
-                const Icon = plan.icon;
-
-                return (
-                  <motion.div
-                    key={plan.name}
-                    initial={{ opacity: 0, y: 16 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.35, ease: "easeOut" }}
-                    className={`relative rounded-2xl bg-white p-6 lg:p-7 border transition-all duration-300 ${
-                      plan.highlighted
-                        ? "border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated lg:scale-[1.03]"
-                        : "border-slate-200 hover:shadow-card-hover hover:border-neutral-300"
-                    }`}
-                  >
-                    {plan.highlighted && (
-                      <span className="absolute -top-3 left-6 inline-flex items-center rounded-full bg-brand-accent px-3 py-1 text-xs font-semibold text-white">
-                        Most popular
-                      </span>
-                    )}
-
-                    <div className="mb-6">
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100">
-                          <Icon
-                            className="h-4 w-4 text-slate-600"
-                            strokeWidth={2}
-                          />
-                        </div>
-                        <div>
-                          <h3 className="text-base font-semibold text-slate-900">
-                            {plan.name}
-                          </h3>
-                        </div>
-                      </div>
-
-                      {plan.size && (
-                        <div className="flex items-center gap-1.5 mb-3">
-                          <Users className="h-3.5 w-3.5 text-slate-400" strokeWidth={2} />
-                          <span className="text-xs font-medium text-slate-500">
-                            {plan.size}
-                          </span>
-                        </div>
-                      )}
-
-                      <div className="flex items-baseline gap-1">
-                        {plan.name !== "Free" &&
-                          annual &&
-                          plan.monthlyPrice &&
-                          plan.monthlyPrice > (plan.annualPrice ?? 0) && (
-                            <span className="text-lg text-slate-400 line-through tabular-nums mr-1">
-                              £{plan.monthlyPrice}
-                            </span>
-                          )}
-                        <AnimatePresence mode="wait">
-                          <motion.span
-                            key={price}
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 8 }}
-                            transition={{ duration: 0.2 }}
-                            className="text-3xl font-bold text-slate-900 tabular-nums"
-                          >
-                            {plan.name === "Free" ? "Free" : `£${price}`}
-                          </motion.span>
-                        </AnimatePresence>
-                        {plan.name !== "Free" && (
-                          <span className="text-slate-500 text-sm">/mo</span>
-                        )}
-                      </div>
-
-                      {plan.name !== "Free" && annual && (
-                        <p className="text-xs text-slate-400 mt-1">
-                          Billed annually (£{(price ?? 0) * 12}/yr)
-                        </p>
-                      )}
-                      {plan.name !== "Free" &&
-                        !annual &&
-                        plan.annualPrice &&
-                        plan.monthlyPrice &&
-                        plan.annualPrice < plan.monthlyPrice && (
-                          <p className="text-xs text-teal-600 mt-1">
-                            £{plan.annualPrice}/mo when billed annually
-                          </p>
-                        )}
-
-                      {plan.badge && (
-                        <div className="mt-3 flex items-start gap-2 rounded-lg bg-teal-50 border border-teal-100 px-3 py-2">
-                          <Lock className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
-                          <p className="text-xs text-teal-700 leading-relaxed">
-                            {plan.badge}
-                          </p>
-                        </div>
-                      )}
-
-                      <p className="text-slate-500 text-sm mt-3 leading-relaxed">
-                        {plan.description}
-                      </p>
+          <div className="mx-auto max-w-[900px] px-6 lg:px-12">
+            <div className="grid gap-8 md:grid-cols-2 items-start">
+              {/* ── Free card ─────────────────────────── */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="relative rounded-2xl bg-white p-7 lg:p-8 border border-slate-200 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
+              >
+                <div className="mb-6">
+                  <div className="flex items-center gap-2.5 mb-4">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100">
+                      <Zap className="h-4 w-4 text-slate-600" strokeWidth={2} />
                     </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-900">
+                        {freePlan.name}
+                      </h3>
+                      <p className="text-xs text-slate-400">{freePlan.audience}</p>
+                    </div>
+                  </div>
 
-                    <ul className="space-y-2.5 mb-6">
-                      {plan.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-start gap-2 text-sm text-slate-600"
-                        >
-                          <Check
-                            className="h-4 w-4 text-teal-500 mt-0.5 shrink-0"
-                            strokeWidth={2}
-                          />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-3xl font-bold text-slate-900">Free</span>
+                    <span className="text-slate-500 text-sm">forever</span>
+                  </div>
 
-                    {priceId ? (
-                      <CheckoutButton
-                        priceId={priceId}
-                        label={plan.cta}
-                        highlighted={plan.highlighted}
+                  <p className="text-slate-500 text-sm mt-3 leading-relaxed">
+                    {freePlan.description}
+                  </p>
+                </div>
+
+                <ul className="space-y-3 mb-6">
+                  {freePlan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2.5 text-sm text-slate-600"
+                    >
+                      <Check
+                        className="h-4 w-4 text-teal-500 mt-0.5 shrink-0"
+                        strokeWidth={2}
                       />
-                    ) : (
-                      <Link
-                        href={plan.href}
-                        className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
-                          plan.highlighted
-                            ? "bg-brand-accent text-white hover:bg-brand-accent-hover shadow-md shadow-brand-accent/20"
-                            : "bg-slate-100 text-slate-900 hover:bg-neutral-200"
-                        }`}
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                <Link
+                  href={freePlan.href}
+                  className="flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold bg-slate-100 text-slate-900 hover:bg-neutral-200 transition-all duration-200"
+                >
+                  {freePlan.cta}
+                  <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                </Link>
+              </motion.div>
+
+              {/* ── Pro card ──────────────────────────── */}
+              <motion.div
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.35, ease: "easeOut", delay: 0.08 }}
+                className="relative rounded-2xl bg-white p-7 lg:p-8 border border-brand-accent ring-1 ring-brand-accent/20 shadow-elevated md:scale-[1.03] transition-all duration-300"
+              >
+                <span className="absolute -top-3 left-6 inline-flex items-center rounded-full bg-brand-accent px-3 py-1 text-xs font-semibold text-white">
+                  Everything you need
+                </span>
+
+                <div className="mb-6">
+                  <div className="flex items-center gap-2.5 mb-4">
+                    <div className="flex items-center justify-center h-8 w-8 rounded-lg bg-slate-100">
+                      <Building2
+                        className="h-4 w-4 text-slate-600"
+                        strokeWidth={2}
+                      />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-semibold text-slate-900">
+                        {proPlan.name}
+                      </h3>
+                      <p className="text-xs text-slate-400">{proPlan.audience}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-baseline gap-1">
+                    {annual &&
+                      proPlan.monthlyPrice > proPlan.annualPrice && (
+                        <span className="text-lg text-slate-400 line-through tabular-nums mr-1">
+                          £{proPlan.monthlyPrice}
+                        </span>
+                      )}
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={proPrice}
+                        initial={{ opacity: 0, y: -8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 8 }}
+                        transition={{ duration: 0.2 }}
+                        className="text-3xl font-bold text-slate-900 tabular-nums"
                       >
-                        {plan.cta}
-                        <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
-                      </Link>
-                    )}
-                  </motion.div>
-                );
-              })}
+                        £{proPrice}
+                      </motion.span>
+                    </AnimatePresence>
+                    <span className="text-slate-500 text-sm">/month</span>
+                  </div>
+
+                  {annual && (
+                    <p className="text-xs text-slate-400 mt-1">
+                      Billed annually (£{proPrice * 12}/year)
+                    </p>
+                  )}
+                  {!annual && proPlan.annualPrice < proPlan.monthlyPrice && (
+                    <p className="text-xs text-teal-600 mt-1">
+                      £{proPlan.annualPrice}/mo when billed annually
+                    </p>
+                  )}
+
+                  <div className="mt-3 flex items-start gap-2 rounded-lg bg-teal-50 border border-teal-100 px-3 py-2">
+                    <Lock className="h-3.5 w-3.5 text-teal-600 mt-0.5 shrink-0" />
+                    <p className="text-xs text-teal-700 leading-relaxed">
+                      {proPlan.badge}
+                    </p>
+                  </div>
+
+                  <p className="text-slate-500 text-sm mt-3 leading-relaxed">
+                    {proPlan.description}
+                  </p>
+                </div>
+
+                <ul className="space-y-3 mb-6">
+                  {proPlan.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex items-start gap-2.5 text-sm text-slate-600"
+                    >
+                      <Check
+                        className="h-4 w-4 text-teal-500 mt-0.5 shrink-0"
+                        strokeWidth={2}
+                      />
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+
+                {proPriceId ? (
+                  <CheckoutButton
+                    priceId={proPriceId}
+                    label={proPlan.cta}
+                    highlighted
+                  />
+                ) : (
+                  <Link
+                    href={proPlan.href}
+                    className="flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold bg-brand-accent text-white hover:bg-brand-accent-hover shadow-md shadow-brand-accent/20 transition-all duration-200"
+                  >
+                    {proPlan.cta}
+                    <ArrowRight className="h-3.5 w-3.5 ml-1.5" />
+                  </Link>
+                )}
+              </motion.div>
             </div>
 
             {/* ── Enterprise row ────────────────────── */}
@@ -464,12 +429,9 @@ export default function PricingPage() {
                     <h3 className="text-base font-semibold text-slate-900">
                       {enterprise.name}
                     </h3>
-                    <div className="flex items-center gap-1.5">
-                      <Users className="h-3.5 w-3.5 text-slate-400" strokeWidth={2} />
-                      <span className="text-xs font-medium text-slate-400">
-                        {enterprise.audience}
-                      </span>
-                    </div>
+                    <span className="text-xs font-medium text-slate-400">
+                      {enterprise.audience}
+                    </span>
                   </div>
                   <p className="text-sm text-slate-500 max-w-lg mb-4">
                     {enterprise.description}
@@ -573,7 +535,7 @@ export default function PricingPage() {
                   <p className="text-sm font-medium text-teal-700 mb-1">
                     Senior Engineer
                   </p>
-                  <p className="text-3xl font-bold text-teal-600 mb-1">15x ROI</p>
+                  <p className="text-3xl font-bold text-teal-600 mb-1">21x ROI</p>
                   <p className="text-xs text-slate-500">
                     £15K avg agency fee saved
                   </p>
@@ -582,14 +544,14 @@ export default function PricingPage() {
                   <p className="text-sm font-medium text-teal-700 mb-1">
                     Mid-level role
                   </p>
-                  <p className="text-3xl font-bold text-teal-600 mb-1">8x ROI</p>
+                  <p className="text-3xl font-bold text-teal-600 mb-1">11x ROI</p>
                   <p className="text-xs text-slate-500">
                     £8K avg agency fee saved
                   </p>
                 </div>
               </div>
               <p className="text-sm text-slate-500">
-                OpenRole starts at £468/year. Most companies pay more than that for a
+                OpenRole Pro costs £708/year. Most companies pay more than that for a
                 single LinkedIn Recruiter seat.
               </p>
             </div>

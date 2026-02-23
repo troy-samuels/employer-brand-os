@@ -28,34 +28,33 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 /**
  * Maps Stripe Price IDs → OpenRole plan names.
  *
- * Plan tiers (Feb 2026):
- *   starter  — £59/mo (£49 annual) — diagnostic only, no playbook
- *   growth   — £179/mo (£149 annual) — full solution + playbook + competitors
- *   scale    — £449/mo (£379 annual) — unlimited benchmarks, API, strategy calls
+ * Flat two-tier pricing (Feb 2026):
+ *   pro — £79/mo (£59/mo annual) — full suite, everything included
  *
  * Env vars to set in .env.local / Vercel:
- *   NEXT_PUBLIC_STRIPE_PRICE_STARTER   → Starter monthly price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH    → Growth monthly price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_SCALE     → Scale monthly price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL → Starter annual price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL  → Growth annual price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL   → Scale annual price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_PRO        → Pro monthly price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL → Pro annual price ID
  *
  * Legacy env vars (kept for backwards compat):
- *   NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY → maps to "starter"
- *   NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE → maps to "growth"
+ *   NEXT_PUBLIC_STRIPE_PRICE_STARTER   → maps to "pro"
+ *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH    → maps to "pro"
+ *   NEXT_PUBLIC_STRIPE_PRICE_SCALE     → maps to "pro"
+ *   NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY → maps to "pro"
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE → maps to "pro"
  */
 const PRICE_TO_PLAN: Record<string, string> = {
-  // New plan-specific price IDs
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? ""]: "starter",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? ""]: "growth",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? ""]: "scale",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? ""]: "starter",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? ""]: "growth",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? ""]: "scale",
-  // Legacy mappings
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "starter",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "growth",
+  // Current plan price IDs
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? ""]: "pro",
+  // Legacy mappings (all map to pro now)
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "pro",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "pro",
 };
 
 function resolvePlanName(priceId: string | null | undefined): string {

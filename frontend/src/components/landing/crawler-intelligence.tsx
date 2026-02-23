@@ -167,7 +167,7 @@ export default function CrawlerIntelligence() {
                 <span className="text-xs text-neutral-400">— This week</span>
               </div>
               <span className="inline-flex items-center rounded-full bg-brand-accent-light px-2.5 py-0.5 text-[10px] font-semibold text-brand-accent">
-                Growth plan
+                Pro plan
               </span>
             </div>
 
@@ -224,7 +224,7 @@ export default function CrawlerIntelligence() {
 
           {/* Caption */}
           <p className="mt-4 text-center text-xs text-neutral-400">
-            Mock preview — actual data available on Growth and Scale plans.
+            Mock preview — actual data available on the Pro plan.
           </p>
         </motion.div>
 
@@ -234,7 +234,7 @@ export default function CrawlerIntelligence() {
             href="/pricing"
             className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-950 hover:text-neutral-700 transition-colors"
           >
-            See crawler intelligence on Growth plan
+            See crawler intelligence on Pro plan
             <ArrowRight className="h-3.5 w-3.5" />
           </a>
         </div>
