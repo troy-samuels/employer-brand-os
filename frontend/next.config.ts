@@ -4,18 +4,15 @@ import type { NextConfig } from "next";
  * Security headers applied at the config level.
  *
  * NOTE: Content-Security-Policy is NOT set here — it is set exclusively
- * in middleware.ts with a per-request nonce. Setting CSP here would
- * override/compete with the middleware nonce-bearing CSP and break
+ * in proxy.ts with a per-request nonce. Setting CSP here would
+ * override/compete with the proxy nonce-bearing CSP and break
  * Next.js inline script hydration.
  *
  * Cross-Origin-Embedder-Policy is also omitted for non-API routes
  * because `require-corp` blocks external resources (fonts, images)
- * that lack CORS headers. The middleware sets COEP only where needed.
+ * that lack CORS headers. The proxy sets COEP only where needed.
  */
 const nextConfig: NextConfig = {
-  turbopack: {
-    root: ".",
-  },
   async redirects() {
     return [
       {
@@ -33,7 +30,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        // Apply security headers to all routes (CSP handled by middleware)
+        // Apply security headers to all routes (CSP handled by proxy)
         source: "/:path*",
         headers: [
           {

@@ -1,6 +1,6 @@
 /**
- * @module middleware
- * Module implementation for middleware.ts.
+ * @module proxy
+ * Request proxy for auth/session refresh, rate limits, and security headers.
  */
 
 import { createServerClient } from "@supabase/ssr";
@@ -208,11 +208,11 @@ function withSecurityHeaders(
 }
 
 /**
- * Executes middleware.
+ * Executes proxy.
  * @param request - request input.
  * @returns The resulting value.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const isApiRoute = pathname.startsWith("/api");
   const isStatic =

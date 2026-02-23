@@ -15,6 +15,9 @@ interface ScoreTrendProps {
   ukAverage?: number;
 }
 
+const CHART_VIEWBOX_WIDTH = 600;
+const CHART_VIEWBOX_HEIGHT = 180;
+
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
   return date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
@@ -37,26 +40,20 @@ interface TooltipData {
   date: string;
 }
 
-function Tooltip({ data, containerRef }: { data: TooltipData; containerRef: React.RefObject<SVGSVGElement | null> }) {
-  const rect = containerRef.current?.getBoundingClientRect();
-  if (!rect) return null;
-
-  // Convert SVG coords to pixel coords
-  const scaleX = rect.width / 600;
-  const scaleY = rect.height / 180;
-  const px = data.x * scaleX;
-  const py = data.y * scaleY;
-
-  // Flip tooltip left if too close to right edge
-  const flipLeft = px > rect.width * 0.75;
+function Tooltip({ data }: { data: TooltipData }) {
+  const xPercent = (data.x / CHART_VIEWBOX_WIDTH) * 100;
+  const yPercent = (data.y / CHART_VIEWBOX_HEIGHT) * 100;
+  const flipLeft = xPercent > 75;
 
   return (
     <div
       className="pointer-events-none absolute z-10 rounded-lg bg-neutral-900 px-3 py-2 text-xs shadow-lg transition-all duration-150"
       style={{
-        left: flipLeft ? px - 8 : px + 8,
-        top: py - 40,
-        transform: flipLeft ? "translateX(-100%)" : "translateX(0)",
+        left: `${xPercent}%`,
+        top: `${yPercent}%`,
+        transform: flipLeft
+          ? "translate(calc(-100% - 8px), calc(-100% - 8px))"
+          : "translate(8px, calc(-100% - 8px))",
       }}
     >
       <span className="font-semibold text-white tabular-nums">{data.score}/100</span>
@@ -75,8 +72,6 @@ function Tooltip({ data, containerRef }: { data: TooltipData; containerRef: Reac
 /* ------------------------------------------------------------------ */
 
 export function ScoreTrend({ history, companyName, ukAverage }: ScoreTrendProps) {
-  if (history.length < 2) return null;
-
   const gradientId = useId().replace(/:/g, "_");
   const svgRef = useRef<SVGSVGElement>(null);
   const [hoveredPoint, setHoveredPoint] = useState<TooltipData | null>(null);
@@ -99,13 +94,17 @@ export function ScoreTrend({ history, companyName, ukAverage }: ScoreTrendProps)
     return () => observer.disconnect();
   }, []);
 
+  if (history.length < 2) {
+    return null;
+  }
+
   const latest = history[history.length - 1];
   const earliest = history[0];
   const delta = latest.score - earliest.score;
 
   // SVG chart dimensions
-  const width = 600;
-  const height = 180;
+  const width = CHART_VIEWBOX_WIDTH;
+  const height = CHART_VIEWBOX_HEIGHT;
   const padding = { top: 24, right: 30, bottom: 32, left: 44 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
@@ -339,7 +338,7 @@ export function ScoreTrend({ history, companyName, ukAverage }: ScoreTrendProps)
         </svg>
 
         {/* Tooltip */}
-        {hoveredPoint && <Tooltip data={hoveredPoint} containerRef={svgRef} />}
+        {hoveredPoint && <Tooltip data={hoveredPoint} />}
       </div>
 
       {/* Footer */}
