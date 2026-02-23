@@ -25,6 +25,8 @@ import { untypedTable } from "@/lib/supabase/untyped-table";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { formatCompanyName } from "@/lib/utils/company-names";
+import { generateDisplacementReport } from "@/lib/compare/displacement";
+import { DisplacementPlaybook } from "@/components/compare/displacement-playbook";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -194,6 +196,23 @@ export default async function ComparisonPage({ params }: PageProps) {
   const nameB = formatCompanyName(companyB.company_name, slugB);
   const checks = getChecks(companyA, companyB);
   const winner = companyA.score > companyB.score ? "a" : companyA.score < companyB.score ? "b" : "tie";
+
+  // Generate displacement report for both directions (A trying to beat B, and B trying to beat A)
+  // Show the report for the losing company (how to catch up to the winner)
+  let displacementReport = null;
+  try {
+    if (winner === "a") {
+      // Company B is behind, show them how to beat A
+      displacementReport = await generateDisplacementReport(slugB, slugA);
+    } else if (winner === "b") {
+      // Company A is behind, show them how to beat B
+      displacementReport = await generateDisplacementReport(slugA, slugB);
+    }
+    // If tie, don't show displacement report (both are equal)
+  } catch (error) {
+    console.error("Failed to generate displacement report:", error);
+    // Continue without displacement report if generation fails
+  }
 
   return (
     <>
@@ -409,6 +428,17 @@ export default async function ComparisonPage({ params }: PageProps) {
             )}
           </div>
         </section>
+
+        {/* ── Displacement Playbook ──────────────── */}
+        {displacementReport && displacementReport.opportunities.length > 0 && (
+          <DisplacementPlaybook
+            opportunities={displacementReport.opportunities}
+            quickWins={displacementReport.quickWins}
+            isFreeTier={true}
+            companyName={displacementReport.company.name}
+            competitorName={displacementReport.competitor.name}
+          />
+        )}
 
         {/* ── CTAs ───────────────────────────────── */}
         <section className="border-t border-slate-200 bg-white">
