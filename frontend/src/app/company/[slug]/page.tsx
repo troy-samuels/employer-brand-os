@@ -39,6 +39,7 @@ import { formatCompanyName } from "@/lib/utils/company-names";
 import { ShareButtons } from "./share-buttons";
 import { ScoreGauge } from "./score-gauge";
 import { ScoreBar } from "./score-bar";
+import { ScoreTrend } from "./score-trend";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -119,6 +120,30 @@ async function getIndustryAvg(): Promise<number> {
     // fallback
   }
   return 35;
+}
+
+interface ScoreHistoryPoint {
+  date: string;
+  score: number;
+}
+
+async function getScoreHistory(slug: string): Promise<ScoreHistoryPoint[]> {
+  try {
+    const { data } = await untypedTable("score_history")
+      .select("score, created_at")
+      .eq("company_slug", slug)
+      .order("created_at", { ascending: true })
+      .limit(50);
+
+    if (!data || data.length === 0) return [];
+
+    return (data as { score: number; created_at: string }[]).map((row) => ({
+      date: row.created_at,
+      score: row.score,
+    }));
+  } catch {
+    return [];
+  }
 }
 
 interface SimilarCompany {
@@ -483,10 +508,11 @@ export default async function CompanyPage({ params }: PageProps) {
     year: "numeric",
   });
 
-  const [percentile, avgScore, similarCompanies] = await Promise.all([
+  const [percentile, avgScore, similarCompanies, scoreHistory] = await Promise.all([
     getPercentile(audit.score),
     getIndustryAvg(),
     getSimilarCompanies(slug, audit.score),
+    getScoreHistory(slug),
   ]);
 
   const scoreDelta = audit.score - avgScore;
@@ -713,6 +739,13 @@ export default async function CompanyPage({ params }: PageProps) {
             </div>
           </div>
         </section>
+
+        {/* ── Score history trendline ──────────────── */}
+        {scoreHistory.length >= 2 && (
+          <section className="max-w-5xl mx-auto px-6 py-14">
+            <ScoreTrend history={scoreHistory} companyName={displayName} />
+          </section>
+        )}
 
         {/* ── What candidates see (mock AI) ─────────── */}
         <section className="max-w-5xl mx-auto px-6 py-14">
