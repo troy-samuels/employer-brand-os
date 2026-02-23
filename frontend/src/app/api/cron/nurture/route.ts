@@ -50,7 +50,7 @@ export async function GET(request: NextRequest) {
 
     const { data: leads, error } = await supabase
       .from("audit_leads")
-      .select("id, email, company_slug, name, created_at, nurture_sent")
+      .select("id, email, company_slug, created_at, nurture_sent")
       .gte("created_at", eightDaysAgo)
       .not("email", "is", null)
       .order("created_at", { ascending: true })
@@ -97,7 +97,6 @@ export async function GET(request: NextRequest) {
       const result = await sendNurtureEmail({
         email: lead.email,
         companySlug: lead.company_slug,
-        recipientName: lead.name ?? undefined,
         step,
       });
 
