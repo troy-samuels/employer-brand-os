@@ -78,6 +78,11 @@ export async function upsertPublicAudit(result: WebsiteCheckResult): Promise<voi
         careers_page_status: result.careersPageStatus,
         robots_txt_status: result.robotsTxtStatus,
         ats_detected: result.atsDetected || null,
+        ats_provider: result.atsProvider,
+        ats_board_token: result.atsBoardToken,
+        ats_job_count: result.atsJobCount,
+        ats_analysis: result.atsAnalysis,
+        ats_facts: result.atsGeneratedFacts,
         updated_at: new Date().toISOString(),
       },
       {

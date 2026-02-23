@@ -50,6 +50,11 @@ async function insertWebsiteCheck(
     robots_txt_ai_policy: result.robotsTxtStatus,
     robots_txt_blocked_bots: result.robotsTxtBlockedBots,
     ai_readiness_score: result.score,
+    ats_provider: result.atsProvider,
+    ats_board_token: result.atsBoardToken,
+    ats_job_count: result.atsJobCount,
+    ats_analysis: result.atsAnalysis,
+    ats_facts: result.atsGeneratedFacts,
     source_ip_hash: clientIpHash,
   });
 

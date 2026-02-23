@@ -10,6 +10,10 @@ import {
   scoreBrandReputation,
   type BrandReputation,
 } from "@/lib/audit/brand-reputation";
+import { detectATS, isReliableDetection } from "@/lib/ats/detect";
+import { fetchJobsFromProvider } from "@/lib/ats/providers";
+import { analyseJobs } from "@/lib/ats/analyse";
+import { generateFacts, hasSubstantialFacts } from "@/lib/ats/generate-facts";
 
 const FETCH_TIMEOUT_MS = 5000;
 const AUDIT_USER_AGENT = "OpenRoleAuditBot/1.1 (+https://openrole.ai/audit)";
@@ -454,6 +458,11 @@ export type WebsiteCheckResult = {
   careersPageUrl: string | null;
   careersBlockedUrl: string | null;
   atsDetected: AtsName;
+  atsProvider: string | null;
+  atsBoardToken: string | null;
+  atsJobCount: number | null;
+  atsAnalysis: Record<string, unknown> | null;
+  atsGeneratedFacts: Record<string, unknown> | null;
   hasSitemap: boolean;
   robotsTxtStatus: RobotsTxtStatus;
   robotsTxtAllowedBots: string[];
@@ -1903,6 +1912,11 @@ export async function runWebsiteChecks(
   let careersPageUrl: string | null = null;
   let careersBlockedUrl: string | null = null;
   let atsDetected: AtsName = null;
+  let atsProvider: string | null = null;
+  let atsBoardToken: string | null = null;
+  let atsJobCount: number | null = null;
+  let atsAnalysis: Record<string, unknown> | null = null;
+  let atsGeneratedFacts: Record<string, unknown> | null = null;
   let hasSitemap = false;
   let careersPageHtml: string | null = null;
   let robotsTxtStatus: RobotsTxtStatus = "not_found";
@@ -2018,6 +2032,36 @@ export async function runWebsiteChecks(
       try {
         const careersHostname = new URL(careersPageUrl).hostname.toLowerCase();
         atsDetected = detectAtsName(careersHostname);
+        
+        // Enhanced ATS detection with job scraping (graceful fallback on error)
+        try {
+          const atsDetection = await detectATS(careersPageUrl);
+          if (isReliableDetection(atsDetection) && atsDetection.boardToken && atsDetection.provider) {
+            atsProvider = atsDetection.provider;
+            atsBoardToken = atsDetection.boardToken;
+            
+            // Fetch and analyse jobs (with timeout protection)
+            const jobsPromise = fetchJobsFromProvider(atsDetection.provider, atsDetection.boardToken);
+            const jobs = await Promise.race([
+              jobsPromise,
+              new Promise<[]>((resolve) => setTimeout(() => resolve([]), 8000))
+            ]);
+            
+            if (jobs.length > 0) {
+              atsJobCount = jobs.length;
+              const analysis = analyseJobs(jobs);
+              atsAnalysis = analysis as unknown as Record<string, unknown>;
+              
+              const facts = generateFacts(jobs, analysis, atsDetection.provider);
+              if (hasSubstantialFacts(facts)) {
+                atsGeneratedFacts = facts as unknown as Record<string, unknown>;
+              }
+            }
+          }
+        } catch (atsError) {
+          // Enhanced ATS detection failed — gracefully continue with basic detection
+          console.error("[Audit] Enhanced ATS detection failed:", atsError);
+        }
       } catch {
         // Invalid URL — ignore
       }
@@ -2117,6 +2161,11 @@ export async function runWebsiteChecks(
     careersPageUrl,
     careersBlockedUrl,
     atsDetected,
+    atsProvider,
+    atsBoardToken,
+    atsJobCount,
+    atsAnalysis,
+    atsGeneratedFacts,
     hasSitemap,
     robotsTxtStatus,
     robotsTxtAllowedBots,
