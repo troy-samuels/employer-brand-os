@@ -19,11 +19,11 @@ const {
   const mockSelect = vi.fn();
   const mockIlike = vi.fn();
   const mockOrder = vi.fn();
-  const mockLimit = vi.fn();
+  const mockRange = vi.fn();
 
-  // Chain: .from().select().ilike().order().limit()
-  mockLimit.mockResolvedValue({ data: [], error: null });
-  mockOrder.mockReturnValue({ limit: mockLimit });
+  // Chain: .from().select().ilike().order().range()
+  mockRange.mockResolvedValue({ data: [], error: null });
+  mockOrder.mockReturnValue({ range: mockRange });
   mockIlike.mockReturnValue({ order: mockOrder });
   mockSelect.mockReturnValue({ ilike: mockIlike });
 
@@ -36,7 +36,7 @@ const {
     mockSelect,
     mockIlike,
     mockOrder,
-    mockLimit,
+    mockRange,
   };
 });
 
@@ -80,19 +80,19 @@ function createRequest(
 }
 
 function mockDbResults(rows: Array<Record<string, unknown>>): void {
-  const mockLimit = vi.fn().mockResolvedValue({ data: rows, error: null });
-  const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+  const mockRange = vi.fn().mockResolvedValue({ data: rows, error: null });
+  const mockOrder = vi.fn().mockReturnValue({ range: mockRange });
   const mockIlike = vi.fn().mockReturnValue({ order: mockOrder });
   const mockSelect = vi.fn().mockReturnValue({ ilike: mockIlike });
   mockSupabaseFrom.mockReturnValue({ select: mockSelect });
 }
 
 function mockDbError(code: string, message: string): void {
-  const mockLimit = vi.fn().mockResolvedValue({
+  const mockRange = vi.fn().mockResolvedValue({
     data: null,
     error: { code, message },
   });
-  const mockOrder = vi.fn().mockReturnValue({ limit: mockLimit });
+  const mockOrder = vi.fn().mockReturnValue({ range: mockRange });
   const mockIlike = vi.fn().mockReturnValue({ order: mockOrder });
   const mockSelect = vi.fn().mockReturnValue({ ilike: mockIlike });
   mockSupabaseFrom.mockReturnValue({ select: mockSelect });

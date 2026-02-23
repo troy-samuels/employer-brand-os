@@ -37,6 +37,8 @@ export interface CompanySearchResult {
 
 interface CompanySearchResponse {
   companies: CompanySearchResult[];
+  offset?: number;
+  hasMore?: boolean;
 }
 
 /**

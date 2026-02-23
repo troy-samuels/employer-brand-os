@@ -36,6 +36,7 @@ const LIKE_SPECIAL_CHARACTER_REGEX = /[%_\\]/g;
 
 const companySearchQuerySchema = z.object({
   q: z.string().trim().min(2, "Search query must be at least 2 characters.").max(100),
+  offset: z.coerce.number().int().min(0).default(0),
 });
 
 const rateLimiter = new RateLimiter();
@@ -56,6 +57,8 @@ export interface CompanySearchItem {
  */
 export interface CompanySearchResponse {
   companies: CompanySearchItem[];
+  offset?: number;
+  hasMore?: boolean;
 }
 
 type CompanyRow = Database["public"]["Tables"]["companies"]["Row"];
@@ -127,9 +130,10 @@ export async function GET(
   }
 
   const rawQuery = request.nextUrl.searchParams.get("q") ?? "";
+  const rawOffset = request.nextUrl.searchParams.get("offset") ?? "0";
   const sanitizedQuery = sanitizeSearchTerm(rawQuery);
 
-  const parsedQuery = companySearchQuerySchema.safeParse({ q: sanitizedQuery });
+  const parsedQuery = companySearchQuerySchema.safeParse({ q: sanitizedQuery, offset: rawOffset });
   if (!parsedQuery.success) {
     const issueMessage = parsedQuery.error.issues[0]?.message ?? "Invalid search query.";
     return apiErrorResponse({
@@ -139,18 +143,21 @@ export async function GET(
     });
   }
 
-  const ilikePattern = `%${escapeIlikePattern(parsedQuery.data.q)}%`;
+  const { q, offset } = parsedQuery.data;
+  const ilikePattern = `%${escapeIlikePattern(q)}%`;
+
+  // Fetch one extra row to determine if more results exist beyond this page.
   const { data, error } = await supabaseAnon
     .from("companies")
     .select("id, name, domain, industry, employee_count")
     .ilike("name", ilikePattern)
     .order("name", { ascending: true })
-    .limit(MAX_RESULTS);
+    .range(offset, offset + MAX_RESULTS);
 
   if (error) {
     // If migrations are pending, allow the UI to gracefully show fallback URL mode.
     if (error.code === "42P01") {
-      return apiSuccessResponse<CompanySearchResponse>({ companies: [] });
+      return apiSuccessResponse<CompanySearchResponse>({ companies: [], offset, hasMore: false });
     }
 
     console.error("Company search query failed:", error);
@@ -161,6 +168,8 @@ export async function GET(
     });
   }
 
-  const companies = (data ?? []).map((row) => mapCompany(row));
-  return apiSuccessResponse<CompanySearchResponse>({ companies });
+  const rows = data ?? [];
+  const hasMore = rows.length > MAX_RESULTS;
+  const companies = rows.slice(0, MAX_RESULTS).map((row) => mapCompany(row));
+  return apiSuccessResponse<CompanySearchResponse>({ companies, offset, hasMore });
 }

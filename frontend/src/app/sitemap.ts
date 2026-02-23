@@ -10,18 +10,6 @@ import { industries } from "@/data/industries";
 
 const BASE_URL = "https://openrole.co.uk";
 
-// Hardcoded blog posts (for sitemap purposes - duplicates will be handled)
-const hardcodedBlogSlugs = [
-  "what-ai-tells-candidates-about-your-company",
-  "glassdoor-doesnt-matter-anymore",
-  "zero-click-candidate",
-  "llms-txt-guide",
-  "ai-hallucinating-salary-data",
-  "800-million-weekly-users",
-  "geo-for-employer-branding",
-  "ai-employer-brand-score",
-];
-
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -55,33 +43,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${BASE_URL}/feed.xml`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.5 },
   ];
 
-  // Blog posts (markdown + hardcoded)
+  // Blog posts — dynamically read from content/blog/ directory
   const blogPages: MetadataRoute.Sitemap = [];
-  
-  // Get markdown blog posts
-  const markdownPosts = getAllPosts();
-  const markdownSlugs = new Set(markdownPosts.map((p) => p.slug));
-  
-  // Add markdown posts
-  for (const post of markdownPosts) {
-    blogPages.push({
-      url: `${BASE_URL}/blog/${post.slug}`,
-      lastModified: new Date(post.date),
-      changeFrequency: "monthly",
-      priority: post.featured ? 0.9 : 0.7,
-    });
-  }
-  
-  // Add hardcoded posts that aren't in markdown
-  for (const slug of hardcodedBlogSlugs) {
-    if (!markdownSlugs.has(slug)) {
+
+  try {
+    const posts = getAllPosts();
+    for (const post of posts) {
       blogPages.push({
-        url: `${BASE_URL}/blog/${slug}`,
-        lastModified: new Date(),
+        url: `${BASE_URL}/blog/${post.slug}`,
+        lastModified: new Date(post.date),
         changeFrequency: "monthly",
-        priority: 0.7,
+        priority: post.featured ? 0.9 : 0.7,
       });
     }
+  } catch {
+    // Blog sitemap still works if content directory is unavailable
   }
 
   // Industry index pages
