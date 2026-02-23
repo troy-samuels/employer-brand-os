@@ -39,6 +39,8 @@ import { ShareButtons } from "./share-buttons";
 import { ScoreGauge } from "./score-gauge";
 import { ScoreBar } from "./score-bar";
 import { ScoreTrend } from "./score-trend";
+import { EmployerVerifiedSection } from "./employer-verified-section";
+import type { EmployerFacts } from "@/features/facts/types/employer-facts.types";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -190,6 +192,21 @@ async function getSimilarCompanies(
     return deduped;
   } catch {
     return [];
+  }
+}
+
+async function getEmployerFacts(slug: string): Promise<EmployerFacts | null> {
+  try {
+    const { data, error } = await untypedTable("employer_facts")
+      .select("*")
+      .eq("company_slug", slug)
+      .eq("published", true)
+      .single();
+
+    if (error || !data) return null;
+    return data as EmployerFacts;
+  } catch {
+    return null;
   }
 }
 
@@ -459,11 +476,12 @@ export default async function CompanyPage({ params }: PageProps) {
     year: "numeric",
   });
 
-  const [percentile, avgScore, similarCompanies, scoreHistory] = await Promise.all([
+  const [percentile, avgScore, similarCompanies, scoreHistory, employerFacts] = await Promise.all([
     getPercentile(audit.score),
     getIndustryAvg(),
     getSimilarCompanies(slug, audit.score),
     getScoreHistory(slug),
+    getEmployerFacts(slug),
   ]);
 
   const scoreDelta = audit.score - avgScore;
@@ -619,6 +637,11 @@ export default async function CompanyPage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* ── Employer Verified Facts (if published) ── */}
+        {employerFacts && employerFacts.published && (
+          <EmployerVerifiedSection facts={employerFacts} />
+        )}
 
         {/* ── Vs UK Average comparison ─────────────── */}
         <section className="border-y border-slate-200 bg-white">

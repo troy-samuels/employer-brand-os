@@ -114,8 +114,7 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
         is_active,
         created_at,
         last_used_at,
-        expires_at,
-        key_version
+        expires_at
       `)
       .eq('organization_id', orgId)
       .eq('is_active', true);
@@ -135,14 +134,9 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
 
     const newestKey = validKeys.sort(
       (
-        left: { key_version?: number | null; created_at?: string | null },
-        right: { key_version?: number | null; created_at?: string | null }
+        left: { created_at?: string | null },
+        right: { created_at?: string | null }
       ) => {
-        const versionDiff = (right.key_version ?? 1) - (left.key_version ?? 1);
-        if (versionDiff !== 0) {
-          return versionDiff;
-        }
-
         return (
           new Date(right.created_at ?? 0).getTime() -
           new Date(left.created_at ?? 0).getTime()

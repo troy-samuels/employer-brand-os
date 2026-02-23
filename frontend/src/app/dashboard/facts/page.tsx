@@ -70,19 +70,19 @@ export default async function FactsPage() {
           {isPublished && (
             <div className="flex gap-2">
               <Link href={`/api/employer-facts/download/llms-txt?slug=${companyInfo.slug}`}>
-                <Button variant="outline" size="sm">
+                <Button variant="secondary" size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   llms.txt
                 </Button>
               </Link>
               <Link href={`/api/employer-facts/download/schema?slug=${companyInfo.slug}`}>
-                <Button variant="outline" size="sm">
+                <Button variant="secondary" size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   Schema
                 </Button>
               </Link>
               <Link href={`/api/employer-facts/download/markdown?slug=${companyInfo.slug}`}>
-                <Button variant="outline" size="sm">
+                <Button variant="secondary" size="sm">
                   <Download className="h-4 w-4 mr-2" />
                   Markdown
                 </Button>

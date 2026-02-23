@@ -332,7 +332,7 @@ export function EmployerQuestionnaire({ defaultValues, companySlug, companyName 
                       <FormLabel>Salary Bands</FormLabel>
                       <Button
                         type="button"
-                        variant="outline"
+                        variant="secondary"
                         size="sm"
                         onClick={() => salaryBands.append({ 
                           role: '', 
@@ -532,7 +532,7 @@ export function EmployerQuestionnaire({ defaultValues, companySlug, companyName 
                         <Button
                           key={benefit}
                           type="button"
-                          variant="outline"
+                          variant="secondary"
                           size="sm"
                           onClick={() => {
                             const exists = benefits.fields.some(
@@ -561,7 +561,7 @@ export function EmployerQuestionnaire({ defaultValues, companySlug, companyName 
                       <FormLabel>Custom Benefits</FormLabel>
                       <Button
                         type="button"
-                        variant="outline"
+                        variant="secondary"
                         size="sm"
                         onClick={() => benefits.append({ 
                           category: 'Healthcare', 
@@ -727,7 +727,7 @@ export function EmployerQuestionnaire({ defaultValues, companySlug, companyName 
             <div className="flex items-center justify-between pt-6 border-t">
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 onClick={() => {
                   const data = form.getValues();
                   saveDraft(data);
@@ -761,7 +761,7 @@ export function EmployerQuestionnaire({ defaultValues, companySlug, companyName 
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-3 mt-4">
-            <Button variant="outline" onClick={() => setShowPublishDialog(false)}>
+            <Button variant="secondary" onClick={() => setShowPublishDialog(false)}>
               Cancel
             </Button>
             <Button onClick={handlePublish} disabled={isPublishing}>

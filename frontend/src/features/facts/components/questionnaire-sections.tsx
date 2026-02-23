@@ -111,7 +111,7 @@ export function WorkPolicySection({ form, officeLocations }: SectionProps) {
               <FormLabel>Office Locations</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => officeLocations.append({ city: '', country: '', address: '' })}
               >
@@ -238,7 +238,7 @@ export function TechStackSection({ form, techStack }: SectionProps) {
               <FormLabel>Technology Categories</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => techStack.append({ category: 'Frontend', tools: [] })}
               >
@@ -357,7 +357,7 @@ export function InterviewSection({ form, interviewStages }: SectionProps) {
               <FormLabel>Interview Stages</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => interviewStages.append({ stage: '', description: '', duration: '' })}
               >
@@ -473,7 +473,7 @@ export function CultureSection({ form, companyValues }: SectionProps) {
               <FormLabel>Company Values</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => companyValues.append({ value: '', description: '' })}
               >
@@ -628,7 +628,7 @@ export function DEISection({ form, deiInitiatives }: SectionProps) {
               <FormLabel>DEI Initiatives</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => deiInitiatives.append({ name: '', description: '' })}
               >
@@ -765,7 +765,7 @@ export function CareerGrowthSection({ form, careerLevels }: SectionProps) {
               <FormLabel>Career Levels</FormLabel>
               <Button
                 type="button"
-                variant="outline"
+                variant="secondary"
                 size="sm"
                 onClick={() => careerLevels.append({ level: '', title: '', description: '' })}
               >
