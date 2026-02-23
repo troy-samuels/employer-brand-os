@@ -111,7 +111,7 @@ export function renderNurtureDay1Email({
 
               <p style="margin: 24px 0 0; font-size: 13px; color: #94a3b8; line-height: 1.5;">
                 Want the content playbook that tells you exactly what to publish?
-                <a href="${pricingUrl}" style="color: #0d9488; text-decoration: underline;">See Pro plan — £79/month, everything included</a>
+                <a href="${pricingUrl}" style="color: #0d9488; text-decoration: underline;">See plans from £149/month</a>
               </p>
             </td>
           </tr>

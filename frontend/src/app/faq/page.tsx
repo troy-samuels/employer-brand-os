@@ -132,7 +132,7 @@ const faqs: FaqEntry[] = [
     slug: "which-plan-do-i-need",
     question: "Which plan is right for my company?",
     summary:
-      "There are two plans: Free and Pro. Free gives you unlimited audits — run as many as you want, no signup needed. Pro (£79/mo) is everything: weekly monitoring, competitor reports, content playbook, ATS integration, embeddable snippet, brand defence alerts, and proof tracking. One plan, everything included, any company size.",
+      "Control (£149/mo) gives you the full AI monitoring and content toolkit. Compete (£299/mo) is our most popular — it adds 5 competitor benchmarks, ATS integration, displacement reports, and proof tracking. Command (£599/mo) adds unlimited competitors, API access, a dedicated account manager, and quarterly strategy calls. All plans include a 14-day free trial.",
     category: "Pricing & Plans",
   },
 ];

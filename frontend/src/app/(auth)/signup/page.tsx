@@ -112,8 +112,8 @@ export default function SignupPage() {
         </a>
         <p className="text-sm text-slate-400">
           Or{" "}
-          <Link href="/signup?plan=pro" className="text-teal-600 hover:text-teal-700 font-medium">
-            start with Pro
+          <Link href="/signup?plan=compete" className="text-teal-600 hover:text-teal-700 font-medium">
+            start with Compete
           </Link>{" "}
           and upgrade later
         </p>

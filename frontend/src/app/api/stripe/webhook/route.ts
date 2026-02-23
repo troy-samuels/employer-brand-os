@@ -28,33 +28,42 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 /**
  * Maps Stripe Price IDs → OpenRole plan names.
  *
- * Flat two-tier pricing (Feb 2026):
- *   pro — £79/mo (£59/mo annual) — full suite, everything included
+ * Tiered pricing (Feb 2026):
+ *   control  — £149/mo (£119/mo annual) — monitoring + content toolkit
+ *   compete  — £299/mo (£239/mo annual) — competitive intelligence + ATS
+ *   command  — £599/mo (£479/mo annual) — unlimited + API + account manager
  *
  * Env vars to set in .env.local / Vercel:
- *   NEXT_PUBLIC_STRIPE_PRICE_PRO        → Pro monthly price ID
- *   NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL → Pro annual price ID
+ *   NEXT_PUBLIC_STRIPE_PRICE_CONTROL        → Control monthly
+ *   NEXT_PUBLIC_STRIPE_PRICE_CONTROL_ANNUAL → Control annual
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMPETE        → Compete monthly
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMPETE_ANNUAL → Compete annual
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMMAND        → Command monthly
+ *   NEXT_PUBLIC_STRIPE_PRICE_COMMAND_ANNUAL → Command annual
  *
  * Legacy env vars (kept for backwards compat):
- *   NEXT_PUBLIC_STRIPE_PRICE_STARTER   → maps to "pro"
- *   NEXT_PUBLIC_STRIPE_PRICE_GROWTH    → maps to "pro"
- *   NEXT_PUBLIC_STRIPE_PRICE_SCALE     → maps to "pro"
- *   NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY → maps to "pro"
- *   NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE → maps to "pro"
  */
 const PRICE_TO_PLAN: Record<string, string> = {
-  // Current plan price IDs
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? ""]: "pro",
-  // Legacy mappings (all map to pro now)
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "pro",
-  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "pro",
+  // Control tier
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_CONTROL ?? ""]: "control",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_CONTROL_ANNUAL ?? ""]: "control",
+  // Compete tier
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPETE ?? ""]: "compete",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPETE_ANNUAL ?? ""]: "compete",
+  // Command tier
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMMAND ?? ""]: "command",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMMAND_ANNUAL ?? ""]: "command",
+  // Legacy mappings
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO ?? ""]: "compete",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_PRO_ANNUAL ?? ""]: "compete",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER ?? ""]: "control",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH ?? ""]: "compete",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE ?? ""]: "command",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_STARTER_ANNUAL ?? ""]: "control",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_GROWTH_ANNUAL ?? ""]: "compete",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_SCALE_ANNUAL ?? ""]: "command",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? ""]: "control",
+  [process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? ""]: "compete",
 };
 
 function resolvePlanName(priceId: string | null | undefined): string {
