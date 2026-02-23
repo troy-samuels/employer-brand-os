@@ -6,23 +6,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://openrole.co.uk"),
   title: {
-    default: "OpenRole — Employer Brand Audit | Measure Your Employer Brand Across AI",
+    default: "OpenRole — Inject Machine-Readable Employer Data | AI Cites Your Facts",
     template: "%s | OpenRole",
   },
   description:
-    "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, benchmark against competitors, and get a content playbook to improve employer visibility, candidate experience, and recruitment ROI.",
+    "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts instead of third-party rumours. See what ChatGPT, Perplexity and Google AI say about you right now, then deploy structured data to increase the likelihood AI represents your employer brand accurately.",
   keywords: [
-    "employer brand audit",
-    "employer brand score",
-    "employer brand measurement",
-    "employer branding tools",
-    "ai employer branding",
-    "employer brand monitoring",
-    "how to improve employer branding",
-    "employer branding strategy",
-    "employer brand ROI",
-    "candidate experience",
-    "employer visibility",
+    "rag employer data",
+    "machine-readable employer data",
+    "ai employer visibility",
+    "structured employer data",
+    "llms.txt",
+    "employer brand ai",
+    "chatgpt employer branding",
+    "perplexity employer data",
+    "google ai employer brand",
+    "employer data injection",
+    "ai cites employer facts",
   ],
   authors: [{ name: "OpenRole" }],
   openGraph: {
@@ -30,23 +30,23 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "https://openrole.co.uk",
     siteName: "OpenRole",
-    title: "OpenRole — Employer Brand Audit | Measure Your Employer Brand Across AI",
+    title: "OpenRole — Inject Machine-Readable Employer Data | AI Cites Your Facts",
     description:
-      "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, benchmark against competitors, and get a content playbook to improve employer visibility, candidate experience, and recruitment ROI.",
+      "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts instead of third-party rumours. See what ChatGPT, Perplexity and Google AI say about you, then deploy structured data on your domain.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "OpenRole — Measure your employer brand across AI search",
+        alt: "OpenRole — Inject machine-readable employer data so AI cites your facts",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenRole — Employer Brand Audit | Measure Your Employer Brand Across AI",
+    title: "OpenRole — Inject Machine-Readable Employer Data | AI Cites Your Facts",
     description:
-      "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, benchmark against competitors, and get a content playbook to improve employer visibility, candidate experience, and recruitment ROI.",
+      "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts instead of third-party rumours. See what ChatGPT, Perplexity and Google AI say about you, then deploy structured data on your domain.",
     images: ["/opengraph-image"],
   },
   alternates: {

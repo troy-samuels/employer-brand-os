@@ -13,21 +13,21 @@ import { Footer } from "@/components/shared/footer";
 import { generateFAQSchema, JsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "FAQ — AI Employer Visibility Questions Answered",
+  title: "FAQ — RAG-Native Employer Data Questions Answered",
   description:
-    "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you maximize the probability that AI represents your employer brand accurately.",
+    "Everything employers need to know about RAG, machine-readable employer data, and how OpenRole helps you increase the likelihood that AI cites your verified facts instead of third-party rumours.",
   openGraph: {
-    title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
+    title: "FAQ — RAG-Native Employer Data Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you influence what AI says about your company.",
+      "Everything employers need to know about RAG, machine-readable employer data, and how OpenRole helps you increase the likelihood that AI cites your verified facts instead of third-party rumours.",
     url: "https://openrole.co.uk/faq",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "FAQ — AI Employer Visibility Questions Answered | OpenRole",
+    title: "FAQ — RAG-Native Employer Data Questions Answered | OpenRole",
     description:
-      "Everything employers need to know about AI employer visibility, information gaps, content playbooks, and how OpenRole helps you influence what AI says about your company.",
+      "Everything employers need to know about RAG, machine-readable employer data, and how OpenRole helps you increase the likelihood that AI cites your verified facts instead of third-party rumours.",
   },
   alternates: { canonical: "https://openrole.co.uk/faq" },
 };
@@ -45,14 +45,21 @@ const faqs: FaqEntry[] = [
     slug: "what-is-ai-visibility",
     question: "What is AI visibility and why should employers care?",
     summary:
-      "AI visibility measures how accurately AI models represent your company to job seekers. 800M people use ChatGPT weekly — when candidates ask about you, AI answers instantly. If that answer is wrong, they move on. You never know they were interested.",
+      "AI visibility measures whether AI models cite your verified employer data when candidates research you. 800M people use ChatGPT weekly — when they ask about your salaries or benefits, AI searches your website first. If your data isn't machine-readable, AI defaults to Glassdoor and Reddit rumours.",
+    category: "Understanding AI Visibility",
+  },
+  {
+    slug: "how-does-this-change-ai-answers",
+    question: "How does this actually change what AI says?",
+    summary:
+      "Modern AI uses RAG (Retrieval-Augmented Generation) — it searches the web before answering. Publishing structured data on your own domain maximises the probability AI cites your content. Your domain authority + our machine-readable format = AI finds your facts first.",
     category: "Understanding AI Visibility",
   },
   {
     slug: "what-do-llms-say-about-employers",
     question: "What do AI models actually say about employers?",
     summary:
-      "We tested ChatGPT, Claude, Perplexity and Gemini on hundreds of UK companies. They get salaries wrong by an average of £18K, miss benefits entirely, and cite 2-3 year old data as current fact. See real examples.",
+      "We tested ChatGPT, Claude, Perplexity and Gemini on hundreds of UK companies. They get salaries wrong by an average of £18K, miss benefits entirely, and cite 2-3 year old data as current fact. Why? Because companies don't publish machine-readable employer data. See real examples.",
     category: "Understanding AI Visibility",
   },
   {
@@ -67,28 +74,35 @@ const faqs: FaqEntry[] = [
     slug: "how-scoring-works",
     question: "How does the AI Visibility Score work?",
     summary:
-      "Your score (0-100) measures how well-equipped your digital presence is for AI models to accurately represent your company. We audit 6 dimensions: structured data, AI crawler access, careers page, brand reputation, salary transparency, and content format.",
+      "Your score (0-100) measures how well-equipped your digital presence is for AI models to cite your verified employer data. We audit 6 dimensions: structured data readiness, AI crawler access, careers page quality, domain authority, salary transparency, and content format.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "do-i-need-it-involvement",
+    question: "Do I need IT involvement?",
+    summary:
+      "No. Level 1 (llms.txt) requires pasting one code block into your site footer. Level 2 (JavaScript snippet) requires pasting one script tag. Both take under 5 minutes. Level 3 (reverse proxy) requires a DNS change — your IT team can do this in under 10 minutes.",
     category: "How OpenRole Works",
   },
   {
     slug: "what-is-llms-txt",
     question: "Does llms.txt help with AI visibility?",
     summary:
-      "llms.txt is a structured file at your domain root that tells AI models how to describe your organisation. Think of it as robots.txt for your reputation. 91% of UK employers don't have one.",
+      "Yes. llms.txt is a structured file at your domain root that provides machine-readable employer data to AI models. Think of it as robots.txt for your reputation. Publishing it on your own domain increases the likelihood AI cites your verified facts. 91% of UK employers don't have one.",
     category: "How OpenRole Works",
   },
   {
     slug: "what-is-the-pixel",
     question: "What does the OpenRole pixel do?",
     summary:
-      "The pixel is a lightweight JavaScript snippet (~2KB) that serves structured employer data to AI crawlers visiting your careers page. It makes your company information readable by AI models.",
+      "The pixel is a lightweight JavaScript snippet (~2KB) that serves machine-readable employer data to AI crawlers visiting your careers page. It injects JSON-LD structured data that AI models can parse instantly. Updates propagate without redeploying your site.",
     category: "How OpenRole Works",
   },
   {
     slug: "how-often-are-audits-updated",
-    question: "How often is AI monitoring updated?",
+    question: "How often is Brand Defence updated?",
     summary:
-      "AI models retrain regularly — what they say about you changes over time. Weekly monitoring catches hallucinations, tracks your optimisation efforts, and alerts you when AI narratives shift.",
+      "Weekly. RAG-based AI pulls fresh content constantly — what they say about you changes over time. Weekly monitoring tracks which AI models cite your structured data, which still cite third-party sources, and where gaps remain.",
     category: "How OpenRole Works",
   },
   // Security & Privacy
@@ -111,14 +125,14 @@ const faqs: FaqEntry[] = [
     slug: "free-vs-paid",
     question: "What's included free vs paid?",
     summary:
-      "The free audit gives you a full AI scan with gap summary. Paid plans add weekly monitoring, the full Information Gap Report with content templates, competitor benchmarking, and the Content Playbook.",
+      "The free audit shows what AI says about you right now — word for word — plus a gap summary. Paid plans add the deployment code (llms.txt, snippet, or proxy), weekly Brand Defence reports, competitor benchmarking, and structured data updates.",
     category: "Pricing & Plans",
   },
   {
     slug: "which-plan-do-i-need",
     question: "Which plan is right for my company?",
     summary:
-      "Starter (£49/mo) if you want to monitor and get templates. Growth (£149/mo) if you're actively hiring and want the full Content Playbook plus competitor intel. Scale (£399/mo) for done-for-you content drafts and board reporting.",
+      "Starter (£49/mo) if you want llms.txt and weekly monitoring. Growth (£149/mo) if you're actively hiring and want the JavaScript snippet plus competitor benchmarking. Scale (£399/mo) for the reverse proxy, done-for-you structured data updates, and board reporting.",
     category: "Pricing & Plans",
   },
 ];
@@ -151,11 +165,10 @@ export default function FaqPage() {
               <p className="overline">FAQ</p>
             </div>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight">
-              Questions about AI employer visibility
+              Questions about RAG-native employer data
             </h1>
             <p className="mt-5 text-lg text-slate-500 leading-relaxed">
-              Deep-dive answers, not one-liners. Click through for the full
-              explanation with examples and evidence.
+              Deep-dive answers on how RAG works, why machine-readable data matters, and how OpenRole injects structured employer data into your website. Click through for full explanations with examples.
             </p>
           </div>
         </section>
@@ -203,8 +216,8 @@ export default function FaqPage() {
               Still have questions?
             </h2>
             <p className="text-sm text-slate-500 mb-6">
-              Run a free audit to see exactly what AI says about your company,
-              or get in touch.
+              Run a free audit to see what ChatGPT, Perplexity, Claude and Gemini
+              say about your company right now — word for word.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

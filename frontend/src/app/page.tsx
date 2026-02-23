@@ -38,13 +38,13 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "OpenRole is an AI employer visibility platform that helps you measure and influence what AI tells candidates about your company. Run a free employer brand audit, get your visibility score, and maximize the probability that AI represents your employer brand accurately.",
+      "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts instead of third-party rumours. See what AI says about you right now, then deploy structured data to increase the likelihood AI represents your employer brand accurately.",
   });
 
   const websiteSchema = generateWebsiteSchema({
     name: SITE_NAME,
     url: BASE_URL,
-    description: "Free employer visibility audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, identify information gaps, and get a content playbook to increase the likelihood AI cites your verified data.",
+    description: "Free audit shows what AI says about your employer brand right now. We inject machine-readable data into your website so ChatGPT, Perplexity and Google AI cite your facts instead of third-party guesses. Your domain, your authority, your data.",
   });
 
   return (
@@ -70,12 +70,12 @@ export default function Home() {
                   className="mb-12 max-w-3xl text-center"
                 >
                   <h1 className="mb-5 text-5xl font-medium leading-[1.04] text-neutral-950 sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.04em' }}>
-                    Measure your employer brand
+                    AI is answering questions about you.
                     <br />
-                    <span className="text-brand-accent">where candidates look first</span>
+                    <span className="text-brand-accent">Are you feeding it the right data?</span>
                   </h1>
                   <p className="text-lg text-neutral-400 max-w-lg mx-auto">
-                    Candidates research you in AI before they apply, engage, or accept. Run a free employer brand audit — see your score across ChatGPT, Claude, Perplexity and Gemini, find the gaps, and provide AI with your verified data.
+                    OpenRole injects a machine-readable data layer into your existing website. When ChatGPT, Perplexity or Google AI researches your company, it finds your verified facts — not Glassdoor rumours from 2022.
                   </p>
                 </motion.div>
               )}

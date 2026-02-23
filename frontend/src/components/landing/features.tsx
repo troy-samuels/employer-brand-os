@@ -12,18 +12,18 @@ import { Search, FileSearch, BarChart3 } from "lucide-react";
 const steps = [
   {
     icon: Search,
-    label: "See what AI says",
-    detail: "Real responses from ChatGPT, Claude, Perplexity and Gemini — word for word. Know exactly what candidates, hiring managers, and leadership see.",
+    label: "Audit",
+    detail: "See what AI says about you right now — word for word. Real responses from ChatGPT, Perplexity, Claude and Gemini. Know exactly what candidates see when they research you.",
   },
   {
     icon: FileSearch,
-    label: "Measure the gaps",
-    detail: "Your employer brand audit report scores every category — salary, benefits, culture, interview process — so you can benchmark and prioritise.",
+    label: "Fill in the gaps",
+    detail: "Input your real data: salaries, benefits, remote policy, interview process. We show you what's missing and what AI is guessing about.",
   },
   {
     icon: BarChart3,
-    label: "Improve your employer brand",
-    detail: "A step-by-step Content Playbook tied to your score. Publish on your site, track the impact, and prove employer brand ROI.",
+    label: "Deploy",
+    detail: "We inject it into your website as AI-readable content. Your domain, your authority, your data. Track the impact as AI starts citing your facts.",
   },
 ];
 
@@ -92,7 +92,7 @@ export default function Features() {
           viewport={{ once: true, amount: 0.05 }}
           transition={spring}
         >
-          See it. Find the gaps. Fix them.
+          Audit. Input. Deploy.
         </motion.h2>
 
         <div className="grid gap-5 md:grid-cols-3">

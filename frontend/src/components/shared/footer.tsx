@@ -20,7 +20,7 @@ export function Footer() {
               OpenRole
             </Link>
             <span className="text-slate-400 max-w-xs leading-relaxed">
-              See what AI tells your candidates. Find the gaps. Take control.
+              Inject machine-readable employer data. AI cites your facts, not rumours.
             </span>
           </div>
 

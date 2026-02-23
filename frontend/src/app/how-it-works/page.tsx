@@ -30,13 +30,13 @@ import { Footer } from "@/components/shared/footer";
 /* ------------------------------------------------------------------ */
 
 export const metadata: Metadata = {
-  title: "How It Works — AI Employer Brand Audit | OpenRole",
+  title: "How It Works — RAG-Native Employer Data | OpenRole",
   description:
-    "Understand how OpenRole audits your employer brand across ChatGPT, Claude, Perplexity and Gemini. See the methodology, the scoring, and how to improve.",
+    "OpenRole injects machine-readable employer data into your existing website so AI cites your verified facts. Understand how RAG works, why careers pages fail AI, and what OpenRole does (llms.txt, snippet, reverse proxy).",
   openGraph: {
-    title: "How OpenRole Works — AI Employer Brand Audit",
+    title: "How OpenRole Works — RAG-Native Employer Data",
     description:
-      "We query 4 AI models with the same questions candidates ask. Then we show you what they say, what's wrong, and exactly what to publish to fix it.",
+      "We inject machine-readable employer data into your website. When ChatGPT, Perplexity or Google AI researches your company, it finds your verified facts — not third-party rumours.",
     type: "website",
     url: "https://openrole.co.uk/how-it-works",
   },
@@ -62,164 +62,150 @@ export default function HowItWorksPage() {
               How It Works
             </p>
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-slate-900 tracking-tight mb-6 max-w-2xl">
-              We ask AI the same questions your candidates do.
+              We inject machine-readable data into your website
               <br />
-              Then we show you the answers.
+              so AI cites your facts, not rumours.
             </h1>
             <p className="text-lg text-slate-500 max-w-xl leading-relaxed">
-              No black box. No vague scores. Just the actual AI responses candidates receive — word for word — with specific recommendations to improve each one.
+              When ChatGPT, Perplexity or Google AI researches your company, it searches the web first. Publishing structured data on your own domain maximises the probability AI cites your verified content instead of third-party guesses.
             </p>
           </div>
         </section>
 
-        {/* ── The Problem ──────────────────────────── */}
+        {/* ── How RAG Works ──────────────────────────── */}
         <section className="py-16 lg:py-20 border-b border-slate-200">
           <div className="mx-auto max-w-[900px] px-6 lg:px-12">
             <h2 className="text-2xl font-bold text-slate-900 mb-4">
-              The problem we solve
+              How RAG works (the short version)
             </h2>
             <p className="text-slate-600 leading-relaxed mb-8 max-w-2xl">
-              When a candidate considers your company, they no longer just Google you.
-              They ask ChatGPT. They ask Perplexity. They ask Claude. And these AI tools
-              answer — whether or not the information is accurate.
+              Modern AI models like ChatGPT and Perplexity use Retrieval-Augmented Generation (RAG) — they search the web for current information before answering. This means they're not just regurgitating training data; they're actively looking for your content right now.
             </p>
 
-            <div className="grid gap-6 md:grid-cols-2">
-              <div className="rounded-xl bg-red-50 border border-red-100 p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <XCircle className="h-5 w-5 text-red-400" />
-                  <h3 className="text-sm font-semibold text-slate-900">Without OpenRole</h3>
-                </div>
-                <ul className="space-y-2 text-sm text-slate-600">
-                  <li>• AI guesses your salary based on Glassdoor averages</li>
-                  <li>• Interview prep comes from 2-year-old Reddit threads</li>
-                  <li>• Benefits description is generic industry defaults</li>
-                  <li>• Candidates make decisions based on wrong information</li>
-                  <li>• You never know what they saw or why they didn&apos;t apply</li>
-                </ul>
-              </div>
-
-              <div className="rounded-xl bg-teal-50 border border-teal-100 p-6">
-                <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle2 className="h-5 w-5 text-teal-500" />
-                  <h3 className="text-sm font-semibold text-slate-900">With OpenRole</h3>
-                </div>
-                <ul className="space-y-2 text-sm text-slate-600">
-                  <li>• See exactly what AI tells candidates about you</li>
-                  <li>• Identify the specific questions AI gets wrong</li>
-                  <li>• Get a content playbook — what to publish, where</li>
-                  <li>• Track improvements weekly as AI cites your content</li>
-                  <li>• Benchmark against competitors in your industry</li>
-                </ul>
-              </div>
+            <div className="rounded-xl bg-slate-50 border border-slate-200 p-6 mb-8">
+              <h3 className="text-sm font-semibold text-slate-900 mb-3">
+                When a candidate asks "What's the salary at [Your Company]?":
+              </h3>
+              <ol className="space-y-3 text-sm text-slate-600">
+                <li className="flex gap-3">
+                  <span className="font-semibold text-brand-accent">1.</span>
+                  <span>AI searches the web for pages about your company and salaries</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-semibold text-brand-accent">2.</span>
+                  <span>It ranks results by domain authority and relevance</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-semibold text-brand-accent">3.</span>
+                  <span>It reads the top results and synthesises an answer</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-semibold text-brand-accent">4.</span>
+                  <span>It cites the sources it used (Perplexity does this explicitly)</span>
+                </li>
+              </ol>
             </div>
+
+            <p className="text-slate-600 leading-relaxed max-w-2xl">
+              <strong className="text-slate-900">The problem:</strong> Most company careers pages fail this process. They're JavaScript-heavy, lack structured data, and bury key facts in PDFs or behind login walls. So AI defaults to third-party sources — Glassdoor, Indeed, old Reddit threads — even when those sources are wrong.
+            </p>
           </div>
         </section>
 
-        {/* ── The 4 Steps ──────────────────────────── */}
+        {/* ── What OpenRole Does ──────────────────────────── */}
         <section className="py-16 lg:py-20">
           <div className="mx-auto max-w-[900px] px-6 lg:px-12">
-            <h2 className="text-2xl font-bold text-slate-900 mb-12">
-              Four steps. From blind to in control.
+            <h2 className="text-2xl font-bold text-slate-900 mb-4">
+              What OpenRole does (3 levels)
             </h2>
+            <p className="text-slate-600 leading-relaxed mb-12 max-w-2xl">
+              We inject machine-readable employer data into your existing website. Three levels of implementation — you pick what works for your team. All use your domain authority to increase the likelihood AI cites your verified content.
+            </p>
 
-            <div className="space-y-12">
-              {/* Step 1 */}
-              <div className="flex gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
-                  <Search className="h-6 w-6 text-brand-accent" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    1. We query AI like a candidate would
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    We ask ChatGPT, Claude, Perplexity, and Gemini the 8 questions
-                    candidates ask most: salary, benefits, interview process, culture,
-                    remote policy, tech stack, career growth, and employer reviews.
-                  </p>
-                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-4">
-                    <p className="text-sm text-slate-500 italic mb-2">Example queries we run:</p>
-                    <ul className="text-sm text-slate-700 space-y-1">
-                      <li>→ &quot;What is the salary for a Senior Engineer at [Your Company]?&quot;</li>
-                      <li>→ &quot;What benefits does [Your Company] offer?&quot;</li>
-                      <li>→ &quot;Help me prepare for an interview at [Your Company]&quot;</li>
-                      <li>→ &quot;What is the remote work policy at [Your Company]?&quot;</li>
-                    </ul>
+            <div className="space-y-8">
+              {/* Level 1: llms.txt */}
+              <div className="rounded-xl bg-white border border-slate-200 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
+                    <FileSearch className="h-6 w-6 text-brand-accent" />
                   </div>
-                </div>
-              </div>
-
-              {/* Step 2 */}
-              <div className="flex gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
-                  <FileSearch className="h-6 w-6 text-brand-accent" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    2. We identify the information gaps
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    For each question, we compare what AI says against reality. We flag
-                    inaccuracies, missing data, and outdated information. We also check
-                    which sources AI is citing — your own content, or third-party guesses.
-                  </p>
-                  <div className="rounded-lg bg-amber-50 border border-amber-200 p-4">
-                    <p className="text-sm text-amber-800">
-                      <strong>Common finding:</strong> AI says your salary is £55K when you actually
-                      pay £75K. Why? Because you haven&apos;t published salary bands anywhere AI can
-                      find them, so it defaults to Glassdoor averages from 2 years ago.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 3 */}
-              <div className="flex gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
-                  <Lightbulb className="h-6 w-6 text-brand-accent" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    3. We give you a Content Playbook
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    Not vague advice — specific content recommendations. For each gap,
-                    we tell you exactly what to publish, where to publish it, and how to
-                    format it so AI picks it up. Templates included.
-                  </p>
-                  <div className="rounded-lg bg-teal-50 border border-teal-200 p-4">
-                    <p className="text-sm text-teal-800">
-                      <strong>Example recommendation:</strong> &quot;Add a salary range to your Senior
-                      Engineer listing on your careers page. Format: &apos;Senior Engineer: £75,000–£90,000
-                      base + equity.&apos; AI picks up structured salary data within 2-4 weeks.&quot;
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Step 4 */}
-              <div className="flex gap-6">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
-                  <Repeat className="h-6 w-6 text-brand-accent" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">
-                    4. We track the impact weekly
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    Every Monday, you get a report: what AI said this week, which gaps
-                    you&apos;ve closed, which remain, and what to work on next. Watch your
-                    score improve as AI starts citing your content instead of guessing.
-                  </p>
-                  <div className="rounded-lg bg-slate-50 border border-slate-200 p-4">
-                    <div className="flex items-center gap-2 text-sm text-slate-600">
-                      <TrendingUp className="h-4 w-4 text-teal-500" />
-                      <span>Average improvement: +15 points in the first month for employers who follow the playbook.</span>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        Level 1: llms.txt
+                      </h3>
+                      <span className="rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-semibold text-teal-700">
+                        No IT required
+                      </span>
                     </div>
+                    <p className="text-slate-600 leading-relaxed mb-3">
+                      A structured text file at <code className="text-sm bg-slate-50 px-1.5 py-0.5 rounded">yourcompany.com/llms.txt</code> that tells AI models how to describe your company. Think robots.txt for your reputation. Paste one code block into your site footer.
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      <strong>What it covers:</strong> Company overview, salary ranges, benefits, remote policy, interview process, tech stack.
+                    </p>
                   </div>
                 </div>
               </div>
+
+              {/* Level 2: Snippet */}
+              <div className="rounded-xl bg-white border border-slate-200 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
+                    <Zap className="h-6 w-6 text-brand-accent" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        Level 2: JavaScript snippet
+                      </h3>
+                      <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-700">
+                        Paste 1 script tag
+                      </span>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed mb-3">
+                      A lightweight script (~2KB) that serves structured employer data to AI crawlers visiting your careers page. Makes your company information machine-readable — AI can parse it instantly. Updates propagate without redeploying your site.
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      <strong>What it adds:</strong> JSON-LD structured data, dynamic content updates, tracking which AI models visit your site.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Level 3: Reverse proxy */}
+              <div className="rounded-xl bg-white border border-slate-200 p-6">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-accent/10">
+                    <Globe className="h-6 w-6 text-brand-accent" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-2">
+                      <h3 className="text-lg font-semibold text-slate-900">
+                        Level 3: Reverse proxy
+                      </h3>
+                      <span className="rounded-full bg-purple-50 px-2.5 py-0.5 text-xs font-semibold text-purple-700">
+                        Requires DNS change
+                      </span>
+                    </div>
+                    <p className="text-slate-600 leading-relaxed mb-3">
+                      We sit in front of your careers page and serve AI-optimised content to crawlers while humans see your normal site. Maximum control — we can A/B test what AI sees, inject real-time data, and block bad actors. Your site stays unchanged.
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      <strong>What it adds:</strong> Full content control, rate limiting, crawler analytics, instant updates without redeploying.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 rounded-xl bg-teal-50 border border-teal-200 p-6">
+              <h3 className="text-sm font-semibold text-teal-900 mb-2">
+                All levels share the same principle:
+              </h3>
+              <p className="text-sm text-teal-800 leading-relaxed">
+                Your domain authority + our structured data = AI cites you. When candidates ask about your company, AI finds <em>your verified facts</em> on <em>your domain</em> — not third-party guesses. That's what increases the probability of accurate AI answers.
+              </p>
             </div>
           </div>
         </section>
@@ -231,21 +217,17 @@ export default function HowItWorksPage() {
               Why this works
             </h2>
             <p className="text-slate-600 leading-relaxed mb-8 max-w-2xl">
-              AI models like ChatGPT use Retrieval-Augmented Generation (RAG) — they
-              search the web for current information before answering. Publishing structured, 
-              machine-readable content on your careers page maximizes the probability that AI 
-              models cite your verified data instead of third-party sources.
+              RAG-based AI (ChatGPT, Perplexity, Google AI Overviews) searches the web before answering. Publishing structured, machine-readable content on your own domain maximises the probability that AI models cite your verified data instead of third-party sources. Three reasons:
             </p>
 
             <div className="grid gap-6 md:grid-cols-3">
               <div className="rounded-xl bg-white border border-slate-200 p-6">
                 <Brain className="h-6 w-6 text-brand-accent mb-3" />
                 <h3 className="text-sm font-semibold text-slate-900 mb-2">
-                  AI follows authority
+                  Domain authority matters
                 </h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  When your own domain ranks for employer queries, AI prefers your
-                  content over third-party guesses. Domain authority matters.
+                  When your own domain ranks for employer queries, AI prefers your content over third-party guesses. Publishing on yourcompany.com beats publishing on Medium or LinkedIn.
                 </p>
               </div>
 
@@ -255,21 +237,17 @@ export default function HowItWorksPage() {
                   Changes happen fast
                 </h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  RAG-based AI (Perplexity, ChatGPT search) picks up new content
-                  in days. One company went from 0% to 11% AI visibility in 2 weeks
-                  from a single blog post.
+                  RAG updates in days, not months. One company went from 0% to 11% AI visibility in 2 weeks from publishing structured data. Another went 3.2% → 22.2% with a careers page rewrite.
                 </p>
               </div>
 
               <div className="rounded-xl bg-white border border-slate-200 p-6">
                 <Globe className="h-6 w-6 text-brand-accent mb-3" />
                 <h3 className="text-sm font-semibold text-slate-900 mb-2">
-                  You already have the answers
+                  You already have the data
                 </h3>
                 <p className="text-sm text-slate-500 leading-relaxed">
-                  You know your salary bands, benefits, and interview process.
-                  The only problem is that it&apos;s not published where AI can find it.
-                  We show you exactly where the gaps are.
+                  You know your salary bands, benefits, and interview process. The only problem is it's not published in a machine-readable format on your domain. OpenRole fixes that.
                 </p>
               </div>
             </div>
@@ -280,11 +258,10 @@ export default function HowItWorksPage() {
         <section className="py-16 lg:py-20">
           <div className="mx-auto max-w-2xl px-6 text-center">
             <h2 className="text-2xl lg:text-3xl font-bold text-slate-900 mb-4 tracking-tight">
-              See it in action
+              See what AI says about you right now
             </h2>
             <p className="text-slate-500 mb-8 max-w-md mx-auto">
-              Run a free audit on your company — or check out a sample report to see
-              exactly what you get.
+              Run a free audit to see what ChatGPT, Perplexity, Claude and Gemini tell candidates about your company — word for word. Then we show you how to fix it.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link

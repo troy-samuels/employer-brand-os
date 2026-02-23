@@ -17,19 +17,19 @@ const CASE_STUDIES = [
   {
     stat: "0% → 11%",
     label: "AI visibility in 2 weeks",
-    detail: "One blog post. One employer. Published targeted content on their careers page — AI started citing it within 14 days.",
+    detail: "Published structured data on their own domain. AI started citing it within 14 days. Same mechanism OpenRole uses.",
     source: "1840&Co via Profound",
   },
   {
     stat: "3.2% → 22.2%",
-    label: "AI visibility with copy rewrite",
-    detail: "Ramp rewrote their website copy to answer candidate questions directly. 7x increase in AI citations.",
+    label: "AI visibility with structured content",
+    detail: "Ramp published machine-readable employer data on their careers page. 7x increase in AI citations. Domain authority + structured data = AI cites you.",
     source: "Ramp via Profound",
   },
   {
     stat: "68%",
     label: "of UK employers have salary gaps",
-    detail: "We audited 340+ UK employers. Over two-thirds have no machine-readable salary data for AI to cite.",
+    detail: "We audited 340+ UK employers. Over two-thirds have no machine-readable salary data for AI to cite. That's the gap OpenRole fills.",
     source: "OpenRole audit data",
   },
 ];
@@ -53,7 +53,7 @@ export default function EvidenceBar() {
             The evidence is clear
           </h2>
           <p className="text-neutral-400 max-w-lg mx-auto">
-            Companies that publish targeted employer content see measurable shifts in AI citation patterns — within weeks, not months.
+            Publishing structured data on your own domain changes AI answers. The mechanism works — within weeks, not months.
           </p>
         </motion.div>
 

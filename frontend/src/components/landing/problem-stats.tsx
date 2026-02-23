@@ -10,15 +10,15 @@ import { motion } from "framer-motion";
 const stats = [
   {
     value: "800M",
-    label: "people use ChatGPT every week — and 13.5% of conversations are employer research",
+    label: "people use ChatGPT every week — and they're asking about your company",
   },
   {
     value: "68%",
-    label: "of UK employers have missing or outdated information in AI search results",
+    label: "of UK employers have no machine-readable salary or benefits data for AI to cite",
   },
   {
     value: "32/100",
-    label: "average employer brand score across 340+ UK companies we've audited",
+    label: "average employer AI visibility score. Glassdoor fills the silence.",
   },
 ];
 

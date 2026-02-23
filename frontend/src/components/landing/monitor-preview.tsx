@@ -110,12 +110,12 @@ export default function MonitorPreview() {
               className="text-3xl lg:text-4xl font-medium text-neutral-950 mb-4"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Employer brand monitoring.
+              Brand Defence.
               <br />
               Every Monday.
             </h2>
             <p className="text-neutral-400 leading-relaxed max-w-sm">
-              Your weekly employer brand score, what changed across AI models, where the gaps remain — and exactly what to publish next. Measurement your leadership team can see, actions your team can take.
+              Your weekly employer brand score, what changed across AI models, where the gaps remain — and exactly what to deploy next. Measurement your leadership team can see, actions your team can take.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
