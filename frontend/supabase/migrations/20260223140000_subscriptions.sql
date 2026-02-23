@@ -1,12 +1,12 @@
 -- Subscriptions table for Stripe integration
 CREATE TABLE IF NOT EXISTS subscriptions (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   organization_id UUID REFERENCES organizations(id) ON DELETE SET NULL,
   stripe_customer_id TEXT UNIQUE,
   stripe_subscription_id TEXT UNIQUE,
   stripe_price_id TEXT,
-  plan_name TEXT NOT NULL DEFAULT 'free' CHECK (plan_name IN ('free', 'visibility', 'compliance', 'agency')),
+  plan_name TEXT NOT NULL DEFAULT 'free' CHECK (plan_name IN ('free', 'starter', 'growth', 'scale', 'enterprise', 'visibility', 'compliance', 'agency')),
   status TEXT NOT NULL DEFAULT 'inactive' CHECK (status IN ('active', 'inactive', 'past_due', 'cancelled', 'trialing')),
   current_period_start TIMESTAMPTZ,
   current_period_end TIMESTAMPTZ,

@@ -323,6 +323,11 @@ export default function PricingPage() {
                       </div>
 
                       <div className="flex items-baseline gap-1">
+                        {annual && plan.monthlyPrice > plan.annualPrice && (
+                          <span className="text-lg text-slate-400 line-through tabular-nums mr-1">
+                            £{plan.monthlyPrice}
+                          </span>
+                        )}
                         <AnimatePresence mode="wait">
                           <motion.span
                             key={price}

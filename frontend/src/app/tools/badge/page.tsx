@@ -38,6 +38,16 @@ function scoreLabel(score: number): string {
   return "Needs Work";
 }
 
+/** Escape XML special characters for safe SVG text content */
+function escapeXml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&apos;");
+}
+
 function generateSvg(
   company: string,
   score: number,
@@ -46,6 +56,7 @@ function generateSvg(
 ): string {
   const color = scoreColor(score);
   const label = scoreLabel(score);
+  const safeCompany = escapeXml(company);
   const bg = theme === "dark" ? "#0a0a0a" : "#ffffff";
   const text = theme === "dark" ? "#ffffff" : "#0a0a0a";
   const muted = theme === "dark" ? "#a3a3a3" : "#737373";
@@ -73,7 +84,7 @@ function generateSvg(
   // detailed
   return `<svg xmlns="http://www.w3.org/2000/svg" width="280" height="96" viewBox="0 0 280 96">
   <rect width="280" height="96" rx="12" fill="${bg}" stroke="${border}" stroke-width="1"/>
-  <text x="16" y="24" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="${text}">${company}</text>
+  <text x="16" y="24" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="${text}">${safeCompany}</text>
   <text x="16" y="42" font-family="system-ui,sans-serif" font-size="10" fill="${muted}">AI Employer Visibility Score</text>
   <text x="16" y="72" font-family="system-ui,sans-serif" font-size="28" font-weight="700" fill="${color}">${score}</text>
   <text x="52" y="72" font-family="system-ui,sans-serif" font-size="14" fill="${muted}">/100</text>

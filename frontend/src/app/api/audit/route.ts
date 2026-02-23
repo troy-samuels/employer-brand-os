@@ -28,7 +28,7 @@ export const runtime = "nodejs";
 
 const AUDIT_RESOURCE = "api.audit";
 const AUDIT_RATE_LIMIT_SCOPE = "audit-phase1";
-const AUDIT_RATE_LIMIT_LIMIT = 500;
+const AUDIT_RATE_LIMIT_LIMIT = 20;
 const AUDIT_RATE_LIMIT_WINDOW_SECONDS = 3600;
 const AUDIT_EXECUTION_TIMEOUT_MS = 45_000;
 
