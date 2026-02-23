@@ -7,6 +7,7 @@ import { NextRequest, type NextResponse } from "next/server";
 import { z } from "zod";
 
 import { logAuditRequest } from "@/lib/audit/audit-logger";
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
@@ -52,7 +53,7 @@ interface AuditLeadSuccessResponse {
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<AuditLeadSuccessResponse | ApiErrorResponse>> {
-  const actor = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+  const actor = resolveRequestActor(request);
 
   try {
     if (!validateCsrf(request)) {

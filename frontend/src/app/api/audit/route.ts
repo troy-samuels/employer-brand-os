@@ -3,8 +3,6 @@
  * Runs the public website audit workflow and returns the computed audit result.
  */
 
-import { isIP } from "node:net";
-
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,6 +11,7 @@ import { persistAuditResult } from "@/lib/audit/audit-persistence";
 import { resolveCompanyUrl } from "@/lib/audit/company-resolver";
 import { isLikelyDomainOrUrl, validateUrl } from "@/lib/audit/url-validator";
 import { runWebsiteChecks, type WebsiteCheckResult } from "@/lib/audit/website-checks";
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
   apiErrorResponse,
@@ -84,35 +83,6 @@ const auditRequestSchema = z.object({
   careersUrl: careersUrlFieldSchema.optional(),
 });
 
-function getClientIpAddress(request: NextRequest): string {
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp && isIP(realIp)) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const [first] = forwarded.split(",");
-    const candidate = first?.trim();
-    if (candidate && isIP(candidate)) {
-      return candidate;
-    }
-  }
-
-  const cfIp = request.headers.get("cf-connecting-ip")?.trim();
-  if (cfIp && isIP(cfIp)) {
-    return cfIp;
-  }
-
-  const vercelIp = request.headers.get("x-vercel-forwarded-for")?.trim();
-  if (vercelIp && isIP(vercelIp)) {
-    return vercelIp;
-  }
-
-  const userAgent = request.headers.get("user-agent") ?? "unknown";
-  return `anonymous:${Buffer.from(userAgent).toString("base64url").slice(0, 24)}`;
-}
-
 /**
  * Executes an audit request for a provided domain or URL.
  * @param request - The incoming audit request.
@@ -121,7 +91,7 @@ function getClientIpAddress(request: NextRequest): string {
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<WebsiteCheckResult | ApiErrorResponse>> {
-  const clientIp = getClientIpAddress(request);
+  const clientIp = resolveRequestActor(request);
 
   try {
     if (!validateCsrf(request)) {

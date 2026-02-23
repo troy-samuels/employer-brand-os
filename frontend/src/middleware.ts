@@ -5,6 +5,7 @@
 
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { validateCsrf } from "@/lib/utils/csrf";
 
 const publicRoutes = [
@@ -33,6 +34,8 @@ const csrfExemptApiRoutes = [
 const API_LIMIT_PER_MINUTE = 600;
 const AUDIT_LIMIT_PER_MINUTE = 200;
 const RATE_WINDOW_MS = 60_000;
+const RATE_LIMIT_CLEANUP_INTERVAL_MS = 15_000;
+const MAX_RATE_LIMIT_BUCKETS = 10_000;
 
 type RateLimitBucket = {
   count: number;
@@ -46,23 +49,7 @@ type RateLimitBucket = {
  * Redis (`@upstash/ratelimit`).
  */
 const rateLimitStore = new Map<string, RateLimitBucket>();
-
-function getClientIp(request: NextRequest): string {
-  const fromForwarded = request.headers.get("x-forwarded-for");
-  if (fromForwarded) {
-    const [first] = fromForwarded.split(",");
-    if (first?.trim()) {
-      return first.trim();
-    }
-  }
-
-  const fromRealIp = request.headers.get("x-real-ip");
-  if (fromRealIp?.trim()) {
-    return fromRealIp.trim();
-  }
-
-  return (request as unknown as { ip?: string }).ip ?? "unknown";
-}
+let lastRateLimitCleanupAt = 0;
 
 function getRateLimitForPath(pathname: string): number {
   if (pathname === "/api/audit" || pathname.startsWith("/api/audit/")) {
@@ -86,12 +73,12 @@ function buildRateLimitKey(pathname: string, ip: string): string {
   return `${scope}:${ip}`;
 }
 
-function checkRateLimit(
-  pathname: string,
-  ip: string
-): { allowed: boolean; retryAfter: number; remaining: number; limit: number } {
-  const now = Date.now();
-  const limit = getRateLimitForPath(pathname);
+function pruneRateLimitStore(now: number): void {
+  if (now - lastRateLimitCleanupAt < RATE_LIMIT_CLEANUP_INTERVAL_MS) {
+    return;
+  }
+
+  lastRateLimitCleanupAt = now;
 
   for (const [key, bucket] of rateLimitStore.entries()) {
     if (bucket.resetAt <= now) {
@@ -99,13 +86,47 @@ function checkRateLimit(
     }
   }
 
+  if (rateLimitStore.size <= MAX_RATE_LIMIT_BUCKETS) {
+    return;
+  }
+
+  const entriesByResetAt = Array.from(rateLimitStore.entries()).sort(
+    (left, right) => left[1].resetAt - right[1].resetAt,
+  );
+  const overflow = rateLimitStore.size - MAX_RATE_LIMIT_BUCKETS;
+
+  for (let index = 0; index < overflow; index += 1) {
+    const candidate = entriesByResetAt[index];
+    if (!candidate) {
+      break;
+    }
+    rateLimitStore.delete(candidate[0]);
+  }
+}
+
+function checkRateLimit(
+  pathname: string,
+  ip: string
+): {
+  allowed: boolean;
+  retryAfter: number;
+  remaining: number;
+  limit: number;
+  resetAt: number;
+} {
+  const now = Date.now();
+  const limit = getRateLimitForPath(pathname);
+  pruneRateLimitStore(now);
+
   const key = buildRateLimitKey(pathname, ip);
   const existing = rateLimitStore.get(key);
+
+  const windowResetAt = now + RATE_WINDOW_MS;
 
   if (!existing || existing.resetAt <= now) {
     rateLimitStore.set(key, {
       count: 1,
-      resetAt: now + RATE_WINDOW_MS,
+      resetAt: windowResetAt,
     });
 
     return {
@@ -113,6 +134,7 @@ function checkRateLimit(
       retryAfter: 0,
       remaining: limit - 1,
       limit,
+      resetAt: windowResetAt,
     };
   }
 
@@ -122,6 +144,7 @@ function checkRateLimit(
       retryAfter: Math.max(1, Math.ceil((existing.resetAt - now) / 1000)),
       remaining: 0,
       limit,
+      resetAt: existing.resetAt,
     };
   }
 
@@ -133,6 +156,7 @@ function checkRateLimit(
     retryAfter: 0,
     remaining: Math.max(0, limit - existing.count),
     limit,
+    resetAt: existing.resetAt,
   };
 }
 
@@ -202,7 +226,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (isApiRoute) {
-    const ip = getClientIp(request);
+    const ip = resolveRequestActor(request);
     const rateLimitResult = checkRateLimit(pathname, ip);
 
     if (!rateLimitResult.allowed) {
@@ -214,6 +238,9 @@ export async function middleware(request: NextRequest) {
             "Retry-After": String(rateLimitResult.retryAfter),
             "X-RateLimit-Limit": String(rateLimitResult.limit),
             "X-RateLimit-Remaining": String(rateLimitResult.remaining),
+            "X-RateLimit-Reset": String(
+              Math.floor(rateLimitResult.resetAt / 1000),
+            ),
           },
         }
       );

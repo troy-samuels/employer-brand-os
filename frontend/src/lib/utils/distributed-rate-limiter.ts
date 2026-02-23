@@ -1,14 +1,14 @@
 /**
  * @module lib/utils/distributed-rate-limiter
  * Distributed rate limiter using Supabase as the backend.
- * 
+ *
  * SECURITY CRITICAL: This prevents abuse of the pixel API.
- * 
+ *
  * Architecture:
  * - Primary: Supabase-backed persistent buckets (shared across all instances)
  * - Fallback: In-memory buckets (per-instance, for when DB is unavailable)
- * - Graceful degradation: Allows requests when rate limiter is down (fail open)
- * 
+ * - Graceful degradation: Falls back to memory if DB path fails
+ *
  * Production hardening needed:
  * - Migrate to Upstash Redis for sub-millisecond performance
  * - Add circuit breaker to prevent cascading failures
@@ -24,7 +24,11 @@ type MemoryBucket = {
 
 const fallbackStore = new Map<string, MemoryBucket>();
 const CLEANUP_INTERVAL_MS = 60_000; // Clean up expired buckets every minute
+const SUPABASE_CLEANUP_INTERVAL_MS = 5 * 60_000;
+const DISTRIBUTED_RETRY_LIMIT = 3;
+const FALLBACK_MAX_BUCKETS = 5_000;
 let lastCleanup = Date.now();
+let lastSupabaseCleanup = 0;
 
 /**
  * Distributed rate limiter with automatic failover
@@ -71,26 +75,24 @@ export class DistributedRateLimiter {
     } catch (error) {
       console.error('[RateLimiter] Distributed check failed:', error);
 
-      // Fallback to in-memory (per-instance) rate limiting
-      const fallbackResult = this.checkInMemory(
-        bucketKey,
-        limit,
-        windowSeconds
-      );
-
-      // If fail-open is enabled and both fail, allow the request
-      if (this.failOpenOnError && !fallbackResult.allowed) {
-        console.warn(
-          '[RateLimiter] Both distributed and in-memory checks failed, allowing request (fail-open mode)'
+      try {
+        // Fallback to in-memory (per-instance) rate limiting
+        return this.checkInMemory(
+          bucketKey,
+          limit,
+          windowSeconds
         );
-        return {
-          allowed: true,
-          remaining: 0,
-          resetAt: expiresAt.getTime(),
-        };
+      } catch (fallbackError) {
+        console.error('[RateLimiter] In-memory fallback check failed:', fallbackError);
+        if (this.failOpenOnError) {
+          return {
+            allowed: true,
+            remaining: Math.max(0, limit - 1),
+            resetAt: expiresAt.getTime(),
+          };
+        }
+        throw fallbackError;
       }
-
-      return fallbackResult;
     }
   }
 
@@ -112,73 +114,119 @@ export class DistributedRateLimiter {
     const nowIso = now.toISOString();
     const expiresAtIso = expiresAt.toISOString();
 
-    // Clean up expired buckets (best effort)
-    void this.cleanupExpiredBuckets(nowIso);
+    this.maybeCleanupExpiredBuckets(nowIso);
 
-    // Try to get existing bucket
-    const { data: existing, error: selectError } = await supabaseAdmin
-      .from('rate_limits')
-      .select('count, expires_at')
-      .eq('bucket_key', bucketKey)
-      .maybeSingle();
+    await this.ensureBucketExists(bucketKey, expiresAtIso);
 
-    if (selectError) {
-      throw selectError;
-    }
-
-    // If bucket doesn't exist or is expired, create/reset it
-    if (!existing || new Date(existing.expires_at) <= now) {
-      const { error: upsertError } = await supabaseAdmin
+    for (let attempt = 0; attempt < DISTRIBUTED_RETRY_LIMIT; attempt += 1) {
+      const { data: bucket, error: selectError } = await supabaseAdmin
         .from('rate_limits')
-        .upsert(
-          {
-            bucket_key: bucketKey,
-            count: 1,
-            expires_at: expiresAtIso,
-          },
-          {
-            onConflict: 'bucket_key',
-          }
-        );
+        .select('count, expires_at')
+        .eq('bucket_key', bucketKey)
+        .maybeSingle();
 
-      if (upsertError) {
-        throw upsertError;
+      if (selectError || !bucket) {
+        throw selectError ?? new Error('Missing distributed rate limit bucket');
       }
 
-      return {
-        allowed: true,
-        remaining: limit - 1,
-        resetAt: expiresAt.getTime(),
-      };
+      const resetAt = this.parseResetAt(bucket.expires_at, expiresAt.getTime());
+      const currentCount = bucket.count ?? 0;
+
+      if (resetAt <= now.getTime()) {
+        const { data: resetBucket, error: resetError } = await supabaseAdmin
+          .from('rate_limits')
+          .update({
+            count: 1,
+            expires_at: expiresAtIso,
+          })
+          .eq('bucket_key', bucketKey)
+          .select('count, expires_at')
+          .maybeSingle();
+
+        if (!resetError && resetBucket) {
+          return {
+            allowed: true,
+            remaining: Math.max(0, limit - 1),
+            resetAt: this.parseResetAt(resetBucket.expires_at, expiresAt.getTime()),
+          };
+        }
+
+        if (attempt === DISTRIBUTED_RETRY_LIMIT - 1) {
+          throw resetError ?? new Error('Failed to reset expired rate limit bucket');
+        }
+        continue;
+      }
+
+      if (currentCount >= limit) {
+        return {
+          allowed: false,
+          remaining: 0,
+          resetAt,
+        };
+      }
+
+      const nextCount = currentCount + 1;
+      const { data: incremented, error: incrementError } = await supabaseAdmin
+        .from('rate_limits')
+        .update({ count: nextCount })
+        .eq('bucket_key', bucketKey)
+        .eq('count', currentCount)
+        .select('count')
+        .maybeSingle();
+
+      if (!incrementError && incremented) {
+        return {
+          allowed: true,
+          remaining: Math.max(0, limit - nextCount),
+          resetAt,
+        };
+      }
+
+      if (attempt === DISTRIBUTED_RETRY_LIMIT - 1) {
+        throw incrementError ?? new Error('Failed to increment distributed rate limit bucket');
+      }
     }
 
-    // Bucket exists and is valid
-    const currentCount = existing.count ?? 0;
+    throw new Error('Exceeded distributed rate limiter retry attempts');
+  }
 
-    if (currentCount >= limit) {
-      return {
-        allowed: false,
-        remaining: 0,
-        resetAt: new Date(existing.expires_at).getTime(),
-      };
-    }
-
-    // Increment the counter
-    const newCount = currentCount + 1;
-    const { error: updateError } = await supabaseAdmin
+  private async ensureBucketExists(bucketKey: string, expiresAtIso: string): Promise<void> {
+    const { error } = await supabaseAdmin
       .from('rate_limits')
-      .update({ count: newCount })
-      .eq('bucket_key', bucketKey);
+      .upsert(
+        {
+          bucket_key: bucketKey,
+          count: 0,
+          expires_at: expiresAtIso,
+        },
+        {
+          onConflict: 'bucket_key',
+          ignoreDuplicates: true,
+        },
+      );
 
-    if (updateError) {
-      throw updateError;
+    if (error) {
+      throw error;
+    }
+  }
+
+  private parseResetAt(value: string | null, fallback: number): number {
+    if (!value) {
+      return fallback;
     }
 
-    return {
-      allowed: true,
-      remaining: Math.max(0, limit - newCount),
-      resetAt: new Date(existing.expires_at).getTime(),
-    };
+    const parsed = new Date(value).getTime();
+    return Number.isFinite(parsed) ? parsed : fallback;
+  }
+
+  private maybeCleanupExpiredBuckets(nowIso: string): void {
+    const nowMs = Date.now();
+    if (nowMs - lastSupabaseCleanup < SUPABASE_CLEANUP_INTERVAL_MS) {
+      return;
+    }
+
+    lastSupabaseCleanup = nowMs;
+    void this.cleanupExpiredBuckets(nowIso);
   }
 
   /**
@@ -264,6 +312,23 @@ export class DistributedRateLimiter {
       if (bucket.expiresAt <= now) {
         fallbackStore.delete(key);
       }
+    }
+
+    if (fallbackStore.size <= FALLBACK_MAX_BUCKETS) {
+      return;
+    }
+
+    const entriesByExpiry = Array.from(fallbackStore.entries()).sort(
+      (left, right) => left[1].expiresAt - right[1].expiresAt
+    );
+    const overflow = fallbackStore.size - FALLBACK_MAX_BUCKETS;
+
+    for (let index = 0; index < overflow; index += 1) {
+      const entry = entriesByExpiry[index];
+      if (!entry) {
+        break;
+      }
+      fallbackStore.delete(entry[0]);
     }
   }
 }

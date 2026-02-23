@@ -73,7 +73,7 @@ describe("url-validator", () => {
         async () => [{ address: "93.184.216.34", family: 4 }] as never,
       );
 
-      const result = await validateUrl("example.com");
+      const result = await validateUrl("public-example.com");
       expect(result.ok).toBe(true);
     });
   });

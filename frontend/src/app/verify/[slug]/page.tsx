@@ -7,6 +7,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { supabaseAdmin } from '@/lib/supabase/admin';
+import { serializeJsonForHtml } from '@/lib/utils/safe-json';
 
 /**
  * Hosted Truth Page
@@ -420,7 +421,7 @@ export default async function TruthPage({ params }: PageProps) {
           key={i}
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(schema).replace(/</g, '\\u003c').replace(/>/g, '\\u003e'),
+            __html: serializeJsonForHtml(schema),
           }}
         />
       ))}

@@ -11,6 +11,7 @@ import { ArrowLeft } from "lucide-react";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 import { sanitizeHtml } from "@/lib/utils/sanitize-html";
+import { serializeJsonForHtml } from "@/lib/utils/safe-json";
 import { getPostBySlug, formatDate, getAllPostSlugs } from "@/lib/blog";
 import { MarkdownRenderer } from "@/components/blog/markdown-renderer";
 
@@ -1434,7 +1435,7 @@ export default async function BlogPost({ params }: PageProps) {
       <div className="min-h-screen bg-slate-50">
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonForHtml(articleSchema) }}
         />
         <Header />
 

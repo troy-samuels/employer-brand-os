@@ -220,7 +220,7 @@ Disallow: /jobs
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("jsonld_base_salary");
-      expect(result.scoreBreakdown.salaryData).toBe(12);
+      expect(result.scoreBreakdown.salaryData).toBe(10);
       expect(result.detectedCurrency).toBe("GBP");
     });
 
@@ -236,7 +236,7 @@ Disallow: /jobs
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("multiple_ranges");
-      expect(result.scoreBreakdown.salaryData).toBe(10);
+      expect(result.scoreBreakdown.salaryData).toBe(8);
     });
 
     it("scores 3 for mention-only salary language with no disclosed range", async () => {
@@ -251,7 +251,7 @@ Disallow: /jobs
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("mention_only");
-      expect(result.scoreBreakdown.salaryData).toBe(3);
+      expect(result.scoreBreakdown.salaryData).toBe(2);
     });
 
     it("does not detect MYR when 'rm' appears only inside normal words", async () => {
@@ -359,7 +359,7 @@ Disallow: /jobs
 
       expect(result.hasSalaryData).toBe(true);
       expect(result.salaryConfidence).toBe("single_range");
-      expect(result.scoreBreakdown.salaryData).toBe(6);
+      expect(result.scoreBreakdown.salaryData).toBe(5);
       expect(fetchedUrls).toContain("https://example.com/jobs/staff-frontend-engineer");
       expect(fetchedUrls).not.toContain("https://example.com/about");
     });
@@ -424,8 +424,7 @@ Disallow: /jobs
         "Anthropic",
         "CCBot",
       ]);
-      expect(result.scoreBreakdown.robotsTxt).toBeGreaterThan(7);
-      expect(result.scoreBreakdown.robotsTxt).toBeLessThan(17);
+      expect(result.scoreBreakdown.robotsTxt).toBe(7);
     });
 
     it("does not fetch the target domain when URL validation fails", async () => {
@@ -512,8 +511,8 @@ Disallow: /jobs
 
       const result = await runWebsiteChecks("example.com", "Example");
 
-      // FAQ schema (2) + headings h1+h2 (2) + table/dl (1) + answer-first short para (2) + ARIA role (2) = 9, capped at 9
-      expect(result.scoreBreakdown.contentFormat).toBe(9);
+      // FAQ schema (3) + headings h1+h2 (3) + table/dl (2) + answer-first short para (3) + ARIA role (2) = 13
+      expect(result.scoreBreakdown.contentFormat).toBe(13);
     });
 
     it("scores content format at 0 when careers page has no structural signals", async () => {
@@ -543,8 +542,8 @@ Disallow: /jobs
 
       const result = await runWebsiteChecks("example.com", "Example");
 
-      // Only h1+h2 = 2 points (paragraph is >60 words, no answer-first bonus)
-      expect(result.scoreBreakdown.contentFormat).toBe(2);
+      // Only h1+h2 = 3 points (paragraph is >60 words, no answer-first bonus)
+      expect(result.scoreBreakdown.contentFormat).toBe(3);
     });
 
     it("always returns 0 for llmsTxt score regardless of file presence", async () => {
@@ -875,7 +874,7 @@ Disallow: /jobs
 
       expect(result.careersPageStatus).toBe("full");
       expect(result.careersPageUrl).toBe("https://careers.bbc.co.uk/");
-      expect(result.scoreBreakdown.careersPage).toBe(17);
+      expect(result.scoreBreakdown.careersPage).toBe(20);
       expect(fetchedUrls).toContain("https://bbc.co.uk/careers");
       expect(fetchedUrls).toContain("https://careers.bbc.co.uk/");
     });

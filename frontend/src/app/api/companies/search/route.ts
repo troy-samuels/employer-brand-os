@@ -6,11 +6,10 @@
  * Rate-limited to 30 requests per 60s per IP. CSRF-validated.
  */
 
-import { isIP } from "node:net";
-
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { supabaseAnon } from "@/lib/supabase/anon";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
@@ -40,20 +39,6 @@ const companySearchQuerySchema = z.object({
 });
 
 const rateLimiter = new RateLimiter();
-
-function getClientIpAddress(request: NextRequest): string {
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp && isIP(realIp)) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  if (forwarded && isIP(forwarded)) {
-    return forwarded;
-  }
-
-  return "anonymous";
-}
 
 /**
  * Defines the CompanySearchItem contract.
@@ -125,7 +110,7 @@ export async function GET(
   }
 
   // Rate limiting — 30 requests per 60s per IP.
-  const clientIp = getClientIpAddress(request);
+  const clientIp = resolveRequestActor(request);
   const allowed = await rateLimiter.check(
     clientIp,
     SEARCH_RATE_LIMIT_SCOPE,

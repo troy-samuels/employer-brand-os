@@ -8,6 +8,7 @@ import { z } from "zod";
 
 import { logPixelLoad } from "@/lib/audit/audit-logger";
 import { markPixelServiceRequest } from "@/lib/pixel/health";
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import {
   PIXEL_SCRIPT_BODY,
   PIXEL_SCRIPT_ETAG,
@@ -26,28 +27,6 @@ import {
 export const runtime = "nodejs";
 
 const scriptQuerySchema = z.object({}).passthrough();
-
-/**
- * Extracts a best-effort client IP for audit logging.
- * @param request - The script request.
- * @returns The inferred client IP or `unknown`.
- */
-function getClientIp(request: NextRequest): string {
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const [first] = forwarded.split(",");
-    if (first?.trim()) {
-      return first.trim();
-    }
-  }
-
-  return "unknown";
-}
 
 /**
  * Serves the JavaScript payload for the Smart Pixel runtime.
@@ -88,7 +67,7 @@ export async function GET(
     }
 
     void logPixelLoad({
-      actor: getClientIp(request),
+      actor: resolveRequestActor(request),
       result: "success",
       metadata: {
         script_version: PIXEL_SCRIPT_VERSION,

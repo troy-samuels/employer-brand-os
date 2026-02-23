@@ -14,6 +14,7 @@ import {
 } from "@/features/pixel/lib/validate-key";
 import { validateDomain } from "@/features/pixel/lib/validate-domain";
 import type { ValidatedPixelKey } from "@/features/pixel/types/pixel.types";
+import { extractClientIp as extractClientIpFromRequest } from "@/lib/security/request-metadata";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import type { ApiErrorResponse } from "@/lib/utils/api-response";
 import { pixelRateLimiter } from "@/lib/utils/distributed-rate-limiter";
@@ -118,20 +119,7 @@ export function zodValidationDetails(error: ZodError): {
 }
 
 export function extractClientIp(request: NextRequest): string | null {
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get("x-forwarded-for");
-  if (forwarded) {
-    const [first] = forwarded.split(",");
-    if (first?.trim()) {
-      return first.trim();
-    }
-  }
-
-  return null;
+  return extractClientIpFromRequest(request);
 }
 
 export async function requireApiKey(

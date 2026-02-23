@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 
 import { untypedTable } from "@/lib/supabase/untyped-table";
+import { serializeJsonForHtml } from "@/lib/utils/safe-json";
 
 /* ------------------------------------------------------------------ */
 /* Types                                                               */
@@ -574,7 +575,7 @@ export default async function CompanyPage({ params }: PageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(buildJsonLd(audit, slug)),
+          __html: serializeJsonForHtml(buildJsonLd(audit, slug)),
         }}
       />
     </main>

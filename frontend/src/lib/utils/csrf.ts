@@ -4,6 +4,10 @@
  */
 
 import { type NextRequest } from "next/server";
+import {
+  getAllowedRequestHosts,
+  getOriginHost,
+} from "@/lib/security/request-metadata";
 
 /**
  * Executes validateCsrf.
@@ -14,35 +18,23 @@ import { type NextRequest } from "next/server";
  * This prevents subdomain attacks (e.g., attacker.openrole.co.uk → api.openrole.co.uk).
  */
 export function validateCsrf(request: NextRequest): boolean {
-  const host = request.headers.get("host");
-  if (!host) return false;
-
   const origin = request.headers.get("origin");
   if (!origin) {
-    // Some same-origin browser requests (notably GET) may omit `Origin`.
-    // In that case, only trust explicit same-origin fetch metadata.
-    // SECURITY: Changed from accepting "same-site" to only "same-origin"
+    // Some browser requests omit `Origin`, so we use fetch metadata.
+    // Missing fetch metadata is treated as untrusted.
     const fetchSite = request.headers.get("sec-fetch-site");
     return fetchSite === "same-origin";
   }
 
-  try {
-    const originUrl = new URL(origin);
-    
-    // Strict host matching (includes port if specified)
-    if (originUrl.host === host) {
-      return true;
-    }
-
-    // Fallback to NEXT_PUBLIC_APP_URL for cases where host might be proxied
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
-    if (!appUrl) {
-      return false;
-    }
-
-    const appUrlHost = new URL(appUrl).host;
-    return originUrl.host === appUrlHost;
-  } catch {
+  const originHost = getOriginHost(origin);
+  if (!originHost) {
     return false;
   }
+
+  const allowedHosts = getAllowedRequestHosts(request);
+  if (allowedHosts.size === 0) {
+    return false;
+  }
+
+  return allowedHosts.has(originHost);
 }

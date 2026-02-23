@@ -4,6 +4,7 @@
  */
 
 import type { Metadata } from "next";
+import { serializeJsonForHtml } from "@/lib/utils/safe-json";
 
 /* ------------------------------------------------------------------ */
 /* Constants                                                           */
@@ -282,7 +283,7 @@ export function JsonLd({ data }: { data: object }) {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: serializeJsonForHtml(data) }}
     />
   );
 }

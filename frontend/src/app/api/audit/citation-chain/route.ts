@@ -3,8 +3,6 @@
  * Runs the full citation-chain audit and returns all report sections.
  */
 
-import { isIP } from "node:net";
-
 import { type NextRequest, type NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -13,6 +11,7 @@ import { detectEntityConfusion, type EntityConfusionResult } from "@/lib/citatio
 import { analyseGaps, type GapAnalysis } from "@/lib/citation-chain/gap-analysis";
 import type { CitationChainResult } from "@/lib/citation-chain/types";
 import { calculateTrustDelta, type TrustDeltaResult } from "@/lib/citation-chain/trust-delta";
+import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
   apiErrorResponse,
@@ -70,20 +69,6 @@ const auditRequestSchema = z.object({
 
 const rateLimiter = new RateLimiter();
 
-function getClientIpAddress(request: NextRequest): string {
-  const realIp = request.headers.get("x-real-ip")?.trim();
-  if (realIp && isIP(realIp)) {
-    return realIp;
-  }
-
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  if (forwarded && isIP(forwarded)) {
-    return forwarded;
-  }
-
-  return "anonymous";
-}
-
 /**
  * Execute a citation-chain audit request.
  * @param request - Incoming API request.
@@ -92,7 +77,7 @@ function getClientIpAddress(request: NextRequest): string {
 export async function POST(
   request: NextRequest,
 ): Promise<NextResponse<CitationChainAuditResponse | ApiErrorResponse>> {
-  const clientIp = getClientIpAddress(request);
+  const clientIp = resolveRequestActor(request);
 
   try {
     if (!validateCsrf(request)) {
