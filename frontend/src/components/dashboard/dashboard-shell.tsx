@@ -33,7 +33,7 @@ import { createClient } from "@/lib/supabase/client";
  *   pro         — full solution: monitoring, playbook, competitors, brand defence
  *   enterprise  — everything + API, SSO, dedicated CSM
  */
-export type PlanTier = "free" | "pro" | "enterprise" | "starter" | "growth" | "scale";
+export type PlanTier = "free" | "pro" | "enterprise" | "starter" | "growth" | "scale" | "control" | "compete" | "command";
 
 interface DashboardShellProps {
   children: React.ReactNode;
@@ -92,6 +92,33 @@ const PLAN_FEATURES: Record<PlanTier, Set<string>> = {
     "/dashboard/integration",
     "/dashboard/settings",
   ]),
+  // New tier names (control / compete / command)
+  control: new Set([
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/facts",
+    "/dashboard/settings",
+  ]),
+  compete: new Set([
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/compliance",
+    "/dashboard/sanitization",
+    "/dashboard/facts",
+    "/dashboard/jobs",
+    "/dashboard/settings",
+  ]),
+  command: new Set([
+    "/dashboard",
+    "/dashboard/analytics",
+    "/dashboard/compliance",
+    "/dashboard/sanitization",
+    "/dashboard/facts",
+    "/dashboard/jobs",
+    "/dashboard/pixel",
+    "/dashboard/integration",
+    "/dashboard/settings",
+  ]),
 };
 
 interface NavItem {
@@ -102,7 +129,7 @@ interface NavItem {
   minPlan: PlanTier;
 }
 
-const PLAN_ORDER: PlanTier[] = ["free", "starter", "growth", "pro", "scale", "enterprise"];
+const PLAN_ORDER: PlanTier[] = ["free", "starter", "control", "growth", "compete", "pro", "scale", "command", "enterprise"];
 
 function planIndex(p: PlanTier): number {
   return PLAN_ORDER.indexOf(p);
@@ -145,6 +172,19 @@ const planBadge: Record<string, { label: string; className: string }> = {
   scale: {
     label: "Scale",
     className: "bg-violet-50 text-violet-700",
+  },
+  // New tier names
+  control: {
+    label: "Control",
+    className: "bg-teal-50 text-teal-700",
+  },
+  compete: {
+    label: "Compete+",
+    className: "bg-violet-50 text-violet-700",
+  },
+  command: {
+    label: "Command",
+    className: "bg-amber-50 text-amber-700",
   },
 };
 

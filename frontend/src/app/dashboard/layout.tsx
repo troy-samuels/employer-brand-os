@@ -27,7 +27,7 @@ async function getUserPlan(userId: string): Promise<PlanTier> {
     const plan = (data as { plan_name: string }).plan_name;
 
     // Validate against known plan names (including legacy)
-    const validPlans: PlanTier[] = ["free", "pro", "enterprise", "starter", "growth", "scale"];
+    const validPlans: PlanTier[] = ["free", "pro", "enterprise", "starter", "growth", "scale", "control", "compete", "command"];
     if (validPlans.includes(plan as PlanTier)) {
       return plan as PlanTier;
     }
