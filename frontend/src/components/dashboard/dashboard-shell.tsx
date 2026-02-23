@@ -1,0 +1,222 @@
+/**
+ * @module components/dashboard/dashboard-shell
+ * Client shell for the dashboard with sidebar and main content area.
+ */
+
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import {
+  LayoutDashboard,
+  Brain,
+  ShieldCheck,
+  BarChart3,
+  FileCheck,
+  Briefcase,
+  Code2,
+  Plug,
+  Settings,
+  LogOut,
+  ArrowUpRight,
+  Menu,
+  X,
+} from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/client";
+
+interface DashboardShellProps {
+  children: React.ReactNode;
+  userEmail: string;
+  plan: "free" | "pro" | "enterprise";
+}
+
+const navigationItems = [
+  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "AI Intelligence", href: "/dashboard/analytics", icon: Brain },
+  { name: "Compliance", href: "/dashboard/compliance", icon: ShieldCheck },
+  { name: "Analytics", href: "/dashboard/sanitization", icon: BarChart3 },
+  { name: "Facts", href: "/dashboard/facts", icon: FileCheck },
+  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase },
+  { name: "Pixel", href: "/dashboard/pixel", icon: Code2 },
+  { name: "Integration", href: "/dashboard/integration", icon: Plug },
+  { name: "Settings", href: "/dashboard/settings", icon: Settings },
+];
+
+const planBadge: Record<string, { label: string; className: string }> = {
+  free: {
+    label: "Free",
+    className: "bg-slate-100 text-slate-600",
+  },
+  pro: {
+    label: "Pro",
+    className: "bg-teal-50 text-teal-700",
+  },
+  enterprise: {
+    label: "Enterprise",
+    className: "bg-violet-50 text-violet-700",
+  },
+};
+
+export function DashboardShell({
+  children,
+  userEmail,
+  plan,
+}: DashboardShellProps) {
+  const pathname = usePathname();
+  const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const badge = planBadge[plan] ?? planBadge.free;
+
+  async function handleLogout() {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    router.push("/login");
+    router.refresh();
+  }
+
+  const sidebar = (
+    <div className="flex h-full flex-col">
+      {/* Logo */}
+      <div className="px-4 py-6">
+        <Link
+          href="/dashboard"
+          className="text-lg font-bold text-slate-900 tracking-tight block px-3"
+        >
+          OpenRole
+        </Link>
+      </div>
+
+      {/* Nav */}
+      <nav className="flex-1 space-y-1 px-4 overflow-y-auto">
+        {navigationItems.map((item) => {
+          const isActive =
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
+              : pathname.startsWith(item.href);
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              onClick={() => setMobileOpen(false)}
+              className={cn(
+                "flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors duration-150",
+                isActive
+                  ? "bg-teal-50 text-teal-700"
+                  : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+              )}
+            >
+              <Icon className="h-[18px] w-[18px]" strokeWidth={1.5} />
+              <span className="flex-1">{item.name}</span>
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer */}
+      <div className="border-t border-slate-200 px-4 py-4 space-y-3">
+        {/* Upgrade CTA */}
+        {plan === "free" && (
+          <Link
+            href="/pricing"
+            className="flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-3 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 transition-colors duration-200"
+          >
+            Upgrade
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        )}
+
+        {/* User info */}
+        <div className="flex items-center gap-3 px-1">
+          <div className="h-8 w-8 rounded-full bg-slate-200 flex items-center justify-center text-xs font-bold text-slate-600 uppercase shrink-0">
+            {userEmail.charAt(0)}
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-medium text-slate-900 truncate">
+              {userEmail}
+            </p>
+            <span
+              className={cn(
+                "inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded",
+                badge.className
+              )}
+            >
+              {badge.label}
+            </span>
+          </div>
+        </div>
+
+        {/* Logout */}
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition-colors duration-150"
+        >
+          <LogOut className="h-[18px] w-[18px]" strokeWidth={1.5} />
+          Log out
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Mobile header */}
+      <div className="sticky top-0 z-40 flex items-center justify-between border-b border-slate-200 bg-white px-4 py-3 lg:hidden">
+        <Link
+          href="/dashboard"
+          className="text-lg font-bold text-slate-900 tracking-tight"
+        >
+          OpenRole
+        </Link>
+        <button
+          type="button"
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="inline-flex items-center justify-center rounded-lg p-2 text-slate-600 hover:bg-slate-100 transition-colors duration-200"
+          aria-label={mobileOpen ? "Close sidebar" : "Open sidebar"}
+        >
+          {mobileOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile sidebar overlay */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/20 backdrop-blur-sm lg:hidden"
+            onClick={() => setMobileOpen(false)}
+            onKeyDown={() => setMobileOpen(false)}
+            role="button"
+            tabIndex={-1}
+            aria-label="Close sidebar"
+          />
+          <aside className="fixed inset-y-0 left-0 z-50 w-72 bg-white border-r border-slate-200 lg:hidden">
+            {sidebar}
+          </aside>
+        </>
+      )}
+
+      <div className="flex">
+        {/* Desktop sidebar */}
+        <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:fixed lg:inset-y-0 border-r border-slate-200 bg-white">
+          {sidebar}
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 lg:pl-64">
+          <div className="mx-auto max-w-5xl px-6 py-8 lg:px-10 lg:py-10">
+            {children}
+          </div>
+        </main>
+      </div>
+    </div>
+  );
+}

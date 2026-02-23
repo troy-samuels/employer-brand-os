@@ -7,6 +7,7 @@ import { NextRequest, type NextResponse } from "next/server";
 import { z } from "zod";
 
 import { logAuditRequest } from "@/lib/audit/audit-logger";
+import { sendAuditReportEmail } from "@/lib/email/send-audit-report";
 import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
@@ -149,6 +150,15 @@ export async function POST(
         metadata: { reason: "unexpected_error" },
       });
       // Keep success to avoid interrupting funnel UX.
+    }
+
+    // Fire-and-forget: send audit report email (don't block the response)
+    if (companySlug) {
+      void sendAuditReportEmail({
+        email,
+        companySlug,
+        score: score ?? 0,
+      });
     }
 
     void logAuditRequest({

@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { CheckoutButton, ContactSalesButton } from "@/components/pricing/checkout-button";
 import { BASE_URL, SITE_NAME, generateProductSchema, JsonLd } from "@/lib/seo";
 
 /* ------------------------------------------------------------------ */
@@ -34,6 +35,7 @@ const plans = [
     ],
     cta: "Get started",
     href: "/signup?plan=starter",
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_VISIBILITY ?? null,
   },
   {
     name: "Growth",
@@ -52,6 +54,7 @@ const plans = [
     cta: "Get started",
     href: "/signup?plan=growth",
     highlighted: true,
+    priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_COMPLIANCE ?? null,
   },
   {
     name: "Scale",
@@ -67,8 +70,9 @@ const plans = [
       "ATS/careers page integration API",
       "Custom board reporting",
     ],
-    cta: "Get started",
+    cta: "Contact sales",
     href: "/signup?plan=scale",
+    priceId: null,
   },
 ];
 
@@ -284,16 +288,15 @@ export default function PricingPage() {
                       ))}
                     </ul>
 
-                    <Link
-                      href={plan.href}
-                      className={`flex items-center justify-center w-full rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
-                        plan.highlighted
-                          ? "bg-brand-accent text-white hover:bg-brand-accent-hover shadow-md shadow-brand-accent/20"
-                          : "bg-slate-100 text-slate-900 hover:bg-neutral-200"
-                      }`}
-                    >
-                      {plan.cta}
-                    </Link>
+                    {plan.priceId ? (
+                      <CheckoutButton
+                        priceId={plan.priceId}
+                        label={plan.cta}
+                        highlighted={plan.highlighted}
+                      />
+                    ) : (
+                      <ContactSalesButton />
+                    )}
                   </motion.div>
                 );
               })}

@@ -30,6 +30,7 @@ const mutatingMethods = new Set(["POST", "PUT", "DELETE"]);
 const csrfExemptApiRoutes = [
   "/api/monitor/weekly", // Cron/scheduler trigger (server-to-server)
   "/api/pixel/v1/crawl-log", // Authenticated via key + signature
+  "/api/email", // Internal service-to-service email triggers
 ];
 const API_LIMIT_PER_MINUTE = 600;
 const AUDIT_LIMIT_PER_MINUTE = 200;
@@ -313,6 +314,7 @@ export async function proxy(request: NextRequest) {
   if (!user && pathname.startsWith("/dashboard")) {
     const url = request.nextUrl.clone();
     url.pathname = "/login";
+    url.searchParams.set("redirect", pathname);
     const response = NextResponse.redirect(url);
     return withSecurityHeaders(response, pathname, nonce);
   }
