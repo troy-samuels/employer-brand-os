@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import { untypedTable } from "@/lib/supabase/untyped-table";
+import { formatCompanyName } from "@/lib/utils/company-names";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
 
@@ -305,7 +306,7 @@ export default async function IndexPage() {
                           </span>
                         </div>
                         <h3 className="text-base font-semibold text-slate-900 group-hover:text-brand-accent transition-colors">
-                          {company.company_name}
+                          {formatCompanyName(company.company_name, company.company_slug)}
                         </h3>
                         <p className="text-xs text-slate-400 mt-1">
                           {company.company_domain} · {checkCount(company)}/5
@@ -346,7 +347,7 @@ export default async function IndexPage() {
                       </span>
                       <div className="min-w-0">
                         <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-brand-accent transition-colors">
-                          {company.company_name}
+                          {formatCompanyName(company.company_name, company.company_slug)}
                         </p>
                         <p className="text-xs text-slate-400 truncate">
                           {company.company_domain}
