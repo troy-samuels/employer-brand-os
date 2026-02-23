@@ -5,7 +5,7 @@
 
 import { NextResponse } from "next/server";
 
-import { stripe } from "@/lib/stripe/server";
+import { getStripe } from "@/lib/stripe/server";
 import { createClient } from "@/lib/supabase/server";
 import { untypedTable } from "@/lib/supabase/untyped-table";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
@@ -67,7 +67,7 @@ export async function POST(): Promise<
 
     /* ── Create portal session ─────────────────────── */
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
-    const portalSession = await stripe.billingPortal.sessions.create({
+    const portalSession = await getStripe().billingPortal.sessions.create({
       customer: subscription.stripe_customer_id as string,
       return_url: `${appUrl}/dashboard`,
     });

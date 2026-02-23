@@ -9,7 +9,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
-import { stripe } from "@/lib/stripe/server";
+import { getStripe } from "@/lib/stripe/server";
 import { untypedTable } from "@/lib/supabase/untyped-table";
 import { supabaseAdmin } from "@/lib/supabase/admin";
 
@@ -105,7 +105,7 @@ async function handleCheckoutCompleted(
   }
 
   // Fetch the full subscription to get price and period details
-  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  const subscription = await getStripe().subscriptions.retrieve(subscriptionId);
   const priceId = subscription.items.data[0]?.price?.id ?? null;
   const planName = resolvePlanName(priceId);
   const { periodStart, periodEnd } = extractPeriod(subscription);
@@ -243,7 +243,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   /* ── Verify webhook ────────────────────────────── */
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    event = getStripe().webhooks.constructEvent(rawBody, signature, webhookSecret);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("[stripe/webhook] Signature verification failed:", message);
