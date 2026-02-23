@@ -37,13 +37,13 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "OpenRole is an AI employer branding tool that audits what ChatGPT, Claude, Perplexity and Gemini tell candidates about your company. Run a free employer brand audit, get your employer brand score, and improve your employer visibility.",
+      "OpenRole is an AI employer branding tool that measures what ChatGPT, Claude, Perplexity and Gemini say about your company. Run a free employer brand audit, get your employer brand score, and build an employer branding strategy grounded in data.",
   });
 
   const websiteSchema = generateWebsiteSchema({
     name: SITE_NAME,
     url: BASE_URL,
-    description: "Free employer brand audit and employer brand measurement across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score and get a playbook to improve candidate experience.",
+    description: "Free employer brand audit and measurement across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, benchmark against competitors, and get a playbook to improve your employer visibility.",
   });
 
   return (
@@ -69,12 +69,12 @@ export default function Home() {
                   className="mb-12 max-w-3xl text-center"
                 >
                   <h1 className="mb-5 text-5xl font-medium leading-[1.04] text-neutral-950 sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.04em' }}>
-                    The employer brand audit
+                    Measure your employer brand
                     <br />
-                    <span className="text-brand-accent">for the AI era</span>
+                    <span className="text-brand-accent">where candidates look first</span>
                   </h1>
                   <p className="text-lg text-neutral-400 max-w-lg mx-auto">
-                    80% of candidates ask AI about you before they apply. Run a free employer brand audit — see what AI tells them about your salary, benefits, culture, and interview process.
+                    Candidates research you in AI before they apply, engage, or accept. Run a free employer brand audit — see your score across ChatGPT, Claude, Perplexity and Gemini, find the gaps, and fix them.
                   </p>
                 </motion.div>
               )}
@@ -93,7 +93,7 @@ export default function Home() {
                 >
                   <CompanySearch onSubmit={runAudit} isLoading={isLoading} />
                   <p className="mt-4 text-center text-xs text-neutral-400">
-                    340+ UK employers tracked · Average employer brand score: <span className="font-semibold text-neutral-500">32/100</span> · <span className="font-semibold text-status-critical">68%</span> have incomplete employer data in AI search
+                    340+ UK employers audited · Average employer brand score: <span className="font-semibold text-neutral-500">32/100</span> · <span className="font-semibold text-status-critical">68%</span> have incomplete employer data in AI search
                   </p>
                   {error && (
                     <motion.p

@@ -324,7 +324,7 @@ export default function BeforeAfter() {
             Same question. Completely different answer.
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
-            A candidate asks AI about working at your company.
+            Someone asks AI about working at your company — a candidate, a recruiter, even your board.
             Without your published content, AI pulls from third-party review sites and outdated job boards. With it, AI cites your careers page directly.
           </p>
         </motion.div>

@@ -115,7 +115,7 @@ export default function MonitorPreview() {
               Every Monday.
             </h2>
             <p className="text-neutral-400 leading-relaxed max-w-sm">
-              Weekly employer brand tracking report: what AI says about your salary, benefits, culture — what changed, what&apos;s still wrong, and where to focus your employer branding strategy next.
+              Your weekly employer brand score, what changed across AI models, where the gaps remain — and exactly what to publish next. Measurement your leadership team can see, actions your team can take.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">

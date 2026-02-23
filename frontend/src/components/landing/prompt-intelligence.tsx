@@ -109,7 +109,7 @@ export default function PromptIntelligence() {
           viewport={{ once: true, amount: 0.05 }}
           transition={{ delay: 0.1 }}
         >
-          These are the real prompts candidates use to research employers. Measure your employer brand visibility across all of them.
+          These are the real prompts used to research employers millions of times a week. Do you know how AI answers them about you?
         </motion.p>
 
         {/* Mock AI chat — Claude style */}

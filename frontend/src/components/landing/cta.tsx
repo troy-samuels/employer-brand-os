@@ -59,10 +59,10 @@ export default function CTA() {
             className="flex w-full flex-col items-center gap-3 rounded-2xl bg-neutral-950/90 backdrop-blur-2xl border border-white/10 px-4 py-3 text-center shadow-2xl shadow-black/30 transition-colors duration-200 hover:bg-neutral-950 sm:w-auto sm:flex-row sm:rounded-full sm:px-6 sm:text-left"
           >
             <span className="text-sm text-neutral-300 leading-snug">
-              Run your free employer brand audit
+              See what AI says about your employer brand
             </span>
             <span className="w-full rounded-full bg-brand-accent px-4 py-1.5 text-xs font-semibold text-white sm:w-auto">
-              Get your score
+              Free audit
             </span>
           </Link>
         </motion.div>

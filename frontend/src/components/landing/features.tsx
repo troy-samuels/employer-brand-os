@@ -13,17 +13,17 @@ const steps = [
   {
     icon: Search,
     label: "See what AI says",
-    detail: "Real responses from ChatGPT, Claude, Perplexity and Gemini — word for word.",
+    detail: "Real responses from ChatGPT, Claude, Perplexity and Gemini — word for word. Know exactly what candidates, hiring managers, and leadership see.",
   },
   {
     icon: FileSearch,
-    label: "Find what's missing",
-    detail: "Your employer brand audit report shows every gap — what AI can't answer about your salary, benefits, and culture.",
+    label: "Measure the gaps",
+    detail: "Your employer brand audit report scores every category — salary, benefits, culture, interview process — so you can benchmark and prioritise.",
   },
   {
     icon: BarChart3,
-    label: "Fill the gaps",
-    detail: "A step-by-step Content Playbook to improve your employer branding. Publish on your site this week, see results within days.",
+    label: "Improve your employer brand",
+    detail: "A step-by-step Content Playbook tied to your score. Publish on your site, track the impact, and prove employer brand ROI.",
   },
 ];
 

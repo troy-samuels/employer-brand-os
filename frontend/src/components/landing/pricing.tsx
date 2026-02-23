@@ -16,13 +16,13 @@ const plans = [
   {
     name: "Starter",
     price: "£49",
-    features: ["Employer brand score tracking", "Weekly gap alerts across 4 AI models", "5 content templates/month", "Email notifications"],
+    features: ["Employer brand score tracking", "Weekly monitoring across 4 AI models", "5 content templates/month", "Email alerts when your score changes"],
   },
   {
     name: "Growth",
     price: "£149",
     highlighted: true,
-    features: ["Everything in Starter", "Full Content Playbook to improve employer branding", "Competitor benchmarking ×2", "Candidate experience monitoring"],
+    features: ["Everything in Starter", "Full Content Playbook with ROI tracking", "Competitor benchmarking ×2", "Candidate experience + interview monitoring"],
   },
   {
     name: "Scale",
@@ -46,10 +46,10 @@ export default function Pricing() {
             className="text-3xl lg:text-4xl font-medium text-neutral-950"
             style={{ letterSpacing: "-0.03em" }}
           >
-            Employer branding tools that measure what matters
+            From audit to strategy to measurable ROI
           </h2>
           <p className="text-neutral-400 mt-3 max-w-md mx-auto text-sm">
-            The free employer brand audit is always free. Plans start when you want ongoing employer brand monitoring and measurement.
+            The free employer brand audit is always free. Plans add ongoing employer brand monitoring, competitor benchmarking, and the content playbook to close every gap.
           </p>
         </motion.div>
 
