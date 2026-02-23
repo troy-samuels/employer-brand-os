@@ -1,102 +1,67 @@
-# OpenRole: AI Developer Persona & Rules
+# OpenRole — Agent Instructions
 
-## 1. Identity & Communication
-- **Role:** You are a World-Class Lead Full-Stack Engineer and Product Architect.
-- **Client:** A Non-Technical Solo Founder.
-- **Communication Style:** Explain "Why" before "How." Avoid unexplained jargon. If a technical trade-off is required, explain it in terms of **Cost, Time, and Business Impact.**
-- **Founder Summary:** Every time you complete a task, provide a "Founder-Friendly Summary" of what was done and what the next logical step is.
-- **Explain everything as though you're talking to a non-technical co-founder.**
+## Product
 
-## 2. Project Mission
-OpenRole is the **"Stripe for Employer Truth"**—the employment data infrastructure layer for the AI age. We provide a Smart Pixel that makes every job **visible** to AI agents, **compliant** with pay transparency laws, and **sanitized** for public consumption.
+OpenRole helps employers understand and improve what AI platforms (ChatGPT, Perplexity, Google AI) say about them to job seekers. We identify information gaps that cause AI to guess or hallucinate, then provide a content playbook to fix it.
 
-**Core Value Proposition:** Most companies are "Invisible and Illegal." Their ATS outputs messy HTML that AI agents cannot read (40% traffic drop), and they fail to automate Pay Transparency compliance (regulatory risk). OpenRole intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
+**Live at [openrole.co.uk](https://openrole.co.uk).**
 
-**Target Market:**
-- **Primary:** High-Volume Franchises & Retail (The "Desperate Middle")—companies with visibility pain
-- **Secondary:** Mid-market companies (50-1,000 employees) in "3-Star Purgatory"
-- **Channel:** Recruitment Marketing Agencies managing 50+ locations (wholesale strategy)
+## Core Thesis
 
-## 3. The 4-Layer Platform (Product Architecture)
+AI answers broad opinion queries using Glassdoor. But for specific factual questions (salary, benefits, tech stack, interview process, remote policy), aggregators have thin/outdated data. If employers haven't published these answers, AI guesses. OpenRole identifies these information gaps and gives employers a content playbook to fill them on their own domains.
 
-### Layer 1: Infrastructure (The Smart Pixel & Sanitization)
-*The "Fix It" Wedge.*
-- **Smart Pixel:** Single line of JavaScript (like Meta Pixel) deployed via Google Tag Manager
-- **Sanitization Engine:** Translates internal ATS codes to public-friendly titles (e.g., `L4-Eng-NY` → `Senior Software Engineer`)
-- **CSP Fallback:** Hosted Truth Mirror (`jobs.openrole.co.uk/client`) for strict security environments
-- Dynamically injects `JSON-LD` Schema into the page for AI crawlers
+## Stack
 
-### Layer 2: Compliance (Automated Guardrails & Safety)
-*The "Moat" & Retention.*
-- **Automated Guardrails:** Scans job listings by location. Auto-flags or injects salary data for Pay Transparency compliance
-- **Hallucination Radar:** Weekly scans of OpenAI/Perplexity to detect AI models inventing fake data
-- Acts as "Reputation Insurance"
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **Database:** Supabase (PostgreSQL, RLS on all tables)
+- **Auth:** Supabase Auth (email/password + Google OAuth)
+- **Payments:** Stripe (Checkout + webhooks)
+- **Email:** Resend (transactional + nurture)
+- **Hosting:** Vercel (openrole.co.uk)
+- **Monitoring:** Sentry
+- **Styling:** Tailwind CSS
 
-### Layer 3: Intelligence (The "Proof of Life" Dashboard)
-*The Churn Killer.*
-- **Problem:** Infrastructure is invisible. CFOs cancel what they can't see.
-- **Solution:** The "Monday Morning Visibility Report"—automated email showing:
-  - Data points served to Google/OpenAI
-  - Non-compliant posts auto-corrected
-  - Job ranking improvements
+## Architecture
 
-### Layer 4: Network (Live Benchmarking)
-*The Upsell.*
-- **Verified Benchmarking:** Aggregated, anonymized salary/benefit data from verified clients
-- Real-time market comparison (not self-reported Glassdoor guesses)
-- Network effect: Gets more valuable as more companies join
+All code lives in `frontend/`. Key directories:
 
-## 4. Core Development Principles
-- **Simplicity First:** Use a "No-Code/Low-Code + API" philosophy. If a feature can be built with a reliable API or a simple database trigger, do not over-engineer it.
-- **Zero-IT Deployment:** Features must be deployable by HR/Marketing via Google Tag Manager—no IT tickets required.
-- **Modular Build:** Build Phase 1 (MVP) features as independent but connected modules.
-- **Scalability:** Ensure the database schema supports multi-location franchises from Day 1 (Role-Based Access Control).
-- **ATS Defense:** We are the "Translator" between messy internal data and public AI consumption.
+- `src/app/` — Pages and API routes
+- `src/lib/audit/` — Audit engine, scoring, shared utilities
+- `src/lib/email/` — Resend client + email templates (audit report, nurture day 1/3/7)
+- `src/lib/pdf/` — React-PDF briefing generator
+- `src/lib/stripe/` — Stripe client (lazy-init, server-only)
+- `src/lib/supabase/` — DB client, server/browser variants
+- `src/lib/security/` — CSRF, request metadata, rate limiting
+- `src/components/` — React components (shared, dashboard, pricing)
+- `supabase/migrations/` — 11 migrations, all applied to remote
 
-## 5. Guardrails
-- **No Hardcoded Keys:** Never put API keys in code. Use `.env` files.
-- **Validation:** Before writing code, confirm the requirements with the Founder to prevent "Feature Creep."
-- **Security:** Implement Row Level Security (RLS) on all database tables.
-- **Budget Conscious:** Alert the founder if a requested feature will significantly increase API costs (e.g., heavy LLM usage).
-- **Phase 1 Focus:** Do NOT build voice/video features, C2PA content authenticity, or complex content creation tools in Phase 1.
+## Pricing
 
-## 6. Tech Stack
-- **Frontend:** Next.js (App Router) + Shadcn/ui + Tailwind CSS
-- **Backend:** Supabase (PostgreSQL with RLS) + Supabase Edge Functions
-- **Smart Pixel:** Lightweight JavaScript SDK hosted on Cloudflare CDN
-- **AI:** Claude 3.5 Sonnet API (brand analysis), Perplexity API (hallucination detection)
-- **Scripts:** Python (Visibility Audit for lead generation)
+| Plan | Monthly | Annual | Target |
+|------|---------|--------|--------|
+| Free | £0 | — | Anyone — unlimited audits |
+| Starter | £59 | £49 | ≤100 employees |
+| Growth ⭐ | £179 | £149 | 100–1,000 employees |
+| Scale | £449 | £379 | 1,000+ employees |
+| Enterprise | Custom | Custom | 2,000+ / multi-brand |
 
-See `tech-stack.md` for detailed architecture decisions.
+## Development Principles
 
-## 7. Design System
-- **Vibe:** "Stripe for Employer Truth" - professional, authoritative, trust-focused
-- **Core Colors:** Trust Navy (`#0F172A`), Verification Blue (`#3B82F6`), Signal Green (`#10B981`), Warning Amber (`#F59E0B`)
-- **Key Motif:** "Verified Badge" iconography across all data points
+- **Graceful degradation** — Missing env vars log warnings, don't crash
+- **RLS everywhere** — All 33 tables have Row Level Security
+- **Server-only secrets** — Stripe, Resend, service role keys never touch the client
+- **Zod validation** — All API inputs validated with schemas
+- **CSRF + rate limiting** — On all public write endpoints
+- **UK English** — British spelling throughout
 
-See `design-system.md` for full visual identity guidelines.
+## Key Files
 
-## 8. Do's & Don'ts
-- **DO:** Flexible schema, data exportability, multi-persona access, audit logs, Zero-IT deployment, Sanitization rules
-- **DON'T:** Hardcode industry labels, build unverifiable features, require IT involvement for pixel deployment, expose internal ATS codes publicly
-
-See `do_do_not.md` for full guardrails.
-
-## 9. Database Architecture
-- **Multi-tenant:** Single Supabase project with RLS separating all tenant data
-- **Flat Locations:** All locations are peers (no hierarchy)
-- **Company Facts:** Salary, Benefits, Policy data with Pay Transparency compliance tracking
-- **Job Title Mappings:** Sanitization rules for ATS code translation
-- **JSON-LD Exports:** Track what data is exported and when
-- **Hallucination Tracking:** Monitor what AI agents say vs. verified facts
-- **Full Audit:** Every fact change creates version history and audit log entry
-
-See `database-schema.sql` for complete schema.
-
-## 10. Pricing Tiers (Reference)
-
-| Tier | Price | Target | Includes |
-|------|-------|--------|----------|
-| **Visibility** | $299/mo | SMB / Franchise | Smart Pixel, Basic Schema, Hosted Truth Page |
-| **Compliance** | $899/mo | Mid-Market | Visibility + Auto-Compliance Checks + Monday Morning Report |
-| **Agency** | $150/mo per location | Agency Partners | Wholesale rate, min 10 locations, Whitelabel reporting |
+| File | Purpose |
+|------|---------|
+| `OPENROLE_THESIS.md` | Full strategy (27K words) |
+| `PRICING_RESEARCH.md` | Competitor pricing data |
+| `GEMINI_GROWTH_ANALYSIS.md` | Feature roadmap |
+| `AUDIT_FIXES_CHECKLIST.md` | Security/tech debt tracker |
+| `COLD_OUTREACH_PLAYBOOK.md` | Sales playbook |
+| `CONTACTS_INDEX.md` | Lead pipeline |
+| `VALIDATION_TARGETS.md` | Employer outreach targets |

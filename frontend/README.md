@@ -1,71 +1,97 @@
 # OpenRole Frontend
 
-Production Next.js app for OpenRole's public site, audit engine, dashboard, and API routes.
+Next.js 16 application powering [openrole.co.uk](https://openrole.co.uk) — public site, AI audit engine, dashboard, and API.
 
-## Requirements
-
-- Node.js 20.11+ (Node 20 LTS recommended)
-- npm 10+
-
-## Local Setup
-
-1. Copy environment template:
+## Setup
 
 ```bash
-cp .env.example .env.local
-```
-
-2. Fill `.env.local` with real values from your secret manager.
-
-3. Install and run:
-
-```bash
+cp .env.example .env.local    # Add your keys
 npm install
-npm run dev
+npm run dev                   # http://localhost:3000
 ```
 
-App runs at `http://localhost:3000`.
-
-## Commands
-
-- `npm run dev` start local dev server
-- `npm run lint` run ESLint
-- `npm run typecheck` run TypeScript checks
-- `npm run test` run Vitest suite
-- `npm run build` production build
-- `npm run check` full release gate (`lint + typecheck + tests + build`)
-
-## Production Release Gate
-
-Run before deploy:
-
-```bash
-npm run check
-npm audit --omit=dev
-```
+**Node 20+ required.**
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_APP_URL` public app URL for metadata/callbacks
-- `NEXT_PUBLIC_SUPABASE_URL` Supabase project URL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY` public anon key
-- `SUPABASE_SERVICE_ROLE_KEY` server-side Supabase key
-- `CRON_SECRET` auth for scheduled monitor endpoint
-- `SCRAPINGBEE_API_KEY` optional fallback renderer for bot-protected pages
-- `SERPER_API_KEY` optional search provider key
-- `BRAVE_SEARCH_API_KEY` optional search provider key
+### Required
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public anon key |
+| `SUPABASE_SERVICE_ROLE_KEY` | Server-side DB access |
+
+### Optional (graceful degradation)
+| Variable | Purpose |
+|----------|---------|
+| `STRIPE_SECRET_KEY` | Stripe checkout/webhooks |
+| `STRIPE_WEBHOOK_SECRET` | Webhook signature validation |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side Stripe |
+| `NEXT_PUBLIC_STRIPE_PRICE_*` | 6 price IDs (starter/growth/scale × monthly/annual) |
+| `RESEND_API_KEY` | Email delivery (audit reports + nurture) |
+| `RESEND_FROM_EMAIL` | Sender address (default: hello@mail.openrole.co.uk) |
+| `BRAVE_SEARCH_API_KEY` | Web checks in audit engine |
+| `NEXT_PUBLIC_SENTRY_DSN` | Error monitoring |
+| `NEXT_PUBLIC_APP_URL` | Canonical URL for auth redirects |
+| `CRON_SECRET` | Protect /api/cron/* endpoints |
+
+## Commands
+
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Local dev server |
+| `npm run build` | Production build |
+| `npm run lint` | ESLint |
+| `npm run typecheck` | TypeScript checks |
+| `npm run test` | Vitest suite |
 
 ## Key Directories
 
-- `src/app` App Router pages + API routes
-- `src/components` UI and feature components
-- `src/lib` audit engine, security, utilities, Supabase clients
-- `src/features` domain modules (`pixel`, `facts`, `sanitization`)
-- `src/__tests__` unit and integration tests
-- `public` static assets, logos, pixel scripts
+```
+src/
+├── app/                    # Pages + API routes
+│   ├── api/audit/          # Core audit engine
+│   ├── api/stripe/         # Checkout, webhook, portal
+│   ├── api/cron/           # Nurture email cron
+│   ├── api/pdf/            # PDF briefing generator
+│   ├── company/[slug]/     # Public company scorecards
+│   ├── compare/            # Head-to-head comparisons
+│   ├── dashboard/          # Authenticated, plan-gated
+│   └── ...
+├── components/             # React components
+├── lib/
+│   ├── audit/              # Scoring engine + shared utils
+│   ├── email/              # Resend client + templates
+│   ├── pdf/                # React-PDF briefing
+│   ├── stripe/             # Stripe client (lazy-init)
+│   ├── supabase/           # DB clients (server + browser)
+│   ├── security/           # CSRF, rate limiting, request metadata
+│   └── utils/              # Formatters, validators, errors
+├── data/                   # Static data (industries, scores)
+└── __tests__/              # Unit + integration tests
 
-## Security Notes
+content/blog/               # 10 markdown blog posts
+public/                     # Static assets, llms.txt
+supabase/migrations/        # 11 DB migrations (all applied)
+```
 
-- Request hardening and auth/session enforcement live in `src/proxy.ts`.
-- CSP is nonce-based and set in proxy, not in `next.config.ts`.
-- Never commit `.env.local` or real credentials.
+## Database
+
+11 migrations, all pushed to remote Supabase. RLS enabled on all 33 tables.
+
+```bash
+cd frontend
+supabase migration list     # Check sync status
+supabase db push            # Apply pending migrations
+```
+
+## Deployment
+
+Hosted on Vercel. No auto-deploy from Git — deploy manually:
+
+```bash
+vercel --prod
+```
+
+Cron jobs configured in `vercel.json`:
+- `/api/cron/nurture` — Daily 9am, processes email nurture sequence

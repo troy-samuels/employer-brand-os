@@ -1,7 +1,9 @@
-# OpenRole Validation Targets - First 20 Companies
+# OpenRole — Validation Targets
 
-**Research Date:** January 26, 2026  
-**Criteria:** 100-500 employees, UK-based, actively hiring (5+ roles), mix of tech/fintech/other sectors
+**Research date:** January 2026 (refresh before outreach)
+**Goal:** Contact 20 companies → book 10 calls → validate willingness to pay
+**Criteria:** 100–500 employees, UK-based, actively hiring, mix of sectors
+**Playbook:** See `COLD_OUTREACH_PLAYBOOK.md` for email templates and cadence
 
 ## Summary Table
 
