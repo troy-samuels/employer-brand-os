@@ -12,27 +12,27 @@
 - [ ] **CRIT-01:** Invalidate `sb_publishable` and `sb_secret` keys from initial commit
 - [ ] **CRIT-01:** Run `git filter-repo` or BFG to strip secrets from git history
 - [ ] **CRIT-01:** Force-push cleaned history to origin
-- [ ] **CRIT-02:** Add `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` to all 18 unprotected tables
-- [ ] **CRIT-02:** Create `organization_members` table migration (referenced by RLS policies but never created)
-- [ ] **CRIT-02:** Verify all RLS policies are active: `SELECT tablename, rowsecurity FROM pg_tables WHERE schemaname = 'public'`
+- [x] **CRIT-02:** Add `ALTER TABLE ... ENABLE ROW LEVEL SECURITY` to all 33 tables ✅ (20260223120000 + 20260223160000)
+- [x] **CRIT-02:** Create `organization_members` table migration ✅ (20260223120000)
+- [x] **CRIT-02:** All RLS policies active — pushed to remote ✅
 - [ ] **CRIT-02:** Test that anon key cannot read `api_keys`, `audit_leads`, `users`, `audit_logs`
-- [ ] **CRIT-03:** Add CSRF validation to `/api/nominate`
-- [ ] **CRIT-03:** Add rate limiting to `/api/nominate` (10/hour per IP)
-- [ ] **CRIT-03:** Add Zod schema validation with email format check and max length
-- [ ] **CRIT-03:** Add `resolveRequestActor` for rate limit key
+- [x] **CRIT-03:** Add CSRF validation to `/api/nominate` ✅
+- [x] **CRIT-03:** Add rate limiting to `/api/nominate` (10/hour per IP) ✅
+- [x] **CRIT-03:** Add Zod schema validation with email format check and max length ✅
+- [x] **CRIT-03:** Add `resolveRequestActor` for rate limit key ✅
 
 ## 🟠 HIGH (Fix Soon)
 
-- [ ] **HIGH-01:** Reduce audit rate limit from 500/hour to 10-20/hour per IP (`src/app/api/audit/route.ts:31`)
+- [x] **HIGH-01:** Reduce audit rate limit from 500 → 20/hour per IP ✅
 - [ ] **HIGH-02:** Refactor homepage (`src/app/page.tsx`) from `"use client"` to server component with client islands
-- [ ] **HIGH-03:** Add Sentry (`@sentry/nextjs`) for error monitoring
+- [x] **HIGH-03:** Add Sentry (`@sentry/nextjs`) for error monitoring ✅ (268a4e0)
 - [ ] **HIGH-03:** Configure Vercel Analytics
 - [ ] **HIGH-04:** Consolidate all migrations under `frontend/supabase/migrations/` (timestamped)
 - [ ] **HIGH-04:** Delete `src/lib/db/migrations/` directory
 - [ ] **HIGH-04:** Delete `src/lib/supabase/migrations/` directory
 - [ ] **HIGH-04:** Run `supabase db diff` to verify schema consistency
-- [ ] **HIGH-05:** Escape company name in SVG generation (`src/app/tools/badge/page.tsx:41-93`)
-- [ ] **HIGH-05:** Add XML entity escaping function for `&`, `<`, `>`, `"`
+- [x] **HIGH-05:** Escape company name in SVG generation ✅ (`escapeXml` function added)
+- [x] **HIGH-05:** Add XML entity escaping function for `&`, `<`, `>`, `"` ✅
 - [ ] **HIGH-06:** Replace in-memory rate limiter in proxy with Upstash Redis or Supabase-backed limiter
 - [ ] **HIGH-07:** Replace regex-based HTML sanitizer with `isomorphic-dompurify` (`src/lib/utils/sanitize-html.ts`)
 
