@@ -24,6 +24,8 @@ import { untypedTable } from "@/lib/supabase/untyped-table";
 import { formatCompanyName } from "@/lib/utils/company-names";
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { NominateForm } from "@/components/shared/nominate-form";
+import { ZeroScoreSection } from "./zero-score-section";
 
 /* ------------------------------------------------------------------ */
 /* Metadata                                                            */
@@ -182,6 +184,9 @@ export const dynamic = "force-dynamic";
 export default async function IndexPage() {
   const { companies, stats } = await getIndexData();
 
+  // Separate scored companies from zero-score companies
+  const scoredCompanies = companies.filter((c) => c.score > 0);
+  const zeroScoreCompanies = companies.filter((c) => c.score === 0);
   const hasData = companies.length > 0;
 
   return (
@@ -287,9 +292,9 @@ export default async function IndexPage() {
             ) : (
               <>
                 {/* Top 3 podium */}
-                {companies.length >= 3 && (
+                {scoredCompanies.length >= 3 && (
                   <div className="grid gap-4 md:grid-cols-3 mb-10">
-                    {companies.slice(0, 3).map((company, i) => (
+                    {scoredCompanies.slice(0, 3).map((company, i) => (
                       <Link
                         key={company.company_slug}
                         href={`/company/${company.company_slug}`}
@@ -335,8 +340,8 @@ export default async function IndexPage() {
                     <span className="text-right">Score</span>
                   </div>
 
-                  {/* Rows */}
-                  {companies.map((company, i) => (
+                  {/* Rows — only companies with score > 0 */}
+                  {scoredCompanies.map((company, i) => (
                     <Link
                       key={company.company_slug}
                       href={`/company/${company.company_slug}`}
@@ -417,6 +422,9 @@ export default async function IndexPage() {
                     .
                   </p>
                 </div>
+
+                {/* Zero-score companies — collapsed by default */}
+                <ZeroScoreSection companies={zeroScoreCompanies} />
               </>
             )}
           </div>
@@ -434,10 +442,18 @@ export default async function IndexPage() {
             </p>
             <Link
               href="/#audit"
-              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
+              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors mb-8"
             >
               Audit your company
             </Link>
+
+            {/* Nominate a company */}
+            <div className="mt-8 pt-6 border-t border-slate-100">
+              <p className="text-sm font-medium text-slate-700 mb-3">
+                Or nominate a company for us to audit
+              </p>
+              <NominateForm />
+            </div>
           </div>
         </section>
       </main>

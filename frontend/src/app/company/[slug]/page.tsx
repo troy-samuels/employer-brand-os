@@ -121,6 +121,54 @@ async function getIndustryAvg(): Promise<number> {
   return 35;
 }
 
+interface SimilarCompany {
+  company_name: string;
+  company_slug: string;
+  company_domain: string;
+  score: number;
+}
+
+async function getSimilarCompanies(
+  currentSlug: string,
+  currentScore: number
+): Promise<SimilarCompany[]> {
+  try {
+    // Get companies with similar scores (±15 points), excluding current
+    const { data } = await untypedTable("public_audits")
+      .select("company_name, company_slug, company_domain, score")
+      .neq("company_slug", currentSlug)
+      .gt("score", 0)
+      .gte("score", Math.max(0, currentScore - 15))
+      .lte("score", Math.min(100, currentScore + 15))
+      .order("score", { ascending: false })
+      .limit(20);
+
+    if (!data || data.length === 0) {
+      // Fallback: get top companies if no similar-score ones found
+      const { data: fallback } = await untypedTable("public_audits")
+        .select("company_name, company_slug, company_domain, score")
+        .neq("company_slug", currentSlug)
+        .gt("score", 0)
+        .order("score", { ascending: false })
+        .limit(6);
+      return (fallback as SimilarCompany[]) ?? [];
+    }
+
+    // Deduplicate by domain and pick up to 6
+    const seen = new Set<string>();
+    const deduped: SimilarCompany[] = [];
+    for (const c of data as SimilarCompany[]) {
+      if (!seen.has(c.company_domain) && deduped.length < 6) {
+        seen.add(c.company_domain);
+        deduped.push(c);
+      }
+    }
+    return deduped;
+  } catch {
+    return [];
+  }
+}
+
 /* ------------------------------------------------------------------ */
 /* Dynamic metadata for SEO                                            */
 /* ------------------------------------------------------------------ */
@@ -435,9 +483,10 @@ export default async function CompanyPage({ params }: PageProps) {
     year: "numeric",
   });
 
-  const [percentile, avgScore] = await Promise.all([
+  const [percentile, avgScore, similarCompanies] = await Promise.all([
     getPercentile(audit.score),
     getIndustryAvg(),
+    getSimilarCompanies(slug, audit.score),
   ]);
 
   const scoreDelta = audit.score - avgScore;
@@ -776,6 +825,54 @@ export default async function CompanyPage({ params }: PageProps) {
             . Last updated {auditDate}.
           </p>
         </div>
+
+        {/* ── Similar companies (internal linking) ── */}
+        {similarCompanies.length > 0 && (
+          <section className="max-w-5xl mx-auto px-6 py-14">
+            <h2 className="text-xl font-bold text-slate-900 mb-2">
+              Companies with similar scores
+            </h2>
+            <p className="text-sm text-slate-500 mb-6">
+              See how other UK employers compare on AI visibility
+            </p>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {similarCompanies.map((company) => (
+                <Link
+                  key={company.company_slug}
+                  href={`/company/${company.company_slug}`}
+                  className="group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 hover:shadow-card-hover hover:border-neutral-300 transition-all duration-300"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-semibold text-slate-900 truncate group-hover:text-teal-600 transition-colors">
+                      {formatCompanyName(company.company_name, company.company_slug)}
+                    </p>
+                    <p className="text-xs text-slate-400 truncate">{company.company_domain}</p>
+                  </div>
+                  <span
+                    className={`text-lg font-bold tabular-nums shrink-0 ml-3 ${
+                      company.score >= 70
+                        ? "text-teal-600"
+                        : company.score >= 40
+                          ? "text-amber-600"
+                          : "text-red-600"
+                    }`}
+                  >
+                    {company.score}
+                  </span>
+                </Link>
+              ))}
+            </div>
+            <div className="mt-6 text-center">
+              <Link
+                href="/uk-index"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors"
+              >
+                View full UK index
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+          </section>
+        )}
 
         {/* ── Audit another company ───────────────── */}
         <section className="border-t border-slate-200 bg-white">

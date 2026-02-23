@@ -1,0 +1,53 @@
+# OpenRole — AI Employer Visibility Platform
+> OpenRole helps UK employers control what AI tells candidates about them.
+
+## What We Do
+OpenRole audits employer visibility across AI models (ChatGPT, Claude, Perplexity, Gemini). We score companies 0–100 on how accurately AI represents their employer brand — salaries, benefits, culture, interview process, and more.
+
+## Core Product
+- **Free AI Visibility Audit**: Enter your company domain, get a score out of 100 in 30 seconds. No signup required.
+- **AI Visibility Score**: 8-category scoring covering structured data, bot access, careers pages, salary transparency, content format, brand reputation, and llms.txt adoption.
+- **Content Playbook**: Paid tier generates specific content recommendations to close information gaps that AI models have about your company.
+- **Weekly Monitoring**: Track how your AI visibility changes over time as you publish content.
+
+## Key Pages
+- Homepage & Audit Tool: https://openrole.co.uk
+- UK AI Employer Index: https://openrole.co.uk/uk-index (235+ companies ranked)
+- Compare Page: https://openrole.co.uk/compare (side-by-side AI model responses)
+- How We Score: https://openrole.co.uk/how-we-score (methodology)
+- ROI Calculator: https://openrole.co.uk/roi-calculator
+- Blog: https://openrole.co.uk/blog
+- Pricing: https://openrole.co.uk/pricing
+- Sample Report: https://openrole.co.uk/sample-report
+- FAQ: https://openrole.co.uk/faq
+
+## Industry Rankings
+- Fintech: https://openrole.co.uk/uk-index/fintech
+- SaaS & Software: https://openrole.co.uk/uk-index/saas
+- Healthcare: https://openrole.co.uk/uk-index/healthcare
+- Retail: https://openrole.co.uk/uk-index/retail
+- Consulting: https://openrole.co.uk/uk-index/consulting
+- Energy: https://openrole.co.uk/uk-index/energy
+- Cybersecurity: https://openrole.co.uk/uk-index/cybersecurity
+- AI & Machine Learning: https://openrole.co.uk/uk-index/ai-ml
+- Media: https://openrole.co.uk/uk-index/media
+
+## Key Statistics
+- Average UK employer AI visibility score: ~34/100
+- 89% of audited companies lack an llms.txt file
+- 72% have no structured employer data (JSON-LD)
+- 61% don't publish salary information in a machine-readable format
+- 80% of candidates under 30 use AI to research employers before applying
+
+## Blog Posts
+- What AI Tells Candidates About Your Company: https://openrole.co.uk/blog/what-ai-tells-candidates-about-your-company
+- Glassdoor Doesn't Matter Anymore: https://openrole.co.uk/blog/glassdoor-doesnt-matter-anymore
+- The Zero-Click Candidate: https://openrole.co.uk/blog/zero-click-candidate
+- llms.txt Guide for Employers: https://openrole.co.uk/blog/llms-txt-guide
+- AI Is Hallucinating Salary Data: https://openrole.co.uk/blog/ai-hallucinating-salary-data
+- 800 Million Weekly Users: https://openrole.co.uk/blog/800-million-weekly-users
+- GEO for Employer Branding: https://openrole.co.uk/blog/geo-for-employer-branding
+- AI Employer Brand Score: https://openrole.co.uk/blog/ai-employer-brand-score
+
+## Contact
+Website: https://openrole.co.uk

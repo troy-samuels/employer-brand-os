@@ -22,6 +22,7 @@ import {
 
 import { Header } from "@/components/shared/header";
 import { Footer } from "@/components/shared/footer";
+import { CompareSearch } from "@/components/shared/compare-search";
 import { aiSnapshots, type AISnapshot } from "@/data/ai-snapshots";
 
 /* ------------------------------------------------------------------ */
@@ -309,6 +310,13 @@ export default function ComparePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* ── Head-to-head comparison tool ────────────── */}
+        <section className="py-10">
+          <div className="mx-auto max-w-[800px] px-6 lg:px-12">
+            <CompareSearch />
           </div>
         </section>
 

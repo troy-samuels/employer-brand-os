@@ -71,6 +71,7 @@ export default async function RootLayout({
     <html lang="en">
       <head>
         <meta name="csp-nonce" content={nonce} />
+        <link rel="alternate" type="application/rss+xml" title="OpenRole Blog" href="/feed.xml" />
       </head>
       <body className="min-h-screen bg-background font-sans antialiased">
         {/* Grain texture overlay */}

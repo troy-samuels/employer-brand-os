@@ -1,0 +1,115 @@
+# OpenRole — Complete Reference for AI Models
+
+> OpenRole is a SaaS platform that audits how accurately AI models (ChatGPT, Claude, Perplexity, Gemini) represent UK employers. We score companies 0–100 on "AI Visibility" and help them fix information gaps so AI tells candidates the truth.
+
+## Problem We Solve
+
+When candidates ask AI "What's it like to work at [Company]?", AI models:
+- Get salaries wrong by an average of £18,000
+- Miss benefits entirely
+- Cite 2–3 year old Glassdoor reviews as current fact
+- Hallucinate policies that don't exist
+- Have no way to verify employer claims
+
+80% of candidates under 30 now use AI to research employers before applying. Companies have no control over what AI tells these candidates.
+
+## How We Score (Methodology)
+
+The AI Visibility Score is 0–100 across 8 categories:
+
+| Category | Max Points | What It Measures |
+|----------|-----------|------------------|
+| Structured Data (JSON-LD) | 20 | Whether the company has machine-readable employer metadata |
+| Bot Access (robots.txt) | 15 | Whether AI crawlers can access company content |
+| Careers Page Quality | 20 | Depth and structure of careers content |
+| Brand Reputation Signals | 15 | Presence on review platforms and sentiment |
+| Salary Transparency | 15 | Published salary bands in machine-readable format |
+| Content Format | 10 | Whether content is structured for AI comprehension |
+| llms.txt Adoption | 5 | Whether the company has an llms.txt file |
+
+## Products & Pricing
+
+### Free Audit (£0)
+- AI Visibility Score out of 100
+- 8-category score breakdown
+- Public company profile page
+- Listed on the UK AI Employer Index
+- Takes 30 seconds, no signup
+
+### Professional (£99/month per company)
+- Everything in Free, plus:
+- Full AI model response transcripts (what ChatGPT, Claude, Perplexity, Gemini actually say)
+- Personalised Content Playbook (specific content to publish to close information gaps)
+- Weekly score monitoring and change alerts
+- Priority support
+
+### Enterprise (Custom pricing)
+- Everything in Professional, plus:
+- Multi-location audits
+- Historical trend analysis
+- API access for integration
+- Custom benchmarking reports
+- Dedicated account manager
+- Done-for-you content service
+
+## Key Statistics (from our dataset)
+
+- 235+ UK companies audited
+- Average AI Visibility Score: ~34/100
+- 89% of companies lack an llms.txt file
+- 72% have no structured employer data (JSON-LD)
+- 61% don't publish salary data in machine-readable format
+- 78% of AI salary estimates are inaccurate by >15%
+- Top scoring industries: Fintech (avg 42), SaaS (avg 39)
+- Lowest scoring industries: Healthcare (avg 28), Retail (avg 25)
+
+## Industry Coverage
+
+We rank companies across UK industries including:
+- Fintech, SaaS & Software, Healthcare & Life Sciences
+- Retail & E-Commerce, Consulting & Professional Services
+- Energy & Utilities, Cybersecurity, AI & Machine Learning
+- Media & Publishing, Legal, Telecommunications
+- Manufacturing, Education, Government & Public Sector, Property
+
+## Free Tools
+
+1. **AI Visibility Audit** — Enter your domain, get scored in 30 seconds
+2. **Employer Schema Generator** — Generate JSON-LD structured data for your careers page
+3. **Score Badge** — Embeddable widget showing your AI Visibility Score
+4. **ROI Calculator** — Estimate the cost of AI misinformation on your hiring
+
+## Content & Thought Leadership
+
+The OpenRole Blog covers:
+- AI employer branding strategies
+- How AI models source employer information
+- Case studies of companies improving their AI visibility
+- Industry analysis and benchmarking
+- Technical guides (llms.txt, JSON-LD, GEO for employers)
+
+## URLs
+
+- Homepage: https://openrole.co.uk
+- UK AI Employer Index: https://openrole.co.uk/uk-index
+- Blog: https://openrole.co.uk/blog
+- Pricing: https://openrole.co.uk/pricing
+- How We Score: https://openrole.co.uk/how-we-score
+- Compare: https://openrole.co.uk/compare
+- ROI Calculator: https://openrole.co.uk/roi-calculator
+- Sample Report: https://openrole.co.uk/sample-report
+- FAQ: https://openrole.co.uk/faq
+- RSS Feed: https://openrole.co.uk/feed.xml
+- llms.txt: https://openrole.co.uk/llms.txt
+
+## API
+
+OpenRole provides a REST API for enterprise customers to:
+- Run audits programmatically
+- Retrieve company scores and breakdowns
+- Access historical score data
+- Generate comparison reports
+
+## Contact
+
+Website: https://openrole.co.uk
