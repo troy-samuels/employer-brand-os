@@ -604,11 +604,10 @@ function mapRow(row: CsvRow, stats: Stats): ContactRecord | null {
   const email = row.email?.trim().toLowerCase();
   if (!email || !isValidEmail(email)) return null;
 
-  // Check freemail
+  // Track freemail (but still import them)
   const domain = extractDomain(email);
   if (domain && isFreemailDomain(domain)) {
-    stats.skippedFreemail++;
-    return null;
+    stats.skippedFreemail++; // counter kept for reporting only
   }
 
   // Normalise country
@@ -844,16 +843,12 @@ async function main(): Promise<void> {
       continue;
     }
 
-    // Map row (includes freemail check — stats updated inside mapRow)
-    const freemailBefore = stats.skippedFreemail;
+    // Map row (tracks freemail count internally but still returns the contact)
     const contact = mapRow(row, stats);
     if (!contact) {
-      // mapRow already incremented the relevant skip counter
-      // If freemail count didn't change, the email was invalid (shouldn't happen
-      // since we already validated above, but guard anyway)
-      if (stats.skippedFreemail === freemailBefore) {
-        stats.skippedInvalidEmail++;
-      }
+      // mapRow returns null only for invalid email (shouldn't happen since
+      // we already validated above, but guard anyway)
+      stats.skippedInvalidEmail++;
       continue;
     }
 
@@ -929,7 +924,7 @@ async function main(): Promise<void> {
   console.log(`  🔁 Skipped (duplicate):    ${stats.skippedDuplicate.toLocaleString()}`);
   console.log(`  📭 Skipped (no email):     ${stats.skippedNoEmail.toLocaleString()}`);
   console.log(`  ❌ Skipped (bad email):     ${stats.skippedInvalidEmail.toLocaleString()}`);
-  console.log(`  📧 Skipped (freemail):     ${stats.skippedFreemail.toLocaleString()}`);
+  console.log(`  📧 Freemail addresses:      ${stats.skippedFreemail.toLocaleString()} (imported, not filtered)`);
   console.log(`  🏢 Companies created:      ${stats.companiesCreated.toLocaleString()}`);
   console.log(`  🏢 Companies cached:       ${companyIdCache.size.toLocaleString()}`);
   console.log(`  💥 Error rows:             ${stats.errorRows.toLocaleString()}`);
