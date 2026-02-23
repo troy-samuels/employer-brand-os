@@ -14,11 +14,11 @@ const stats = [
   },
   {
     value: "68%",
-    label: "of UK employers have wrong salary data in ChatGPT",
+    label: "of UK employers have missing or outdated information in AI search results",
   },
   {
     value: "32/100",
-    label: "average AI accuracy score across 340+ UK companies",
+    label: "average employer brand score across 340+ UK companies",
   },
 ];
 

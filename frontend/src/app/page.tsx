@@ -37,13 +37,13 @@ export default function Home() {
     name: SITE_NAME,
     url: BASE_URL,
     description:
-      "Candidates ask AI about you before applying. OpenRole shows you what they hear, finds the gaps, and gives you the content playbook to take control.",
+      "OpenRole is an AI employer branding tool that audits what ChatGPT, Claude, Perplexity and Gemini tell candidates about your company. Run a free employer brand audit, get your employer brand score, and improve your employer visibility.",
   });
 
   const websiteSchema = generateWebsiteSchema({
     name: SITE_NAME,
     url: BASE_URL,
-    description: "Take control of what AI tells your candidates. Free employer brand audit across ChatGPT, Claude, Perplexity and Gemini.",
+    description: "Free employer brand audit and employer brand measurement across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score and get a playbook to improve candidate experience.",
   });
 
   return (
@@ -69,12 +69,12 @@ export default function Home() {
                   className="mb-12 max-w-3xl text-center"
                 >
                   <h1 className="mb-5 text-5xl font-medium leading-[1.04] text-neutral-950 sm:text-6xl lg:text-7xl" style={{ letterSpacing: '-0.04em' }}>
-                    Take control of what AI tells
+                    The employer brand audit
                     <br />
-                    <span className="text-brand-accent">your candidates</span>
+                    <span className="text-brand-accent">for the AI era</span>
                   </h1>
-                  <p className="text-lg text-neutral-400 max-w-md mx-auto">
-                    80% of candidates ask AI about you before applying. See what they hear — free.
+                  <p className="text-lg text-neutral-400 max-w-lg mx-auto">
+                    80% of candidates ask AI about you before they apply. Run a free employer brand audit — see what AI tells them about your salary, benefits, culture, and interview process.
                   </p>
                 </motion.div>
               )}
@@ -93,7 +93,7 @@ export default function Home() {
                 >
                   <CompanySearch onSubmit={runAudit} isLoading={isLoading} />
                   <p className="mt-4 text-center text-xs text-neutral-400">
-                    340+ UK employers tracked · Average AI accuracy score: <span className="font-semibold text-neutral-500">32/100</span> · <span className="font-semibold text-status-critical">68%</span> have wrong salary data in ChatGPT
+                    340+ UK employers tracked · Average employer brand score: <span className="font-semibold text-neutral-500">32/100</span> · <span className="font-semibold text-status-critical">68%</span> have incomplete employer data in AI search
                   </p>
                   {error && (
                     <motion.p

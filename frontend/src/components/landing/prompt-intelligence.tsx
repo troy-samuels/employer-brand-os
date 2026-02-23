@@ -99,6 +99,7 @@ export default function PromptIntelligence() {
           viewport={{ once: true, amount: 0.05 }}
           transition={{ type: "spring", stiffness: 200, damping: 20 }}
         >
+
           Every candidate. Every question. Every AI model.
         </motion.h2>
         <motion.p
@@ -108,7 +109,7 @@ export default function PromptIntelligence() {
           viewport={{ once: true, amount: 0.05 }}
           transition={{ delay: 0.1 }}
         >
-          These are the real questions asked millions of times a week. Is AI getting yours right?
+          These are the real prompts candidates use to research employers. Measure your employer brand visibility across all of them.
         </motion.p>
 
         {/* Mock AI chat — Claude style */}

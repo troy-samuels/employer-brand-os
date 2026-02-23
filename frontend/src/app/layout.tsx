@@ -6,20 +6,23 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://openrole.co.uk"),
   title: {
-    default: "OpenRole — Take Control of What AI Tells Your Candidates",
+    default: "OpenRole — Free Employer Brand Audit | Measure What AI Tells Your Candidates",
     template: "%s | OpenRole",
   },
   description:
-    "80% of candidates ask AI about you before applying. OpenRole shows you what they hear, finds the information gaps, and gives you the content playbook to take control.",
+    "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, find information gaps, and get a content playbook to improve your employer branding and candidate experience.",
   keywords: [
-    "employer brand AI",
-    "AI employer visibility",
-    "what does ChatGPT say about employers",
-    "AI employer reputation UK",
-    "employer brand monitoring",
-    "AI candidate research",
     "employer brand audit",
-    "AI job search",
+    "employer brand score",
+    "employer brand measurement",
+    "employer branding tools",
+    "ai employer branding",
+    "employer brand monitoring",
+    "how to improve employer branding",
+    "employer branding strategy",
+    "employer brand ROI",
+    "candidate experience",
+    "employer visibility",
   ],
   authors: [{ name: "OpenRole" }],
   openGraph: {
@@ -27,23 +30,23 @@ export const metadata: Metadata = {
     locale: "en_GB",
     url: "https://openrole.co.uk",
     siteName: "OpenRole",
-    title: "OpenRole — Take Control of What AI Tells Your Candidates",
+    title: "OpenRole — Free Employer Brand Audit | Measure What AI Tells Your Candidates",
     description:
-      "80% of candidates ask AI about you before applying. OpenRole shows you what they hear, finds the information gaps, and gives you the content playbook to take control.",
+      "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, find information gaps, and get a content playbook to improve your employer branding and candidate experience.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "OpenRole — Take control of what AI tells your candidates",
+        alt: "OpenRole — Free employer brand audit across AI search",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "OpenRole — Take Control of What AI Tells Your Candidates",
+    title: "OpenRole — Free Employer Brand Audit | Measure What AI Tells Your Candidates",
     description:
-      "80% of candidates ask AI about you before applying. OpenRole shows you what they hear, finds the information gaps, and gives you the content playbook to take control.",
+      "Run a free employer brand audit across ChatGPT, Claude, Perplexity and Gemini. See your employer brand score, find information gaps, and get a content playbook to improve your employer branding and candidate experience.",
     images: ["/opengraph-image"],
   },
   alternates: {

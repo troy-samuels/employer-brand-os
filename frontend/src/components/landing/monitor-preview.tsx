@@ -110,12 +110,12 @@ export default function MonitorPreview() {
               className="text-3xl lg:text-4xl font-medium text-neutral-950 mb-4"
               style={{ letterSpacing: "-0.03em" }}
             >
-              Your AI reputation.
+              Employer brand monitoring.
               <br />
               Every Monday.
             </h2>
             <p className="text-neutral-400 leading-relaxed max-w-sm">
-              Weekly report: what AI says about your salary, benefits, culture — what changed, what&apos;s still wrong, what to fix next.
+              Weekly employer brand tracking report: what AI says about your salary, benefits, culture — what changed, what&apos;s still wrong, and where to focus your employer branding strategy next.
             </p>
 
             <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">

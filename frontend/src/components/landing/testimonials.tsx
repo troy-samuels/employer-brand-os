@@ -50,15 +50,13 @@ const WITHOUT_TOKENS: Token[] = tokensFrom([
   { text: "• Described as " },
   { text: "\"decent work culture\"", className: "italic" },
   { text: " with mixed management experiences. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Review site", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
   { text: "💰 Senior Engineer Salary\n", className: "font-semibold text-neutral-900" },
   { text: "• Estimated: " },
   { text: "£55,000 – £68,000", className: "font-semibold text-neutral-900" },
   { text: " based on aggregated data. " },
-  { text: "Glassdoor", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
-  { text: " " },
-  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Third-party sources", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
   { text: "🏠 Remote Policy\n", className: "font-semibold text-neutral-900" },
   { text: "• I couldn't find confirmed details about their remote work policy.\n\n" },
@@ -66,7 +64,7 @@ const WITHOUT_TOKENS: Token[] = tokensFrom([
   { text: "• No specific benefits information available beyond " },
   { text: "\"standard UK package.\"", className: "italic" },
   { text: " " },
-  { text: "Indeed", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
+  { text: "Job board", className: "inline-flex items-center ml-1 px-1.5 py-0.5 bg-neutral-100 rounded-full text-[10px] text-neutral-500 font-medium" },
   { text: "\n\n" },
   { text: "❌ Salary £20K below actual", className: "text-[11px] px-2 py-1 bg-red-50 border border-red-200 rounded-lg text-red-600 font-medium inline-block" },
   { text: "  " },
@@ -326,8 +324,8 @@ export default function BeforeAfter() {
             Same question. Completely different answer.
           </h2>
           <p className="text-neutral-400 mt-3 max-w-xl">
-            A candidate asks ChatGPT about working at your company.
-            Toggle between the two to see what changes when you publish your facts.
+            A candidate asks AI about working at your company.
+            Without your published content, AI pulls from third-party review sites and outdated job boards. With it, AI cites your careers page directly.
           </p>
         </motion.div>
 

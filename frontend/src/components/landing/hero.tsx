@@ -50,8 +50,8 @@ export default function Hero() {
 
           {/* Subheadline */}
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-500 lg:text-xl">
-            When candidates ask ChatGPT about your company, the answer comes from old Glassdoor reviews — not you. 
-            See exactly what AI is saying, and fix it.
+            When candidates ask AI about your company, the answer comes from outdated third-party reviews — not you. 
+            Run a free employer brand audit to see exactly what AI says, and fix it.
           </p>
 
           {/* Search input */}
@@ -92,7 +92,7 @@ export default function Hero() {
             {
               icon: BarChart3,
               title: "Citation Score",
-              description: "See what % of AI answers come from sources you control vs Glassdoor & Indeed.",
+              description: "See what % of AI answers come from sources you control vs third-party review sites.",
             },
             {
               icon: Shield,

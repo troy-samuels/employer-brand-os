@@ -18,12 +18,12 @@ const steps = [
   {
     icon: FileSearch,
     label: "Find what's missing",
-    detail: "Your Information Gap Report shows what AI can't answer about your salary, benefits, and culture.",
+    detail: "Your employer brand audit report shows every gap — what AI can't answer about your salary, benefits, and culture.",
   },
   {
     icon: BarChart3,
     label: "Fill the gaps",
-    detail: "Content Playbook with templates. Publish on your site this week, see results within days.",
+    detail: "A step-by-step Content Playbook to improve your employer branding. Publish on your site this week, see results within days.",
   },
 ];
 
