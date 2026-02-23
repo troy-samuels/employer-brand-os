@@ -154,7 +154,6 @@ export async function getApiKey(): Promise<GetApiKeyResult> {
         name: newestKey.name ?? 'API Key',
         keyPrefix: newestKey.key_prefix,
         scopes: jsonToStringArray(newestKey.scopes),
-        keyVersion: newestKey.key_version ?? 1,
         isActive: newestKey.is_active ?? false,
         createdAt: newestKey.created_at ?? new Date().toISOString(),
         lastUsedAt: newestKey.last_used_at,

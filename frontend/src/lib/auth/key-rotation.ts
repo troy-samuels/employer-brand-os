@@ -16,7 +16,6 @@ export type RotatedApiKey = {
   keyId: string;
   rawKey: string;
   keyPrefix: string;
-  keyVersion: number;
   gracePeriodHours: number;
   oldKeysExpireAt: string;
 };
@@ -100,17 +99,11 @@ export async function rotateApiKey(params: {
 
   const { data: existingActive } = await admin
     .from("api_keys")
-    .select("id, key_version")
+    .select("id")
     .eq("organization_id", params.organizationId)
     .eq("is_active", true);
 
-  let nextVersion = 1;
   if (Array.isArray(existingActive) && existingActive.length > 0) {
-    nextVersion =
-      existingActive.reduce((maxVersion: number, item: { key_version?: number | null }) => {
-        return Math.max(maxVersion, item.key_version ?? 1);
-      }, 1) + 1;
-
     await admin
       .from("api_keys")
       .update({
@@ -136,9 +129,7 @@ export async function rotateApiKey(params: {
       name: params.name ?? "Production Key",
       key_prefix: prefix,
       key_hash: hash,
-      allowed_domains: allowedDomains,
       scopes: params.scopes ?? ["pixel:read", "facts:read"],
-      key_version: nextVersion,
       is_active: true,
       expires_at: null,
       rate_limit_per_minute: params.rateLimitPerMinute ?? 100,
@@ -160,7 +151,7 @@ export async function rotateApiKey(params: {
     keyId: newKey.id,
     rawKey: raw,
     keyPrefix: prefix,
-    keyVersion: nextVersion,
+    keyVersion: 1,
     gracePeriodHours,
     oldKeysExpireAt,
   };

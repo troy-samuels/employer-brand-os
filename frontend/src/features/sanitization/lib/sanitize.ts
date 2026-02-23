@@ -113,7 +113,9 @@ export async function sanitizeJobCodes(params: {
     exactMap.set(mapping.internal_code, mapping);
     if (mapping.aliases && Array.isArray(mapping.aliases)) {
       for (const alias of mapping.aliases) {
-        aliasMap.set(alias, mapping);
+        if (typeof alias === 'string') {
+          aliasMap.set(alias, mapping);
+        }
       }
     }
   }
