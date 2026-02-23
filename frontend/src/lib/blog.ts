@@ -32,7 +32,7 @@ export interface BlogPostMetadata {
   featured?: boolean;
 }
 
-const CONTENT_DIR = path.join(process.cwd(), "..", "content", "blog");
+const CONTENT_DIR = path.join(process.cwd(), "content", "blog");
 
 /**
  * Get all blog post slugs
