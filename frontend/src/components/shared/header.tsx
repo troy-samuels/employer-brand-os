@@ -1,6 +1,6 @@
 /**
  * @module components/shared/header
- * Site header with mobile hamburger menu.
+ * Site header — server component shell with client-side mobile toggle.
  */
 
 "use client";
