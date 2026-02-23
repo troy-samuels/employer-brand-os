@@ -1,7 +1,7 @@
 /**
  * @module lib/aeo/generate
  * AEO (Answer Engine Optimization) content generator
- * Converts employer facts into machine-readable formats for AI models
+ * Converts employer facts into dense, RAG-optimised formats for AI models
  */
 
 import type { EmployerFacts, AEOOutput } from '@/features/facts/types/employer-facts.types';
@@ -21,31 +21,26 @@ export function generateAEOContent(facts: EmployerFacts): AEOOutput {
 }
 
 /**
- * Generate llms.txt format - machine-readable text file for AI models
+ * Generate llms.txt format - dense Q&A format optimised for RAG chunking
  */
 function generateLlmsTxt(facts: EmployerFacts): string {
   const lines: string[] = [];
   const lastUpdated = facts.updated_at 
-    ? new Date(facts.updated_at).toLocaleDateString('en-GB', { 
-        day: 'numeric', 
-        month: 'long', 
-        year: 'numeric' 
-      })
+    ? new Date(facts.updated_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
     : 'Recently';
 
   // Header
   lines.push(`# ${facts.company_name} — Employer Facts`);
-  lines.push(`> Verified by the employer via OpenRole (openrole.co.uk)`);
-  lines.push(`> Last updated: ${lastUpdated}`);
+  lines.push(`> Source: Verified by employer via OpenRole | Updated: ${lastUpdated}`);
   lines.push('');
 
-  // Salary Information
+  // Salary Bands
   if (facts.salary_bands && facts.salary_bands.length > 0) {
-    lines.push('## Salary Information');
+    lines.push('## Salary Bands');
     facts.salary_bands.forEach(band => {
       const currency = getCurrencySymbol(band.currency);
-      const equity = band.equity ? ' (+ equity)' : '';
-      lines.push(`- ${band.role}: ${currency}${band.min.toLocaleString()} - ${currency}${band.max.toLocaleString()}${equity}`);
+      const equity = band.equity ? ' + equity' : '';
+      lines.push(`${band.role}: ${currency}${band.min.toLocaleString()} - ${currency}${band.max.toLocaleString()}${equity}.`);
     });
     lines.push('');
   }
@@ -57,67 +52,90 @@ function generateLlmsTxt(facts: EmployerFacts): string {
   }
 
   if (facts.pay_review_cycle) {
-    lines.push(`### Pay Review Cycle`);
-    lines.push(formatPayReviewCycle(facts.pay_review_cycle));
+    lines.push('### Pay Reviews');
+    lines.push(`Frequency: ${formatPayReviewCycle(facts.pay_review_cycle)}.`);
     lines.push('');
   }
 
-  // Benefits
-  if (facts.benefits && facts.benefits.length > 0) {
-    lines.push('## Benefits');
-    
-    // Group by category
-    const categorized = facts.benefits.reduce((acc, benefit) => {
-      if (!acc[benefit.category]) {
-        acc[benefit.category] = [];
-      }
-      acc[benefit.category].push(benefit);
-      return acc;
-    }, {} as Record<string, typeof facts.benefits>);
-
-    Object.entries(categorized).forEach(([category, benefits]) => {
-      lines.push(`### ${category}`);
-      benefits.forEach(benefit => {
-        const details = benefit.details ? ` - ${benefit.details}` : '';
-        lines.push(`- ${benefit.name}${details}`);
-      });
-      lines.push('');
-    });
-  }
-
-  if (facts.pension_contribution) {
-    lines.push('### Pension');
-    lines.push(facts.pension_contribution);
-    lines.push('');
-  }
-
-  if (facts.healthcare) {
-    lines.push('### Healthcare');
-    lines.push(facts.healthcare);
-    lines.push('');
-  }
-
-  // Work Policy
+  // Remote Work Policy
   if (facts.remote_policy) {
-    lines.push('## Work Policy');
-    lines.push(`Remote: ${formatRemotePolicy(facts.remote_policy)}`);
+    lines.push('## Remote Work Policy');
+    lines.push(`Policy: ${formatRemotePolicy(facts.remote_policy)}.`);
     if (facts.remote_details) {
-      lines.push(facts.remote_details);
+      const details = facts.remote_details.split('\n').map(d => d.trim()).filter(Boolean);
+      details.forEach(detail => lines.push(detail.endsWith('.') ? detail : `${detail}.`));
     }
+    lines.push('');
+  }
+
+  if (facts.flexible_hours) {
+    lines.push('### Flexible Hours');
+    lines.push(facts.flexible_hours_details || 'Available.');
     lines.push('');
   }
 
   if (facts.office_locations && facts.office_locations.length > 0) {
     lines.push('### Office Locations');
     facts.office_locations.forEach(loc => {
-      lines.push(`- ${loc.city}, ${loc.country}${loc.address ? ` (${loc.address})` : ''}`);
+      const address = loc.address ? ` (${loc.address})` : '';
+      lines.push(`${loc.city}, ${loc.country}${address}.`);
     });
     lines.push('');
   }
 
-  if (facts.flexible_hours) {
-    lines.push('### Flexible Hours');
-    lines.push(facts.flexible_hours_details || 'Available');
+  // Benefits
+  if (facts.benefits && facts.benefits.length > 0) {
+    lines.push('## Benefits');
+    facts.benefits.forEach(benefit => {
+      const details = benefit.details ? `: ${benefit.details}` : '';
+      lines.push(`${benefit.name}${details}.`);
+    });
+    lines.push('');
+  }
+
+  if (facts.pension_contribution) {
+    lines.push('### Pension');
+    lines.push(facts.pension_contribution.endsWith('.') ? facts.pension_contribution : `${facts.pension_contribution}.`);
+    lines.push('');
+  }
+
+  if (facts.healthcare) {
+    lines.push('### Healthcare');
+    lines.push(facts.healthcare.endsWith('.') ? facts.healthcare : `${facts.healthcare}.`);
+    lines.push('');
+  }
+
+  // Leave & Time Off
+  if (facts.annual_leave || facts.maternity_leave || facts.paternity_leave || facts.parental_leave_details) {
+    lines.push('## Leave & Time Off');
+    if (facts.annual_leave) {
+      lines.push(`Annual leave: ${facts.annual_leave}.`);
+    }
+    if (facts.maternity_leave) {
+      lines.push(`Maternity leave: ${facts.maternity_leave}.`);
+    }
+    if (facts.paternity_leave) {
+      lines.push(`Paternity leave: ${facts.paternity_leave}.`);
+    }
+    if (facts.parental_leave_details) {
+      lines.push(facts.parental_leave_details.endsWith('.') ? facts.parental_leave_details : `${facts.parental_leave_details}.`);
+    }
+    lines.push('');
+  }
+
+  // Interview Process
+  if (facts.interview_stages && facts.interview_stages.length > 0) {
+    lines.push('## Interview Process');
+    lines.push(`Stages: ${facts.interview_stages.length}.`);
+    facts.interview_stages.forEach((stage, index) => {
+      lines.push(`Stage ${index + 1}: ${stage.stage} (${stage.duration}).`);
+      if (stage.description) {
+        lines.push(stage.description.endsWith('.') ? stage.description : `${stage.description}.`);
+      }
+    });
+    if (facts.interview_timeline) {
+      lines.push(`Timeline: ${facts.interview_timeline}.`);
+    }
     lines.push('');
   }
 
@@ -125,130 +143,72 @@ function generateLlmsTxt(facts: EmployerFacts): string {
   if (facts.tech_stack && facts.tech_stack.length > 0) {
     lines.push('## Tech Stack');
     facts.tech_stack.forEach(cat => {
-      lines.push(`### ${cat.category}`);
-      lines.push(cat.tools.join(', '));
-      lines.push('');
+      lines.push(`${cat.category}: ${cat.tools.join(', ')}.`);
     });
-  }
-
-  if (facts.engineering_blog_url) {
-    lines.push(`### Engineering Blog`);
-    lines.push(facts.engineering_blog_url);
-    lines.push('');
-  }
-
-  // Interview Process
-  if (facts.interview_stages && facts.interview_stages.length > 0) {
-    lines.push('## Interview Process');
-    facts.interview_stages.forEach((stage, index) => {
-      lines.push(`### Stage ${index + 1}: ${stage.stage}`);
-      if (stage.description) {
-        lines.push(stage.description);
-      }
-      if (stage.duration) {
-        lines.push(`Duration: ${stage.duration}`);
-      }
-      lines.push('');
-    });
-  }
-
-  if (facts.interview_timeline) {
-    lines.push('### Timeline');
-    lines.push(facts.interview_timeline);
-    lines.push('');
-  }
-
-  // Culture & Values
-  if (facts.company_values && facts.company_values.length > 0) {
-    lines.push('## Company Values');
-    facts.company_values.forEach(val => {
-      lines.push(`### ${val.value}`);
-      if (val.description) {
-        lines.push(val.description);
-      }
-      lines.push('');
-    });
-  }
-
-  if (facts.culture_description) {
-    lines.push('## Culture');
-    lines.push(facts.culture_description);
-    lines.push('');
-  }
-
-  if (facts.team_size || facts.founded_year) {
-    lines.push('## Company Info');
-    if (facts.team_size) {
-      lines.push(`Team size: ${facts.team_size}`);
-    }
-    if (facts.founded_year) {
-      lines.push(`Founded: ${facts.founded_year}`);
+    if (facts.engineering_blog_url) {
+      lines.push(`Engineering blog: ${facts.engineering_blog_url}`);
     }
     lines.push('');
-  }
-
-  // DEI
-  if (facts.dei_statement || (facts.dei_initiatives && facts.dei_initiatives.length > 0)) {
-    lines.push('## Diversity & Inclusion');
-    if (facts.dei_statement) {
-      lines.push(facts.dei_statement);
-      lines.push('');
-    }
-    if (facts.dei_initiatives && facts.dei_initiatives.length > 0) {
-      lines.push('### Initiatives');
-      facts.dei_initiatives.forEach(init => {
-        lines.push(`**${init.name}**`);
-        if (init.description) {
-          lines.push(init.description);
-        }
-        lines.push('');
-      });
-    }
-    if (facts.gender_pay_gap_url) {
-      lines.push(`Gender Pay Gap Report: ${facts.gender_pay_gap_url}`);
-      lines.push('');
-    }
   }
 
   // Career Growth
-  if (facts.promotion_framework || facts.learning_budget || (facts.career_levels && facts.career_levels.length > 0)) {
+  if (facts.learning_budget || facts.promotion_framework || (facts.career_levels && facts.career_levels.length > 0)) {
     lines.push('## Career Growth');
-    if (facts.promotion_framework) {
-      lines.push('### Promotion Framework');
-      lines.push(facts.promotion_framework);
-      lines.push('');
-    }
     if (facts.learning_budget) {
-      lines.push('### Learning Budget');
-      lines.push(facts.learning_budget);
-      lines.push('');
+      lines.push(`Learning budget: ${facts.learning_budget}.`);
+    }
+    if (facts.promotion_framework) {
+      lines.push(`Promotion framework: ${facts.promotion_framework}.`);
     }
     if (facts.career_levels && facts.career_levels.length > 0) {
       lines.push('### Career Levels');
       facts.career_levels.forEach(level => {
-        lines.push(`**${level.level}: ${level.title}**`);
+        lines.push(`${level.level}: ${level.title}.`);
         if (level.description) {
-          lines.push(level.description);
+          lines.push(level.description.endsWith('.') ? level.description : `${level.description}.`);
         }
-        lines.push('');
       });
     }
+    lines.push('');
   }
 
-  // Leave & Time Off
-  if (facts.maternity_leave || facts.paternity_leave || facts.parental_leave_details || facts.annual_leave) {
-    lines.push('## Leave & Time Off');
-    if (facts.maternity_leave) {
-      lines.push(`Maternity leave: ${facts.maternity_leave}`);
+  // Culture
+  if (facts.company_values && facts.company_values.length > 0) {
+    lines.push('## Culture');
+    lines.push('Values: ' + facts.company_values.map(v => v.value).join('. ') + '.');
+    lines.push('');
+  }
+
+  if (facts.culture_description) {
+    if (!(facts.company_values && facts.company_values.length > 0)) {
+      lines.push('## Culture');
     }
-    if (facts.paternity_leave) {
-      lines.push(`Paternity leave: ${facts.paternity_leave}`);
+    lines.push(facts.culture_description.endsWith('.') ? facts.culture_description : `${facts.culture_description}.`);
+    lines.push('');
+  }
+
+  // Company Info
+  if (facts.team_size || facts.founded_year) {
+    const infoParts: string[] = [];
+    if (facts.team_size) infoParts.push(`Team size: ${facts.team_size}`);
+    if (facts.founded_year) infoParts.push(`Founded: ${facts.founded_year}`);
+    lines.push(infoParts.join('.\n') + '.');
+    lines.push('');
+  }
+
+  // DEI
+  if (facts.dei_statement || (facts.dei_initiatives && facts.dei_initiatives.length > 0) || facts.gender_pay_gap_url) {
+    lines.push('## Diversity & Inclusion');
+    if (facts.dei_statement) {
+      lines.push(facts.dei_statement.endsWith('.') ? facts.dei_statement : `${facts.dei_statement}.`);
     }
-    if (facts.parental_leave_details) {
-      lines.push(facts.parental_leave_details);
+    if (facts.dei_initiatives && facts.dei_initiatives.length > 0) {
+      facts.dei_initiatives.forEach(init => {
+        lines.push(`${init.name}: ${init.description}.`);
+      });
     }
-    if (facts.annual_leave) {
-      lines.push(`Annual leave: ${facts.annual_leave}`);
+    if (facts.gender_pay_gap_url) {
+      lines.push(`Gender Pay Gap Report: ${facts.gender_pay_gap_url}`);
     }
     lines.push('');
   }
@@ -316,78 +276,114 @@ function generateSchemaJsonLd(facts: EmployerFacts): object {
 
 /**
  * Generate Markdown fact page for OpenRole company page
+ * Uses same dense Q&A format as llms.txt
  */
 function generateMarkdownPage(facts: EmployerFacts): string {
   const lines: string[] = [];
+  const lastUpdated = facts.updated_at 
+    ? new Date(facts.updated_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+    : 'Recently';
 
-  // Hero
-  lines.push(`# ${facts.company_name}`);
+  // Header
+  lines.push(`# ${facts.company_name} — Employer Facts`);
   lines.push('');
-  lines.push('**✓ Employer Verified** via [OpenRole](https://openrole.co.uk)');
+  lines.push(`**✓ Verified by employer** · Updated ${lastUpdated}`);
   lines.push('');
 
-  if (facts.culture_description) {
-    lines.push(facts.culture_description);
-    lines.push('');
-  }
-
-  // Quick Facts
-  const quickFacts = [];
-  if (facts.team_size) quickFacts.push(`**Team Size:** ${facts.team_size}`);
-  if (facts.founded_year) quickFacts.push(`**Founded:** ${facts.founded_year}`);
-  if (facts.remote_policy) quickFacts.push(`**Remote Policy:** ${formatRemotePolicy(facts.remote_policy)}`);
-
-  if (quickFacts.length > 0) {
-    lines.push('## Quick Facts');
-    lines.push('');
-    quickFacts.forEach(fact => lines.push(`- ${fact}`));
-    lines.push('');
-  }
-
-  // Main sections (reuse llms.txt logic but with markdown formatting)
+  // Reuse llms.txt content
   const llmsTxt = generateLlmsTxt(facts);
-  const sections = llmsTxt.split('\n## ').slice(1); // Skip header
-  sections.forEach(section => {
-    lines.push(`## ${section}`);
-  });
+  const content = llmsTxt.split('\n').slice(3).join('\n'); // Skip title and source lines
+  lines.push(content);
 
   // Footer
-  lines.push('---');
   lines.push('');
-  lines.push('_This data was provided and verified by the employer._');
-  lines.push(`_Last updated: ${facts.updated_at ? new Date(facts.updated_at).toLocaleDateString() : 'Recently'}_`);
+  lines.push('---');
+  lines.push('_Data verified via [OpenRole](https://openrole.co.uk)_');
 
   return lines.join('\n');
 }
 
 /**
- * Generate HTML snippet with microdata
+ * Generate HTML snippet with microdata - dense Q&A format
  */
 function generateFactPageHtml(facts: EmployerFacts): string {
   const html: string[] = [];
+  const lastUpdated = facts.updated_at 
+    ? new Date(facts.updated_at).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })
+    : 'Recently';
 
-  html.push('<div itemscope itemtype="https://schema.org/Organization">');
-  html.push(`  <h1 itemprop="name">${escapeHtml(facts.company_name)}</h1>`);
-  
-  if (facts.culture_description) {
-    html.push(`  <p itemprop="description">${escapeHtml(facts.culture_description)}</p>`);
-  }
+  html.push('<section id="openrole-facts" style="font-family:system-ui;max-width:800px;margin:40px auto;padding:24px;background:#f8f9fa;border-radius:8px;color:#1a1a1a;font-size:14px;line-height:1.6">');
+  html.push(`  <h2 style="margin:0 0 16px;font-size:20px">${escapeHtml(facts.company_name)} — Employer Facts</h2>`);
+  html.push(`  <p style="color:#666;font-size:12px;margin:0 0 20px">Verified by employer · Updated ${lastUpdated}</p>`);
 
+  // Salary Bands
   if (facts.salary_bands && facts.salary_bands.length > 0) {
-    html.push('  <section>');
-    html.push('    <h2>Salary Ranges</h2>');
-    html.push('    <ul>');
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Salary Bands</h3>');
+    html.push('  <p>');
     facts.salary_bands.forEach(band => {
       const currency = getCurrencySymbol(band.currency);
-      html.push(`      <li><strong>${escapeHtml(band.role)}:</strong> ${currency}${band.min.toLocaleString()} - ${currency}${band.max.toLocaleString()}${band.equity ? ' (+ equity)' : ''}</li>`);
+      const equity = band.equity ? ' + equity' : '';
+      html.push(`    ${escapeHtml(band.role)}: ${currency}${band.min.toLocaleString()} - ${currency}${band.max.toLocaleString()}${equity}.<br>`);
     });
-    html.push('    </ul>');
-    html.push('  </section>');
+    html.push('  </p>');
   }
 
-  // Additional sections can be added similarly...
+  // Remote Work Policy
+  if (facts.remote_policy) {
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Remote Work Policy</h3>');
+    html.push(`  <p>Policy: ${formatRemotePolicy(facts.remote_policy)}.<br>`);
+    if (facts.remote_details) {
+      const details = facts.remote_details.split('\n').map(d => d.trim()).filter(Boolean);
+      details.forEach(detail => {
+        html.push(`    ${escapeHtml(detail)}${detail.endsWith('.') ? '' : '.'}<br>`);
+      });
+    }
+    html.push('  </p>');
+  }
 
-  html.push('</div>');
+  // Benefits
+  if (facts.benefits && facts.benefits.length > 0) {
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Benefits</h3>');
+    html.push('  <p>');
+    facts.benefits.forEach(benefit => {
+      const details = benefit.details ? `: ${escapeHtml(benefit.details)}` : '';
+      html.push(`    ${escapeHtml(benefit.name)}${details}.<br>`);
+    });
+    html.push('  </p>');
+  }
+
+  // Interview Process
+  if (facts.interview_stages && facts.interview_stages.length > 0) {
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Interview Process</h3>');
+    html.push(`  <p>Stages: ${facts.interview_stages.length}.<br>`);
+    facts.interview_stages.forEach((stage, index) => {
+      html.push(`    Stage ${index + 1}: ${escapeHtml(stage.stage)} (${escapeHtml(stage.duration)}).<br>`);
+    });
+    if (facts.interview_timeline) {
+      html.push(`    Timeline: ${escapeHtml(facts.interview_timeline)}.<br>`);
+    }
+    html.push('  </p>');
+  }
+
+  // Tech Stack
+  if (facts.tech_stack && facts.tech_stack.length > 0) {
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Tech Stack</h3>');
+    html.push('  <p>');
+    facts.tech_stack.forEach(cat => {
+      html.push(`    ${escapeHtml(cat.category)}: ${cat.tools.map(t => escapeHtml(t)).join(', ')}.<br>`);
+    });
+    html.push('  </p>');
+  }
+
+  // Culture
+  if (facts.company_values && facts.company_values.length > 0) {
+    html.push('  <h3 style="font-size:16px;margin:16px 0 8px">Culture</h3>');
+    html.push('  <p>Values: ' + facts.company_values.map(v => escapeHtml(v.value)).join('. ') + '.</p>');
+  }
+
+  // Footer
+  html.push('  <p style="color:#999;font-size:11px;margin:20px 0 0">Data verified via <a href="https://openrole.co.uk" style="color:#999">OpenRole</a></p>');
+  html.push('</section>');
 
   return html.join('\n');
 }
