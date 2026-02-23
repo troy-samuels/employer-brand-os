@@ -83,10 +83,82 @@ const UK_DOMAIN_SUFFIXES = [
   ".mod.uk",
 ];
 
+const FREEMAIL_DOMAINS = new Set([
+  "gmail.com", "googlemail.com", "hotmail.com", "hotmail.co.uk", "hotmail.fr",
+  "yahoo.com", "yahoo.co.uk", "outlook.com", "outlook.co.uk", "aol.com",
+  "aol.co.uk", "icloud.com", "live.com", "live.co.uk", "me.com", "mail.com",
+  "protonmail.com", "proton.me", "msn.com", "ymail.com", "rocketmail.com",
+  "btinternet.com", "sky.com", "virgin.net", "virginmedia.com", "talktalk.net",
+  "ntlworld.com", "blueyonder.co.uk", "btopenworld.com", "tiscali.co.uk",
+  "inbox.com", "fastmail.com", "zoho.com", "gmx.com", "gmx.co.uk",
+  "rediffmail.com", "yandex.com", "qq.com", "163.com", "126.com",
+  "tutanota.com", "tuta.io", "pm.me", "hotmail.de", "hotmail.it", "hotmail.es",
+  "yahoo.fr", "yahoo.de", "yahoo.it", "yahoo.es",
+]);
+
+function isFreemailDomain(domain: string): boolean {
+  return FREEMAIL_DOMAINS.has(domain.toLowerCase());
+}
+
 function isUkDomain(domain: string): boolean {
   if (!domain) return false;
   const d = domain.toLowerCase();
   return UK_DOMAIN_SUFFIXES.some((suffix) => d.endsWith(suffix));
+}
+
+// ---------------------------------------------------------------------------
+// Domain-to-name corrections for known mismatches in source data
+// ---------------------------------------------------------------------------
+
+const DOMAIN_NAME_OVERRIDES: Record<string, string> = {
+  "unilever.com": "Unilever",
+  "hays.com": "Hays Recruitment",
+  "reedglobal.com": "Reed",
+  "gsk.com": "GSK",
+  "bp.com": "BP",
+  "willis.com": "Willis Towers Watson",
+  "capita.co.uk": "Capita",
+  "sainsburys.co.uk": "Sainsbury's",
+  "diageo.com": "Diageo",
+  "pearson.com": "Pearson",
+  "deloitte.co.uk": "Deloitte",
+  "kpmg.co.uk": "KPMG",
+  "pwc.com": "PwC",
+  "ey.com": "EY",
+  "accenture.com": "Accenture",
+  "ibm.com": "IBM",
+  "microsoft.com": "Microsoft",
+  "google.com": "Google",
+  "amazon.co.uk": "Amazon",
+  "tfl.gov.uk": "Transport for London",
+  "nhs.net": "NHS",
+  "shell.com": "Shell",
+  "hsbc.com": "HSBC",
+  "barclays.com": "Barclays",
+  "lloydsbanking.com": "Lloyds Banking Group",
+  "natwestgroup.com": "NatWest Group",
+  "vodafone.com": "Vodafone",
+  "bt.com": "BT Group",
+  "bbc.co.uk": "BBC",
+  "rolls-royce.com": "Rolls-Royce",
+  "baesystems.com": "BAE Systems",
+  "astrazeneca.com": "AstraZeneca",
+  "sky.uk": "Sky",
+  "tesco.com": "Tesco",
+};
+
+/**
+ * Pick the best company name: use a domain override if available,
+ * otherwise pick the most frequently occurring name from contacts.
+ */
+function resolveBestName(domain: string, names: Map<string, number>): string {
+  const domainLower = domain.toLowerCase();
+  if (DOMAIN_NAME_OVERRIDES[domainLower]) {
+    return DOMAIN_NAME_OVERRIDES[domainLower];
+  }
+  // Pick the most common name
+  const best = Array.from(names.entries()).sort((a, b) => b[1] - a[1])[0];
+  return best?.[0] || domain;
 }
 
 // ---------------------------------------------------------------------------
@@ -126,7 +198,7 @@ interface ContactRow {
 }
 
 interface CompanyAggregate {
-  name: string;
+  names: Map<string, number>; // name → count (to pick the best name)
   domain: string;
   contactCount: number;
   titles: Map<string, number>;
@@ -175,12 +247,13 @@ async function fetchAllCompanies(): Promise<Map<string, CompanyRow>> {
 async function aggregateContacts(
   companies: Map<string, CompanyRow>
 ): Promise<Map<string, CompanyAggregate>> {
-  const aggregates = new Map<string, CompanyAggregate>();
+  // Aggregate by domain (not company_id) to handle multiple company records per domain
+  const aggregatesByDomain = new Map<string, CompanyAggregate>();
   const PAGE_SIZE = 1000;
   let offset = 0;
   let totalFetched = 0;
 
-  console.log("📊 Aggregating contacts per company...");
+  console.log("📊 Aggregating contacts per domain...");
 
   while (true) {
     const { data, error } = await supabase
@@ -197,21 +270,25 @@ async function aggregateContacts(
     if (!data || data.length === 0) break;
 
     for (const row of data as ContactRow[]) {
-      let agg = aggregates.get(row.company_id);
+      const company = companies.get(row.company_id);
+      if (!company || !company.domain) continue;
+
+      const domain = company.domain.toLowerCase();
+      let agg = aggregatesByDomain.get(domain);
       if (!agg) {
-        const company = companies.get(row.company_id);
-        if (!company) continue;
         agg = {
-          name: company.name,
+          names: new Map(),
           domain: company.domain,
           contactCount: 0,
           titles: new Map(),
           hasDecisionMakers: false,
           hasUkContacts: false,
         };
-        aggregates.set(row.company_id, agg);
+        aggregatesByDomain.set(domain, agg);
       }
 
+      // Track which company name this contact belongs to
+      agg.names.set(company.name, (agg.names.get(company.name) || 0) + 1);
       agg.contactCount++;
 
       if (row.title) {
@@ -241,8 +318,8 @@ async function aggregateContacts(
     offset += PAGE_SIZE;
   }
 
-  console.log(`   ✅ Processed ${totalFetched.toLocaleString()} contacts across ${aggregates.size.toLocaleString()} companies`);
-  return aggregates;
+  console.log(`   ✅ Processed ${totalFetched.toLocaleString()} contacts across ${aggregatesByDomain.size.toLocaleString()} domains`);
+  return aggregatesByDomain;
 }
 
 // ---------------------------------------------------------------------------
@@ -268,6 +345,24 @@ function filterAndRank(
     // Must have minimum contacts
     if (agg.contactCount < minContacts) continue;
 
+    // Filter out freemail domains
+    if (isFreemailDomain(agg.domain)) continue;
+
+    // Pick the best company name
+    const bestName = resolveBestName(agg.domain, agg.names);
+
+    // Filter out junk/placeholder names
+    const nameLower = bestName.toLowerCase();
+    if (
+      nameLower.includes("do not use") ||
+      nameLower.includes("self serve") ||
+      nameLower.includes("test account") ||
+      nameLower.includes("placeholder") ||
+      nameLower === "unknown" ||
+      nameLower === "other" ||
+      nameLower === "n/a"
+    ) continue;
+
     // Must be UK-relevant: UK domain OR .com with UK contacts
     const ukDomain = isUkDomain(agg.domain);
     const comWithUk = agg.domain?.endsWith(".com") && agg.hasUkContacts;
@@ -282,6 +377,7 @@ function filterAndRank(
 
   // Take top N
   return candidates.slice(0, limit).map((agg) => {
+    const bestName = resolveBestName(agg.domain, agg.names);
     // Get top 5 most common titles (case-preserved from first occurrence)
     const titleEntries = Array.from(agg.titles.entries())
       .sort((a, b) => b[1] - a[1])
@@ -296,7 +392,7 @@ function filterAndRank(
     );
 
     return {
-      name: agg.name,
+      name: bestName,
       domain: agg.domain,
       contactCount: agg.contactCount,
       topTitles,
