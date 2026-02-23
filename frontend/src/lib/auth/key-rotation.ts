@@ -151,7 +151,6 @@ export async function rotateApiKey(params: {
     keyId: newKey.id,
     rawKey: raw,
     keyPrefix: prefix,
-    keyVersion: 1,
     gracePeriodHours,
     oldKeysExpireAt,
   };

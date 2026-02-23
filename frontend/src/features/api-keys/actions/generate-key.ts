@@ -64,7 +64,6 @@ export async function generateApiKey(
       recordId: rotatedKey.keyId,
       metadata: {
         key_prefix: rotatedKey.keyPrefix,
-        key_version: rotatedKey.keyVersion,
         old_keys_expire_at: rotatedKey.oldKeysExpireAt,
       },
     });
