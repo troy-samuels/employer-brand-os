@@ -94,7 +94,8 @@
     "equiniti-ics.com",
     "scas.nhs.uk",
     "amey.co.uk",
-    "novartis.com"
+    "novartis.com",
+    "ed.ac.uk"
   ],
   "failedDomains": [
     "dft.gsi.gov.uk",
@@ -109,6 +110,6 @@
     "nabarro.com",
     "justice.gsi.gov.uk"
   ],
-  "lastIndex": 134,
-  "timestamp": "2026-02-23T03:44:20.022Z"
+  "lastIndex": 135,
+  "timestamp": "2026-02-23T03:45:10.908Z"
 }
