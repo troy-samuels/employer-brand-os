@@ -1,117 +1,139 @@
-# OpenRole: The Stripe for Employer Truth
+# OpenRole
 
-## The Problem: Invisible and Illegal
+**Take control of what AI tells your candidates.**
 
-In 2026, the "Apply" button is dying. 40% of job searches now happen via AI Agents (ChatGPT, Perplexity, Gemini) or Aggregators. These systems don't read "Career Sites"—they read **structured data**.
+OpenRole helps employers understand and improve what AI platforms (ChatGPT, Perplexity, Google AI) say about them to job seekers. We identify the information gaps that cause AI to guess, hallucinate, or default to outdated Glassdoor data — then give employers a playbook to fix it.
 
-Most companies are **"Invisible and Illegal"**:
-1. **Invisible:** Their ATS outputs messy HTML that AI agents cannot read (40% traffic drop)
-2. **Illegal:** New Pay Transparency laws (EU, NY/CA/CO) require salary disclosures that legacy systems fail to automate
-
-## The Solution: The Smart Pixel & Sanitization Engine
-
-OpenRole is the **employment data infrastructure layer for the AI age**. Our Smart Pixel overlays a company's existing site, intercepts messy data, sanitizes it, and injects a verified "Truth Layer" (JSON-LD) that ensures jobs rank higher and meet legal standards automatically.
-
-Think of it like Stripe for payments—one integration, instant compliance, AI-ready data.
+🌐 **[openrole.co.uk](https://openrole.co.uk)**
 
 ---
 
-## The 4-Layer Platform
+## The Problem
 
-### Layer 1: Infrastructure (The Smart Pixel & Sanitization)
-*The "Fix It" Wedge.*
+38% of under-30 job seekers now use AI to research employers. When a candidate asks ChatGPT "What's it like working at [company]?", AI pulls from whatever it can find — often thin, outdated, or wrong.
 
-- **Smart Pixel:** Single line of JavaScript via Google Tag Manager
-- **Sanitization Engine:** Translates ATS codes to public titles (`L4-Eng-NY` → `Senior Software Engineer`)
-- **CSP Fallback:** Hosted Truth Mirror for strict security environments
-- Zero-IT deployment (HR/Marketing can install it)
+AI handles broad opinion queries fine (it cites Glassdoor). But for **specific factual questions** — salary bands, benefits, tech stack, interview process, remote policy — most employers haven't published the answers anywhere AI can find them. So AI guesses.
 
-### Layer 2: Compliance (Automated Guardrails)
-*The "Moat" & Retention.*
-
-- **Automated Guardrails:** Auto-flags jobs missing salary data for Pay Transparency compliance
-- **Hallucination Radar:** Weekly scans of AI models to detect invented data
-- Acts as "Reputation Insurance"
-
-### Layer 3: Intelligence (Proof of Life Dashboard)
-*The Churn Killer.*
-
-- **Monday Morning Report:** Automated stakeholder email showing data points served, posts auto-corrected, ranking improvements
-- Makes invisible infrastructure visible to CFOs
-
-### Layer 4: Network (Live Benchmarking)
-*The Upsell.*
-
-- **Verified Benchmarking:** Real salary data from verified clients (not Glassdoor guesses)
-- Network effect: Gets more valuable as more companies join
+**The result:** Employers lose candidates to competitors who simply have better-published information.
 
 ---
 
-## Target Market
+## How It Works
 
-**Primary:** High-Volume Franchises & Retail (The "Desperate Middle")—companies with visibility pain
+1. **Free AI Audit** — Run your company through our tool. See exactly what 4 AI models say about you, scored out of 100.
+2. **Information Gap Report** — We show you what AI *can't* answer about your company — the questions where it's guessing or hallucinating.
+3. **Content Playbook** — What to publish, where to publish it, and how to structure it so AI cites your own domain (Growth plan).
+4. **Weekly Monitoring** — Track how AI answers change over time. Get alerts when something shifts.
 
-**Secondary:** Mid-market companies (50–1,000 employees) in "3-Star Purgatory" (Glassdoor 2.5-3.8)
+---
 
-**Channel:** Recruitment Marketing Agencies managing 50+ locations (wholesale strategy)
+## Key Features
+
+- **AI Visibility Score** — 0-100 score across 4 AI models (ChatGPT, Perplexity, Google AI, Claude)
+- **Company Scorecard Pages** — Public, shareable pages with SEO and dynamic OG images
+- **UK Visibility Index** — Rankings of UK employers by AI visibility
+- **Head-to-Head Comparisons** — Compare any two companies side by side
+- **PDF Executive Briefing** — One-page leave-behind for CFO/leadership conversations
+- **Blog & Research** — 10 original articles on AI employer branding
+- **Free Tools** — Badge generator, employer schema builder, llms.txt generator
+- **Email Nurture Sequence** — Automated follow-up (Day 1, 3, 7) after audit
+- **Stripe Checkout** — Self-serve signup with monthly/annual billing
+- **Dashboard** — Plan-gated features: monitoring, playbook, compliance, analytics
 
 ---
 
 ## Pricing
 
-| Tier | Price | Target | Value Proposition |
-|------|-------|--------|-------------------|
-| **Visibility** | $299/mo | SMB / Franchise | "Get Found." Smart Pixel + Basic Schema |
-| **Compliance** | $899/mo | Mid-Market | "Stay Safe." + Auto-Compliance + Monday Report |
-| **Agency** | $150/mo per location | Agency Partners | Wholesale rate, min 10 locations |
+| Plan | Monthly | Annual | Target |
+|------|---------|--------|--------|
+| **Free** | £0 | — | Anyone — unlimited audits, no signup |
+| **Starter** | £59/mo | £49/mo | ≤100 employees — monitoring + gap alerts |
+| **Growth** ⭐ | £179/mo | £149/mo | 100–1,000 employees — full playbook + competitors |
+| **Scale** | £449/mo | £379/mo | 1,000+ employees — API, unlimited competitors |
+| **Enterprise** | Custom | Custom | 2,000+ / multi-brand — SSO, SLA, dedicated CSM |
 
 ---
 
 ## Tech Stack
 
-- **Frontend:** Next.js (App Router) + Shadcn/ui + Tailwind CSS
-- **Backend:** Supabase (PostgreSQL with RLS) + Edge Functions
-- **Smart Pixel:** JavaScript SDK hosted on Cloudflare CDN
-- **AI:** Claude API (analysis), Perplexity API (hallucination detection)
-- **Scripts:** Python (Visibility Audit for lead generation)
+- **Framework:** Next.js 16 (App Router, Turbopack)
+- **Database:** Supabase (PostgreSQL, RLS on all 33 tables)
+- **Auth:** Supabase Auth (email/password + Google OAuth)
+- **Payments:** Stripe (Checkout, webhooks, customer portal)
+- **Email:** Resend (transactional + nurture sequences)
+- **Hosting:** Vercel (production at openrole.co.uk)
+- **Monitoring:** Sentry (error tracking)
+- **Styling:** Tailwind CSS + custom design system
 
 ---
 
 ## Project Structure
 
 ```
-employer-openrole/
-├── frontend/               # Next.js dashboard for clients
-│   └── src/
-│       ├── app/            # Pages (dashboard, API routes)
-│       └── features/       # Feature modules (facts, sanitization, pixel)
-├── scripts/                # Python audit scripts (lead generation)
-│   ├── audit_brand*.py     # Visibility Audit scripts
-│   └── companies.csv       # Target companies
-├── supabase/               # Database migrations
-├── database-schema.sql     # Complete schema reference
-├── BUSINESS_PLAN.md        # 2026 Strategic Plan
-├── CLAUDE.md               # AI Developer Rules
-├── tech-stack.md           # Architecture Decisions
-├── design-system.md        # Visual Identity
-└── do_do_not.md            # Development Guardrails
+open-role/
+├── frontend/                   # Next.js application
+│   ├── src/
+│   │   ├── app/                # Pages + API routes
+│   │   │   ├── api/            # audit, stripe, pdf, cron, email, pixel
+│   │   │   ├── company/[slug]/ # Public company scorecards
+│   │   │   ├── compare/        # Head-to-head comparisons
+│   │   │   ├── dashboard/      # Authenticated dashboard (plan-gated)
+│   │   │   └── ...             # pricing, blog, tools, uk-index, etc.
+│   │   ├── components/         # React components
+│   │   ├── lib/                # Core logic
+│   │   │   ├── audit/          # Audit engine + scoring
+│   │   │   ├── email/          # Resend client + templates
+│   │   │   ├── pdf/            # React-PDF briefing generator
+│   │   │   ├── stripe/         # Stripe client + helpers
+│   │   │   └── supabase/       # DB client + typed queries
+│   │   └── data/               # Static data (industries, scores)
+│   ├── content/blog/           # Markdown blog posts (10)
+│   ├── public/                 # Static assets, llms.txt, robots.txt
+│   ├── supabase/migrations/    # Database migrations (11)
+│   └── vercel.json             # Cron config
+├── scripts/                    # Utility scripts
+├── OPENROLE_THESIS.md          # Full strategy document (27K words)
+├── PRICING_RESEARCH.md         # Competitor pricing analysis
+├── GEMINI_GROWTH_ANALYSIS.md   # Feature roadmap (Gemini-generated)
+├── AUDIT_FIXES_CHECKLIST.md    # Security/tech debt tracker
+├── COLD_OUTREACH_PLAYBOOK.md   # Sales playbook
+├── CONTACTS_INDEX.md           # Lead pipeline
+├── VALIDATION_TARGETS.md       # Employer outreach targets
+└── ATS_INTEGRATION_RESEARCH.md # Future: ATS platform APIs
 ```
 
 ---
 
-## Quick Links
+## Local Development
 
-- [Business Plan](./BUSINESS_PLAN.md) - 2026 Strategic Roadmap
-- [Tech Stack](./tech-stack.md) - Architecture Decisions
-- [Design System](./design-system.md) - Visual Identity Guidelines
-- [Frontend Setup](./frontend/README.md) - Local runbook, environment variables, release gate
-- [Guardrails](./do_do_not.md) - Do's and Don'ts
+```bash
+cd frontend
+cp .env.example .env.local      # Add your keys
+npm install
+npm run dev                     # http://localhost:3000
+```
+
+**Required env vars:**
+- `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+
+**Optional (features degrade gracefully):**
+- `STRIPE_SECRET_KEY` + `STRIPE_WEBHOOK_SECRET` — payments
+- `RESEND_API_KEY` — email delivery
+- `BRAVE_SEARCH_API_KEY` — audit web checks
+- `NEXT_PUBLIC_SENTRY_DSN` — error monitoring
 
 ---
 
-## The Moat
+## Evidence
 
-1. **Sanitization Moat:** We're the indispensable translator between messy ATS data and AI-ready output
-2. **Agency Lock-In:** Once deployed across 50 clients, agencies can't rip us out
-3. **Active Retention:** Monday Morning Report constantly proves value
-4. **Regulatory Tailwinds:** Pay Transparency laws force companies to structure data—we automate compliance
+- **1840&Co** published one blog post → 0% to 11% AI visibility in 2 weeks
+- **Monzo's** careers page is the dominant AI citation source for interview prep queries
+- ATS-hosted pages (Lever, Workable) are nearly empty — AI defaults to Glassdoor when employers provide nothing
+- Nobody is serving UK mid-market employers across all sectors at self-serve prices
+
+---
+
+## Status
+
+**Live at [openrole.co.uk](https://openrole.co.uk).** MVP complete. Validating with employers.
