@@ -1,1 +1,0 @@
-DONE — Index page already existed from previous build session. It's fully functional, pulling from Supabase public_audits table. Blog also exists with 5+ articles. Full build compiles clean.
