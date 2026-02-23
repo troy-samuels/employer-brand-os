@@ -743,7 +743,7 @@ export default async function CompanyPage({ params }: PageProps) {
         {/* ── Score history trendline ──────────────── */}
         {scoreHistory.length >= 2 && (
           <section className="max-w-5xl mx-auto px-6 py-14">
-            <ScoreTrend history={scoreHistory} companyName={displayName} />
+            <ScoreTrend history={scoreHistory} companyName={displayName} ukAverage={avgScore} />
           </section>
         )}
 

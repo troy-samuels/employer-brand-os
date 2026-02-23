@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useId, useRef, useState } from "react";
 import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 interface ScorePoint {
@@ -10,6 +11,8 @@ interface ScorePoint {
 interface ScoreTrendProps {
   history: ScorePoint[];
   companyName: string;
+  /** Optional UK average line for context */
+  ukAverage?: number;
 }
 
 function formatDate(dateStr: string): string {
@@ -23,8 +26,78 @@ function scoreColor(score: number): string {
   return "#dc2626";
 }
 
-export function ScoreTrend({ history, companyName }: ScoreTrendProps) {
+/* ------------------------------------------------------------------ */
+/* Tooltip                                                             */
+/* ------------------------------------------------------------------ */
+
+interface TooltipData {
+  x: number;
+  y: number;
+  score: number;
+  date: string;
+}
+
+function Tooltip({ data, containerRef }: { data: TooltipData; containerRef: React.RefObject<SVGSVGElement | null> }) {
+  const rect = containerRef.current?.getBoundingClientRect();
+  if (!rect) return null;
+
+  // Convert SVG coords to pixel coords
+  const scaleX = rect.width / 600;
+  const scaleY = rect.height / 180;
+  const px = data.x * scaleX;
+  const py = data.y * scaleY;
+
+  // Flip tooltip left if too close to right edge
+  const flipLeft = px > rect.width * 0.75;
+
+  return (
+    <div
+      className="pointer-events-none absolute z-10 rounded-lg bg-neutral-900 px-3 py-2 text-xs shadow-lg transition-all duration-150"
+      style={{
+        left: flipLeft ? px - 8 : px + 8,
+        top: py - 40,
+        transform: flipLeft ? "translateX(-100%)" : "translateX(0)",
+      }}
+    >
+      <span className="font-semibold text-white tabular-nums">{data.score}/100</span>
+      <span className="ml-1.5 text-neutral-400">{formatDate(data.date)}</span>
+      {/* Arrow */}
+      <div
+        className="absolute top-full h-0 w-0 border-x-[5px] border-t-[5px] border-x-transparent border-t-neutral-900"
+        style={{ left: flipLeft ? "auto" : 8, right: flipLeft ? 8 : "auto" }}
+      />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Main component                                                      */
+/* ------------------------------------------------------------------ */
+
+export function ScoreTrend({ history, companyName, ukAverage }: ScoreTrendProps) {
   if (history.length < 2) return null;
+
+  const gradientId = useId().replace(/:/g, "_");
+  const svgRef = useRef<SVGSVGElement>(null);
+  const [hoveredPoint, setHoveredPoint] = useState<TooltipData | null>(null);
+  const [animated, setAnimated] = useState(false);
+  const chartRef = useRef<HTMLDivElement>(null);
+
+  // Trigger line-draw animation on mount / scroll into view
+  useEffect(() => {
+    if (!chartRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setAnimated(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(chartRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const latest = history[history.length - 1];
   const earliest = history[0];
@@ -32,15 +105,15 @@ export function ScoreTrend({ history, companyName }: ScoreTrendProps) {
 
   // SVG chart dimensions
   const width = 600;
-  const height = 160;
-  const padding = { top: 20, right: 20, bottom: 30, left: 40 };
+  const height = 180;
+  const padding = { top: 24, right: 30, bottom: 32, left: 44 };
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
   // Calculate scales
   const scores = history.map((p) => p.score);
-  const minScore = Math.max(0, Math.min(...scores) - 5);
-  const maxScore = Math.min(100, Math.max(...scores) + 5);
+  const minScore = Math.max(0, Math.min(...scores) - 8);
+  const maxScore = Math.min(100, Math.max(...scores) + 8);
   const scoreRange = maxScore - minScore || 1;
 
   const xScale = (i: number) => padding.left + (i / (history.length - 1)) * chartWidth;
@@ -55,15 +128,33 @@ export function ScoreTrend({ history, companyName }: ScoreTrendProps) {
   // Gradient fill area
   const areaPath = `${linePath} L ${xScale(history.length - 1)} ${yScale(minScore)} L ${xScale(0)} ${yScale(minScore)} Z`;
 
-  // Grid lines (horizontal)
+  // Grid lines — 3 evenly spaced
   const gridLines = [minScore, Math.round((minScore + maxScore) / 2), maxScore];
 
+  // Smart date label selection — avoid collisions
+  const showDateLabel = (i: number): boolean => {
+    if (i === 0 || i === history.length - 1) return true;
+    if (history.length <= 5) return true;
+    // For longer histories, show every nth to avoid overlap
+    const step = Math.max(2, Math.ceil(history.length / 5));
+    return i % step === 0;
+  };
+
+  // Calculate line length for stroke animation
+  const pathLength = history.reduce((acc, p, i) => {
+    if (i === 0) return 0;
+    const dx = xScale(i) - xScale(i - 1);
+    const dy = yScale(p.score) - yScale(history[i - 1].score);
+    return acc + Math.sqrt(dx * dx + dy * dy);
+  }, 0);
+
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6">
-      <div className="flex items-center justify-between mb-4">
+    <div ref={chartRef} className="rounded-2xl border border-neutral-200 bg-white p-6">
+      {/* Header — stacks vertically on mobile */}
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between mb-5">
         <div>
-          <h3 className="text-base font-bold text-slate-900">Score History</h3>
-          <p className="text-xs text-slate-400">
+          <h3 className="text-base font-semibold text-neutral-950">Score History</h3>
+          <p className="text-xs text-neutral-500">
             {companyName}&apos;s AI visibility over time
           </p>
         </div>
@@ -73,100 +164,192 @@ export function ScoreTrend({ history, companyName }: ScoreTrendProps) {
           ) : delta < 0 ? (
             <TrendingDown className="h-4 w-4 text-red-500" />
           ) : (
-            <Minus className="h-4 w-4 text-slate-400" />
+            <Minus className="h-4 w-4 text-neutral-400" />
           )}
           <span
-            className={`text-sm font-bold ${
-              delta > 0 ? "text-teal-600" : delta < 0 ? "text-red-600" : "text-slate-500"
+            className={`text-sm font-semibold tabular-nums ${
+              delta > 0 ? "text-teal-600" : delta < 0 ? "text-red-600" : "text-neutral-500"
             }`}
           >
             {delta > 0 ? "+" : ""}
             {delta} points
           </span>
-          <span className="text-xs text-slate-400 ml-1">
+          <span className="text-xs text-neutral-500 ml-1">
             since {formatDate(earliest.date)}
           </span>
         </div>
       </div>
 
-      <svg
-        viewBox={`0 0 ${width} ${height}`}
-        className="w-full h-auto"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        <defs>
-          <linearGradient id="scoreGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={scoreColor(latest.score)} stopOpacity={0.15} />
-            <stop offset="100%" stopColor={scoreColor(latest.score)} stopOpacity={0.02} />
-          </linearGradient>
-        </defs>
+      {/* Chart with tooltip overlay */}
+      <div className="relative">
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${width} ${height}`}
+          className="w-full h-auto"
+          preserveAspectRatio="xMidYMid meet"
+          onMouseLeave={() => setHoveredPoint(null)}
+        >
+          <defs>
+            <linearGradient id={`grad-${gradientId}`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={scoreColor(latest.score)} stopOpacity={0.15} />
+              <stop offset="100%" stopColor={scoreColor(latest.score)} stopOpacity={0.02} />
+            </linearGradient>
+          </defs>
 
-        {/* Grid lines */}
-        {gridLines.map((score) => (
-          <g key={score}>
-            <line
-              x1={padding.left}
-              y1={yScale(score)}
-              x2={width - padding.right}
-              y2={yScale(score)}
-              stroke="#f1f5f9"
-              strokeWidth={1}
-            />
-            <text
-              x={padding.left - 8}
-              y={yScale(score) + 4}
-              textAnchor="end"
-              className="fill-slate-400"
-              fontSize={10}
+          {/* Grid lines */}
+          {gridLines.map((score) => (
+            <g key={score}>
+              <line
+                x1={padding.left}
+                y1={yScale(score)}
+                x2={width - padding.right}
+                y2={yScale(score)}
+                stroke="#f1f5f9"
+                strokeWidth={1}
+              />
+              <text
+                x={padding.left - 10}
+                y={yScale(score) + 4}
+                textAnchor="end"
+                fill="#94a3b8"
+                fontSize={10}
+                fontFamily="inherit"
+              >
+                {score}
+              </text>
+            </g>
+          ))}
+
+          {/* UK average dashed line */}
+          {ukAverage != null && ukAverage >= minScore && ukAverage <= maxScore && (
+            <g>
+              <line
+                x1={padding.left}
+                y1={yScale(ukAverage)}
+                x2={width - padding.right}
+                y2={yScale(ukAverage)}
+                stroke="#cbd5e1"
+                strokeWidth={1}
+                strokeDasharray="4 3"
+              />
+              <text
+                x={width - padding.right + 4}
+                y={yScale(ukAverage) + 3}
+                textAnchor="start"
+                fill="#94a3b8"
+                fontSize={9}
+                fontFamily="inherit"
+              >
+                UK avg
+              </text>
+            </g>
+          )}
+
+          {/* Area fill — fades in after line draws */}
+          <path
+            d={areaPath}
+            fill={`url(#grad-${gradientId})`}
+            className="transition-opacity duration-700"
+            style={{
+              opacity: animated ? 1 : 0,
+              transitionDelay: "0.6s",
+            }}
+          />
+
+          {/* Line with draw animation */}
+          <path
+            d={linePath}
+            fill="none"
+            stroke={scoreColor(latest.score)}
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            style={{
+              strokeDasharray: pathLength,
+              strokeDashoffset: animated ? 0 : pathLength,
+              transition: "stroke-dashoffset 0.8s cubic-bezier(0.16, 1, 0.3, 1)",
+            }}
+          />
+
+          {/* Data points — appear after line draws */}
+          {history.map((p, i) => (
+            <g
+              key={i}
+              style={{
+                opacity: animated ? 1 : 0,
+                transition: `opacity 0.3s ease ${0.6 + i * 0.05}s`,
+              }}
             >
-              {score}
+              {/* Invisible larger hit area for hover */}
+              <circle
+                cx={xScale(i)}
+                cy={yScale(p.score)}
+                r={14}
+                fill="transparent"
+                className="cursor-pointer"
+                onMouseEnter={() =>
+                  setHoveredPoint({ x: xScale(i), y: yScale(p.score), score: p.score, date: p.date })
+                }
+              />
+              {/* Visible dot */}
+              <circle
+                cx={xScale(i)}
+                cy={yScale(p.score)}
+                r={hoveredPoint?.date === p.date ? 5 : 3.5}
+                fill="white"
+                stroke={scoreColor(p.score)}
+                strokeWidth={2}
+                className="transition-all duration-150"
+              />
+              {/* Date labels */}
+              {showDateLabel(i) && (
+                <text
+                  x={xScale(i)}
+                  y={height - 6}
+                  textAnchor={i === 0 ? "start" : i === history.length - 1 ? "end" : "middle"}
+                  fill="#94a3b8"
+                  fontSize={9}
+                  fontFamily="inherit"
+                >
+                  {formatDate(p.date)}
+                </text>
+              )}
+            </g>
+          ))}
+
+          {/* Current score label at last point */}
+          <g
+            style={{
+              opacity: animated ? 1 : 0,
+              transition: `opacity 0.3s ease 0.9s`,
+            }}
+          >
+            <text
+              x={xScale(history.length - 1) + 8}
+              y={yScale(latest.score) + 4}
+              textAnchor="start"
+              fill={scoreColor(latest.score)}
+              fontSize={12}
+              fontWeight={600}
+              fontFamily="inherit"
+            >
+              {latest.score}
             </text>
           </g>
-        ))}
+        </svg>
 
-        {/* Area fill */}
-        <path d={areaPath} fill="url(#scoreGradient)" />
+        {/* Tooltip */}
+        {hoveredPoint && <Tooltip data={hoveredPoint} containerRef={svgRef} />}
+      </div>
 
-        {/* Line */}
-        <path
-          d={linePath}
-          fill="none"
-          stroke={scoreColor(latest.score)}
-          strokeWidth={2.5}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-
-        {/* Data points */}
-        {history.map((p, i) => (
-          <g key={i}>
-            <circle
-              cx={xScale(i)}
-              cy={yScale(p.score)}
-              r={3.5}
-              fill="white"
-              stroke={scoreColor(p.score)}
-              strokeWidth={2}
-            />
-            {/* Show date labels for first, last, and every ~3rd point */}
-            {(i === 0 || i === history.length - 1 || i % Math.max(1, Math.floor(history.length / 4)) === 0) && (
-              <text
-                x={xScale(i)}
-                y={height - 6}
-                textAnchor={i === 0 ? "start" : i === history.length - 1 ? "end" : "middle"}
-                className="fill-slate-400"
-                fontSize={9}
-              >
-                {formatDate(p.date)}
-              </text>
-            )}
-          </g>
-        ))}
-      </svg>
-
-      {history.length >= 3 && (
-        <p className="text-xs text-slate-400 mt-2 text-center">
+      {/* Footer */}
+      {history.length >= 3 ? (
+        <p className="text-xs text-neutral-500 mt-3 text-center">
           {history.length} data points · Updated with each audit
+        </p>
+      ) : (
+        <p className="text-xs text-neutral-400 mt-3 text-center italic">
+          Trend data building — each audit adds a data point
         </p>
       )}
     </div>
