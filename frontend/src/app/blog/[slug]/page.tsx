@@ -24,7 +24,12 @@ interface PageProps {
 /* ------------------------------------------------------------------ */
 
 export async function generateStaticParams() {
-  const slugs = getAllPostSlugs();
+  let slugs: string[] = [];
+  try {
+    slugs = getAllPostSlugs();
+  } catch {
+    // fs read may fail on serverless (Vercel) — that's ok
+  }
   return slugs.map((slug) => ({ slug }));
 }
 
@@ -1367,8 +1372,29 @@ Industry: [industry].
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   
-  // Try markdown first
-  const markdownPost = getPostBySlug(slug);
+  // Check hardcoded content first (always available, no fs dependency)
+  const post = blogContent[slug];
+  if (post) {
+    return {
+      title: post.ogTitle,
+      description: post.description,
+      openGraph: {
+        title: post.ogTitle,
+        description: post.description,
+        type: "article",
+      },
+      alternates: { canonical: `https://openrole.co.uk/blog/${slug}` },
+    };
+  }
+  
+  // Only try markdown if no hardcoded content exists
+  let markdownPost = null;
+  try {
+    markdownPost = getPostBySlug(slug);
+  } catch {
+    // fs read may fail on serverless (Vercel) — that's ok
+  }
+  
   if (markdownPost) {
     return {
       title: `${markdownPost.title} | OpenRole`,
@@ -1383,21 +1409,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       alternates: { canonical: `https://openrole.co.uk/blog/${slug}` },
     };
   }
-  
-  // Fall back to hardcoded
-  const post = blogContent[slug];
-  if (!post) return { title: "Post Not Found | OpenRole" };
 
-  return {
-    title: post.ogTitle,
-    description: post.description,
-    openGraph: {
-      title: post.ogTitle,
-      description: post.description,
-      type: "article",
-    },
-    alternates: { canonical: `https://openrole.co.uk/blog/${slug}` },
-  };
+  return { title: "Post Not Found | OpenRole" };
 }
 
 /* ------------------------------------------------------------------ */
@@ -1407,8 +1420,19 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function BlogPost({ params }: PageProps) {
   const { slug } = await params;
   
-  // Try markdown first
-  const markdownPost = getPostBySlug(slug);
+  // Check hardcoded content first (always available, no fs dependency)
+  const post = blogContent[slug];
+  
+  // Only try markdown if no hardcoded content exists
+  let markdownPost = null;
+  if (!post) {
+    try {
+      markdownPost = getPostBySlug(slug);
+    } catch {
+      // fs read may fail on serverless (Vercel) — that's ok
+    }
+  }
+  
   if (markdownPost) {
     const articleSchema = {
       "@context": "https://schema.org",
@@ -1480,7 +1504,6 @@ export default async function BlogPost({ params }: PageProps) {
   }
 
   // Fall back to hardcoded HTML
-  const post = blogContent[slug];
   if (!post) notFound();
 
   return (

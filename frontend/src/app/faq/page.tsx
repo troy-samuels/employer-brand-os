@@ -40,85 +40,85 @@ interface FaqEntry {
 }
 
 const faqs: FaqEntry[] = [
-  // Understanding the Problem
+  // Understanding AI Visibility
   {
-    slug: "what-does-ai-say-about-employers",
-    question: "What does AI actually say about employers?",
+    slug: "what-is-ai-visibility",
+    question: "What is AI visibility and why should employers care?",
     summary:
-      "We tested ChatGPT, Claude, Perplexity and Gemini on hundreds of UK companies. They get salaries wrong by an average of £18K, miss benefits entirely, and cite 2-3 year old Glassdoor reviews as current fact. See real examples.",
-    category: "Understanding the Problem",
+      "AI visibility measures how accurately AI models represent your company to job seekers. 800M people use ChatGPT weekly — when candidates ask about you, AI answers instantly. If that answer is wrong, they move on. You never know they were interested.",
+    category: "Understanding AI Visibility",
   },
   {
-    slug: "why-candidates-use-ai",
-    question: "How many candidates use AI to research employers?",
+    slug: "what-do-llms-say-about-employers",
+    question: "What do AI models actually say about employers?",
     summary:
-      "80% of candidates under 30 use ChatGPT, Claude or Perplexity to research companies before applying. 38% use it as their primary research tool. That AI answer is their first impression — and you didn't get a say in it.",
-    category: "Understanding the Problem",
+      "We tested ChatGPT, Claude, Perplexity and Gemini on hundreds of UK companies. They get salaries wrong by an average of £18K, miss benefits entirely, and cite 2-3 year old data as current fact. See real examples.",
+    category: "Understanding AI Visibility",
   },
   {
-    slug: "what-are-information-gaps",
-    question: "What are employer information gaps?",
+    slug: "which-ai-models-matter",
+    question: "Which AI models matter for employer brand?",
     summary:
-      "Information gaps are specific factual questions AI can't answer about your company — your actual salary bands, specific benefits, remote policy, interview process, tech stack. Glassdoor has opinions, not facts. When AI hits a gap, it guesses. OpenRole finds those gaps.",
-    category: "Understanding the Problem",
+      "ChatGPT (800M weekly users), Google AI Overviews, Perplexity, Claude, and Meta AI (1B monthly users in WhatsApp/Instagram). Each cites different sources — only 25% content overlap between platforms.",
+    category: "Understanding AI Visibility",
   },
   // How OpenRole Works
-  {
-    slug: "how-the-audit-works",
-    question: "How does the free audit work?",
-    summary:
-      "Enter your company name. We query ChatGPT, Claude, Perplexity and Gemini with the exact questions candidates ask. You see the actual AI responses word for word, where they sourced the information, and which questions AI couldn't answer.",
-    category: "How OpenRole Works",
-  },
-  {
-    slug: "what-is-the-content-playbook",
-    question: "What's in the Content Playbook?",
-    summary:
-      "For each information gap, you get: what content to publish, where to publish it on your domain, how to format it for AI, and a ready-to-edit template. Most gaps take 20 minutes to fill. We track whether AI starts citing your content.",
-    category: "How OpenRole Works",
-  },
-  {
-    slug: "how-long-to-see-results",
-    question: "How quickly do AI answers change after publishing content?",
-    summary:
-      "Typically 2-4 weeks. AI models regularly refresh their knowledge. When you publish specific, dated, well-structured content on your careers page, AI preferences it over vague aggregator data. We track this weekly in your Monday Report.",
-    category: "How OpenRole Works",
-  },
   {
     slug: "how-scoring-works",
     question: "How does the AI Visibility Score work?",
     summary:
-      "Your score (0-100) measures how accurately AI represents your company across 8 factual themes: salary accuracy, benefits completeness, remote policy clarity, interview process transparency, tech stack discoverability, career growth pathways, DEI commitments, and culture specificity.",
+      "Your score (0-100) measures how well-equipped your digital presence is for AI models to accurately represent your company. We audit 6 dimensions: structured data, AI crawler access, careers page, brand reputation, salary transparency, and content format.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "what-is-llms-txt",
+    question: "Does llms.txt help with AI visibility?",
+    summary:
+      "llms.txt is a structured file at your domain root that tells AI models how to describe your organisation. Think of it as robots.txt for your reputation. 91% of UK employers don't have one.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "what-is-the-pixel",
+    question: "What does the OpenRole pixel do?",
+    summary:
+      "The pixel is a lightweight JavaScript snippet (~2KB) that serves structured employer data to AI crawlers visiting your careers page. It makes your company information readable by AI models.",
+    category: "How OpenRole Works",
+  },
+  {
+    slug: "how-often-are-audits-updated",
+    question: "How often is AI monitoring updated?",
+    summary:
+      "AI models retrain regularly — what they say about you changes over time. Weekly monitoring catches hallucinations, tracks your optimisation efforts, and alerts you when AI narratives shift.",
     category: "How OpenRole Works",
   },
   // Security & Privacy
   {
-    slug: "data-handling",
-    question: "How does OpenRole handle our data?",
+    slug: "pixel-security",
+    question: "Is the pixel safe to install? What data does it collect?",
     summary:
-      "We only process publicly available information — your website, careers page, and what AI models say publicly about your company. All data encrypted at rest and in transit. EU-hosted infrastructure. GDPR compliant. We never access anything behind authentication.",
+      "Yes. The pixel collects zero personal data, doesn't track users, and doesn't set cookies. It uses SRI hashes, HMAC signing, and runs on SOC 2 certified infrastructure. Your security team can inspect the open-source code.",
     category: "Security & Privacy",
   },
   {
-    slug: "is-it-safe",
-    question: "Do we need to install anything?",
+    slug: "data-handling",
+    question: "How does OpenRole handle our company data?",
     summary:
-      "No. OpenRole works entirely from the outside — we query AI models and analyse your public web presence. There's nothing to install, no code snippet, no pixel. Your IT team doesn't need to be involved.",
+      "We only process publicly available information — your website, careers page, and what AI models say publicly about your company. All data encrypted at rest and in transit. EU-hosted infrastructure. GDPR compliant.",
     category: "Security & Privacy",
   },
   // Pricing & Plans
   {
     slug: "free-vs-paid",
-    question: "What's included free vs paid plans?",
+    question: "What's included free vs paid?",
     summary:
-      "The free audit gives you a full AI scan with gap summary. Paid plans add weekly monitoring, the full Information Gap Report with content templates, competitor benchmarking, and the Content Playbook that tells you exactly what to publish.",
+      "The free audit gives you a full AI scan with gap summary. Paid plans add weekly monitoring, the full Information Gap Report with content templates, competitor benchmarking, and the Content Playbook.",
     category: "Pricing & Plans",
   },
   {
-    slug: "which-plan",
-    question: "Which plan is right for us?",
+    slug: "which-plan-do-i-need",
+    question: "Which plan is right for my company?",
     summary:
-      "Starter (£49/mo) if you want to monitor and get templates. Growth (£149/mo) if you're actively hiring and want the full Content Playbook plus competitor intel. Scale (£399/mo) if you want done-for-you content drafts and board reporting.",
+      "Starter (£49/mo) if you want to monitor and get templates. Growth (£149/mo) if you're actively hiring and want the full Content Playbook plus competitor intel. Scale (£399/mo) for done-for-you content drafts and board reporting.",
     category: "Pricing & Plans",
   },
 ];

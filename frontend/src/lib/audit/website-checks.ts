@@ -610,7 +610,39 @@ function isSameDomain(hostname: string, domain: string): boolean {
   return hostname === domain || hostname.endsWith(`.${domain}`);
 }
 
+function looksLikeErrorPage(html: string): boolean {
+  const lower = html.toLowerCase();
+  // Detect soft-404 pages that return HTTP 200 but contain error content
+  const errorPatterns = [
+    "page not found",
+    "404 error",
+    "404 not found",
+    "page doesn't exist",
+    "page does not exist",
+    "this page isn't available",
+    "this page is not available",
+    "no longer available",
+    "couldn't find",
+    "could not find",
+    "nothing here",
+    "page you requested",
+    "doesn't exist",
+    "does not exist",
+    "<title>404",
+    "<title>not found",
+    "<title>page not found",
+    "<title>error",
+  ];
+  const matchCount = errorPatterns.filter((p) => lower.includes(p)).length;
+  return matchCount >= 1;
+}
+
 function classifyCareersResponse(html: string, resolvedUrl: string): CareersCheckResult {
+  // Detect soft-404 pages (HTTP 200 but error content)
+  if (looksLikeErrorPage(html)) {
+    return { status: "not_found", url: null, blockedUrl: null, html: "" };
+  }
+
   const textLength = stripHtmlTags(html).length;
   if (textLength > 1000) {
     return { status: "full", url: resolvedUrl, blockedUrl: null, html };

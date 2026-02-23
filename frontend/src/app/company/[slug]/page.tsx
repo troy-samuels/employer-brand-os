@@ -14,6 +14,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import {
   ArrowRight,
   CheckCircle2,
@@ -288,7 +289,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
           ? "partial"
           : "fail",
       points: audit.score_breakdown.salaryData ?? 0,
-      maxPoints: 12,
+      maxPoints: 10,
       description: audit.has_salary_data
         ? "Salary information is visible and machine-readable on job listings."
         : "No machine-readable salary data found — AI will guess or refuse to answer salary questions.",
@@ -302,7 +303,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
           ? "partial"
           : "fail",
       points: audit.score_breakdown.careersPage ?? 0,
-      maxPoints: 17,
+      maxPoints: 20,
       description:
         audit.careers_page_status === "full"
           ? "A comprehensive careers page was found with sufficient content for AI."
@@ -315,7 +316,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
       name: "Structured Data (JSON-LD)",
       status: audit.has_jsonld ? "pass" : "fail",
       points: audit.score_breakdown.jsonld ?? 0,
-      maxPoints: 28,
+      maxPoints: 20,
       description: audit.has_jsonld
         ? "Machine-readable organisation data is present on the website."
         : "No JSON-LD schema markup found — AI has to guess basic company details.",
@@ -325,7 +326,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
       name: "Brand Reputation & Presence",
       status: (audit.score_breakdown.brandReputation ?? 0) > 0 ? "pass" : "fail",
       points: audit.score_breakdown.brandReputation ?? 0,
-      maxPoints: 17,
+      maxPoints: 15,
       description: (audit.score_breakdown.brandReputation ?? 0) > 0
         ? "Employer review and reputation data is available for AI to reference."
         : "No employer review data found online — AI has nothing to reference about your workplace.",
@@ -339,7 +340,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
           ? "partial"
           : "fail",
       points: audit.score_breakdown.robotsTxt ?? 0,
-      maxPoints: 17,
+      maxPoints: 20,
       description:
         audit.robots_txt_status === "allows"
           ? "AI crawlers are allowed to read this website."
@@ -352,7 +353,7 @@ function buildChecks(audit: StoredAuditResult): CheckItem[] {
       name: "Content Format",
       status: contentFormatScore >= 7 ? "pass" : contentFormatScore > 0 ? "partial" : "fail",
       points: contentFormatScore,
-      maxPoints: 9,
+      maxPoints: 15,
       description: contentFormatScore >= 7
         ? "Content uses structured formats AI prefers — FAQ patterns, semantic headings, and answer-first structure."
         : contentFormatScore > 0
@@ -475,27 +476,7 @@ export default async function CompanyPage({ params }: PageProps) {
   const audit = await getCompanyAudit(slug);
 
   if (!audit) {
-    return (
-      <>
-        <Header />
-        <main className="min-h-screen bg-slate-50 flex items-center justify-center px-6">
-          <div className="max-w-md text-center">
-            <Search className="h-12 w-12 text-slate-300 mx-auto mb-4" />
-            <h1 className="text-2xl font-bold text-slate-900 mb-2">Company not found</h1>
-            <p className="text-slate-500 mb-6">
-              We haven&apos;t audited this company yet. Run a free audit to generate their report.
-            </p>
-            <Link
-              href="/#audit"
-              className="inline-flex items-center justify-center rounded-xl bg-teal-600 px-6 py-3 text-sm font-semibold text-white hover:bg-teal-700 transition-colors"
-            >
-              Run a free audit
-            </Link>
-          </div>
-        </main>
-        <Footer />
-      </>
-    );
+    notFound();
   }
 
   const displayName = formatCompanyName(audit.company_name, slug);
