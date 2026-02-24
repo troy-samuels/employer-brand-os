@@ -127,7 +127,12 @@ const MAX_SAMPLED_JOB_LISTING_PAGES = 12;
 const CAREERS_SUBDOMAIN_PREFIXES = ["careers", "jobs"] as const;
 const MAX_META_REFRESH_REDIRECT_HOPS = 2;
 const CAREERS_PROBE_CONCURRENCY = 4;
-const CAREERS_PROBE_TIMEOUT_MS = 35_000;
+const CAREERS_PROBE_TIMEOUT_MS = 25_000;
+
+/** Hard ceiling for the entire inner audit (must leave headroom below route timeout). */
+const INNER_AUDIT_TIMEOUT_MS = 38_000;
+/** Maximum time for brand reputation search before returning neutral score. */
+const BRAND_REPUTATION_TIMEOUT_MS = 10_000;
 
 const ATS_HOST_SUFFIXES = [
   "boards.greenhouse.io",
@@ -271,7 +276,8 @@ type SalaryConfidence =
   | "mention_only"
   | "single_range"
   | "multiple_ranges"
-  | "jsonld_base_salary";
+  | "jsonld_base_salary"
+  | "no_active_listings";
 
 type SafeFetchResult = {
   ok: boolean;
@@ -376,7 +382,7 @@ export type CurrencyCode =
 /**
  * Defines the AuditStatus contract.
  */
-export type AuditStatus = "success" | "no_website" | "unreachable" | "empty";
+export type AuditStatus = "success" | "no_website" | "unreachable" | "empty" | "bot_protected";
 
 /**
  * Defines the AtsName contract.
@@ -596,6 +602,19 @@ async function fetchSafe(url: string, useHeadlessFallback = false): Promise<Safe
   }
 }
 
+/**
+ * Converts a hostname to its ASCII (punycode) form for safe comparison.
+ * Falls back to lowercase original if conversion fails.
+ */
+function toAsciiHostname(hostname: string): string {
+  try {
+    // The URL constructor automatically converts IDN to punycode in .hostname
+    return new URL(`https://${hostname}`).hostname.toLowerCase();
+  } catch {
+    return hostname.toLowerCase();
+  }
+}
+
 function normalizeDomain(input: string): string {
   const trimmed = input.trim();
   if (!trimmed) {
@@ -607,7 +626,7 @@ function normalizeDomain(input: string): string {
     return new URL(normalizedInput).hostname.toLowerCase();
   } catch {
     const withoutProtocol = trimmed.replace(/^https?:\/\//i, "");
-    return withoutProtocol.split("/")[0]?.toLowerCase() ?? "";
+    return toAsciiHostname(withoutProtocol.split("/")[0] ?? "");
   }
 }
 
@@ -616,7 +635,9 @@ function stripLeadingWww(hostname: string): string {
 }
 
 function isSameDomain(hostname: string, domain: string): boolean {
-  return hostname === domain || hostname.endsWith(`.${domain}`);
+  const h = toAsciiHostname(hostname);
+  const d = toAsciiHostname(domain);
+  return h === d || h.endsWith(`.${d}`);
 }
 
 function looksLikeErrorPage(html: string): boolean {
@@ -1686,7 +1707,21 @@ function detectCurrency(text: string): CurrencyCode {
   return null;
 }
 
-function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
+const NO_ACTIVE_LISTINGS_PATTERNS = [
+  /\bno\s+(?:current|open)\s+(?:openings?|positions?|vacanc(?:y|ies)|roles?|jobs?)\b/i,
+  /\bcheck\s+back\s+(?:later|soon)\b/i,
+  /\bno\s+vacanc(?:y|ies)\b/i,
+  /\bwe(?:'re|\s+are)\s+not\s+(?:currently\s+)?hiring\b/i,
+  /\bcurrently\s+no\s+(?:open\s+)?(?:positions?|roles?|jobs?|vacanc(?:y|ies))\b/i,
+  /\bno\s+jobs?\s+(?:available|listed|posted)\b/i,
+  /\ball\s+positions?\s+(?:have\s+been\s+)?filled\b/i,
+];
+
+function detectNoActiveListings(careersText: string): boolean {
+  return NO_ACTIVE_LISTINGS_PATTERNS.some((pattern) => pattern.test(careersText));
+}
+
+function analyzeSalaryTransparency(careersHtml: string, hasActiveListings?: boolean): SalaryDetectionResult {
   if (!careersHtml) {
     return {
       hasSalaryData: false,
@@ -1742,6 +1777,18 @@ function analyzeSalaryTransparency(careersHtml: string): SalaryDetectionResult {
       salaryConfidence: "mention_only",
       score: 2,
       detectedCurrency,
+    };
+  }
+
+  // If the careers page exists but has no active job listings, give benefit
+  // of the doubt — the company may normally disclose salaries when hiring.
+  // Score 3/10 is neutral: not penalised, but not rewarded either.
+  if (hasActiveListings === false) {
+    return {
+      hasSalaryData: false,
+      salaryConfidence: "no_active_listings",
+      score: 3,
+      detectedCurrency: null,
     };
   }
 
@@ -1907,9 +1954,15 @@ export async function runWebsiteChecks(
   const normalizedDomain = normalizeDomain(domain);
   const companySlug = createCompanySlug(companyName);
 
-  // Resilience wrapper: never throw — always return at least a partial result
+  // Resilience wrapper: never throw — always return at least a partial result.
+  // Also caps the inner audit at INNER_AUDIT_TIMEOUT_MS to prevent the route
+  // 45s timeout from firing (which returns a 504 with no score at all).
   try {
-    return await runWebsiteChecksInner(normalizedDomain, companyName, companySlug, careersUrlOverride);
+    const innerPromise = runWebsiteChecksInner(normalizedDomain, companyName, companySlug, careersUrlOverride);
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error("Inner audit timeout")), INNER_AUDIT_TIMEOUT_MS);
+    });
+    return await Promise.race([innerPromise, timeoutPromise]);
   } catch (error) {
     console.error("runWebsiteChecks fatal error (returning partial result):", error);
     return {
@@ -1937,7 +1990,7 @@ export async function runWebsiteChecks(
       robotsTxtStatus: "not_found",
       robotsTxtAllowedBots: [],
       robotsTxtBlockedBots: [],
-      brandReputation: { platforms: [], sentiment: "unknown", sourceCount: 0 },
+      brandReputation: { platforms: [], sentiment: "unknown", sourceCount: 0, available: false },
       score: 0,
       scoreBreakdown: {
         jsonld: 0,
@@ -2010,16 +2063,34 @@ async function runWebsiteChecksInner(
       llmsTxtHasEmployment = LLMS_EMPLOYMENT_KEYWORDS.some((keyword) => llmsText.includes(keyword));
     }
 
+    // ── Homepage bot-protection fallback ──────────────────────────
+    // If the homepage is blocked by Cloudflare/bot protection, attempt a
+    // headless render before declaring it empty.
+    let homepageHtml = "";
+
     if (!homepageResponse.ok) {
       auditStatus = "unreachable";
+    } else if (homepageResponse.isBotProtected) {
+      // Homepage is bot-protected — try headless fallback
+      const rendered = await renderBotProtectedPage(`https://${normalizedDomain}/`);
+      if (rendered.html && stripHtmlTags(rendered.html).length >= 50) {
+        homepageHtml = rendered.html;
+        auditStatus = "success";
+      } else {
+        auditStatus = "bot_protected";
+      }
     } else if (
       homepageResponse.status === 404 ||
       stripHtmlTags(homepageResponse.text).length < 50
     ) {
       auditStatus = "empty";
+      // Still capture HTML for cross-domain link extraction even if content is thin
+      if (homepageResponse.status === 200) {
+        homepageHtml = homepageResponse.text;
+      }
+    } else {
+      homepageHtml = homepageResponse.text;
     }
-
-    const homepageHtml = homepageResponse.ok && homepageResponse.status === 200 ? homepageResponse.text : "";
 
     // ── Careers probe phase (timeout-capped) ────────────────────────
     // The careers probe can involve multiple network hops (cross-domain
@@ -2089,35 +2160,45 @@ async function runWebsiteChecksInner(
 
     // Detect ATS from the careers URL hostname
     if (careersPageUrl) {
+      const confirmedCareersUrl = careersPageUrl;
       try {
-        const careersHostname = new URL(careersPageUrl).hostname.toLowerCase();
+        const careersHostname = new URL(confirmedCareersUrl).hostname.toLowerCase();
         atsDetected = detectAtsName(careersHostname);
         
         // Enhanced ATS detection with job scraping (graceful fallback on error)
+        // Entire block capped at 12s to prevent stalling the audit.
+        const ATS_ENRICHMENT_TIMEOUT_MS = 12_000;
         try {
-          const atsDetection = await detectATS(careersPageUrl);
-          if (isReliableDetection(atsDetection) && atsDetection.boardToken && atsDetection.provider) {
-            atsProvider = atsDetection.provider;
-            atsBoardToken = atsDetection.boardToken;
-            
-            // Fetch and analyse jobs (with timeout protection)
-            const jobsPromise = fetchJobsFromProvider(atsDetection.provider, atsDetection.boardToken);
-            const jobs = await Promise.race([
-              jobsPromise,
-              new Promise<[]>((resolve) => setTimeout(() => resolve([]), 8000))
-            ]);
-            
-            if (jobs.length > 0) {
-              atsJobCount = jobs.length;
-              const analysis = analyseJobs(jobs);
-              atsAnalysis = analysis as unknown as Record<string, unknown>;
-              
-              const facts = generateFacts(jobs, analysis, atsDetection.provider);
-              if (hasSubstantialFacts(facts)) {
-                atsGeneratedFacts = facts as unknown as Record<string, unknown>;
+          const atsEnrichmentWork = async () => {
+            const atsDetection = await detectATS(confirmedCareersUrl);
+            if (isReliableDetection(atsDetection) && atsDetection.boardToken && atsDetection.provider) {
+              atsProvider = atsDetection.provider;
+              atsBoardToken = atsDetection.boardToken;
+
+              // Fetch and analyse jobs (with timeout protection)
+              const jobsPromise = fetchJobsFromProvider(atsDetection.provider, atsDetection.boardToken);
+              const jobs = await Promise.race([
+                jobsPromise,
+                new Promise<[]>((resolve) => setTimeout(() => resolve([]), 8000)),
+              ]);
+
+              if (jobs.length > 0) {
+                atsJobCount = jobs.length;
+                const analysis = analyseJobs(jobs);
+                atsAnalysis = analysis as unknown as Record<string, unknown>;
+
+                const facts = generateFacts(jobs, analysis, atsDetection.provider);
+                if (hasSubstantialFacts(facts)) {
+                  atsGeneratedFacts = facts as unknown as Record<string, unknown>;
+                }
               }
             }
-          }
+          };
+
+          await Promise.race([
+            atsEnrichmentWork(),
+            new Promise<void>((resolve) => setTimeout(resolve, ATS_ENRICHMENT_TIMEOUT_MS)),
+          ]);
         } catch (atsError) {
           // Enhanced ATS detection failed — gracefully continue with basic detection
           console.error("[Audit] Enhanced ATS detection failed:", atsError);
@@ -2128,8 +2209,16 @@ async function runWebsiteChecksInner(
     }
 
     // Salary analysis — reuse already-fetched job listing HTML (no double fetch)
+    // Detect whether the careers page has active listings so we can score fairly
+    const careersText = bestCareersCheck.html ? stripHtmlTags(bestCareersCheck.html) : "";
+    const noActiveListingsDetected =
+      bestCareersCheck.status === "full" &&
+      jobListingHtmlSamples.length === 0 &&
+      detectNoActiveListings(careersText);
+    const hasActiveListings = noActiveListingsDetected ? false : undefined;
+
     const salaryHtmlSamples = [bestCareersCheck.html, ...jobListingHtmlSamples].filter(Boolean);
-    const salaryDetections = salaryHtmlSamples.map((html) => analyzeSalaryTransparency(html));
+    const salaryDetections = salaryHtmlSamples.map((html) => analyzeSalaryTransparency(html, hasActiveListings));
     const salaryDetection = selectHighestConfidenceSalaryDetection(salaryDetections);
     hasSalaryData = salaryDetection.hasSalaryData;
     salaryConfidence = salaryDetection.salaryConfidence;
@@ -2173,13 +2262,37 @@ async function runWebsiteChecksInner(
       hasSitemap = sitemapText.includes("<urlset") || sitemapText.includes("<sitemapindex");
     }
 
-    // Await brand reputation (started in parallel at the top of crawl)
-    brandReputation = await brandReputationPromise;
+    // Await brand reputation (started in parallel at the top of crawl).
+    // Cap with a timeout so a slow search can't stall the entire audit.
+    const brandRepTimeoutFallback: BrandReputation = {
+      platforms: [],
+      sentiment: "unknown",
+      sourceCount: 0,
+      available: false,
+    };
+    brandReputation = await Promise.race([
+      brandReputationPromise,
+      new Promise<BrandReputation>((resolve) =>
+        setTimeout(() => resolve(brandRepTimeoutFallback), BRAND_REPUTATION_TIMEOUT_MS),
+      ),
+    ]);
   }
 
   // Brand reputation fallback for no-website case
   if (!brandReputation) {
-    brandReputation = await checkBrandReputation(companyName);
+    // Cap the fallback check too
+    const brandRepTimeoutFallback: BrandReputation = {
+      platforms: [],
+      sentiment: "unknown",
+      sourceCount: 0,
+      available: false,
+    };
+    brandReputation = await Promise.race([
+      checkBrandReputation(companyName),
+      new Promise<BrandReputation>((resolve) =>
+        setTimeout(() => resolve(brandRepTimeoutFallback), BRAND_REPUTATION_TIMEOUT_MS),
+      ),
+    ]);
   }
 
   // Content format scoring uses the careers page HTML collected during the crawl.

@@ -18,6 +18,12 @@ export type BrandReputation = {
   sentiment: "positive" | "mixed" | "negative" | "unknown";
   /** Number of review sources found */
   sourceCount: number;
+  /**
+   * Whether the brand reputation data was successfully retrieved.
+   * When `false`, the search infrastructure failed (API down, no key, timeout)
+   * and the score should be treated as neutral rather than zero.
+   */
+  available: boolean;
 };
 
 /* ── Review platform detection ───────────────────── */
@@ -295,10 +301,37 @@ function mergeUniqueResults(...resultSets: BraveSearchResult[][]): BraveSearchRe
 export async function checkBrandReputation(
   companyName: string,
 ): Promise<BrandReputation> {
-  const [reviewResults, linkedInResults] = await Promise.all([
-    searchBrave(`"${companyName}" employer reviews working at`),
-    searchBrave(`"${companyName}" linkedin company jobs`),
-  ]);
+  let reviewResults: BraveSearchResult[];
+  let linkedInResults: BraveSearchResult[];
+
+  try {
+    [reviewResults, linkedInResults] = await Promise.all([
+      searchBrave(`"${companyName}" employer reviews working at`),
+      searchBrave(`"${companyName}" linkedin company jobs`),
+    ]);
+  } catch {
+    // Search infrastructure failed entirely — mark as unavailable
+    return {
+      platforms: [],
+      sentiment: "unknown",
+      sourceCount: 0,
+      available: false,
+    };
+  }
+
+  // If both searches returned zero results, the search API likely failed
+  // (rate-limited, no key, network error). Distinguish from a genuine
+  // "company has no online presence" by checking if both sets are empty.
+  const totalResults = reviewResults.length + linkedInResults.length;
+  if (totalResults === 0) {
+    return {
+      platforms: [],
+      sentiment: "unknown",
+      sourceCount: 0,
+      available: false,
+    };
+  }
+
   const results = mergeUniqueResults(reviewResults, linkedInResults);
 
   const platforms: ReviewPlatform[] = [];
@@ -336,19 +369,28 @@ export async function checkBrandReputation(
     platforms,
     sentiment,
     sourceCount: platforms.length,
+    available: true,
   };
 }
 
 /* ── Scoring ─────────────────────────────────────── */
 
 export function scoreBrandReputation(reputation: BrandReputation): number {
-  const { sourceCount, sentiment } = reputation;
+  const { sourceCount, sentiment, available } = reputation;
 
   // Semrush: unlinked brand mentions carry weight in AI visibility.
   // Moz: consistent brand positioning across platforms drives AI citation.
   // Fairness: capped at 3 platforms for full base marks — a 20-person startup
   // on Glassdoor + LinkedIn + their own site scores the same as a Fortune 500.
   // Max: 15 points.
+
+  // When brand reputation data is unavailable (search API down, no key, timeout),
+  // return a neutral median score so companies aren't penalised for our
+  // infrastructure issues. 8 is the midpoint of the 0-15 range.
+  if (!available) {
+    return 8;
+  }
+
   let score = 0;
 
   if (sourceCount >= 3) {

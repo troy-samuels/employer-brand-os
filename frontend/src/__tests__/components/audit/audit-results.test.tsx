@@ -39,6 +39,7 @@ const createMockResult = (
     platforms: [],
     sentiment: "unknown",
     sourceCount: 0,
+    available: true,
   },
   score: 0,
   scoreBreakdown: {

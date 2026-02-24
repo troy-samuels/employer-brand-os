@@ -50,6 +50,7 @@ describe("v2 scoring model", () => {
         platforms: [],
         sentiment: "unknown",
         sourceCount: 0,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(0);
     });
@@ -59,6 +60,7 @@ describe("v2 scoring model", () => {
         platforms: [{ name: "Glassdoor", url: "https://glassdoor.com/acme", snippet: null }],
         sentiment: "unknown",
         sourceCount: 1,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(4);
     });
@@ -71,6 +73,7 @@ describe("v2 scoring model", () => {
         ],
         sentiment: "unknown",
         sourceCount: 2,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(7);
     });
@@ -84,6 +87,7 @@ describe("v2 scoring model", () => {
         ],
         sentiment: "unknown",
         sourceCount: 3,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(10);
     });
@@ -97,6 +101,7 @@ describe("v2 scoring model", () => {
         ],
         sentiment: "positive",
         sourceCount: 3,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(15);
     });
@@ -106,6 +111,7 @@ describe("v2 scoring model", () => {
         platforms: [{ name: "Glassdoor", url: "https://glassdoor.com/acme", snippet: null }],
         sentiment: "negative",
         sourceCount: 1,
+        available: true,
       };
       // 4 - 3 = 1
       expect(scoreBrandReputation(rep)).toBe(1);
@@ -116,6 +122,7 @@ describe("v2 scoring model", () => {
         platforms: [],
         sentiment: "negative",
         sourceCount: 0,
+        available: true,
       };
       // Base is 0, no modifier applied when score is 0
       expect(scoreBrandReputation(rep)).toBe(0);
@@ -129,6 +136,7 @@ describe("v2 scoring model", () => {
         ],
         sentiment: "mixed",
         sourceCount: 2,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(7);
     });
@@ -138,6 +146,7 @@ describe("v2 scoring model", () => {
         platforms: [{ name: "Glassdoor", url: "https://glassdoor.com/acme", snippet: null }],
         sentiment: "positive",
         sourceCount: 1,
+        available: true,
       };
       expect(scoreBrandReputation(rep)).toBe(9);
     });

@@ -161,6 +161,8 @@ function getJsonldDetail(r: WebsiteCheckResult): string {
 function getSalaryDetail(r: WebsiteCheckResult): string {
   if (r.hasSalaryData)
     return "Salary information is visible to AI crawlers — candidates asking about pay will get answers.";
+  if (r.salaryConfidence === "no_active_listings")
+    return "No active job listings to assess — salary transparency can't be evaluated right now.";
   return "No salary data found. When candidates ask AI about your pay, it has nothing to share.";
 }
 

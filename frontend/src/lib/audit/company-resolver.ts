@@ -10,6 +10,10 @@ const URL_SCHEME_REGEX = /^[a-z][a-z0-9+.-]*:\/\//i;
 const USER_AGENT = "OpenRoleAuditBot/1.0 (+https://openrole.co.uk)";
 const MAX_REDIRECT_HOPS = 5;
 const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+/** Maximum time the TLD brute-force + search fallback may spend. */
+const RESOLVER_TIMEOUT_MS = 10_000;
+/** How many TLD candidates to probe in parallel per batch. */
+const TLD_PROBE_CONCURRENCY = 6;
 
 function slugify(value: string): string {
   return value
@@ -244,7 +248,8 @@ export async function resolveCompanyUrl(
     return { name, url: null };
   }
 
-  // Try various TLD combinations
+  // Try various TLD combinations — batched in parallel with a hard timeout
+  // to prevent budget exhaustion when many TLDs are unreachable.
   const candidates: string[] = [];
   for (const tld of COUNTRY_TLDS) {
     candidates.push(`https://${slug}.${tld}`);
@@ -253,16 +258,34 @@ export async function resolveCompanyUrl(
     }
   }
 
-  for (const candidateUrl of candidates) {
-    if (await isReachable(candidateUrl)) {
-      return { name, url: candidateUrl };
-    }
-  }
+  const resolveWithTimeout = async (): Promise<string | null> => {
+    // Batched parallel probing with early termination
+    for (let start = 0; start < candidates.length; start += TLD_PROBE_CONCURRENCY) {
+      const batch = candidates.slice(start, start + TLD_PROBE_CONCURRENCY);
+      const results = await Promise.all(
+        batch.map(async (candidateUrl) => {
+          const reachable = await isReachable(candidateUrl);
+          return reachable ? candidateUrl : null;
+        }),
+      );
 
-  // Fallback to web search
-  const searchResult = await searchCompanyUrl(name);
-  if (searchResult) {
-    return { name, url: searchResult };
+      const found = results.find((url) => url !== null);
+      if (found) {
+        return found;
+      }
+    }
+
+    // Fallback to web search
+    return searchCompanyUrl(name);
+  };
+
+  const timeoutPromise = new Promise<null>((resolve) => {
+    setTimeout(() => resolve(null), RESOLVER_TIMEOUT_MS);
+  });
+
+  const resolvedUrl = await Promise.race([resolveWithTimeout(), timeoutPromise]);
+  if (resolvedUrl) {
+    return { name, url: resolvedUrl };
   }
 
   return { name, url: null };

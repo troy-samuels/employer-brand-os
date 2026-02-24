@@ -438,7 +438,9 @@ Disallow: /jobs
       const fetchedUrls = vi.mocked(global.fetch).mock.calls.map((call) => String(call[0]));
 
       expect(fetchedUrls.some((url) => url.includes("127.0.0.1"))).toBe(false);
-      expect(result.score).toBe(0);
+      // Score is 8 (not 0) because brand reputation returns a neutral median
+      // score when search infrastructure is unavailable, rather than penalising.
+      expect(result.score).toBe(8);
       expect(result.robotsTxtStatus).toBe("not_found");
       expect(result.robotsTxtAllowedBots).toEqual([]);
       expect(result.robotsTxtBlockedBots).toEqual([]);
