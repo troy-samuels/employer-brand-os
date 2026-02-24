@@ -28,7 +28,7 @@ function ConfidenceBar({ confidence }: { confidence: number }) {
   return (
     <div className="flex items-center gap-2">
       <div
-        className="h-1.5 flex-1 rounded-full bg-neutral-100 overflow-hidden"
+        className="h-2 flex-1 rounded-full bg-neutral-100 overflow-hidden"
         role="progressbar"
         aria-valuenow={clamped}
         aria-valuemin={0}
@@ -148,7 +148,8 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1" role="tablist" aria-label="Response categories">
+      <div className="relative">
+      <div className="flex gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-none" role="tablist" aria-label="Response categories">
         {categories.map((cat) => {
           const isActive = cat === resolvedCategory;
           const catRows = rows.filter((r) => r.category === cat);
@@ -163,10 +164,10 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
               aria-selected={isActive}
               aria-controls={`tabpanel-${cat}`}
               onClick={() => setActiveCategory(cat)}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all shrink-0 ${
+              className={`inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 text-[13px] font-medium transition-all shrink-0 ${
                 isActive
-                  ? "bg-neutral-950 text-white"
-                  : "bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-300"
+                  ? "bg-neutral-950 text-white shadow-sm"
+                  : "bg-white text-neutral-600 border border-neutral-200 hover:border-neutral-300 hover:bg-neutral-50"
               }`}
             >
               {CATEGORY_LABELS[cat] ?? cat}
@@ -176,6 +177,9 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
             </button>
           );
         })}
+      </div>
+      {/* Fade hint for horizontal scroll */}
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-slate-50 to-transparent" />
       </div>
 
       {/* Model responses for active category */}
@@ -215,8 +219,8 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
 
             {/* Gap indicator */}
             {row.matchesVerified === "mismatch" && row.verifiedValue && (
-              <div className="rounded-lg bg-status-warning-light px-3 py-2">
-                <p className="text-[11px] text-status-warning font-medium">
+              <div className="rounded-lg bg-status-warning-light/60 border border-status-warning/10 px-3 py-2">
+                <p className="text-[11px] text-status-warning font-medium leading-relaxed">
                   ⚠ {row.verifiedValue}
                 </p>
               </div>

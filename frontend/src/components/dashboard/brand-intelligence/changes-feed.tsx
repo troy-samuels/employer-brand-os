@@ -34,7 +34,7 @@ function ChangeEntry({ change }: { change: MonitorChange }) {
     <div className="flex items-start gap-3 py-3">
       {/* Icon */}
       <span
-        className={`mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold ${bg} ${text}`}
+        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-sm font-bold ${bg} ${text}`}
       >
         {icon}
       </span>

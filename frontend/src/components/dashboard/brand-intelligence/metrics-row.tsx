@@ -22,20 +22,24 @@ interface MetricCardProps {
 }
 
 function MetricCard({ label, value, description, accent = "default" }: MetricCardProps) {
-  const accentColours = {
-    default: "text-neutral-950",
-    warning: "text-status-warning",
-    success: "text-status-verified",
-    info: "text-brand-accent",
+  const accentConfig = {
+    default: { text: "text-neutral-950", dot: "" },
+    warning: { text: "text-status-warning", dot: "bg-status-warning" },
+    success: { text: "text-status-verified", dot: "bg-status-verified" },
+    info: { text: "text-brand-accent", dot: "bg-brand-accent" },
   };
+  const { text, dot } = accentConfig[accent];
 
   return (
     <Card variant="bordered" padding="md">
-      <p className="overline mb-2">{label}</p>
-      <p className={`text-2xl font-bold tabular-nums ${accentColours[accent]}`}>
+      <div className="flex items-center gap-2 mb-3">
+        {dot && <span className={`inline-block w-2 h-2 rounded-full ${dot}`} />}
+        <p className="overline !mb-0">{label}</p>
+      </div>
+      <p className={`text-3xl font-bold tabular-nums ${text}`}>
         {value}
       </p>
-      <p className="text-xs text-neutral-500 mt-1.5 leading-relaxed">
+      <p className="text-xs text-neutral-500 mt-2 leading-relaxed">
         {description}
       </p>
     </Card>

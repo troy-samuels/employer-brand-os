@@ -112,7 +112,7 @@ export function RecommendationsPanel({ recommendations }: RecommendationsPanelPr
             <div key={`${rec.category}-${i}`} className="px-6 py-4">
               <div className="flex items-start gap-3">
                 {/* Number */}
-                <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-[11px] font-bold text-neutral-600">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-neutral-950 text-[11px] font-bold text-white">
                   {i + 1}
                 </span>
 

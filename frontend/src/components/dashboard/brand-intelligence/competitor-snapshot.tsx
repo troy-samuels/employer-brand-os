@@ -40,14 +40,14 @@ function generateCompetitors(userScore: number): CompetitorData[] {
 // ---------------------------------------------------------------------------
 
 function ScoreBar({ score, isUser = false }: { score: number; isUser?: boolean }) {
-  const colour = isUser ? "bg-brand-accent" : "bg-neutral-300";
+  const colour = isUser ? "bg-brand-accent" : "bg-neutral-200";
 
   return (
     <div className="flex items-center gap-3">
-      <div className="h-2 flex-1 rounded-full bg-neutral-100 overflow-hidden">
+      <div className="h-3 flex-1 rounded-full bg-neutral-100 overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-700 ${colour}`}
-          style={{ width: `${score}%` }}
+          style={{ width: `${Math.max(score, 4)}%` }}
         />
       </div>
       <span className={`text-sm font-bold tabular-nums w-8 text-right ${isUser ? "text-brand-accent" : "text-neutral-600"}`}>
@@ -145,9 +145,15 @@ export function CompetitorSnapshot({ userScore, companyName }: CompetitorSnapsho
         {/* Competitors */}
         {competitors.map((comp) => (
           <div key={comp.name}>
-            <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-medium text-neutral-600">{comp.name}</span>
-              <span className="text-[10px] text-neutral-400">
+              <span className={`text-[11px] font-semibold ${
+                comp.trend === "up"
+                  ? "text-status-verified"
+                  : comp.trend === "down"
+                    ? "text-status-critical"
+                    : "text-neutral-400"
+              }`}>
                 {comp.trend === "up" ? "↑" : comp.trend === "down" ? "↓" : "→"}
               </span>
             </div>

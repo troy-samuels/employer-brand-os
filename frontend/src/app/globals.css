@@ -229,6 +229,15 @@
   to { height: 0; }
 }
 
+/* Scrollbar utilities */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Hide Vercel deployment badge on Hobby plan */
 [data-testid="vc-feedback-widget"],
 a[aria-label="Vercel Logo"],

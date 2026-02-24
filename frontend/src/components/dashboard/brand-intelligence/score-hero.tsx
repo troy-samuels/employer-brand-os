@@ -53,8 +53,8 @@ function Sparkline({
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="var(--brand-accent)" stopOpacity="0.15" />
-          <stop offset="100%" stopColor="var(--brand-accent)" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--brand-accent)" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="var(--brand-accent)" stopOpacity="0.03" />
         </linearGradient>
       </defs>
       <path d={fillD} fill={`url(#${gradientId})`} />
@@ -62,18 +62,27 @@ function Sparkline({
         d={pathD}
         fill="none"
         stroke="var(--brand-accent)"
-        strokeWidth="2"
+        strokeWidth="2.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      {/* Current point dot */}
+      {/* Current point dot with pulse ring */}
       {scores.length > 0 && (
-        <circle
-          cx={width}
-          cy={height - ((scores[scores.length - 1] - min) / range) * height}
-          r="3"
-          fill="var(--brand-accent)"
-        />
+        <>
+          <circle
+            cx={width}
+            cy={height - ((scores[scores.length - 1] - min) / range) * height}
+            r="6"
+            fill="var(--brand-accent)"
+            opacity="0.15"
+          />
+          <circle
+            cx={width}
+            cy={height - ((scores[scores.length - 1] - min) / range) * height}
+            r="3.5"
+            fill="var(--brand-accent)"
+          />
+        </>
       )}
     </svg>
   );
@@ -163,11 +172,12 @@ export function ScoreHero({
         <div className="flex items-center gap-5">
           {/* Large score circle */}
           <div
-            className={`flex items-center justify-center w-20 h-20 rounded-2xl ${scoreBgColour(score)}`}
+            className={`flex flex-col items-center justify-center w-[88px] h-[88px] rounded-2xl ${scoreBgColour(score)}`}
           >
-            <span className={`text-3xl font-bold tabular-nums ${scoreColour(score)}`}>
+            <span className={`text-4xl font-bold tabular-nums leading-none ${scoreColour(score)}`}>
               {score}
             </span>
+            <span className="text-[10px] font-semibold text-neutral-400 mt-0.5">/100</span>
           </div>
 
           <div>
