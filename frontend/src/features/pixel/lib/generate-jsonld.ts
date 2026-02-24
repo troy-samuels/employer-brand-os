@@ -1,10 +1,7 @@
 /**
  * @module features/pixel/lib/generate-jsonld
- * Module implementation for generate-jsonld.ts.
- */
-
-/**
  * JSON-LD Generator
+ * 
  * Builds schema.org compliant JSON-LD from employer facts
  *
  * This is the core value proposition of OpenRole:
@@ -18,16 +15,16 @@ import type {
   JsonLdOptions,
   JsonLdOrganization,
   OrganizationData,
-  EmployerFact,
 } from '../types/pixel.types';
+import type { EmployerFacts } from '@/features/facts/types/employer-facts.types';
 
 /**
  * Generate JSON-LD for an organization's verified facts
  *
  * Business Logic:
- * - Only includes facts marked with include_in_jsonld = true
- * - Maps fact categories to schema.org properties
- * - Verified facts get higher visibility
+ * - Reads from the flat questionnaire schema
+ * - Maps fact columns to schema.org properties
+ * - Published facts get higher visibility
  * - Optionally filters by location for multi-location orgs
  *
  * @param options - Generation options including org ID and filters
@@ -36,7 +33,7 @@ import type {
 export async function generateJsonLd(
   options: JsonLdOptions
 ): Promise<JsonLdOrganization> {
-  const { organisationId, locationId } = options;
+  const { organisationId } = options;
 
   // Fetch organization details
   const org = await fetchOrganization(organisationId);
@@ -44,14 +41,14 @@ export async function generateJsonLd(
     throw new Error('Organization not found');
   }
 
-  // Fetch employer facts
-  const facts = await fetchFacts(organisationId, locationId);
+  // Fetch employer facts by company slug
+  const facts = await fetchFacts(org.id);
 
   // Build the JSON-LD structure
   const jsonLd: JsonLdOrganization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: org.name,
+    name: facts?.company_name || org.name,
   };
 
   // Add optional organization fields
@@ -71,7 +68,9 @@ export async function generateJsonLd(
   }
 
   // Map facts to JSON-LD properties
-  mapFactsToJsonLd(facts, jsonLd);
+  if (facts) {
+    mapFactsToJsonLd(facts, jsonLd);
+  }
 
   // SECURITY: Sanitize all values before injection into customer domains
   // This prevents XSS even if malicious data gets into the database
@@ -82,13 +81,14 @@ export async function generateJsonLd(
 
 /**
  * Fetch organization data from database
+ * Gets the company_slug for fact lookup
  */
 async function fetchOrganization(
   organisationId: string
-): Promise<OrganizationData | null> {
+): Promise<(OrganizationData & { slug?: string }) | null> {
   const { data, error } = await supabaseAdmin
     .from('organizations')
-    .select('id, name, website, logo_url, employee_count')
+    .select('id, name, slug, website, logo_url, employee_count')
     .eq('id', organisationId)
     .single();
 
@@ -102,189 +102,249 @@ async function fetchOrganization(
     website: data.website,
     logoUrl: data.logo_url,
     employeeCount: data.employee_count,
+    slug: data.slug,
   };
 }
 
 /**
- * Fetch employer facts marked for JSON-LD inclusion
+ * Fetch employer facts from the flat questionnaire schema
+ * Returns the complete facts record for the organization
  */
 async function fetchFacts(
-  organisationId: string,
-  locationId?: string
-): Promise<EmployerFact[]> {
-  let query = supabaseAdmin
-    .from('employer_facts')
-    .select(`
-      id,
-      definition_id,
-      value,
-      verification_status,
-      fact_definitions (
-        name,
-        display_name,
-        schema_property,
-        category_id,
-        fact_categories (
-          name
-        )
-      )
-    `)
-    .eq('organization_id', organisationId)
-    .eq('include_in_jsonld', true)
-    .eq('is_current', true);
+  organisationId: string
+): Promise<EmployerFacts | null> {
+  // First get the organization's slug
+  const { data: org } = await supabaseAdmin
+    .from('organizations')
+    .select('slug')
+    .eq('id', organisationId)
+    .single();
 
-  // Filter by location if specified
-  if (locationId) {
-    query = query.eq('location_id', locationId);
+  if (!org?.slug) {
+    return null;
   }
 
-  const { data, error } = await query;
+  // Fetch employer facts by company_slug
+  const { data, error } = await supabaseAdmin
+    .from('employer_facts')
+    .select('*')
+    .eq('company_slug', org.slug)
+    .eq('published', true) // Only include published facts
+    .single();
 
   if (error || !data) {
-    return [];
+    return null;
   }
 
-  // Transform database rows to EmployerFact type
-  return data.map((row) => ({
-    id: row.id,
-    name: (row.fact_definitions as { name: string })?.name || '',
-    displayName: (row.fact_definitions as { display_name: string })?.display_name || '',
-    value: row.value as Record<string, unknown>,
-    schemaProperty: (row.fact_definitions as { schema_property: string | null })?.schema_property || null,
-    category: ((row.fact_definitions as { fact_categories: { name: string } | null })?.fact_categories?.name) || 'other',
-    verificationStatus: row.verification_status as 'unverified' | 'pending' | 'verified',
-  }));
+  return data as unknown as EmployerFacts;
 }
 
 /**
  * Map employer facts to JSON-LD properties
  *
  * Mapping strategy:
- * - If fact has schema_property, use it directly
- * - Otherwise, use category-based defaults
- * - Group related facts (e.g., all benefits into jobBenefits array)
+ * - Map flat questionnaire columns to schema.org properties
+ * - Use appropriate schema.org types for structured data
+ * - Handle arrays and objects appropriately
  */
 function mapFactsToJsonLd(
-  facts: EmployerFact[],
+  facts: EmployerFacts,
   jsonLd: JsonLdOrganization
 ): void {
-  const benefits: string[] = [];
-  const sameAs: string[] = [];
+  // Company description → description
+  if (facts.culture_description) {
+    jsonLd.description = facts.culture_description;
+  }
 
-  for (const fact of facts) {
-    // Use explicit schema property if defined
-    if (fact.schemaProperty) {
-      const value = formatFactValue(fact);
-      // Only assign if value is not empty (omit null/undefined/empty strings/empty arrays)
-      if (value !== undefined && value !== null && value !== '' &&
-          !(Array.isArray(value) && value.length === 0)) {
-        jsonLd[fact.schemaProperty] = value;
+  // DEI statement → append to description
+  if (facts.dei_statement) {
+    const existingDesc = jsonLd.description || '';
+    jsonLd.description = existingDesc
+      ? `${existingDesc}\n\n${facts.dei_statement}`
+      : facts.dei_statement;
+  }
+
+  // Founded year → foundingDate
+  if (facts.founded_year) {
+    jsonLd.foundingDate = facts.founded_year.toString();
+  }
+
+  // Team size → numberOfEmployees
+  if (facts.team_size) {
+    // Parse team size (e.g., "10-50" or "50")
+    const match = facts.team_size.match(/(\d+)/);
+    if (match) {
+      jsonLd.numberOfEmployees = {
+        '@type': 'QuantitativeValue',
+        value: parseInt(match[1], 10),
+      };
+    }
+  }
+
+  // Salary bands → baseSalary (use first band as representative)
+  if (facts.salary_bands && Array.isArray(facts.salary_bands)) {
+    const salaryBands = facts.salary_bands as Array<{
+      role?: string;
+      min?: number;
+      max?: number;
+      currency?: string;
+      equity?: boolean;
+    }>;
+    
+    if (salaryBands.length > 0) {
+      const firstBand = salaryBands[0];
+      if (firstBand.min || firstBand.max) {
+        jsonLd.baseSalary = {
+          '@type': 'MonetaryAmountDistribution',
+          currency: firstBand.currency || 'USD',
+          ...(firstBand.min && { minValue: firstBand.min }),
+          ...(firstBand.max && { maxValue: firstBand.max }),
+        };
       }
-      continue;
-    }
-
-    // Category-based mapping
-    switch (fact.category) {
-      case 'benefits':
-      case 'time_off':
-      case 'perks':
-        // Collect into jobBenefits array
-        benefits.push(formatBenefitValue(fact));
-        break;
-
-      case 'compensation':
-        // Map salary-related facts
-        if (fact.name.includes('salary')) {
-          jsonLd.baseSalary = formatSalaryValue(fact);
-        }
-        break;
-
-      case 'work_style':
-        // Map to employmentType or similar
-        if (fact.name.includes('remote')) {
-          jsonLd.jobLocationType = formatFactValue(fact);
-        }
-        break;
-
-      case 'culture':
-        // Add to description or knowsAbout
-        jsonLd.knowsAbout = formatFactValue(fact);
-        break;
-
-      default:
-        // Store under a custom property
-        jsonLd[`x-${fact.name}`] = formatFactValue(fact);
     }
   }
 
-  // Add collected arrays if not empty AND not already set by schemaProperty
-  // This ensures dashboard-saved facts (with schemaProperty) take precedence over legacy individual facts
-  if (benefits.length > 0 && !jsonLd.jobBenefits) {
-    jsonLd.jobBenefits = benefits;
-  }
-
-  if (sameAs.length > 0) {
-    jsonLd.sameAs = sameAs;
-  }
-}
-
-/**
- * Format a fact value for JSON-LD output
- */
-function formatFactValue(fact: EmployerFact): unknown {
-  const value = fact.value;
-
-  // If value has a 'display' property, use it
-  if (typeof value === 'object' && value !== null && 'display' in value) {
-    return value.display;
-  }
-
-  // If value has a 'value' property, use it
-  if (typeof value === 'object' && value !== null && 'value' in value) {
-    return value.value;
-  }
-
-  return value;
-}
-
-/**
- * Format a benefit for the jobBenefits array
- */
-function formatBenefitValue(fact: EmployerFact): string {
-  const value = fact.value;
-
-  if (typeof value === 'string') {
-    return value;
-  }
-
-  if (typeof value === 'object' && value !== null) {
-    if ('display' in value && typeof value.display === 'string') {
-      return value.display;
-    }
-    if ('name' in value && typeof value.name === 'string') {
-      return value.name;
+  // Benefits → jobBenefits
+  if (facts.benefits && Array.isArray(facts.benefits)) {
+    const benefits = facts.benefits as Array<{
+      category?: string;
+      name?: string;
+      details?: string;
+    }>;
+    
+    const benefitNames = benefits
+      .map((b) => b.name)
+      .filter((name): name is string => Boolean(name));
+    
+    if (benefitNames.length > 0) {
+      jsonLd.jobBenefits = benefitNames;
     }
   }
 
-  return fact.displayName;
-}
+  // Remote policy → jobLocationType
+  if (facts.remote_policy) {
+    const remotePolicyMap: Record<string, string> = {
+      'fully-remote': 'TELECOMMUTE',
+      'hybrid': 'TELECOMMUTE',
+      'office-first': 'OFFICE',
+      'flexible': 'TELECOMMUTE',
+    };
+    
+    jsonLd.jobLocationType = remotePolicyMap[facts.remote_policy] || facts.remote_policy;
+  }
 
-/**
- * Format salary data as schema.org MonetaryAmountDistribution
- */
-function formatSalaryValue(fact: EmployerFact): object {
-  const value = fact.value as {
-    min?: number;
-    max?: number;
-    currency?: string;
-    median?: number;
-  };
+  // Office locations → location
+  if (facts.office_locations && Array.isArray(facts.office_locations)) {
+    const locations = facts.office_locations as Array<{
+      city?: string;
+      country?: string;
+      address?: string;
+    }>;
+    
+    const locationObjects = locations.map((loc) => ({
+      '@type': 'Place',
+      ...(loc.address && { address: loc.address }),
+      ...(loc.city && { addressLocality: loc.city }),
+      ...(loc.country && { addressCountry: loc.country }),
+    }));
+    
+    if (locationObjects.length > 0) {
+      jsonLd.location = locationObjects.length === 1 ? locationObjects[0] : locationObjects;
+    }
+  }
 
-  return {
-    '@type': 'MonetaryAmountDistribution',
-    currency: value.currency || 'USD',
-    ...(value.min && { minValue: value.min }),
-    ...(value.max && { maxValue: value.max }),
-    ...(value.median && { median: value.median }),
-  };
+  // Tech stack → knowsAbout
+  if (facts.tech_stack && Array.isArray(facts.tech_stack)) {
+    const techStack = facts.tech_stack as Array<{
+      category?: string;
+      tools?: string[];
+    }>;
+    
+    const allTools = techStack.flatMap((cat) => cat.tools || []);
+    
+    if (allTools.length > 0) {
+      jsonLd.knowsAbout = allTools;
+    }
+  }
+
+  // Engineering blog → publishingPrinciples (or custom property)
+  if (facts.engineering_blog_url) {
+    jsonLd['x-engineeringBlog'] = facts.engineering_blog_url;
+  }
+
+  // Interview process → custom properties
+  if (facts.interview_stages && Array.isArray(facts.interview_stages)) {
+    jsonLd['x-interviewStages'] = facts.interview_stages;
+  }
+
+  if (facts.interview_timeline) {
+    jsonLd['x-interviewTimeline'] = facts.interview_timeline;
+  }
+
+  // Company values → knowsAbout or custom
+  if (facts.company_values && Array.isArray(facts.company_values)) {
+    const values = facts.company_values as Array<{
+      value?: string;
+      description?: string;
+    }>;
+    
+    const valueNames = values
+      .map((v) => v.value)
+      .filter((val): val is string => Boolean(val));
+    
+    if (valueNames.length > 0) {
+      jsonLd['x-companyValues'] = valueNames;
+    }
+  }
+
+  // DEI initiatives → custom properties
+  if (facts.dei_initiatives && Array.isArray(facts.dei_initiatives)) {
+    jsonLd['x-deiInitiatives'] = facts.dei_initiatives;
+  }
+
+  if (facts.gender_pay_gap_url) {
+    jsonLd['x-genderPayGapReport'] = facts.gender_pay_gap_url;
+  }
+
+  // Flexible hours
+  if (facts.flexible_hours) {
+    jsonLd['x-flexibleHours'] = facts.flexible_hours_details || true;
+  }
+
+  // Leave policies
+  const leaveData: Record<string, string> = {};
+  if (facts.annual_leave) leaveData.annualLeave = facts.annual_leave;
+  if (facts.maternity_leave) leaveData.maternityLeave = facts.maternity_leave;
+  if (facts.paternity_leave) leaveData.paternityLeave = facts.paternity_leave;
+  if (facts.parental_leave_details) leaveData.parentalLeave = facts.parental_leave_details;
+  
+  if (Object.keys(leaveData).length > 0) {
+    jsonLd['x-leavePolicy'] = leaveData;
+  }
+
+  // Compensation details
+  if (facts.bonus_structure) {
+    jsonLd['x-bonusStructure'] = facts.bonus_structure;
+  }
+
+  if (facts.pay_review_cycle) {
+    jsonLd['x-payReviewCycle'] = facts.pay_review_cycle;
+  }
+
+  if (facts.pension_contribution) {
+    jsonLd['x-pensionContribution'] = facts.pension_contribution;
+  }
+
+  // Career development
+  if (facts.promotion_framework) {
+    jsonLd['x-promotionFramework'] = facts.promotion_framework;
+  }
+
+  if (facts.learning_budget) {
+    jsonLd['x-learningBudget'] = facts.learning_budget;
+  }
+
+  if (facts.career_levels && Array.isArray(facts.career_levels)) {
+    jsonLd['x-careerLevels'] = facts.career_levels;
+  }
 }

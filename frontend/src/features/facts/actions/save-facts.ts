@@ -1,22 +1,24 @@
 /**
  * @module features/facts/actions/save-facts
- * Module implementation for save-facts.ts.
+ * Server actions to save and retrieve employer facts
  */
 
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@/lib/supabase/server';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { getUserOrganization, hasPermission } from '@/lib/auth/get-user-org';
 import { logAdminAction } from '@/lib/audit/audit-logger';
 import type { CompanyFactsFormData } from '../schemas/facts.schema';
 import type { SaveFactsResult } from '../types/facts.types';
-import type { Json } from '@/types/database.types';
 
 /**
- * Executes saveCompanyFacts.
- * @param data - data input.
- * @returns The resulting value.
+ * Save company facts using the questionnaire schema
+ * Maps form data to the flat employer_facts table columns
+ * 
+ * @param data - Form data from the facts questionnaire
+ * @returns Success/error result
  */
 export async function saveCompanyFacts(
   data: CompanyFactsFormData
@@ -34,79 +36,77 @@ export async function saveCompanyFacts(
       return { success: false, error: 'You do not have permission to edit facts' };
     }
 
-    const orgId = userOrg.organizationId;
-
-    // 1. Update organization name only (no description column in table)
-    const { error: orgError } = await supabaseAdmin
-      .from('organizations')
-      .update({
-        name: data.companyName,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', orgId);
-
-    if (orgError) {
-      console.error('Error updating organization:', orgError);
-      return { success: false, error: 'Failed to update organization' };
+    // Get company slug from user metadata
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return { success: false, error: 'Authentication failed' };
     }
 
-    // 2. Get or create fact definitions for our fields
-    const definitions = await getOrCreateFactDefinitions();
-
-    // 3. Save description fact
-    if (data.description) {
-      const descError = await saveOrUpdateFact(orgId, definitions.description, data.description);
-      if (descError) {
-        return { success: false, error: 'Failed to save description' };
-      }
+    const companySlug = user.user_metadata?.company_slug;
+    
+    if (!companySlug) {
+      return { success: false, error: 'No company slug found for user' };
     }
 
-    // 4. Save salary fact
-    const salaryValue = {
-      min: data.salaryMin,
-      max: data.salaryMax,
-      currency: data.currency,
+    // Map form data to questionnaire schema columns
+    const remotePolicyMap: Record<string, string> = {
+      remote: 'fully-remote',
+      hybrid: 'hybrid',
+      onsite: 'office-first',
     };
-    const salaryError = await saveOrUpdateFact(orgId, definitions.salary, salaryValue);
-    if (salaryError) {
-      return { success: false, error: 'Failed to save salary information' };
-    }
 
-    // 5. Save benefits fact
-    const benefitsError = await saveOrUpdateFact(orgId, definitions.benefits, data.benefits);
-    if (benefitsError) {
-      return { success: false, error: 'Failed to save benefits information' };
-    }
-
-    // 6. Save remote policy fact
-    const remotePolicyDisplay = {
-      remote: 'Fully Remote',
-      hybrid: 'Hybrid',
-      onsite: 'On-site',
-    }[data.remotePolicy];
-
-    const policyValue = {
-      value: data.remotePolicy,
-      display: remotePolicyDisplay,
+    const employerFactsData = {
+      company_slug: companySlug,
+      company_name: data.companyName,
+      culture_description: data.description || null,
+      salary_bands: [
+        {
+          role: 'General',
+          min: data.salaryMin,
+          max: data.salaryMax,
+          currency: data.currency,
+          equity: false,
+        },
+      ],
+      benefits: data.benefits.map((benefit) => ({
+        category: 'General',
+        name: benefit,
+        details: '',
+      })),
+      remote_policy: remotePolicyMap[data.remotePolicy] || 'hybrid',
+      updated_by: user.id,
+      updated_at: new Date().toISOString(),
     };
-    const policyError = await saveOrUpdateFact(orgId, definitions.remotePolicy, policyValue);
-    if (policyError) {
-      return { success: false, error: 'Failed to save remote policy' };
+
+    // Upsert employer facts (conflict on company_slug)
+    const { error: upsertError } = await supabaseAdmin
+      .from('employer_facts')
+      .upsert(employerFactsData, {
+        onConflict: 'company_slug',
+      });
+
+    if (upsertError) {
+      console.error('Error upserting employer facts:', upsertError);
+      return { success: false, error: 'Failed to save employer facts' };
     }
 
     // Revalidate the facts page to show updated data
     revalidatePath('/dashboard/facts');
 
+    // Log the action for audit trail
     await logAdminAction({
       actor: userOrg.userId,
       action: 'facts.updated',
-      resource: 'organizations',
+      resource: 'employer_facts',
       result: 'success',
-      organizationId: orgId,
+      organizationId: userOrg.organizationId,
       userId: userOrg.userId,
-      recordId: orgId,
+      recordId: companySlug,
       metadata: {
         company_name: data.companyName,
+        company_slug: companySlug,
       },
     });
 
@@ -117,182 +117,11 @@ export async function saveCompanyFacts(
   }
 }
 
-// Helper to save or update a fact (no unique constraint, so we check first)
-async function saveOrUpdateFact(
-  orgId: string,
-  definitionId: string,
-  value: Json
-): Promise<string | null> {
-  try {
-    // Check if fact already exists
-    const { data: existing } = await supabaseAdmin
-      .from('employer_facts')
-      .select('id')
-      .eq('organization_id', orgId)
-      .eq('definition_id', definitionId)
-      .eq('is_current', true)
-      .single();
-
-    if (existing) {
-      // Update existing fact
-      const { error } = await supabaseAdmin
-        .from('employer_facts')
-        .update({
-          value,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', existing.id);
-
-      if (error) {
-        console.error('Error updating fact:', error);
-        return error.message;
-      }
-    } else {
-      // Insert new fact
-      const { error } = await supabaseAdmin
-        .from('employer_facts')
-        .insert({
-          organization_id: orgId,
-          definition_id: definitionId,
-          value,
-          include_in_jsonld: true,
-          is_current: true,
-          verification_status: 'unverified',
-          effective_date: new Date().toISOString(),
-        });
-
-      if (error) {
-        console.error('Error inserting fact:', error);
-        return error.message;
-      }
-    }
-
-    return null; // Success
-  } catch (error) {
-    console.error('Unexpected error saving fact:', error);
-    return 'Unexpected error';
-  }
-}
-
-// Helper to get existing fact definition IDs or create them
-async function getOrCreateFactDefinitions(): Promise<{
-  description: string;
-  salary: string;
-  benefits: string;
-  remotePolicy: string;
-}> {
-  // First, ensure we have a category
-  let categoryId: string;
-
-  const { data: existingCategory } = await supabaseAdmin
-    .from('fact_categories')
-    .select('id')
-    .eq('name', 'compensation')
-    .single();
-
-  if (existingCategory) {
-    categoryId = existingCategory.id;
-  } else {
-    const { data: newCategory } = await supabaseAdmin
-      .from('fact_categories')
-      .insert({
-        name: 'compensation',
-        display_name: 'Compensation & Benefits',
-        description: 'Salary, benefits, and work policies',
-        icon: 'dollar-sign',
-        sort_order: 1,
-      })
-      .select('id')
-      .single();
-
-    categoryId = newCategory?.id || '';
-  }
-
-  // Get or create description definition
-  const descriptionDef = await getOrCreateDefinition({
-    name: 'company_description',
-    displayName: 'Company Description',
-    categoryId,
-    dataType: 'text',
-    schemaProperty: 'description',
-  });
-
-  // Get or create salary definition
-  const salaryDef = await getOrCreateDefinition({
-    name: 'base_salary',
-    displayName: 'Base Salary',
-    categoryId,
-    dataType: 'range',
-    schemaProperty: 'baseSalary',
-  });
-
-  // Get or create benefits definition
-  const benefitsDef = await getOrCreateDefinition({
-    name: 'benefits_list',
-    displayName: 'Benefits',
-    categoryId,
-    dataType: 'list',
-    schemaProperty: 'jobBenefits',
-  });
-
-  // Get or create remote policy definition
-  const remoteDef = await getOrCreateDefinition({
-    name: 'remote_policy',
-    displayName: 'Remote Policy',
-    categoryId,
-    dataType: 'enum',
-    schemaProperty: 'jobLocationType',
-  });
-
-  return {
-    description: descriptionDef,
-    salary: salaryDef,
-    benefits: benefitsDef,
-    remotePolicy: remoteDef,
-  };
-}
-
-async function getOrCreateDefinition(params: {
-  name: string;
-  displayName: string;
-  categoryId: string;
-  dataType: string;
-  schemaProperty: string;
-}): Promise<string> {
-  const { data: existing } = await supabaseAdmin
-    .from('fact_definitions')
-    .select('id')
-    .eq('name', params.name)
-    .is('organization_id', null)
-    .single();
-
-  if (existing) {
-    return existing.id;
-  }
-
-  const { data: created } = await supabaseAdmin
-    .from('fact_definitions')
-    .insert({
-      organization_id: null, // System-wide definition
-      category_id: params.categoryId,
-      name: params.name,
-      display_name: params.displayName,
-      data_type: params.dataType,
-      schema_property: params.schemaProperty,
-      include_in_jsonld: true,
-      is_required: false,
-      is_public: true,
-      sort_order: 1,
-    })
-    .select('id')
-    .single();
-
-  return created?.id || '';
-}
-
 /**
- * Executes getCompanyFacts.
- * @returns The resulting value.
+ * Get company facts for the current user
+ * Reads from the flat questionnaire schema and maps to form data
+ * 
+ * @returns Form data or null if not found
  */
 export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
   try {
@@ -303,69 +132,70 @@ export async function getCompanyFacts(): Promise<CompanyFactsFormData | null> {
       return null;
     }
 
-    const orgId = userOrg.organizationId;
+    // Get company slug from user metadata
+    const supabase = await createClient();
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      return null;
+    }
 
-    // Get organization data (name only - no description column)
-    const { data: org } = await supabaseAdmin
-      .from('organizations')
-      .select('name')
-      .eq('id', orgId)
-      .single();
+    const companySlug = user.user_metadata?.company_slug;
+    
+    if (!companySlug) {
+      return null;
+    }
 
-    if (!org) return null;
-
-    // Get fact definitions
-    const definitions = await getOrCreateFactDefinitions();
-
-    // Get description fact
-    const { data: descFact } = await supabaseAdmin
+    // Fetch employer facts by company slug
+    const { data: facts, error: fetchError } = await supabaseAdmin
       .from('employer_facts')
-      .select('value')
-      .eq('organization_id', orgId)
-      .eq('definition_id', definitions.description)
-      .eq('is_current', true)
+      .select('*')
+      .eq('company_slug', companySlug)
       .single();
 
-    // Get salary fact
-    const { data: salaryFact } = await supabaseAdmin
-      .from('employer_facts')
-      .select('value')
-      .eq('organization_id', orgId)
-      .eq('definition_id', definitions.salary)
-      .eq('is_current', true)
-      .single();
+    if (fetchError) {
+      // If no data exists yet, that's fine - return null
+      if (fetchError.code === 'PGRST116') {
+        return null;
+      }
+      console.error('Error fetching employer facts:', fetchError);
+      return null;
+    }
 
-    // Get benefits fact
-    const { data: benefitsFact } = await supabaseAdmin
-      .from('employer_facts')
-      .select('value')
-      .eq('organization_id', orgId)
-      .eq('definition_id', definitions.benefits)
-      .eq('is_current', true)
-      .single();
+    // Map questionnaire schema back to form data
+    const remotePolicyReverseMap: Record<string, 'remote' | 'hybrid' | 'onsite'> = {
+      'fully-remote': 'remote',
+      'hybrid': 'hybrid',
+      'office-first': 'onsite',
+      'flexible': 'hybrid', // Default flexible to hybrid
+    };
 
-    // Get remote policy fact
-    const { data: remoteFact } = await supabaseAdmin
-      .from('employer_facts')
-      .select('value')
-      .eq('organization_id', orgId)
-      .eq('definition_id', definitions.remotePolicy)
-      .eq('is_current', true)
-      .single();
+    // Extract salary band (first one, as we only support General role for now)
+    const salaryBands = facts.salary_bands as Array<{
+      role?: string;
+      min?: number;
+      max?: number;
+      currency?: string;
+      equity?: boolean;
+    }> | null;
+    const firstBand = salaryBands?.[0];
 
-    const descValue = descFact?.value as string | null;
-    const salaryValue = salaryFact?.value as { min?: number; max?: number; currency?: string } | null;
-    const benefitsValue = benefitsFact?.value as string[] | null;
-    const remoteValue = remoteFact?.value as { value?: string } | null;
+    // Extract benefits (map from structured to simple array)
+    const benefitsData = facts.benefits as Array<{
+      category?: string;
+      name?: string;
+      details?: string;
+    }> | null;
+    const benefitsList = benefitsData?.map((b) => b.name || '').filter(Boolean) || [];
 
     return {
-      companyName: org.name || '',
-      description: descValue || '',
-      salaryMin: salaryValue?.min || 0,
-      salaryMax: salaryValue?.max || 0,
-      currency: (salaryValue?.currency as 'USD' | 'EUR' | 'GBP') || 'USD',
-      benefits: benefitsValue || [],
-      remotePolicy: (remoteValue?.value as 'remote' | 'hybrid' | 'onsite') || 'hybrid',
+      companyName: facts.company_name || '',
+      description: facts.culture_description || '',
+      salaryMin: firstBand?.min || 0,
+      salaryMax: firstBand?.max || 0,
+      currency: (firstBand?.currency as 'USD' | 'EUR' | 'GBP') || 'USD',
+      benefits: benefitsList,
+      remotePolicy: remotePolicyReverseMap[facts.remote_policy || 'hybrid'] || 'hybrid',
     };
   } catch (error) {
     console.error('Error fetching company facts:', error);

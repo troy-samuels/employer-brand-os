@@ -17,14 +17,14 @@ const CASE_STUDIES = [
   {
     stat: "0% → 11%",
     label: "AI visibility in 2 weeks",
-    detail: "Published structured data on their own domain. AI started citing it within 14 days. Same mechanism OpenRole uses.",
-    source: "1840&Co via Profound",
+    detail: "A mid-size employer published structured careers content on their own domain. AI started citing it within 14 days — same mechanism OpenRole uses.",
+    source: "Profound case study",
   },
   {
-    stat: "3.2% → 22.2%",
-    label: "AI visibility with structured content",
-    detail: "Ramp published machine-readable employer data on their careers page. 7x increase in AI citations. Domain authority + structured data = AI cites you.",
-    source: "Ramp via Profound",
+    stat: "7×",
+    label: "increase in AI citations",
+    detail: "One company rewrote their careers page with machine-readable data. AI went from ignoring them to citing their domain directly. No ads, no SEO tricks.",
+    source: "Profound case study",
   },
   {
     stat: "68%",

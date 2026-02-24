@@ -14,7 +14,6 @@ export type {
   DomainValidationResult,
   RateLimitResult,
   JsonLdOptions,
-  EmployerFact,
   OrganizationData,
   PixelErrorResponse,
   PixelEvent,

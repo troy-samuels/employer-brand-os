@@ -25,7 +25,7 @@ import { cn } from "@/lib/utils";
 type Mode = "without" | "with";
 
 const USER_QUESTION =
-  "What's it like to work for Meridian Tech? What's the salary for a senior engineer?";
+  "What's it like to work at Willow & Co? What's the salary for a store manager?";
 
 /** Average ms per word when streaming. */
 const STREAM_SPEED_MS = 40;

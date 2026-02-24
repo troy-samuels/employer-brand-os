@@ -1,11 +1,11 @@
 /**
- * Defines the OrganizationData contract.
- */
-/**
  * @module features/facts/types/facts.types
- * Module implementation for facts.types.ts.
+ * Type definitions for facts-related functionality
  */
 
+/**
+ * Organization data structure
+ */
 export interface OrganizationData {
   id: string;
   name: string;
@@ -16,19 +16,7 @@ export interface OrganizationData {
 }
 
 /**
- * Defines the EmployerFactData contract.
- */
-export interface EmployerFactData {
-  id: string;
-  organization_id: string;
-  definition_id: string;
-  value: Record<string, unknown>;
-  include_in_jsonld: boolean;
-  is_current: boolean;
-}
-
-/**
- * Defines the SaveFactsResult contract.
+ * Result type for save operations
  */
 export interface SaveFactsResult {
   success: boolean;

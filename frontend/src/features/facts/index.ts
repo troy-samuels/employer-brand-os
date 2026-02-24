@@ -20,7 +20,7 @@ export {
   REMOTE_POLICY_OPTIONS,
 } from './schemas/facts.schema';
 
-export type { OrganizationData, EmployerFactData, SaveFactsResult } from './types/facts.types';
+export type { OrganizationData, SaveFactsResult } from './types/facts.types';
 
 // Employer Facts (new comprehensive system)
 export {

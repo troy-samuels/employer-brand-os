@@ -862,115 +862,120 @@ export type Database = {
       }
       employer_facts: {
         Row: {
-          compliance_tags: Json | null
+          annual_leave: string | null
+          benefits: Json | null
+          bonus_structure: string | null
+          career_levels: Json | null
+          company_name: string
+          company_slug: string
+          company_values: Json | null
           created_at: string | null
-          created_by: string | null
-          definition_id: string | null
-          effective_date: string | null
-          effective_end_date: string | null
+          culture_description: string | null
+          dei_initiatives: Json | null
+          dei_statement: string | null
+          engineering_blog_url: string | null
+          flexible_hours: boolean | null
+          flexible_hours_details: string | null
+          founded_year: number | null
+          gender_pay_gap_url: string | null
+          healthcare: string | null
           id: string
-          include_in_jsonld: boolean | null
-          is_current: boolean | null
-          job_roles: Json | null
-          location_id: string | null
-          organization_id: string | null
+          interview_stages: Json | null
+          interview_timeline: string | null
+          learning_budget: string | null
+          maternity_leave: string | null
+          office_locations: Json | null
+          parental_leave_details: string | null
+          paternity_leave: string | null
+          pay_review_cycle: string | null
+          pension_contribution: string | null
+          promotion_framework: string | null
+          published: boolean | null
+          remote_details: string | null
+          remote_policy: string | null
+          salary_bands: Json | null
+          team_size: string | null
+          tech_stack: Json | null
           updated_at: string | null
           updated_by: string | null
-          value: Json
-          verification_source: string | null
-          verification_status: string | null
-          verified_at: string | null
-          verified_by: string | null
-          version: number | null
         }
         Insert: {
-          compliance_tags?: Json | null
+          annual_leave?: string | null
+          benefits?: Json | null
+          bonus_structure?: string | null
+          career_levels?: Json | null
+          company_name: string
+          company_slug: string
+          company_values?: Json | null
           created_at?: string | null
-          created_by?: string | null
-          definition_id?: string | null
-          effective_date?: string | null
-          effective_end_date?: string | null
+          culture_description?: string | null
+          dei_initiatives?: Json | null
+          dei_statement?: string | null
+          engineering_blog_url?: string | null
+          flexible_hours?: boolean | null
+          flexible_hours_details?: string | null
+          founded_year?: number | null
+          gender_pay_gap_url?: string | null
+          healthcare?: string | null
           id?: string
-          include_in_jsonld?: boolean | null
-          is_current?: boolean | null
-          job_roles?: Json | null
-          location_id?: string | null
-          organization_id?: string | null
+          interview_stages?: Json | null
+          interview_timeline?: string | null
+          learning_budget?: string | null
+          maternity_leave?: string | null
+          office_locations?: Json | null
+          parental_leave_details?: string | null
+          paternity_leave?: string | null
+          pay_review_cycle?: string | null
+          pension_contribution?: string | null
+          promotion_framework?: string | null
+          published?: boolean | null
+          remote_details?: string | null
+          remote_policy?: string | null
+          salary_bands?: Json | null
+          team_size?: string | null
+          tech_stack?: Json | null
           updated_at?: string | null
           updated_by?: string | null
-          value: Json
-          verification_source?: string | null
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          version?: number | null
         }
         Update: {
-          compliance_tags?: Json | null
+          annual_leave?: string | null
+          benefits?: Json | null
+          bonus_structure?: string | null
+          career_levels?: Json | null
+          company_name?: string
+          company_slug?: string
+          company_values?: Json | null
           created_at?: string | null
-          created_by?: string | null
-          definition_id?: string | null
-          effective_date?: string | null
-          effective_end_date?: string | null
+          culture_description?: string | null
+          dei_initiatives?: Json | null
+          dei_statement?: string | null
+          engineering_blog_url?: string | null
+          flexible_hours?: boolean | null
+          flexible_hours_details?: string | null
+          founded_year?: number | null
+          gender_pay_gap_url?: string | null
+          healthcare?: string | null
           id?: string
-          include_in_jsonld?: boolean | null
-          is_current?: boolean | null
-          job_roles?: Json | null
-          location_id?: string | null
-          organization_id?: string | null
+          interview_stages?: Json | null
+          interview_timeline?: string | null
+          learning_budget?: string | null
+          maternity_leave?: string | null
+          office_locations?: Json | null
+          parental_leave_details?: string | null
+          paternity_leave?: string | null
+          pay_review_cycle?: string | null
+          pension_contribution?: string | null
+          promotion_framework?: string | null
+          published?: boolean | null
+          remote_details?: string | null
+          remote_policy?: string | null
+          salary_bands?: Json | null
+          team_size?: string | null
+          tech_stack?: Json | null
           updated_at?: string | null
           updated_by?: string | null
-          value?: Json
-          verification_source?: string | null
-          verification_status?: string | null
-          verified_at?: string | null
-          verified_by?: string | null
-          version?: number | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "employer_facts_created_by_fkey"
-            columns: ["created_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_facts_definition_id_fkey"
-            columns: ["definition_id"]
-            isOneToOne: false
-            referencedRelation: "fact_definitions"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_facts_location_id_fkey"
-            columns: ["location_id"]
-            isOneToOne: false
-            referencedRelation: "locations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_facts_organization_id_fkey"
-            columns: ["organization_id"]
-            isOneToOne: false
-            referencedRelation: "organizations"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_facts_updated_by_fkey"
-            columns: ["updated_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "employer_facts_verified_by_fkey"
-            columns: ["verified_by"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       fact_categories: {
         Row: {
@@ -1125,13 +1130,6 @@ export type Database = {
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "fact_versions_fact_id_fkey"
-            columns: ["fact_id"]
-            isOneToOne: false
-            referencedRelation: "employer_facts"
-            referencedColumns: ["id"]
-          },
         ]
       }
       hallucination_flags: {
@@ -1190,13 +1188,6 @@ export type Database = {
           status?: string | null
         }
         Relationships: [
-          {
-            foreignKeyName: "hallucination_flags_fact_id_fkey"
-            columns: ["fact_id"]
-            isOneToOne: false
-            referencedRelation: "employer_facts"
-            referencedColumns: ["id"]
-          },
           {
             foreignKeyName: "hallucination_flags_mention_id_fkey"
             columns: ["mention_id"]
