@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { generateAEOContent } from '@/lib/aeo/generate';
+import { toAttachmentDisposition, toSafeFilenameSegment } from '@/lib/utils/http-filename';
 import type { EmployerFacts } from '@/features/facts/types/employer-facts.types';
 
 export async function GET(request: NextRequest) {
@@ -38,16 +39,17 @@ export async function GET(request: NextRequest) {
 
     // Generate content
     const { markdownPage } = generateAEOContent(facts as EmployerFacts);
+    const safeSlug = toSafeFilenameSegment(companySlug, 'employer-facts');
 
     // Return as downloadable markdown file
     return new NextResponse(markdownPage, {
       status: 200,
       headers: {
         'Content-Type': 'text/markdown; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${companySlug}-facts.md"`,
+        'Content-Disposition': toAttachmentDisposition(`${safeSlug}-facts.md`),
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error generating markdown:', error);
     return NextResponse.json(
       { error: 'Failed to generate markdown' },

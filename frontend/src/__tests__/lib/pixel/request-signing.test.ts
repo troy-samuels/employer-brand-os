@@ -174,4 +174,45 @@ describe("verifyPixelRequestSignature", () => {
       expect(replayResult.error).toBe("replay_detected");
     }
   });
+
+  it("handles high-volume signed traffic with replay guarantees", () => {
+    const secret = "bos_live_burst123456";
+    const nowSeconds = 5000;
+    const requestCount = 2000;
+
+    for (let index = 0; index < requestCount; index += 1) {
+      const request = createSignedRequest({
+        url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_burst123456",
+        secret,
+        timestamp: String(nowSeconds),
+        nonce: `nonce-burst-${index}`,
+      });
+
+      const result = verifyPixelRequestSignature(request, secret, {
+        nowSeconds,
+        allowedDriftSeconds: 120,
+        maxNonceEntries: requestCount + 10,
+      });
+
+      expect(result.ok).toBe(true);
+    }
+
+    const replay = createSignedRequest({
+      url: "https://openrole.test/api/pixel/v1/facts?key=bos_live_burst123456",
+      secret,
+      timestamp: String(nowSeconds),
+      nonce: "nonce-burst-1999",
+    });
+
+    const replayResult = verifyPixelRequestSignature(replay, secret, {
+      nowSeconds,
+      allowedDriftSeconds: 120,
+      maxNonceEntries: requestCount + 10,
+    });
+
+    expect(replayResult.ok).toBe(false);
+    if (!replayResult.ok) {
+      expect(replayResult.error).toBe("replay_detected");
+    }
+  });
 });

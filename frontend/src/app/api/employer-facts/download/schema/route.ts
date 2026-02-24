@@ -6,6 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { generateAEOContent } from '@/lib/aeo/generate';
+import { toAttachmentDisposition, toSafeFilenameSegment } from '@/lib/utils/http-filename';
 import type { EmployerFacts } from '@/features/facts/types/employer-facts.types';
 
 export async function GET(request: NextRequest) {
@@ -38,16 +39,17 @@ export async function GET(request: NextRequest) {
 
     // Generate content
     const { schemaJsonLd } = generateAEOContent(facts as EmployerFacts);
+    const safeSlug = toSafeFilenameSegment(companySlug, 'employer-facts');
 
     // Return as downloadable JSON file
     return new NextResponse(JSON.stringify(schemaJsonLd, null, 2), {
       status: 200,
       headers: {
         'Content-Type': 'application/ld+json; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${companySlug}-schema.jsonld"`,
+        'Content-Disposition': toAttachmentDisposition(`${safeSlug}-schema.jsonld`),
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error generating schema:', error);
     return NextResponse.json(
       { error: 'Failed to generate schema' },
