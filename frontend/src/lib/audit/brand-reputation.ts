@@ -319,16 +319,39 @@ export async function checkBrandReputation(
     };
   }
 
-  // If both searches returned zero results, the search API likely failed
-  // (rate-limited, no key, network error). Distinguish from a genuine
-  // "company has no online presence" by checking if both sets are empty.
+  // If both company-specific searches returned zero results, distinguish
+  // between "search API is broken" and "genuinely obscure company" by
+  // running a trivial canary query. If the canary also returns nothing,
+  // the API is down/rate-limited → mark unavailable. If the canary
+  // succeeds, the company simply has no online employer presence →
+  // return available: true with zero platforms (scores 0/15, not 8/15).
   const totalResults = reviewResults.length + linkedInResults.length;
   if (totalResults === 0) {
+    try {
+      const canary = await searchBrave("site:google.com");
+      if (canary.length === 0) {
+        // Search API is genuinely broken
+        return {
+          platforms: [],
+          sentiment: "unknown",
+          sourceCount: 0,
+          available: false,
+        };
+      }
+    } catch {
+      return {
+        platforms: [],
+        sentiment: "unknown",
+        sourceCount: 0,
+        available: false,
+      };
+    }
+    // API works — company genuinely has no employer presence online
     return {
       platforms: [],
       sentiment: "unknown",
       sourceCount: 0,
-      available: false,
+      available: true,
     };
   }
 

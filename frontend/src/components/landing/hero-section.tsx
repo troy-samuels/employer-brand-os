@@ -184,6 +184,18 @@ export default function HeroSection() {
                     </p>
                   </>
                 )}
+                {result.status === "bot_protected" && (
+                  <>
+                    <h2 className="text-lg font-semibold text-neutral-950">
+                      {result.domain} is blocking automated access
+                    </h2>
+                    <p className="text-sm leading-relaxed text-neutral-500">
+                      Your site&apos;s bot protection (e.g. Cloudflare) prevented us from
+                      reading it — and it&apos;s likely blocking AI crawlers too. This means
+                      ChatGPT, Perplexity and Google AI can&apos;t access your employer data.
+                    </p>
+                  </>
+                )}
               </div>
               <AuditGate score={0} />
               <motion.div

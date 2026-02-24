@@ -2071,8 +2071,15 @@ async function runWebsiteChecksInner(
     if (!homepageResponse.ok) {
       auditStatus = "unreachable";
     } else if (homepageResponse.isBotProtected) {
-      // Homepage is bot-protected — try headless fallback
-      const rendered = await renderBotProtectedPage(`https://${normalizedDomain}/`);
+      // Homepage is bot-protected — try headless fallback.
+      // Cap at 15s so it can't eat the entire 38s audit budget.
+      const homepageBotController = new AbortController();
+      const homepageBotTimeout = setTimeout(() => homepageBotController.abort(), 15_000);
+      const rendered = await renderBotProtectedPage(
+        `https://${normalizedDomain}/`,
+        { signal: homepageBotController.signal },
+      );
+      clearTimeout(homepageBotTimeout);
       if (rendered.html && stripHtmlTags(rendered.html).length >= 50) {
         homepageHtml = rendered.html;
         auditStatus = "success";
