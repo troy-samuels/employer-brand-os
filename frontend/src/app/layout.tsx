@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { headers } from "next/headers";
 import { Toaster } from "@/components/ui/sonner";
+import { CookieConsent } from "@/components/shared/cookie-consent";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -81,6 +82,7 @@ export default async function RootLayout({
         />
         {children}
         <Toaster position="bottom-right" />
+        <CookieConsent />
       </body>
     </html>
   );
