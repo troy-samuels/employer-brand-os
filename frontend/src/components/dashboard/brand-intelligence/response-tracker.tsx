@@ -17,23 +17,31 @@ import { AI_MODEL_LABELS, CATEGORY_LABELS } from "@/lib/monitor/fetch-monitor-da
 // ---------------------------------------------------------------------------
 
 function ConfidenceBar({ confidence }: { confidence: number }) {
+  const clamped = Math.max(0, Math.min(100, confidence));
   const colour =
-    confidence > 60
+    clamped > 60
       ? "bg-status-verified"
-      : confidence >= 35
+      : clamped >= 35
         ? "bg-status-warning"
         : "bg-status-critical";
 
   return (
     <div className="flex items-center gap-2">
-      <div className="h-1.5 flex-1 rounded-full bg-neutral-100 overflow-hidden">
+      <div
+        className="h-1.5 flex-1 rounded-full bg-neutral-100 overflow-hidden"
+        role="progressbar"
+        aria-valuenow={clamped}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={`Confidence: ${clamped}%`}
+      >
         <div
           className={`h-full rounded-full transition-all duration-500 ${colour}`}
-          style={{ width: `${confidence}%` }}
+          style={{ width: `${clamped}%` }}
         />
       </div>
       <span className="text-[11px] font-semibold tabular-nums text-neutral-500 w-8 text-right">
-        {confidence}%
+        {clamped}%
       </span>
     </div>
   );
@@ -79,12 +87,14 @@ const MODEL_COLOURS: Record<AIModel, string> = {
   gemini: "bg-blue-50 text-blue-700 border-blue-200",
 };
 
+const DEFAULT_MODEL_COLOUR = "bg-neutral-50 text-neutral-700 border-neutral-200";
+
 function ModelBadge({ model }: { model: AIModel }) {
   return (
     <span
-      className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold ${MODEL_COLOURS[model]}`}
+      className={`inline-flex items-center rounded-md border px-2 py-0.5 text-[10px] font-semibold ${MODEL_COLOURS[model] ?? DEFAULT_MODEL_COLOUR}`}
     >
-      {AI_MODEL_LABELS[model]}
+      {AI_MODEL_LABELS[model] ?? model}
     </span>
   );
 }
@@ -102,7 +112,28 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
   const categories = Array.from(new Set(rows.map((r) => r.category)));
   const [activeCategory, setActiveCategory] = useState(categories[0] ?? "salary");
 
-  const categoryRows = rows.filter((r) => r.category === activeCategory);
+  // Guard: if activeCategory doesn't exist in categories (e.g. after data refresh),
+  // snap back to the first available category.
+  const resolvedCategory = categories.includes(activeCategory)
+    ? activeCategory
+    : categories[0] ?? "salary";
+
+  const categoryRows = rows.filter((r) => r.category === resolvedCategory);
+
+  if (rows.length === 0) {
+    return (
+      <div className="space-y-4">
+        <div>
+          <h2 className="text-lg font-semibold text-neutral-950">
+            AI Response Tracker
+          </h2>
+          <p className="text-sm text-neutral-500 mt-0.5">
+            No response data available yet. Data will appear after your first monitoring check.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-4">
@@ -117,9 +148,9 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
       </div>
 
       {/* Category tabs */}
-      <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1">
+      <div className="flex gap-1.5 overflow-x-auto pb-1 -mx-1 px-1" role="tablist" aria-label="Response categories">
         {categories.map((cat) => {
-          const isActive = cat === activeCategory;
+          const isActive = cat === resolvedCategory;
           const catRows = rows.filter((r) => r.category === cat);
           const hasIssue = catRows.some(
             (r) => r.matchesVerified === "mismatch" || r.matchesVerified === "no-data",
@@ -128,6 +159,9 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
           return (
             <button
               key={cat}
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={`tabpanel-${cat}`}
               onClick={() => setActiveCategory(cat)}
               className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all shrink-0 ${
                 isActive
@@ -137,7 +171,7 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
             >
               {CATEGORY_LABELS[cat] ?? cat}
               {hasIssue && !isActive && (
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-warning" />
+                <span className="inline-block w-1.5 h-1.5 rounded-full bg-status-warning" aria-label="Has issues" />
               )}
             </button>
           );
@@ -145,7 +179,7 @@ export function ResponseTracker({ rows }: ResponseTrackerProps) {
       </div>
 
       {/* Model responses for active category */}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-3 sm:grid-cols-2" role="tabpanel" id={`tabpanel-${resolvedCategory}`} aria-label={CATEGORY_LABELS[resolvedCategory] ?? resolvedCategory}>
         {categoryRows.map((row) => (
           <Card
             key={`${row.category}-${row.model}`}

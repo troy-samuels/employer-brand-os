@@ -4,6 +4,7 @@
  * Server component — no interactivity needed.
  */
 
+import { useId } from "react";
 import { Card } from "@/components/ui/card";
 import type { ScoreSnapshot } from "@/lib/monitor/fetch-monitor-data";
 import type { TrendDirection } from "@/lib/monitor/reputation-monitor";
@@ -21,6 +22,8 @@ function Sparkline({
   width?: number;
   height?: number;
 }) {
+  const gradientId = useId();
+
   if (data.length < 2) return null;
 
   const scores = data.map((d) => d.score);
@@ -49,12 +52,12 @@ function Sparkline({
       role="img"
     >
       <defs>
-        <linearGradient id="sparkline-fill-hero" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--brand-accent)" stopOpacity="0.15" />
           <stop offset="100%" stopColor="var(--brand-accent)" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={fillD} fill="url(#sparkline-fill-hero)" />
+      <path d={fillD} fill={`url(#${gradientId})`} />
       <path
         d={pathD}
         fill="none"
@@ -108,6 +111,17 @@ function trendColour(trend: TrendDirection): string {
   if (trend === "improving") return "text-status-verified";
   if (trend === "declining") return "text-status-critical";
   return "text-neutral-500";
+}
+
+/** Safely format a date string, returning null if invalid. */
+function formatDate(iso: string): string | null {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return null;
+  return d.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -168,13 +182,9 @@ export function ScoreHero({
                 </span>
               )}
             </div>
-            {lastCheckedAt && (
+            {lastCheckedAt && formatDate(lastCheckedAt) && (
               <p className="text-[11px] text-neutral-400 mt-1">
-                Last checked {new Date(lastCheckedAt).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
+                Last checked {formatDate(lastCheckedAt)}
               </p>
             )}
           </div>

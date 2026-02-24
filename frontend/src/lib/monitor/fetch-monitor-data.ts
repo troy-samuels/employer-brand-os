@@ -364,20 +364,27 @@ export async function fetchBrandIntelligenceData(
     const latest = checks[0];
     const previous = checks[1] ?? null;
 
-    const score = latest.score;
-    const previousScore = latest.previous_score ?? previous?.score ?? null;
+    const score = Math.max(0, Math.min(100, latest.score));
+    const previousScore = latest.previous_score != null
+      ? Math.max(0, Math.min(100, latest.previous_score))
+      : previous?.score != null
+        ? Math.max(0, Math.min(100, previous.score))
+        : null;
     const trend = determineTrend(score, previousScore);
 
     const scoreHistory: ScoreSnapshot[] = checks
       .slice(0, 12)
       .reverse()
-      .map((check) => ({
-        weekLabel: new Date(check.created_at).toLocaleDateString("en-GB", {
-          day: "numeric",
-          month: "short",
-        }),
-        score: check.score,
-      }));
+      .map((check) => {
+        const d = new Date(check.created_at);
+        const weekLabel = Number.isNaN(d.getTime())
+          ? "—"
+          : d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+        return {
+          weekLabel,
+          score: Math.max(0, Math.min(100, check.score)),
+        };
+      });
 
     const checkData = latest.check_data ?? [];
     const changes = latest.changes ?? [];
@@ -389,16 +396,20 @@ export async function fetchBrandIntelligenceData(
     const aiCorrections = changes.filter((c) => c.direction === "improved").length;
 
     // Build tracker rows from real check data
-    const trackerRows: TrackerRow[] = checkData.map((dp) => ({
-      category: dp.category,
-      categoryLabel: CATEGORY_LABELS[dp.category] ?? dp.category,
-      model: (dp.source as AIModel) || "chatgpt",
-      modelLabel: AI_MODEL_LABELS[(dp.source as AIModel) || "chatgpt"],
-      aiResponse: dp.value,
-      confidence: dp.confidence,
-      sourceAttribution: dp.source,
-      matchesVerified: dp.confidence > 60 ? "match" : dp.confidence < 30 ? "no-data" : "mismatch",
-    }));
+    const validModels = new Set<string>(MODELS);
+    const trackerRows: TrackerRow[] = checkData.map((dp) => {
+      const model: AIModel = validModels.has(dp.source) ? (dp.source as AIModel) : "chatgpt";
+      return {
+        category: dp.category,
+        categoryLabel: CATEGORY_LABELS[dp.category] ?? dp.category,
+        model,
+        modelLabel: AI_MODEL_LABELS[model],
+        aiResponse: dp.value,
+        confidence: Math.max(0, Math.min(100, dp.confidence)),
+        sourceAttribution: dp.source,
+        matchesVerified: dp.confidence > 60 ? "match" : dp.confidence < 30 ? "no-data" : "mismatch",
+      };
+    });
 
     return {
       score,

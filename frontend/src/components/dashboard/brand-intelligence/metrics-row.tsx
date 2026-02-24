@@ -49,8 +49,9 @@ export function MetricsRow({
   competitorGap,
   showCompetitor,
 }: MetricsRowProps) {
+  const showCompetitorCard = showCompetitor && competitorGap !== null;
   return (
-    <div className={`grid gap-4 ${showCompetitor ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
+    <div className={`grid gap-4 ${showCompetitorCard ? "md:grid-cols-4" : "md:grid-cols-3"}`}>
       <MetricCard
         label="Information Gaps"
         value={informationGaps}
@@ -69,7 +70,7 @@ export function MetricsRow({
         description="ChatGPT, Claude, Perplexity, Gemini — tracked weekly"
         accent="info"
       />
-      {showCompetitor && competitorGap !== null && (
+      {showCompetitorCard && (
         <MetricCard
           label="Competitor Gap"
           value={`${competitorGap > 0 ? "+" : ""}${competitorGap} pts`}
