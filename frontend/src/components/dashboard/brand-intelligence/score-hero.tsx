@@ -49,12 +49,12 @@ function Sparkline({
       role="img"
     >
       <defs>
-        <linearGradient id="sparkline-fill" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="sparkline-fill-hero" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="var(--brand-accent)" stopOpacity="0.15" />
           <stop offset="100%" stopColor="var(--brand-accent)" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <path d={fillD} fill="url(#sparkline-fill)" />
+      <path d={fillD} fill="url(#sparkline-fill-hero)" />
       <path
         d={pathD}
         fill="none"

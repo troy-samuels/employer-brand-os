@@ -208,7 +208,6 @@ function generateSimulatedTrackerRows(companySlug: string): TrackerRow[] {
       const template = responseTemplates[category]?.[model];
       if (!template) continue;
 
-      const matchRoll = (seed + category.length + model.length) % 3;
       const matchesVerified: TrackerRow["matchesVerified"] =
         template.confidence > 55 ? "match" : template.confidence < 30 ? "no-data" : "mismatch";
 

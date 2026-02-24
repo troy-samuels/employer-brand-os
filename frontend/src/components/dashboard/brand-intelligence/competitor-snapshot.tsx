@@ -22,12 +22,16 @@ interface CompetitorData {
 // Simulated competitor data
 // ---------------------------------------------------------------------------
 
+function clamp(n: number, min = 0, max = 100): number {
+  return Math.max(min, Math.min(max, n));
+}
+
 function generateCompetitors(userScore: number): CompetitorData[] {
   return [
-    { name: "Competitor A", score: userScore + 8, trend: "up" },
-    { name: "Competitor B", score: userScore - 5, trend: "down" },
-    { name: "Competitor C", score: userScore + 2, trend: "flat" },
-    { name: "Industry avg.", score: userScore - 12, trend: "up" },
+    { name: "Competitor A", score: clamp(userScore + 8), trend: "up" },
+    { name: "Competitor B", score: clamp(userScore - 5), trend: "down" },
+    { name: "Competitor C", score: clamp(userScore + 2), trend: "flat" },
+    { name: "Industry avg.", score: clamp(userScore - 12), trend: "up" },
   ];
 }
 

@@ -137,13 +137,13 @@ function planIndex(p: PlanTier): number {
 
 const navigationItems: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard, minPlan: "free" },
-  { name: "Brand Defence", href: "/dashboard/analytics", icon: Brain, minPlan: "pro" },
-  { name: "Compliance", href: "/dashboard/compliance", icon: ShieldCheck, minPlan: "pro" },
-  { name: "Content Playbook", href: "/dashboard/sanitization", icon: BarChart3, minPlan: "pro" },
-  { name: "Facts", href: "/dashboard/facts", icon: FileCheck, minPlan: "pro" },
-  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase, minPlan: "pro" },
-  { name: "Integration", href: "/dashboard/integration", icon: Plug, minPlan: "pro" },
-  { name: "Pixel", href: "/dashboard/pixel", icon: Code2, minPlan: "enterprise" },
+  { name: "Brand Defence", href: "/dashboard/analytics", icon: Brain, minPlan: "control" },
+  { name: "Compliance", href: "/dashboard/compliance", icon: ShieldCheck, minPlan: "compete" },
+  { name: "Content Playbook", href: "/dashboard/sanitization", icon: BarChart3, minPlan: "compete" },
+  { name: "Facts", href: "/dashboard/facts", icon: FileCheck, minPlan: "control" },
+  { name: "Jobs", href: "/dashboard/jobs", icon: Briefcase, minPlan: "compete" },
+  { name: "Integration", href: "/dashboard/integration", icon: Plug, minPlan: "command" },
+  { name: "Pixel", href: "/dashboard/pixel", icon: Code2, minPlan: "command" },
   { name: "Settings", href: "/dashboard/settings", icon: Settings, minPlan: "free" },
 ];
 
