@@ -32,6 +32,7 @@ const publicRoutes = [
   "/privacy",
   "/terms",
   "/dpa",
+  "/cookies",
 ];
 
 const apiPublicRoutes = [
