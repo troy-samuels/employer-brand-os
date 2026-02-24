@@ -922,9 +922,17 @@ function pathContainsNonJobSegment(pathname: string): boolean {
   return segments.some((segment) => NON_JOB_PATH_SEGMENTS.includes(segment));
 }
 
+function safeDecodeURIComponent(value: string): string {
+  try {
+    return decodeURIComponent(value);
+  } catch {
+    return value;
+  }
+}
+
 function isLikelyJobListingUrl(url: URL, domain: string): boolean {
   const hostname = url.hostname.toLowerCase();
-  const pathname = decodeURIComponent(url.pathname).toLowerCase();
+  const pathname = safeDecodeURIComponent(url.pathname).toLowerCase();
   const search = url.search.toLowerCase();
 
   const sameDomain = isSameDomain(hostname, domain);
@@ -1899,6 +1907,58 @@ export async function runWebsiteChecks(
   const normalizedDomain = normalizeDomain(domain);
   const companySlug = createCompanySlug(companyName);
 
+  // Resilience wrapper: never throw — always return at least a partial result
+  try {
+    return await runWebsiteChecksInner(normalizedDomain, companyName, companySlug, careersUrlOverride);
+  } catch (error) {
+    console.error("runWebsiteChecks fatal error (returning partial result):", error);
+    return {
+      domain: normalizedDomain || domain.trim(),
+      companyName,
+      companySlug,
+      status: "no_website",
+      hasLlmsTxt: false,
+      llmsTxtHasEmployment: false,
+      hasJsonld: false,
+      jsonldSchemasFound: [],
+      hasSalaryData: false,
+      salaryConfidence: "none",
+      detectedCurrency: null,
+      careersPageStatus: "not_found",
+      careersPageUrl: null,
+      careersBlockedUrl: null,
+      atsDetected: null,
+      atsProvider: null,
+      atsBoardToken: null,
+      atsJobCount: null,
+      atsAnalysis: null,
+      atsGeneratedFacts: null,
+      hasSitemap: false,
+      robotsTxtStatus: "not_found",
+      robotsTxtAllowedBots: [],
+      robotsTxtBlockedBots: [],
+      brandReputation: { platforms: [], sentiment: "unknown", sourceCount: 0 },
+      score: 0,
+      scoreBreakdown: {
+        jsonld: 0,
+        robotsTxt: 0,
+        careersPage: 0,
+        brandReputation: 0,
+        salaryData: 0,
+        contentFormat: 0,
+        llmsTxt: 0,
+      },
+    };
+  }
+}
+
+async function runWebsiteChecksInner(
+  normalizedDomain: string,
+  companyName: string,
+  companySlug: string,
+  careersUrlOverride?: string,
+): Promise<WebsiteCheckResult> {
+
   let auditStatus: AuditStatus = "success";
   let hasLlmsTxt = false;
   let llmsTxtHasEmployment = false;
@@ -2146,7 +2206,7 @@ export async function runWebsiteChecks(
     scoreBreakdown.llmsTxt;
 
   return {
-    domain: normalizedDomain || domain.trim(),
+    domain: normalizedDomain,
     companyName,
     companySlug,
     status: auditStatus,
