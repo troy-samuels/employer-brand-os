@@ -1,9 +1,9 @@
 /**
  * @module lib/audit/llm-testing
- * Runs per-LLM reputation checks for a company domain.
+ * Runs per-LLM reputation checks for a company domain via OpenRouter.
  *
- * Phase 1: Returns structured placeholder results per model.
- * Phase 2: Will call actual LLM APIs with standardised employer prompts.
+ * Queries real AI models with standardised employer prompts, then parses
+ * responses into structured claims with accuracy classifications.
  */
 
 import type {
@@ -15,9 +15,10 @@ import type {
   ConsensusItem,
 } from "@/types/llm-audit";
 import { LLM_MODELS, isModelAvailable } from "@/types/llm-audit";
+import { queryModel, isConfigured } from "@/lib/ai/openrouter";
 
 /* ------------------------------------------------------------------ */
-/* Standard prompts (used when querying each LLM)                      */
+/* Standard prompts                                                    */
 /* ------------------------------------------------------------------ */
 
 const EMPLOYER_PROMPTS = [
@@ -27,32 +28,305 @@ const EMPLOYER_PROMPTS = [
   "Is {company} a good employer?",
 ];
 
-/** Build the standard prompt for a given company. */
+/** The combined prompt sent to each LLM. */
 export function buildPrompt(domain: string): string {
-  const company = domain.replace(/\.(com|co\.uk|io|org|net)$/i, "");
+  const company = domainToName(domain);
   return EMPLOYER_PROMPTS.map((p) => p.replace("{company}", company)).join("\n");
 }
 
+/** Extract a readable company name from a domain. */
+function domainToName(domain: string): string {
+  return domain
+    .replace(/^(www\.)/i, "")
+    .replace(/\.(com|co\.uk|io|org|net|co|uk|ai|dev|app)$/i, "")
+    .replace(/\./g, " ")
+    .replace(/(^|\s)\S/g, (c) => c.toUpperCase());
+}
+
 /* ------------------------------------------------------------------ */
-/* Phase 1: Placeholder results                                        */
+/* Claim categories                                                    */
+/* ------------------------------------------------------------------ */
+
+const CLAIM_CATEGORIES = [
+  "salary",
+  "benefits",
+  "culture",
+  "remote_policy",
+  "interview_process",
+  "tech_stack",
+  "career_growth",
+  "location",
+  "reputation",
+  "reviews",
+] as const;
+
+/** Keywords that signal each claim category. */
+const CATEGORY_SIGNALS: Record<string, string[]> = {
+  salary: ["salary", "salaries", "pay", "compensation", "earning", "£", "$", "wage", "bonus", "equity", "stock", "remuneration"],
+  benefits: ["benefit", "pension", "health insurance", "dental", "gym", "wellbeing", "well-being", "perks", "holiday", "leave", "pto", "maternity", "paternity", "childcare"],
+  culture: ["culture", "values", "environment", "team", "atmosphere", "inclusive", "diversity", "work-life", "collaboration", "supportive", "toxic"],
+  remote_policy: ["remote", "hybrid", "office", "work from home", "wfh", "flexible", "onsite", "on-site", "in-office"],
+  interview_process: ["interview", "hiring", "application", "recruitment", "screening", "assessment", "process", "stages"],
+  tech_stack: ["tech stack", "technology", "tools", "programming", "framework", "engineering", "developer"],
+  career_growth: ["career", "growth", "promotion", "progression", "training", "development", "learning", "mentoring", "advance"],
+  location: ["location", "based", "headquarter", "office in", "located"],
+  reputation: ["reputation", "known for", "recognized", "recognised", "award", "ranking", "best place", "great place"],
+  reviews: ["glassdoor", "indeed", "rating", "review", "stars", "score", "rated"],
+};
+
+/* ------------------------------------------------------------------ */
+/* Response parsing                                                    */
 /* ------------------------------------------------------------------ */
 
 /**
- * Generate a placeholder LLM audit result for a model.
- * In Phase 2, this will be replaced with actual API calls.
+ * Parse an LLM response into structured claims by splitting into sentences
+ * and classifying each one.
  */
-function generatePlaceholderResult(
+function parseResponseIntoClaims(
+  response: string,
+  domain: string
+): LlmClaim[] {
+  if (!response || response.trim().length === 0) return [];
+
+  const company = domainToName(domain);
+
+  // Split into sentences (handles ., !, ? and double newlines)
+  const sentences = response
+    .split(/(?<=[.!?])\s+|\n\n+/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 15 && s.length < 500);
+
+  const claims: LlmClaim[] = [];
+  const seenCategories = new Set<string>();
+
+  for (const sentence of sentences) {
+    const lower = sentence.toLowerCase();
+
+    // Determine category
+    let category = "general";
+    for (const [cat, signals] of Object.entries(CATEGORY_SIGNALS)) {
+      if (signals.some((signal) => lower.includes(signal))) {
+        category = cat;
+        break;
+      }
+    }
+
+    // Skip if we already have a claim in this category (keep it concise)
+    if (seenCategories.has(category) && claims.length > 3) continue;
+    seenCategories.add(category);
+
+    // Classify accuracy
+    const accuracy = classifyAccuracy(lower, company);
+
+    // Determine severity for non-accurate claims
+    let severity: LlmClaim["severity"] | undefined;
+    if (accuracy !== "accurate" && accuracy !== "unverifiable") {
+      severity = determineSeverity(category, accuracy);
+    }
+
+    // Extract source URL if present
+    const urlMatch = sentence.match(/https?:\/\/[^\s)]+/);
+
+    claims.push({
+      category,
+      llmStatement: sentence,
+      verifiedValue: null,
+      accuracy,
+      ...(severity ? { severity } : {}),
+      ...(urlMatch ? { sourceUrl: urlMatch[0] } : {}),
+    });
+
+    // Cap at 8 claims per model to keep results digestible
+    if (claims.length >= 8) break;
+  }
+
+  return claims;
+}
+
+/**
+ * Classify the accuracy of a statement based on linguistic signals.
+ * In a future phase, this will cross-reference employer_facts data.
+ */
+function classifyAccuracy(
+  lowerSentence: string,
+  _company: string
+): LlmClaim["accuracy"] {
+  // Explicit admissions of ignorance
+  const missingSignals = [
+    "don't have",
+    "do not have",
+    "no specific",
+    "not publicly available",
+    "unable to find",
+    "couldn't find",
+    "no reliable",
+    "i'm not sure",
+    "i am not sure",
+    "not available",
+    "limited information",
+    "i don't know",
+    "cannot confirm",
+    "can't confirm",
+    "no data",
+    "hard to say",
+    "difficult to determine",
+    "recommend checking",
+    "would suggest checking",
+    "check their",
+    "visit their",
+  ];
+  if (missingSignals.some((s) => lowerSentence.includes(s))) {
+    return "missing";
+  }
+
+  // Hedging / unverifiable
+  const hedgeSignals = [
+    "generally",
+    "typically",
+    "appears to",
+    "seems to",
+    "reportedly",
+    "might",
+    "may ",
+    "could be",
+    "likely",
+    "probably",
+    "some sources suggest",
+    "it's believed",
+    "from what i can gather",
+    "based on limited",
+  ];
+  if (hedgeSignals.some((s) => lowerSentence.includes(s))) {
+    return "unverifiable";
+  }
+
+  // Outdated signals (references to old data)
+  const outdatedSignals = [
+    "glassdoor",
+    "according to indeed",
+    "as of 2023",
+    "as of 2024",
+    "last reported",
+    "historically",
+    "in the past",
+    "previous reports",
+  ];
+  if (outdatedSignals.some((s) => lowerSentence.includes(s))) {
+    return "outdated";
+  }
+
+  // Specific factual claims (numbers, URLs, concrete details) → potentially accurate
+  const factualSignals = [
+    /£[\d,]+/,
+    /\$[\d,]+/,
+    /\d+\s*(employees|staff|people|workers)/,
+    /founded in \d{4}/i,
+    /headquartered in/i,
+    /\d+\s*stars?/,
+    /\d+(\.\d+)?\/\d+/,
+  ];
+  if (factualSignals.some((r) => r.test(lowerSentence))) {
+    // Specific claims from third-party data are likely outdated
+    if (outdatedSignals.some((s) => lowerSentence.includes(s))) {
+      return "outdated";
+    }
+    // Without verification data, mark as unverifiable
+    return "unverifiable";
+  }
+
+  // Default: unverifiable (we can't confirm without employer data)
+  return "unverifiable";
+}
+
+/** Assign severity based on category importance. */
+function determineSeverity(
+  category: string,
+  accuracy: LlmClaim["accuracy"]
+): "critical" | "moderate" | "minor" {
+  // Hallucinated or inaccurate salary/benefits claims are always critical
+  if (
+    (category === "salary" || category === "benefits") &&
+    (accuracy === "hallucinated" || accuracy === "inaccurate")
+  ) {
+    return "critical";
+  }
+
+  // Outdated salary data is critical
+  if (category === "salary" && accuracy === "outdated") {
+    return "critical";
+  }
+
+  // Missing data in important categories is moderate
+  if (
+    (category === "salary" || category === "benefits" || category === "culture") &&
+    accuracy === "missing"
+  ) {
+    return "moderate";
+  }
+
+  // Everything else
+  if (accuracy === "hallucinated" || accuracy === "inaccurate") return "moderate";
+  if (accuracy === "outdated") return "moderate";
+  return "minor";
+}
+
+/* ------------------------------------------------------------------ */
+/* Scoring                                                             */
+/* ------------------------------------------------------------------ */
+
+function scoreClaims(claims: LlmClaim[]): {
+  score: number;
+  accurateCount: number;
+  inaccurateCount: number;
+  unverifiableCount: number;
+} {
+  if (claims.length === 0) {
+    return { score: 0, accurateCount: 0, inaccurateCount: 0, unverifiableCount: 0 };
+  }
+
+  const accurateCount = claims.filter((c) => c.accuracy === "accurate").length;
+  const inaccurateCount = claims.filter(
+    (c) =>
+      c.accuracy === "inaccurate" ||
+      c.accuracy === "hallucinated" ||
+      c.accuracy === "outdated"
+  ).length;
+  const unverifiableCount = claims.filter(
+    (c) => c.accuracy === "unverifiable" || c.accuracy === "missing"
+  ).length;
+
+  const total = claims.length;
+  // Scoring: accurate = 100pts, unverifiable = 40pts, missing = 20pts, inaccurate = 0pts
+  const score = Math.round(
+    (accurateCount * 100 + unverifiableCount * 40 + claims.filter((c) => c.accuracy === "missing").length * 20) /
+      total
+  );
+
+  return {
+    score: Math.min(100, Math.max(0, score)),
+    accurateCount,
+    inaccurateCount,
+    unverifiableCount,
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Query a single model (real or placeholder)                          */
+/* ------------------------------------------------------------------ */
+
+async function queryAndParseModel(
   modelId: LlmModelId,
   domain: string,
   locked: boolean
-): LlmAuditResult {
-  const company = domain.replace(/\.(com|co\.uk|io|org|net)$/i, "");
+): Promise<LlmAuditResult> {
+  const prompt = buildPrompt(domain);
   const now = new Date().toISOString();
 
+  // Locked models return empty result
   if (locked) {
     return {
       modelId,
-      prompt: buildPrompt(domain),
+      prompt,
       rawResponse: "",
       claims: [],
       score: 0,
@@ -64,134 +338,68 @@ function generatePlaceholderResult(
     };
   }
 
-  // Placeholder claims that simulate what real LLM responses look like
-  const placeholderClaims: Record<LlmModelId, LlmClaim[]> = {
-    chatgpt: [
-      {
-        category: "salary",
-        llmStatement: `${company} offers competitive salaries, though specific figures are not publicly available.`,
-        verifiedValue: null,
-        accuracy: "missing",
-        severity: "moderate",
-      },
-      {
-        category: "culture",
-        llmStatement: `${company} is generally well-regarded as an employer with a positive work culture.`,
-        verifiedValue: null,
-        accuracy: "unverifiable" as const,
-      },
-      {
-        category: "benefits",
-        llmStatement: `Benefits typically include standard offerings such as health insurance and pension contributions.`,
-        verifiedValue: null,
-        accuracy: "hallucinated",
-        severity: "moderate",
-      },
-    ],
-    "google-ai": [
-      {
-        category: "salary",
-        llmStatement: `Based on Glassdoor data, average salaries at ${company} range from £25,000 to £65,000.`,
-        verifiedValue: null,
-        accuracy: "outdated",
-        severity: "critical",
-        sourceUrl: "https://www.glassdoor.co.uk",
-      },
-      {
-        category: "location",
-        llmStatement: `${company} is based in the United Kingdom.`,
-        verifiedValue: null,
-        accuracy: "accurate",
-      },
-    ],
-    perplexity: [
-      {
-        category: "salary",
-        llmStatement: `According to Indeed, ${company} pays between £28,000-£55,000 depending on role.`,
-        verifiedValue: null,
-        accuracy: "outdated",
-        severity: "critical",
-        sourceUrl: "https://www.indeed.co.uk",
-      },
-      {
-        category: "reviews",
-        llmStatement: `${company} has a 3.4/5 rating on Glassdoor based on 12 reviews.`,
-        verifiedValue: null,
-        accuracy: "outdated",
-        severity: "minor",
-        sourceUrl: "https://www.glassdoor.co.uk",
-      },
-    ],
-    copilot: [
-      {
-        category: "salary",
-        llmStatement: `Salary information for ${company} is limited. Consider checking job listings directly.`,
-        verifiedValue: null,
-        accuracy: "missing",
-        severity: "moderate",
-      },
-      {
-        category: "culture",
-        llmStatement: `${company} appears to be a growing company in its sector.`,
-        verifiedValue: null,
-        accuracy: "unverifiable" as const,
-      },
-    ],
-    claude: [
-      {
-        category: "salary",
-        llmStatement: `I don't have specific salary data for ${company}. I'd recommend checking their careers page or salary comparison sites.`,
-        verifiedValue: null,
-        accuracy: "missing",
-        severity: "moderate",
-      },
-      {
-        category: "benefits",
-        llmStatement: `I don't have detailed information about ${company}'s benefits package.`,
-        verifiedValue: null,
-        accuracy: "missing",
-        severity: "minor",
-      },
-    ],
-    "meta-ai": [
-      {
-        category: "salary",
-        llmStatement: `${company} salaries vary by role. Check Glassdoor for the latest figures.`,
-        verifiedValue: null,
-        accuracy: "missing",
-        severity: "moderate",
-      },
-      {
-        category: "culture",
-        llmStatement: `${company} seems like a decent place to work based on online reviews.`,
-        verifiedValue: null,
-        accuracy: "unverifiable" as const,
-      },
-    ],
-  };
+  // If OpenRouter is not configured, return graceful fallback
+  if (!isConfigured()) {
+    return {
+      modelId,
+      prompt,
+      rawResponse: "[OpenRouter API key not configured — unable to query AI models]",
+      claims: [
+        {
+          category: "general",
+          llmStatement:
+            "AI model query unavailable — configure OPENROUTER_API_KEY to enable real-time employer audits.",
+          verifiedValue: null,
+          accuracy: "missing",
+          severity: "moderate",
+        },
+      ],
+      score: 0,
+      accurateCount: 0,
+      inaccurateCount: 0,
+      unverifiableCount: 1,
+      checkedAt: now,
+      locked: false,
+    };
+  }
 
-  const claims = placeholderClaims[modelId] || [];
-  const accurateCount = claims.filter((c) => c.accuracy === "accurate").length;
-  const inaccurateCount = claims.filter(
-    (c) => c.accuracy === "inaccurate" || c.accuracy === "hallucinated" || c.accuracy === "outdated"
-  ).length;
-  const unverifiableCount = claims.filter(
-    (c) => c.accuracy === "unverifiable" || c.accuracy === "missing"
-  ).length;
+  // Real query via OpenRouter
+  const result = await queryModel(modelId, prompt, { timeoutMs: 25_000 });
 
-  // Score: 100 if all accurate, penalise for inaccuracies
-  const total = claims.length || 1;
-  const score = Math.round(((accurateCount * 100) + (unverifiableCount * 40)) / total);
+  if (!result.success) {
+    console.error(`[llm-testing] ${modelId} query failed:`, result.error);
+    return {
+      modelId,
+      prompt,
+      rawResponse: "",
+      claims: [
+        {
+          category: "general",
+          llmStatement: `Failed to query ${modelId}: ${result.error ?? "unknown error"}`,
+          verifiedValue: null,
+          accuracy: "missing",
+          severity: "minor",
+        },
+      ],
+      score: 0,
+      accurateCount: 0,
+      inaccurateCount: 0,
+      unverifiableCount: 1,
+      checkedAt: now,
+      locked: false,
+    };
+  }
+
+  // Parse the real response into structured claims
+  const claims = parseResponseIntoClaims(result.response, domain);
+  const scores = scoreClaims(claims);
 
   return {
     modelId,
-    prompt: buildPrompt(domain),
-    rawResponse: claims.map((c) => c.llmStatement).join(" "),
+    prompt,
+    rawResponse: result.response,
     claims,
-    score,
-    accurateCount,
-    inaccurateCount,
-    unverifiableCount,
+    ...scores,
     checkedAt: now,
     locked: false,
   };
@@ -217,12 +425,16 @@ function analyseConsensus(results: LlmAuditResult[]): ConsensusItem[] {
   for (const [category, claims] of categoryMap) {
     const accurateCount = claims.filter((c) => c.accuracy === "accurate").length;
     const inaccurateCount = claims.filter(
-      (c) => c.accuracy === "inaccurate" || c.accuracy === "hallucinated" || c.accuracy === "outdated"
+      (c) =>
+        c.accuracy === "inaccurate" ||
+        c.accuracy === "hallucinated" ||
+        c.accuracy === "outdated"
     ).length;
 
     let consensusAccuracy: ConsensusItem["consensusAccuracy"] = "mixed";
     if (accurateCount > 0 && inaccurateCount === 0) consensusAccuracy = "accurate";
-    else if (inaccurateCount > 0 && accurateCount === 0) consensusAccuracy = "inaccurate";
+    else if (inaccurateCount > 0 && accurateCount === 0)
+      consensusAccuracy = "inaccurate";
 
     consensus.push({
       category,
@@ -242,25 +454,32 @@ function analyseConsensus(results: LlmAuditResult[]): ConsensusItem[] {
 
 /**
  * Run LLM reputation tests for a domain.
- * Returns per-model results gated by plan tier.
+ * Queries real AI models via OpenRouter, gated by plan tier.
  */
 export async function runLlmTests(
   domain: string,
   tier: PlanTier = "starter"
 ): Promise<ComprehensiveLlmAudit> {
-  const company = domain.replace(/\.(com|co\.uk|io|org|net)$/i, "");
+  const company = domainToName(domain);
   const modelResults: LlmAuditResult[] = [];
 
-  for (const model of LLM_MODELS) {
+  // Query all models in parallel (locked models return instantly)
+  const promises = LLM_MODELS.map((model) => {
     const locked = !isModelAvailable(model.id, tier);
-    const result = generatePlaceholderResult(model.id, domain, locked);
-    modelResults.push(result);
-  }
+    return queryAndParseModel(model.id, domain, locked);
+  });
+
+  const results = await Promise.all(promises);
+  modelResults.push(...results);
 
   const unlockedResults = modelResults.filter((r) => !r.locked);
-  const overallScore = unlockedResults.length > 0
-    ? Math.round(unlockedResults.reduce((sum, r) => sum + r.score, 0) / unlockedResults.length)
-    : 0;
+  const overallScore =
+    unlockedResults.length > 0
+      ? Math.round(
+          unlockedResults.reduce((sum, r) => sum + r.score, 0) /
+            unlockedResults.length
+        )
+      : 0;
 
   const consensus = analyseConsensus(modelResults);
 
@@ -281,7 +500,10 @@ export async function runLlmTests(
     overallScore,
     modelResults,
     consensus,
-    topRisks: topRisks.length > 0 ? topRisks : ["No verified employer data found — AI is guessing"],
+    topRisks:
+      topRisks.length > 0
+        ? topRisks
+        : ["No verified employer data found — AI is guessing"],
     topStrengths: topStrengths.length > 0 ? topStrengths : [],
     planTier: tier,
     auditedAt: new Date().toISOString(),
