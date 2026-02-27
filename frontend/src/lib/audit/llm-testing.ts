@@ -445,6 +445,7 @@ async function queryAndParseModel(
     ...scores,
     checkedAt: now,
     locked: false,
+    citations: result.citations,
   };
 }
 
@@ -554,9 +555,7 @@ export async function runLlmTests(
 }
 
 /**
- * Run a single ChatGPT query for the homepage AI preview.
- * Uses cache, returns raw response text + parsed claims.
- * Returns null if OpenRouter is not configured or query fails.
+ * Run a single ChatGPT query for the homepage AI preview (legacy, kept for compatibility).
  */
 export async function runSingleModelPreview(
   domain: string
@@ -570,7 +569,6 @@ export async function runSingleModelPreview(
   const slug = domainToSlug(domain);
   const prompt = buildPrompt(domain);
 
-  // Check cache first
   const cached = await getCachedResponse(slug, "chatgpt");
   if (cached) {
     return {
@@ -590,26 +588,21 @@ export async function runSingleModelPreview(
   const claims = parseResponseIntoClaims(result.response, domain);
   const scores = scoreClaims(claims);
 
-  // Cache it
-  void setCachedResponse(
-    slug,
-    domain,
-    "chatgpt",
-    prompt,
-    result.response,
-    claims,
-    scores.score,
-    result.tokensUsed,
-    result.latencyMs
-  );
+  void setCachedResponse(slug, domain, "chatgpt", prompt, result.response, claims, scores.score, result.tokensUsed, result.latencyMs);
 
-  return {
-    model: "ChatGPT",
-    response: result.response,
-    claims,
-    score: scores.score,
-    cached: false,
-  };
+  return { model: "ChatGPT", response: result.response, claims, score: scores.score, cached: false };
+}
+
+/**
+ * Run ALL models for the free audit. No plan gating — the free audit is the hook.
+ * Returns per-model results with raw responses, claims, and citations.
+ * Uses 24hr cache to avoid redundant API calls.
+ */
+export async function runAllModelsForAudit(
+  domain: string
+): Promise<ComprehensiveLlmAudit> {
+  // Query all models with no gating (locked = false for all)
+  return runLlmTests(domain, "enterprise");
 }
 
 /**

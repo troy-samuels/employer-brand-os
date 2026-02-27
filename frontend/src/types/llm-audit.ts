@@ -126,6 +126,8 @@ export interface LlmAuditResult {
   checkedAt: string;
   /** Whether this result is locked behind a higher plan tier. */
   locked: boolean;
+  /** Source citations (Perplexity returns these natively). */
+  citations?: string[];
 }
 
 /* ------------------------------------------------------------------ */

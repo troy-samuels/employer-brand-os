@@ -12,7 +12,7 @@ const MODEL_MAP: Record<string, string> = {
   chatgpt: "openai/gpt-4o-mini",
   "google-ai": "google/gemini-2.0-flash-001",
   perplexity: "perplexity/sonar",
-  claude: "anthropic/claude-3.5-haiku-20241022",
+  claude: "anthropic/claude-3.5-haiku",
   copilot: "openai/gpt-4o-mini", // Copilot uses GPT-4o under the hood
   "meta-ai": "meta-llama/llama-3.3-70b-instruct",
 };
@@ -30,6 +30,8 @@ export interface LlmQueryResult {
   latencyMs: number;
   /** Tokens used (for cost tracking). */
   tokensUsed?: number;
+  /** Citations returned by the model (Perplexity). */
+  citations?: string[];
 }
 
 /**
@@ -113,6 +115,10 @@ export async function queryModel(
     const data = await res.json();
     const content = data?.choices?.[0]?.message?.content ?? "";
     const tokensUsed = data?.usage?.total_tokens;
+    // Perplexity returns citations as a top-level array
+    const citations: string[] | undefined = Array.isArray(data?.citations)
+      ? data.citations
+      : undefined;
 
     return {
       modelId,
@@ -120,6 +126,7 @@ export async function queryModel(
       success: true,
       latencyMs: Date.now() - startTime,
       tokensUsed,
+      citations,
     };
   } catch (err) {
     const message =
