@@ -11,6 +11,7 @@ import { persistAuditResult } from "@/lib/audit/audit-persistence";
 import { resolveCompanyUrl } from "@/lib/audit/company-resolver";
 import { isLikelyDomainOrUrl, validateUrl } from "@/lib/audit/url-validator";
 import { runWebsiteChecks, type WebsiteCheckResult } from "@/lib/audit/website-checks";
+import { runSingleModelPreview } from "@/lib/audit/llm-testing";
 import { resolveRequestActor } from "@/lib/security/request-metadata";
 import { API_ERROR_CODE, API_ERROR_MESSAGE } from "@/lib/utils/api-errors";
 import {
@@ -230,10 +231,18 @@ export async function POST(
     const domain = resolved.url ?? preflightValidation.normalizedUrl.hostname;
     const companyName = resolved.name || preflightValidation.normalizedUrl.hostname;
 
-    const result = await withTimeout(
-      runWebsiteChecks(domain, companyName, validatedCareersUrl),
-      AUDIT_EXECUTION_TIMEOUT_MS,
-    );
+    // Run website checks and AI preview in parallel
+    // AI preview is non-blocking: if it fails or times out, we still return website results
+    const [result, aiPreview] = await Promise.all([
+      withTimeout(
+        runWebsiteChecks(domain, companyName, validatedCareersUrl),
+        AUDIT_EXECUTION_TIMEOUT_MS,
+      ),
+      runSingleModelPreview(domain).catch((err) => {
+        console.error("[audit] AI preview failed (non-blocking):", err);
+        return null;
+      }),
+    ]);
 
     void logAuditRequest({
       actor: clientIp,
@@ -244,13 +253,20 @@ export async function POST(
         resolved_domain: domain,
         company_name: companyName,
         score: result.score,
+        ai_preview: aiPreview ? "success" : "skipped",
       },
     });
 
     // Fire-and-forget: persist to audit_website_checks + public_audits
     void persistAuditResult(result, clientIp);
 
-    return apiSuccessResponse<WebsiteCheckResult>(result);
+    // Attach AI preview to the response (won't break existing type consumers)
+    const responseData = {
+      ...result,
+      ...(aiPreview ? { aiPreview } : {}),
+    };
+
+    return apiSuccessResponse(responseData);
   } catch (error) {
     if (error instanceof AuditExecutionTimeoutError) {
       void logAuditRequest({

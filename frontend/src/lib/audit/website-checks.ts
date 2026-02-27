@@ -448,6 +448,20 @@ export const ATS_HOST_MAP: Record<string, AtsName> = {
  */
 export type { ReviewPlatform, BrandReputation } from "@/lib/audit/brand-reputation";
 
+/** AI preview from a single model query (attached by /api/audit). */
+export type AiPreviewResult = {
+  model: string;
+  response: string;
+  claims: Array<{
+    category: string;
+    llmStatement: string;
+    accuracy: string;
+    severity?: string;
+  }>;
+  score: number;
+  cached: boolean;
+};
+
 export type WebsiteCheckResult = {
   domain: string;
   companyName: string;
@@ -484,6 +498,8 @@ export type WebsiteCheckResult = {
     contentFormat: number;
     llmsTxt: number;
   };
+  /** AI preview from ChatGPT (attached by /api/audit, not by runWebsiteChecks). */
+  aiPreview?: AiPreviewResult;
 };
 
 function isBotProtectionResponse(status: number, text: string): boolean {

@@ -16,6 +16,11 @@ import type {
 } from "@/types/llm-audit";
 import { LLM_MODELS, isModelAvailable } from "@/types/llm-audit";
 import { queryModel, isConfigured } from "@/lib/ai/openrouter";
+import {
+  getCachedResponse,
+  setCachedResponse,
+  type CachedLlmResponse,
+} from "@/lib/ai/llm-cache";
 
 /* ------------------------------------------------------------------ */
 /* Standard prompts                                                    */
@@ -314,12 +319,22 @@ function scoreClaims(claims: LlmClaim[]): {
 /* Query a single model (real or placeholder)                          */
 /* ------------------------------------------------------------------ */
 
+/** Convert domain to a URL-safe slug for cache keys. */
+function domainToSlug(domain: string): string {
+  return domain
+    .replace(/^(www\.)/i, "")
+    .replace(/[^a-z0-9]+/gi, "-")
+    .replace(/^-|-$/g, "")
+    .toLowerCase();
+}
+
 async function queryAndParseModel(
   modelId: LlmModelId,
   domain: string,
   locked: boolean
 ): Promise<LlmAuditResult> {
   const prompt = buildPrompt(domain);
+  const slug = domainToSlug(domain);
   const now = new Date().toISOString();
 
   // Locked models return empty result
@@ -335,6 +350,21 @@ async function queryAndParseModel(
       unverifiableCount: 0,
       checkedAt: now,
       locked: true,
+    };
+  }
+
+  // Check cache first (24hr TTL)
+  const cached = await getCachedResponse(slug, modelId);
+  if (cached) {
+    const scores = scoreClaims(cached.claims);
+    return {
+      modelId,
+      prompt,
+      rawResponse: cached.rawResponse,
+      claims: cached.claims,
+      ...scores,
+      checkedAt: cached.createdAt,
+      locked: false,
     };
   }
 
@@ -393,6 +423,19 @@ async function queryAndParseModel(
   // Parse the real response into structured claims
   const claims = parseResponseIntoClaims(result.response, domain);
   const scores = scoreClaims(claims);
+
+  // Write to cache (fire-and-forget)
+  void setCachedResponse(
+    slug,
+    domain,
+    modelId,
+    prompt,
+    result.response,
+    claims,
+    scores.score,
+    result.tokensUsed,
+    result.latencyMs
+  );
 
   return {
     modelId,
@@ -507,6 +550,65 @@ export async function runLlmTests(
     topStrengths: topStrengths.length > 0 ? topStrengths : [],
     planTier: tier,
     auditedAt: new Date().toISOString(),
+  };
+}
+
+/**
+ * Run a single ChatGPT query for the homepage AI preview.
+ * Uses cache, returns raw response text + parsed claims.
+ * Returns null if OpenRouter is not configured or query fails.
+ */
+export async function runSingleModelPreview(
+  domain: string
+): Promise<{
+  model: string;
+  response: string;
+  claims: LlmClaim[];
+  score: number;
+  cached: boolean;
+} | null> {
+  const slug = domainToSlug(domain);
+  const prompt = buildPrompt(domain);
+
+  // Check cache first
+  const cached = await getCachedResponse(slug, "chatgpt");
+  if (cached) {
+    return {
+      model: "ChatGPT",
+      response: cached.rawResponse,
+      claims: cached.claims,
+      score: scoreClaims(cached.claims).score,
+      cached: true,
+    };
+  }
+
+  if (!isConfigured()) return null;
+
+  const result = await queryModel("chatgpt", prompt, { timeoutMs: 20_000 });
+  if (!result.success) return null;
+
+  const claims = parseResponseIntoClaims(result.response, domain);
+  const scores = scoreClaims(claims);
+
+  // Cache it
+  void setCachedResponse(
+    slug,
+    domain,
+    "chatgpt",
+    prompt,
+    result.response,
+    claims,
+    scores.score,
+    result.tokensUsed,
+    result.latencyMs
+  );
+
+  return {
+    model: "ChatGPT",
+    response: result.response,
+    claims,
+    score: scores.score,
+    cached: false,
   };
 }
 

@@ -205,7 +205,20 @@ const LLM_MODELS = [
   { name: "Meta AI", logo: "/logos/meta-ai.svg" },
 ];
 
-function LlmTeaser({ companyName }: { companyName: string }) {
+interface AiPreviewData {
+  model: string;
+  response: string;
+  claims: Array<{
+    category: string;
+    llmStatement: string;
+    accuracy: string;
+    severity?: string;
+  }>;
+  score: number;
+  cached: boolean;
+}
+
+function LlmTeaser({ companyName, aiPreview }: { companyName: string; aiPreview?: AiPreviewData }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -215,15 +228,57 @@ function LlmTeaser({ companyName }: { companyName: string }) {
     >
       <div className="mb-5">
         <h3 className="text-[15px] font-semibold text-slate-900 mb-1.5">
-          What AI says about {companyName}
+          What AI tells candidates about {companyName}
         </h3>
         <p className="text-[13px] text-slate-500 leading-relaxed">
-          See exactly what each AI model says when candidates ask about working here.
+          {aiPreview
+            ? "This is what ChatGPT says when someone asks about working at your company."
+            : "See exactly what each AI model says when candidates ask about working here."}
         </p>
       </div>
 
+      {/* Real ChatGPT response (when available) */}
+      {aiPreview && (
+        <div className="mb-4 rounded-xl border border-slate-200 bg-white p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Image src="/logos/chatgpt.svg" alt="ChatGPT" width={20} height={20} className="rounded" />
+            <span className="text-[13px] font-semibold text-slate-800">ChatGPT</span>
+          </div>
+          <p className="text-[13px] text-slate-600 leading-relaxed whitespace-pre-line">
+            {aiPreview.response.length > 600
+              ? aiPreview.response.slice(0, 600) + "…"
+              : aiPreview.response}
+          </p>
+          {aiPreview.claims.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-1.5">
+              {aiPreview.claims.slice(0, 5).map((claim, i) => {
+                const colour =
+                  claim.accuracy === "accurate"
+                    ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                    : claim.accuracy === "outdated"
+                      ? "bg-amber-50 text-amber-700 border-amber-200"
+                      : claim.accuracy === "missing"
+                        ? "bg-red-50 text-red-700 border-red-200"
+                        : "bg-slate-50 text-slate-600 border-slate-200";
+                return (
+                  <span
+                    key={i}
+                    className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-medium ${colour}`}
+                  >
+                    {claim.category.replace(/_/g, " ")}
+                    {claim.accuracy === "outdated" && " — outdated"}
+                    {claim.accuracy === "missing" && " — missing"}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Locked models */}
       <div className="space-y-2.5 mb-5">
-        {LLM_MODELS.slice(0, 3).map((model) => (
+        {LLM_MODELS.slice(aiPreview ? 1 : 0, aiPreview ? 6 : 3).map((model) => (
           <div
             key={model.name}
             className="flex items-center gap-3 rounded-lg bg-slate-50 px-4 py-3"
@@ -243,11 +298,11 @@ function LlmTeaser({ companyName }: { companyName: string }) {
         href="/pricing"
         className="flex items-center justify-center gap-2 rounded-lg bg-brand-accent px-4 py-2.5 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
       >
-        See what AI says about you
+        {aiPreview ? "Unlock all AI models" : "See what AI says about you"}
       </a>
 
       <p className="text-[11px] text-slate-400 text-center mt-2.5">
-        Full reports check {LLM_MODELS.length} AI models. Plans from £149/mo.
+        Full reports check {LLM_MODELS.length} AI models · Updated weekly · Plans from £49/mo
       </p>
     </motion.div>
   );
@@ -583,7 +638,7 @@ export function AuditResults({
       </motion.div>
 
       {/* LLM Teaser — locked preview of what AI models say */}
-      <LlmTeaser companyName={companyName} />
+      <LlmTeaser companyName={companyName} aiPreview={result.aiPreview} />
 
       {/* Fix It link */}
       {result.companySlug && (
